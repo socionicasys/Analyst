@@ -76,7 +76,7 @@ import analyst.ControlsPane.AspectSelectionListener;
     JFrame frame = this;
     String fileName = "";
     JPopupMenu popupMenu;
-    public final String version = "0.1";
+    public final String version = "0.2";
     
     
     
@@ -94,8 +94,8 @@ import analyst.ControlsPane.AspectSelectionListener;
     public Analyst() {
         super(applicationName);
         addWindowListener(this);
-        setMinimumSize(new Dimension(600,650));
-        setPreferredSize(new Dimension(1000,650));
+        setMinimumSize(new Dimension(600,400));
+        setPreferredSize(new Dimension(1000,700));
         //Create the text pane and configure it.
         textPane = new JTextPane();
         // Replace the built-in  behavior when the caret highlight
@@ -109,8 +109,8 @@ import analyst.ControlsPane.AspectSelectionListener;
         popupMenu = new JPopupMenu();
         
         textPane.setCaretPosition(0);
-        textPane.setMargin(new Insets(5,5,5,5));
-        textPane.setMinimumSize(new Dimension(400,400));
+        //textPane.setMargin(new Insets(5,5,5,5));
+        textPane.setMinimumSize(new Dimension(400,250));
         
         
         // binding the popup menu for textPane
@@ -132,7 +132,8 @@ import analyst.ControlsPane.AspectSelectionListener;
         }
         JScrollPane scrollPane = new JScrollPane(textPane);
         scrollPane.setPreferredSize(new Dimension(600, 500));
-        scrollPane.setMinimumSize(new Dimension(400,400));
+        scrollPane.setMinimumSize(new Dimension(400,250));
+        
         
         //Create the text area for the status log and configure it.
         commentField = new JTextArea (5, 30) ;
@@ -141,8 +142,8 @@ import analyst.ControlsPane.AspectSelectionListener;
         commentField.setWrapStyleWord(true);
         
         JScrollPane scrollPaneForComment = new JScrollPane(commentField);
-        scrollPaneForComment.setMinimumSize(new Dimension(400,50));
- //       scrollPaneForComment.setPreferredSize(new Dimension(540,70));
+        scrollPaneForComment.setMinimumSize(new Dimension(400,30));
+        scrollPaneForComment.setPreferredSize(new Dimension(400,30));
         
         //Create a split pane for the change log and the text area.
         JSplitPane splitPaneV = new JSplitPane(
@@ -182,11 +183,24 @@ import analyst.ControlsPane.AspectSelectionListener;
         
         commentField.getCaret().addChangeListener((ChangeListener)controlsPane);
 
- 
-             
+        JScrollPane scrollPaneControls = new JScrollPane(controlsPane);
+        scrollPaneControls.setMinimumSize(new Dimension(300,500));     
+        scrollPaneControls.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        
+        
         //getContentPane().add(navigateTabs, BorderLayout.WEST);
+        JPanel allButToolbar = new JPanel();
+        
         getContentPane().add(splitPaneH, BorderLayout.CENTER);
-        getContentPane().add(statusPane, BorderLayout.PAGE_END);
+        getContentPane().add(statusPane, BorderLayout.SOUTH);
+        
+        
+        controlsPane.setMargin(new Insets(1,1,1,1));
+        controlsPane.setBorderPainted(true);
+        
+        
+        //getContentPane().setLayout(new BorderLayout());
+        //getContentPane().add(allButToolbar, BorderLayout.CENTER);
         getContentPane().add(controlsPane, BorderLayout.EAST);
     
        
@@ -621,21 +635,22 @@ import analyst.ControlsPane.AspectSelectionListener;
     protected void addBindings() {
         InputMap inputMap = textPane.getInputMap();
 
-        //Ctrl-b to go backward one character
-        KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_B, Event.CTRL_MASK);
-        inputMap.put(key, DefaultEditorKit.backwardAction);
+        //Ctrl-c cut
+        KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK);
+        inputMap.put(key, DefaultEditorKit.copyAction);
 
-        //Ctrl-f to go forward one character
-        key = KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK);
-        inputMap.put(key, DefaultEditorKit.forwardAction);
+        //Ctrl-V paste
+        key = KeyStroke.getKeyStroke(KeyEvent.VK_V, Event.CTRL_MASK);
+        inputMap.put(key, DefaultEditorKit.pasteAction);
 
         //Ctrl-p to go up one line
         key = KeyStroke.getKeyStroke(KeyEvent.VK_P, Event.CTRL_MASK);
         inputMap.put(key, DefaultEditorKit.upAction);
 
-        //Ctrl-n to go down one line
-        key = KeyStroke.getKeyStroke(KeyEvent.VK_N, Event.CTRL_MASK);
-        inputMap.put(key, DefaultEditorKit.downAction);
+        //Ctrl-f to go down one line
+        key = KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK);
+        inputMap.remove(key);
+
     }
 
     //Create the edit menu.
@@ -652,8 +667,12 @@ import analyst.ControlsPane.AspectSelectionListener;
         menu.add(redoAction);
 
         menu.addSeparator();
-  
-
+        
+        InputMap inputMap = textPane.getInputMap();
+        Keymap keyMap = textPane.getKeymap();
+        KeyStroke key = null;
+      
+       
         //These actions come from the default editor kit.
         //Get the ones we want and stick them in the menu.
         Action a = getActionByName(DefaultEditorKit.cutAction);
@@ -674,12 +693,24 @@ import analyst.ControlsPane.AspectSelectionListener;
         menu.add(a);
         popupMenu.add(a);
         
+        //Ctrl-A select all
+        key = KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK);
+        keyMap.addActionForKeyStroke(key, a);
+        
         menu.addSeparator();
         popupMenu.addSeparator();
+        
+        
+        
         
         a = new SearchAction((JTextComponent)textPane, aDoc);
         menu.add(a);
         popupMenu.add(a);
+        
+        //Ctrl-F search
+        key = KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK);
+        keyMap.removeKeyStrokeBinding(key);
+        keyMap.addActionForKeyStroke(key, a);
         
         return menu;
     }

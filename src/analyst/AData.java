@@ -30,6 +30,8 @@ public final static  String TE = "БИ-ЧЭ";
 public final static  String IL = "ЧИ-БЛ";
 public final static  String IR = "ЧИ-БЭ";
 
+public final static  String DOUBT = "Фрагмент требует уточнения";
+
 public final static  String BLOCK = "БЛОК";
 public final static  String BLOCK_TOKEN  = "~";
 public final static  String JUMP  = "ПЕРЕВОД";
@@ -44,11 +46,14 @@ public final static  String D1 = "Размерность ОПЫТ";
 public final static  String D2 = "Размерность НОРМА";
 public final static  String D3 = "Размерность СИТУАЦИЯ";
 public final static  String D4 = "Размерность ВРЕМЯ";
-public final static  String DOUBT = "Фрагмент требует уточнения";
+public static final  String ODNOMERNOST = "Одномерность";
+public static final  String INDIVIDUALNOST = "Индивидуальность";
 public final static  String MALOMERNOST = "Маломерность";
 public final static  String MNOGOMERNOST = "Многомерность";
+
 public final static  String SUPERID = "Супер-Ид";
 public final static  String SUPEREGO = "Супер-Эго";
+
 
 	
 protected String secondAspect =null;
@@ -126,6 +131,8 @@ public void setDimension(String s) throws ADataException{
 			|s.equals(D4)
 			|s.equals(MALOMERNOST)
 			|s.equals(MNOGOMERNOST)
+			|s.equals(ODNOMERNOST)
+			|s.equals(INDIVIDUALNOST)
 							)) throw new ADataException();
 	this.dimension = s;
 }
@@ -246,6 +253,10 @@ public static AData parceAData(String s) throws ADataException{
 					if(s.contains(MALOMERNOST))		 dimension = MALOMERNOST;	
 					else
 						if(s.contains(MNOGOMERNOST))		 dimension = MNOGOMERNOST;	
+						else
+							if(s.contains(ODNOMERNOST))		 	dimension = ODNOMERNOST;	
+							else
+								if(s.contains(INDIVIDUALNOST))		 dimension = INDIVIDUALNOST;	
 	
 	//detecting sign
 	if(s.contains(PLUS))	 sign = PLUS;

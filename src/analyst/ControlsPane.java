@@ -4,6 +4,7 @@
 package analyst;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.ChangeEvent;
@@ -30,7 +31,7 @@ import java.util.Vector;
  * @author Виктор
  *
  */
-public class ControlsPane extends JPanel  implements 	CaretListener, 
+public class ControlsPane extends JToolBar  implements 	CaretListener, 
 														ADataChangeListener, 
 														ChangeListener, 
 														TreeSelectionListener {
@@ -48,7 +49,9 @@ public class ControlsPane extends JPanel  implements 	CaretListener,
 	
 	//constructor
 	public ControlsPane(){
- 
+        super("Панель разметки", JToolBar.VERTICAL);
+        
+        //setOrientation(JToolBar.VERTICAL);
 		aDataListeners = new Vector <ADataChangeListener>();
 		signPanel = new SignPanel();
 		mvPanel = new MVPanel();        
@@ -61,20 +64,31 @@ public class ControlsPane extends JPanel  implements 	CaretListener,
        
                 
  //       JPanel controlsPane = new JPanel();
-//        setMinimumSize(new Dimension (80,530));
+ //     setMinimumSize(new Dimension (150,600));
         Panel dummy = new Panel();
+        JPanel container = new JPanel();
+        container. setMinimumSize(new Dimension (200,500));
         GridBagLayout gbLayout = new GridBagLayout();
         GridBagConstraints gbc =  new GridBagConstraints();
-        setLayout(gbLayout);
+        JScrollPane scrl = new JScrollPane(container);
+        //scrl.setMinimumSize(new Dimension((int)container.getMinimumSize().getWidth()+ 20,
+        //									(int)container.getMinimumSize().getHeight()+20));
         
+        scrl.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+     
         gbc.gridwidth = GridBagConstraints.REMAINDER ;
         gbc.insets = new Insets(2,2,2,2);
-        add(aspectPanel,gbc);
-        add(signPanel,gbc);
-        add(dimensionPanel,gbc);
-        add(mvPanel,gbc);  
-        gbc.weighty = 1.0;
-        add(dummy,gbc);
+        container.add(aspectPanel); //,gbc);
+        container.add(signPanel) ; //,gbc);
+        container.add(dimensionPanel); //,gbc);
+        container.add(mvPanel); //,gbc);  
+        //gbc.weighty = 1.0;
+        //container.add(dummy); //,gbc);
+        
+        //add(scrl);
+        
+        add(container);
  
         mvPanel.setPanelEnabled(false);    
         dimensionPanel.setPanelEnabled(false);		
@@ -123,19 +137,32 @@ public class ControlsPane extends JPanel  implements 	CaretListener,
         	mvButtonGroup.clearSelection();
         	clearMVSelection.addActionListener(this);
         	
+        	Panel pp1 = new Panel(); 
+        	Panel pp2 = new Panel(); 
         	Panel pp = new Panel(); 
-        	pp.setMinimumSize(new Dimension(100,95));
-        	pp.setPreferredSize(new Dimension(100,95));
+        	//setMinimumSize(new Dimension(100,110));
+        	pp.setMinimumSize(new Dimension(200,120));
+        	//pp.setPreferredSize(new Dimension(100,100));
+        	setMinimumSize(new Dimension(200,120));
+        	setMaximumSize(new Dimension(200,120));
         	
-        pp.setLayout(new BoxLayout(pp,BoxLayout.Y_AXIS));
-        pp.add(vitalButton);
-        pp.add(mentalButton);
-        pp.add(superidButton);
-        pp.add(superegoButton);
+        pp1.setLayout(new BoxLayout(pp1,BoxLayout.Y_AXIS));
+        pp2.setLayout(new BoxLayout(pp2,BoxLayout.Y_AXIS));
+        pp1.add(vitalButton);
+        pp1.add(mentalButton);
+        pp2.add(superidButton);
+        pp2.add(superegoButton);
+        //pp.add(new JPanel());
+        pp.setLayout(new BoxLayout(pp,BoxLayout.X_AXIS));
+        
+        pp.add(pp1);
+        pp.add(pp2);
+        
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); 
         
         add(pp);
         add(clearMVSelection);
-        setBorder(BorderFactory.createLineBorder(Color.black));
+        setBorder(new TitledBorder ("Ментал/Витал"));
   
         } //constructor MVPanel
         
@@ -194,6 +221,7 @@ public class ControlsPane extends JPanel  implements 	CaretListener,
       
             public SignPanel(){
             	super();
+            	            	
             	plusButton = new JRadioButton("+");	
             	minusButton = new JRadioButton("-");	
             	plusButton.addActionListener(this); 	plusButton.setActionCommand(AData.PLUS);
@@ -208,15 +236,24 @@ public class ControlsPane extends JPanel  implements 	CaretListener,
             	clearSignSelection.addActionListener(this);
             	
             	Panel pp = new Panel(); 
-            	pp.setMinimumSize(new Dimension(100,50));
+            	//pp.setMinimumSize(new Dimension(100,50));
+            	pp.setMaximumSize(new Dimension(100,50));
             	pp.setPreferredSize(new Dimension(100,50));
+            	
+            	setMinimumSize(new Dimension(200,80));
+            	setPreferredSize(new Dimension(200,80));
+            	setMaximumSize(new Dimension(200,80));
             	
             pp.setLayout(new BoxLayout(pp,BoxLayout.Y_AXIS));
             pp.add(plusButton);
             pp.add(minusButton);
+            
+            setLayout(new BoxLayout(this, BoxLayout.X_AXIS)); 
+            
             add(pp);
             add(clearSignSelection);
-            setBorder(BorderFactory.createLineBorder(Color.black));
+            setBorder(new TitledBorder("Знак"));
+           
       
             } //constructor MVPanel
             
@@ -324,10 +361,13 @@ public class ControlsPane extends JPanel  implements 	CaretListener,
        
         clearAspectSelection  = new JButton("Очистить");
         
+       setMinimumSize(new Dimension(200, 270)); 
+       setMaximumSize(new Dimension(200, 270));
        Panel pAspect = new Panel(); 
        pAspect.setLayout(new BoxLayout(pAspect, BoxLayout.Y_AXIS));
        pAspect.setPreferredSize(new Dimension(50, 200));
        pAspect.setMinimumSize(new Dimension(50, 200));
+      
        pAspect.add(l); 
        pAspect.add(p); 
        pAspect.add(r); 
@@ -353,8 +393,8 @@ public class ControlsPane extends JPanel  implements 	CaretListener,
      
        Panel pControl = new Panel(); 
        pControl.setLayout(new BoxLayout(pControl, BoxLayout.X_AXIS));
-       pControl.setPreferredSize(new Dimension(200, 40));
-       pControl.setMinimumSize(new Dimension(200, 40));
+       pControl.setPreferredSize(new Dimension(50, 40));
+       pControl.setMinimumSize(new Dimension(50, 40));
        pControl.add(aspect); 
        pControl.add(block); 
        pControl.add(jump); 
@@ -379,7 +419,7 @@ public class ControlsPane extends JPanel  implements 	CaretListener,
        add(pA, BorderLayout.WEST);
        add(pB, BorderLayout.EAST);
       
-       setBorder(BorderFactory.createLineBorder(Color.black));
+       setBorder(new TitledBorder ("Аспект/Блок"));
 
        aspectGroup.clearSelection();
        secondAspectGroup.clearSelection();
@@ -690,7 +730,7 @@ public class ControlsPane extends JPanel  implements 	CaretListener,
         
         private class DimensionPanel extends JPanel implements ActionListener,  AspectSelectionListener {
 
-            private JRadioButton d1,d2,d3,d4,malo,mnogo; 
+            private JRadioButton d1,d2,d3,d4,malo,mnogo,odno,indi; 
             private ButtonGroup dimensionGroup;
             private JButton clearDimensionSelection;
         
@@ -700,36 +740,54 @@ public class ControlsPane extends JPanel  implements 	CaretListener,
         d2 = new JRadioButton("Nm");		d2.setActionCommand(AData.D2);
         d3 = new JRadioButton("St");		d3.setActionCommand(AData.D3);
         d4 = new JRadioButton("Tm");		d4.setActionCommand(AData.D4);
+        odno = new JRadioButton("Одномерность");		odno.setActionCommand(AData.ODNOMERNOST);
         malo = new JRadioButton("Маломерность");		malo.setActionCommand(AData.MALOMERNOST);
         mnogo = new JRadioButton("Многомерность");		mnogo.setActionCommand(AData.MNOGOMERNOST);
+        indi = new JRadioButton("Индивидуальность");	indi.setActionCommand(AData.INDIVIDUALNOST);
         
         dimensionGroup=new ButtonGroup();
         dimensionGroup.add(d1);	
         dimensionGroup.add(d2);
         dimensionGroup.add(d3);
         dimensionGroup.add(d4);
+        dimensionGroup.add(odno);
         dimensionGroup.add(malo);
         dimensionGroup.add(mnogo);
+        dimensionGroup.add(indi);
         dimensionGroup.clearSelection();
         clearDimensionSelection = new JButton("Очистить");      
         clearDimensionSelection.addActionListener(this);
         
  //       setLayout(new GridLayout(8,2));
        Panel p = new Panel();
-       p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-       p.setPreferredSize(new Dimension(100,140));
- //      p.setMinimumSize(new Dimension(100,140));
+       Panel p1 = new Panel();
+       Panel p2 = new Panel();
+       
+       p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
+       p1.setLayout(new BoxLayout(p1, BoxLayout.Y_AXIS));       
+       p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
+       
+       //p.setPreferredSize(new Dimension(100,170));
+       //p.setMaximumSize(new Dimension(100,170));
+       setMinimumSize(new Dimension(200,170));
+       setMaximumSize(new Dimension(200,170));
      
-       p.add(d1);	d1.addActionListener(this);
-       p.add(d2);  	d2.addActionListener(this);
-       p.add(d3); 	d3.addActionListener(this);
-       p.add(d4); 	d4.addActionListener(this);
-       p.add(malo); 	malo.addActionListener(this);
-       p.add(mnogo); 	mnogo.addActionListener(this);
-
+       p1.add(d1);		d1.addActionListener(this);
+       p1.add(d2);  	d2.addActionListener(this);
+       p1.add(d3); 		d3.addActionListener(this);
+       p1.add(d4); 		d4.addActionListener(this);
+       p2.add(odno); 	odno.addActionListener(this);
+       p2.add(malo); 	malo.addActionListener(this);
+       p2.add(mnogo); 	mnogo.addActionListener(this);
+       p2.add(indi); 	indi.addActionListener(this);
+       
+       p.add(p1);
+       p.add(p2);
+       
+       setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); 
        add(p);
        add(clearDimensionSelection);
-       setBorder(BorderFactory.createLineBorder(Color.black));
+       setBorder(new TitledBorder ("Размерность"));
       
         }    //constructor
         
@@ -757,9 +815,11 @@ public class ControlsPane extends JPanel  implements 	CaretListener,
         	d1.setEnabled(enabled);	
         	d2.setEnabled(enabled);
         	d3.setEnabled(enabled);
-        	d4.setEnabled(enabled);    
+        	d4.setEnabled(enabled); 
+        	odno.setEnabled(enabled);
         	mnogo.setEnabled(enabled);   
         	malo.setEnabled(enabled); 
+        	indi.setEnabled(enabled); 
         	}
 
         public String getDimensionSelection(){
@@ -779,9 +839,13 @@ public class ControlsPane extends JPanel  implements 	CaretListener,
 			else
 			if(dimension.equals(AData.D4)) d4.setSelected(true);
 			else
+			if(dimension.equals(AData.ODNOMERNOST)) odno.setSelected(true);
+			else
 			if(dimension.equals(AData.MALOMERNOST)) malo.setSelected(true);
 			else
 			if(dimension.equals(AData.MNOGOMERNOST)) mnogo.setSelected(true);
+			else
+				if(dimension.equals(AData.INDIVIDUALNOST)) indi.setSelected(true);
 
 			if (dimensionGroup.getSelection()!=null) clearDimensionSelection.setEnabled(true);
 				else clearDimensionSelection.setEnabled(false);

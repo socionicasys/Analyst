@@ -144,7 +144,7 @@ public class SearchAction extends AbstractAction{
 			 if (forward) searchOffset =  Math.min(searchOffset + 1, text.length());
 			 if (!forward) searchOffset = Math.max(0, searchOffset - 1);
 			 
-			 String searchText = searchQuote.getText().trim();
+			 String searchText = searchQuote.getText();
 			 
 			 if (!caseSensitive){
 				 text = text.toLowerCase();

@@ -46,6 +46,8 @@ public class ATree extends JTree implements
 				DefaultMutableTreeNode aspectLDimensionD2Node= new EndTreeNode("Nm");
 				DefaultMutableTreeNode aspectLDimensionD3Node= new EndTreeNode("St");
 				DefaultMutableTreeNode aspectLDimensionD4Node= new EndTreeNode("Tm");
+				DefaultMutableTreeNode aspectLDimensionOdnomernostNode= new EndTreeNode("Одномерность");
+				DefaultMutableTreeNode aspectLDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
 				DefaultMutableTreeNode aspectLDimensionMalomernostNode= new EndTreeNode("Маломерность");
 				DefaultMutableTreeNode aspectLDimensionMnogomernostNode= new EndTreeNode("Многомерность");
 			DefaultMutableTreeNode aspectLVMNode= new DefaultMutableTreeNode("Ментал/Витал");
@@ -61,6 +63,8 @@ public class ATree extends JTree implements
 					DefaultMutableTreeNode aspectPDimensionD2Node= new EndTreeNode("Nm");
 					DefaultMutableTreeNode aspectPDimensionD3Node= new EndTreeNode("St");
 					DefaultMutableTreeNode aspectPDimensionD4Node= new EndTreeNode("Tm");
+					DefaultMutableTreeNode aspectPDimensionOdnomernostNode= new EndTreeNode("Одномерность");
+					DefaultMutableTreeNode aspectPDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
 					DefaultMutableTreeNode aspectPDimensionMalomernostNode= new EndTreeNode("Маломерность");
 					DefaultMutableTreeNode aspectPDimensionMnogomernostNode= new EndTreeNode("Многомерность");
 				DefaultMutableTreeNode aspectPVMNode= new DefaultMutableTreeNode("Ментал/Витал");
@@ -76,6 +80,8 @@ public class ATree extends JTree implements
 						DefaultMutableTreeNode aspectRDimensionD2Node= new EndTreeNode("Nm");
 						DefaultMutableTreeNode aspectRDimensionD3Node= new EndTreeNode("St");
 						DefaultMutableTreeNode aspectRDimensionD4Node= new EndTreeNode("Tm");
+						DefaultMutableTreeNode aspectRDimensionOdnomernostNode= new EndTreeNode("Одномерность");
+						DefaultMutableTreeNode aspectRDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
 						DefaultMutableTreeNode aspectRDimensionMalomernostNode= new EndTreeNode("Маломерность");
 						DefaultMutableTreeNode aspectRDimensionMnogomernostNode= new EndTreeNode("Многомерность");
 					DefaultMutableTreeNode aspectRVMNode= new DefaultMutableTreeNode("Ментал/Витал");
@@ -91,6 +97,8 @@ public class ATree extends JTree implements
 							DefaultMutableTreeNode aspectEDimensionD2Node= new EndTreeNode("Nm");
 							DefaultMutableTreeNode aspectEDimensionD3Node= new EndTreeNode("St");
 							DefaultMutableTreeNode aspectEDimensionD4Node= new EndTreeNode("Tm");
+							DefaultMutableTreeNode aspectEDimensionOdnomernostNode= new EndTreeNode("Одномерность");
+							DefaultMutableTreeNode aspectEDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
 							DefaultMutableTreeNode aspectEDimensionMalomernostNode= new EndTreeNode("Маломерность");
 							DefaultMutableTreeNode aspectEDimensionMnogomernostNode= new EndTreeNode("Многомерность");
 						DefaultMutableTreeNode aspectEVMNode= new DefaultMutableTreeNode("Ментал/Витал");
@@ -106,6 +114,8 @@ public class ATree extends JTree implements
 								DefaultMutableTreeNode aspectSDimensionD2Node= new EndTreeNode("Nm");
 								DefaultMutableTreeNode aspectSDimensionD3Node= new EndTreeNode("St");
 								DefaultMutableTreeNode aspectSDimensionD4Node= new EndTreeNode("Tm");
+								DefaultMutableTreeNode aspectSDimensionOdnomernostNode= new EndTreeNode("Одномерность");
+								DefaultMutableTreeNode aspectSDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
 								DefaultMutableTreeNode aspectSDimensionMalomernostNode= new EndTreeNode("Маломерность");
 								DefaultMutableTreeNode aspectSDimensionMnogomernostNode= new EndTreeNode("Многомерность");
 							DefaultMutableTreeNode aspectSVMNode= new DefaultMutableTreeNode("Ментал/Витал");
@@ -121,6 +131,8 @@ public class ATree extends JTree implements
 									DefaultMutableTreeNode aspectFDimensionD2Node= new EndTreeNode("Nm");
 									DefaultMutableTreeNode aspectFDimensionD3Node= new EndTreeNode("St");
 									DefaultMutableTreeNode aspectFDimensionD4Node= new EndTreeNode("Tm");
+									DefaultMutableTreeNode aspectFDimensionOdnomernostNode= new EndTreeNode("Одномерность");
+									DefaultMutableTreeNode aspectFDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
 									DefaultMutableTreeNode aspectFDimensionMalomernostNode= new EndTreeNode("Маломерность");
 									DefaultMutableTreeNode aspectFDimensionMnogomernostNode= new EndTreeNode("Многомерность");
 								DefaultMutableTreeNode aspectFVMNode= new DefaultMutableTreeNode("Ментал/Витал");
@@ -136,6 +148,8 @@ public class ATree extends JTree implements
 										DefaultMutableTreeNode aspectTDimensionD2Node= new EndTreeNode("Nm");
 										DefaultMutableTreeNode aspectTDimensionD3Node= new EndTreeNode("St");
 										DefaultMutableTreeNode aspectTDimensionD4Node= new EndTreeNode("Tm");
+										DefaultMutableTreeNode aspectTDimensionOdnomernostNode= new EndTreeNode("Одномерность");
+										DefaultMutableTreeNode aspectTDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
 										DefaultMutableTreeNode aspectTDimensionMalomernostNode= new EndTreeNode("Маломерность");
 										DefaultMutableTreeNode aspectTDimensionMnogomernostNode= new EndTreeNode("Многомерность");
 									DefaultMutableTreeNode aspectTVMNode= new DefaultMutableTreeNode("Ментал/Витал");
@@ -151,6 +165,8 @@ public class ATree extends JTree implements
 											DefaultMutableTreeNode aspectIDimensionD2Node= new EndTreeNode("Nm");
 											DefaultMutableTreeNode aspectIDimensionD3Node= new EndTreeNode("St");
 											DefaultMutableTreeNode aspectIDimensionD4Node= new EndTreeNode("Tm");
+											DefaultMutableTreeNode aspectIDimensionOdnomernostNode= new EndTreeNode("Одномерность");
+											DefaultMutableTreeNode aspectIDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
 											DefaultMutableTreeNode aspectIDimensionMalomernostNode= new EndTreeNode("Маломерность");
 											DefaultMutableTreeNode aspectIDimensionMnogomernostNode= new EndTreeNode("Многомерность");
 										DefaultMutableTreeNode aspectIVMNode= new DefaultMutableTreeNode("Ментал/Витал");
@@ -216,6 +232,26 @@ DefaultMutableTreeNode dimensionMnogoNode = new DefaultMutableTreeNode("Многомер
 			DefaultMutableTreeNode dimensionMnogoFNode = new EndTreeNode("ЧС");
 			DefaultMutableTreeNode dimensionMnogoTNode = new EndTreeNode("БИ");
 			DefaultMutableTreeNode dimensionMnogoINode = new EndTreeNode("ЧИ");			
+
+DefaultMutableTreeNode dimensionOdnoNode = new DefaultMutableTreeNode("Одномерность");
+			DefaultMutableTreeNode dimensionOdnoLNode = new EndTreeNode("БЛ");
+			DefaultMutableTreeNode dimensionOdnoPNode = new EndTreeNode("ЧЛ");
+			DefaultMutableTreeNode dimensionOdnoRNode = new EndTreeNode("БЭ");
+			DefaultMutableTreeNode dimensionOdnoENode = new EndTreeNode("ЧЭ");
+			DefaultMutableTreeNode dimensionOdnoSNode = new EndTreeNode("БС");
+			DefaultMutableTreeNode dimensionOdnoFNode = new EndTreeNode("ЧС");
+			DefaultMutableTreeNode dimensionOdnoTNode = new EndTreeNode("БИ");
+			DefaultMutableTreeNode dimensionOdnoINode = new EndTreeNode("ЧИ");			
+
+DefaultMutableTreeNode dimensionIndiNode = new DefaultMutableTreeNode("Индивидуальность");
+			DefaultMutableTreeNode dimensionIndiLNode = new EndTreeNode("БЛ");
+			DefaultMutableTreeNode dimensionIndiPNode = new EndTreeNode("ЧЛ");
+			DefaultMutableTreeNode dimensionIndiRNode = new EndTreeNode("БЭ");
+			DefaultMutableTreeNode dimensionIndiENode = new EndTreeNode("ЧЭ");
+			DefaultMutableTreeNode dimensionIndiSNode = new EndTreeNode("БС");
+			DefaultMutableTreeNode dimensionIndiFNode = new EndTreeNode("ЧС");
+			DefaultMutableTreeNode dimensionIndiTNode = new EndTreeNode("БИ");
+			DefaultMutableTreeNode dimensionIndiINode = new EndTreeNode("ЧИ");			
 
 	DefaultMutableTreeNode blockNode = new DefaultMutableTreeNode("Блоки");
 		DefaultMutableTreeNode blockSuperegoNode = new EndTreeNode("Супер-ЭГО");
@@ -375,16 +411,24 @@ public EndTreeNode(Object o){
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
 	 			    		aspectLDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		dimensionMnogoLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		} 	
+	 			    		} else	
+					   		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
+						    aspectLDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    dimensionOdnoLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+					   		}
+	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
+	 			    		aspectLDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		dimensionIndiLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		} 						   
 	 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
 	 			    		aspectLDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		dimensionD1LNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMaloLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		//dimensionMaloLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		}
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
 		 			    	aspectLDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 		 			    	dimensionD2LNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionMaloLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	//dimensionMaloLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
 			 			    aspectLDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
@@ -416,28 +460,34 @@ public EndTreeNode(Object o){
 					        signMinusPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		} 
 					   if(dimension!=null && dimension.equals(AData.MALOMERNOST)){
-					   
-					    aspectPDimensionMalomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						   	aspectPDimensionMalomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 						    dimensionMaloPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
 	 			    		aspectPDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		dimensionMnogoPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		} 	
-	 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
+	 			    		} else	
+					   		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
+						   	aspectPDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    dimensionOdnoPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+					   		}
+	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
+	 			    		aspectPDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		dimensionIndiPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		} 		 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
 	 			    		aspectPDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		dimensionD1PNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMaloPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		//dimensionMaloPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		}
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
 		 			    	aspectPDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 		 			    	dimensionD2PNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionMaloPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	//dimensionMaloPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
 			 			    aspectPDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 			 			    dimensionD3PNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			   dimensionMnogoPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+			 			    dimensionMnogoPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 		 			    	}	
 	 			    		else if (dimension!=null && dimension.equals(AData.D4)){ 
 				 			aspectPDimensionD4Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
@@ -470,16 +520,23 @@ public EndTreeNode(Object o){
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
 	 			    		aspectRDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		dimensionMnogoRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		} 	
-	 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
+	 			    		} 	else
+					   		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
+						    aspectRDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    dimensionOdnoRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+					   		}
+	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
+	 			    		aspectRDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		dimensionIndiRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		} 		 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
 	 			    		aspectRDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		dimensionD1RNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMaloRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		//dimensionMaloRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		}
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
 		 			    	aspectRDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 		 			    	dimensionD2RNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionMaloRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	//dimensionMaloRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
 			 			    aspectRDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
@@ -516,6 +573,14 @@ public EndTreeNode(Object o){
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
 	 			    		aspectEDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		dimensionMnogoENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		} 	else
+					   		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
+						    aspectEDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    dimensionOdnoENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+					   		}
+	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
+	 			    		aspectEDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		dimensionIndiENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		} 	
 	 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
 	 			    		aspectEDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
@@ -525,12 +590,12 @@ public EndTreeNode(Object o){
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
 		 			    	aspectEDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 		 			    	dimensionD2ENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionMaloENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	//dimensionMaloENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
 			 			    aspectEDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 			 			    dimensionD3ENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			   dimensionMnogoENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+			 			    //dimensionMnogoENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 		 			    	}	
 	 			    		else if (dimension!=null && dimension.equals(AData.D4)){ 
 				 			aspectEDimensionD4Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
@@ -562,16 +627,24 @@ public EndTreeNode(Object o){
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
 	 			    		aspectSDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		dimensionMnogoSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		} else	
+					   		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
+						    aspectSDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    dimensionOdnoSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+					   		}
+	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
+	 			    		aspectSDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		dimensionIndiSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		} 	
-	 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
+	 		 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
 	 			    		aspectSDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		dimensionD1SNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMaloSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		//dimensionMaloSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		}
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
 		 			    	aspectSDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 		 			    	dimensionD2SNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionMaloSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	//dimensionMaloSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
 			 			    aspectSDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
@@ -609,21 +682,30 @@ public EndTreeNode(Object o){
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
 	 			    		aspectFDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		dimensionMnogoFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		} else
+					   		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
+						    aspectFDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    dimensionOdnoFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+					   		}
+	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
+	 			    		aspectFDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		dimensionIndiFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		} 	
+
 	 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
 	 			    		aspectFDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		dimensionD1FNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMaloFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		//dimensionMaloFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		}
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
 		 			    	aspectFDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 		 			    	dimensionD2FNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionMaloFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	//dimensionMaloFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
 			 			    aspectFDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 			 			    dimensionD3FNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			   dimensionMnogoFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+			 			    dimensionMnogoFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 		 			    	}	
 	 			    		else if (dimension!=null && dimension.equals(AData.D4)){ 
 				 			aspectFDimensionD4Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
@@ -656,16 +738,24 @@ public EndTreeNode(Object o){
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
 	 			    		aspectTDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		dimensionMnogoTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		} 	else
+	 			    		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
+						    aspectTDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    dimensionOdnoTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+					   		}
+	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
+	 			    		aspectTDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		dimensionIndiTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		} 	
-	 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
+	 	 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
 	 			    		aspectTDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		dimensionD1TNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMaloTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		//dimensionMaloTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		}
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
 		 			    	aspectTDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 		 			    	dimensionD2TNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionMaloTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	//dimensionMaloTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
 			 			    aspectTDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
@@ -703,16 +793,24 @@ public EndTreeNode(Object o){
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
 	 			    		aspectIDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		dimensionMnogoINode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		}
+					   		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
+						    aspectIDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    dimensionOdnoINode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+					   		}
+	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
+	 			    		aspectIDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		dimensionIndiINode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		} 	
 	 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
 	 			    		aspectIDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		dimensionD1INode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMaloINode.add    (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		//dimensionMaloINode.add    (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		}
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
 		 			    	aspectIDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 		 			    	dimensionD2INode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionMaloINode.add    (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	//dimensionMaloINode.add    (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
 			 			    aspectIDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
@@ -832,6 +930,8 @@ public EndTreeNode(Object o){
         aspectLDimensionD4Node.removeAllChildren();
         aspectLDimensionMalomernostNode.removeAllChildren();
         aspectLDimensionMnogomernostNode.removeAllChildren();
+        aspectLDimensionOdnomernostNode.removeAllChildren();
+        aspectLDimensionIndividualnostNode.removeAllChildren();
         aspectLVMMentalNode.removeAllChildren();
         aspectLVMVitalNode.removeAllChildren();
         aspectPSignPlusNode.removeAllChildren(); 
@@ -842,6 +942,8 @@ public EndTreeNode(Object o){
         aspectPDimensionD4Node.removeAllChildren();
         aspectPDimensionMalomernostNode.removeAllChildren(); 
         aspectPDimensionMnogomernostNode.removeAllChildren();
+        aspectPDimensionOdnomernostNode.removeAllChildren(); 
+        aspectPDimensionIndividualnostNode.removeAllChildren();
         aspectPVMMentalNode.removeAllChildren(); 
         aspectPVMVitalNode.removeAllChildren();
         aspectRSignPlusNode.removeAllChildren(); 
@@ -852,6 +954,8 @@ public EndTreeNode(Object o){
         aspectRDimensionD4Node.removeAllChildren();
         aspectRDimensionMalomernostNode.removeAllChildren();
         aspectRDimensionMnogomernostNode.removeAllChildren();
+        aspectRDimensionOdnomernostNode.removeAllChildren();
+        aspectRDimensionIndividualnostNode.removeAllChildren();
         aspectRVMMentalNode.removeAllChildren();
         aspectRVMVitalNode.removeAllChildren(); 
         aspectESignPlusNode.removeAllChildren();
@@ -870,6 +974,8 @@ public EndTreeNode(Object o){
         aspectSDimensionD4Node.removeAllChildren();	
         aspectSDimensionMalomernostNode.removeAllChildren();	
         aspectSDimensionMnogomernostNode.removeAllChildren();	
+        aspectSDimensionOdnomernostNode.removeAllChildren();	
+        aspectSDimensionIndividualnostNode.removeAllChildren();	
        aspectSVMMentalNode.removeAllChildren(); 	
        aspectSVMVitalNode.removeAllChildren();  	
         aspectFSignPlusNode.removeAllChildren();	
@@ -880,6 +986,8 @@ public EndTreeNode(Object o){
         aspectFDimensionD4Node.removeAllChildren();	
         aspectFDimensionMalomernostNode.removeAllChildren();	
         aspectFDimensionMnogomernostNode.removeAllChildren();	
+        aspectFDimensionOdnomernostNode.removeAllChildren();	
+        aspectFDimensionIndividualnostNode.removeAllChildren();	
         aspectFVMMentalNode.removeAllChildren();	
         aspectFVMVitalNode.removeAllChildren();	
         aspectTSignPlusNode.removeAllChildren();	
@@ -890,6 +998,8 @@ public EndTreeNode(Object o){
         aspectTDimensionD4Node.removeAllChildren();
         aspectTDimensionMalomernostNode.removeAllChildren(); 	
         aspectTDimensionMnogomernostNode.removeAllChildren();	
+        aspectTDimensionOdnomernostNode.removeAllChildren(); 	
+        aspectTDimensionIndividualnostNode.removeAllChildren();	        
         aspectTVMMentalNode.removeAllChildren();	
         aspectTVMVitalNode.removeAllChildren(); 	
         aspectISignPlusNode.removeAllChildren();	
@@ -900,6 +1010,8 @@ public EndTreeNode(Object o){
         aspectIDimensionD4Node.removeAllChildren();
         aspectIDimensionMalomernostNode.removeAllChildren();
         aspectIDimensionMnogomernostNode.removeAllChildren();
+        aspectIDimensionOdnomernostNode.removeAllChildren();
+        aspectIDimensionIndividualnostNode.removeAllChildren();
         aspectIVMMentalNode.removeAllChildren();
         aspectIVMVitalNode.removeAllChildren();
         	
@@ -960,6 +1072,25 @@ public EndTreeNode(Object o){
         		dimensionMnogoFNode.removeAllChildren();
         		dimensionMnogoTNode.removeAllChildren();
         		dimensionMnogoINode.removeAllChildren();	
+        		
+        		
+           		dimensionIndiLNode.removeAllChildren();
+        		dimensionIndiPNode.removeAllChildren();
+        		dimensionIndiRNode.removeAllChildren();
+        		dimensionIndiENode.removeAllChildren();
+        		dimensionIndiSNode.removeAllChildren();
+        		dimensionIndiFNode.removeAllChildren();
+        		dimensionIndiTNode.removeAllChildren();
+        		dimensionIndiINode.removeAllChildren();	
+
+           		dimensionOdnoLNode.removeAllChildren();
+        		dimensionOdnoPNode.removeAllChildren();
+        		dimensionOdnoRNode.removeAllChildren();
+        		dimensionOdnoENode.removeAllChildren();
+        		dimensionOdnoSNode.removeAllChildren();
+        		dimensionOdnoFNode.removeAllChildren();
+        		dimensionOdnoTNode.removeAllChildren();
+        		dimensionOdnoINode.removeAllChildren();	
         	
         		blockSuperegoNode.removeAllChildren(); 
         		blockSuperidNode.removeAllChildren(); 
@@ -1023,6 +1154,8 @@ public EndTreeNode(Object o){
 	   		aspectLDimensionNode.add(aspectLDimensionD4Node);
 	   		aspectLDimensionNode.add(aspectLDimensionMalomernostNode );
 	   		aspectLDimensionNode.add(aspectLDimensionMnogomernostNode);
+	   		aspectLDimensionNode.add(aspectLDimensionOdnomernostNode );
+	   		aspectLDimensionNode.add(aspectLDimensionIndividualnostNode);
 	   	aspectLNode.add(aspectLVMNode);
 	   		aspectLVMNode.add(aspectLVMMentalNode);
 	   		aspectLVMNode.add(aspectLVMVitalNode);
@@ -1038,6 +1171,8 @@ public EndTreeNode(Object o){
 		   		aspectPDimensionNode.add(aspectPDimensionD4Node);
 		   		aspectPDimensionNode.add(aspectPDimensionMalomernostNode );
 		   		aspectPDimensionNode.add(aspectPDimensionMnogomernostNode);
+		   		aspectPDimensionNode.add(aspectPDimensionOdnomernostNode );
+		   		aspectPDimensionNode.add(aspectPDimensionIndividualnostNode);
 		   aspectPNode.add(aspectPVMNode);
 		   		aspectPVMNode.add(aspectPVMMentalNode);
 		   		aspectPVMNode.add(aspectPVMVitalNode);	   
@@ -1053,6 +1188,8 @@ public EndTreeNode(Object o){
 	   		aspectRDimensionNode.add(aspectRDimensionD4Node);
 	   		aspectRDimensionNode.add(aspectRDimensionMalomernostNode );
 	   		aspectRDimensionNode.add(aspectRDimensionMnogomernostNode);
+	   		aspectRDimensionNode.add(aspectRDimensionOdnomernostNode );
+	   		aspectRDimensionNode.add(aspectRDimensionIndividualnostNode);
 	   	aspectRNode.add(aspectRVMNode);
 	   		aspectRVMNode.add(aspectRVMMentalNode);
 	   		aspectRVMNode.add(aspectRVMVitalNode);	   
@@ -1068,6 +1205,8 @@ public EndTreeNode(Object o){
 	   		aspectEDimensionNode.add(aspectEDimensionD4Node);
 	   		aspectEDimensionNode.add(aspectEDimensionMalomernostNode );
 	   		aspectEDimensionNode.add(aspectEDimensionMnogomernostNode);
+	   		aspectEDimensionNode.add(aspectEDimensionOdnomernostNode );
+	   		aspectEDimensionNode.add(aspectEDimensionIndividualnostNode);
 	   	aspectENode.add(aspectEVMNode);
 	   		aspectEVMNode.add(aspectEVMMentalNode);
 	   		aspectEVMNode.add(aspectEVMVitalNode);	   
@@ -1083,6 +1222,8 @@ public EndTreeNode(Object o){
 	   		aspectSDimensionNode.add(aspectSDimensionD4Node);
 	   		aspectSDimensionNode.add(aspectSDimensionMalomernostNode );
 	   		aspectSDimensionNode.add(aspectSDimensionMnogomernostNode);
+	   		aspectSDimensionNode.add(aspectSDimensionOdnomernostNode );
+	   		aspectSDimensionNode.add(aspectSDimensionIndividualnostNode);
 	   	aspectSNode.add(aspectSVMNode);
 	   		aspectSVMNode.add(aspectSVMMentalNode);
 	   		aspectSVMNode.add(aspectSVMVitalNode);	   
@@ -1098,6 +1239,8 @@ public EndTreeNode(Object o){
 	   		aspectFDimensionNode.add(aspectFDimensionD4Node);
 	   		aspectFDimensionNode.add(aspectFDimensionMalomernostNode );
 	   		aspectFDimensionNode.add(aspectFDimensionMnogomernostNode);
+	   		aspectFDimensionNode.add(aspectFDimensionOdnomernostNode );
+	   		aspectFDimensionNode.add(aspectFDimensionIndividualnostNode);
 	   	aspectFNode.add(aspectFVMNode);
 	   		aspectFVMNode.add(aspectFVMMentalNode);
 	   		aspectFVMNode.add(aspectFVMVitalNode);
@@ -1113,6 +1256,8 @@ public EndTreeNode(Object o){
 	   		aspectTDimensionNode.add(aspectTDimensionD4Node);
 	   		aspectTDimensionNode.add(aspectTDimensionMalomernostNode );
 	   		aspectTDimensionNode.add(aspectTDimensionMnogomernostNode);
+	   		aspectTDimensionNode.add(aspectTDimensionOdnomernostNode );
+	   		aspectTDimensionNode.add(aspectTDimensionIndividualnostNode);
 	   	aspectTNode.add(aspectTVMNode);
 	   		aspectTVMNode.add(aspectTVMMentalNode);
 	   		aspectTVMNode.add(aspectTVMVitalNode); 
@@ -1128,30 +1273,15 @@ public EndTreeNode(Object o){
 	   		aspectIDimensionNode.add(aspectIDimensionD4Node);
 	   		aspectIDimensionNode.add(aspectIDimensionMalomernostNode );
 	   		aspectIDimensionNode.add(aspectIDimensionMnogomernostNode);
+	   		aspectIDimensionNode.add(aspectIDimensionOdnomernostNode );
+	   		aspectIDimensionNode.add(aspectIDimensionIndividualnostNode);
 	   	aspectINode.add(aspectIVMNode);
 	   		aspectIVMNode.add(aspectIVMMentalNode);
 	   		aspectIVMNode.add(aspectIVMVitalNode);
 
 	   rootNode.add(dimensionNode); 
 
-	   		dimensionNode.add(dimensionMaloNode);
-	   			dimensionMaloNode.add(dimensionMaloLNode);
-	   			dimensionMaloNode.add(dimensionMaloPNode);
-	   			dimensionMaloNode.add(dimensionMaloRNode);
-	   			dimensionMaloNode.add(dimensionMaloENode);
-	   			dimensionMaloNode.add(dimensionMaloSNode);
-	   			dimensionMaloNode.add(dimensionMaloFNode);
-	   			dimensionMaloNode.add(dimensionMaloTNode);
-	   			dimensionMaloNode.add(dimensionMaloINode);
-	   		dimensionNode.add(dimensionMnogoNode);
-	   			dimensionMnogoNode.add(dimensionMnogoLNode);
-	   			dimensionMnogoNode.add(dimensionMnogoPNode);
-	   			dimensionMnogoNode.add(dimensionMnogoRNode);
-	   			dimensionMnogoNode.add(dimensionMnogoENode);
-	   			dimensionMnogoNode.add(dimensionMnogoSNode);
-	   			dimensionMnogoNode.add(dimensionMnogoFNode);
-	   			dimensionMnogoNode.add(dimensionMnogoTNode);
-	   			dimensionMnogoNode.add(dimensionMnogoINode);
+
 	   		dimensionNode.add(dimensionD1Node);
 	   			dimensionD1Node.add(dimensionD1LNode);
 	   			dimensionD1Node.add(dimensionD1PNode);
@@ -1188,6 +1318,42 @@ public EndTreeNode(Object o){
 	   			dimensionD4Node.add(dimensionD4FNode);
 	   			dimensionD4Node.add(dimensionD4TNode);
 	   			dimensionD4Node.add(dimensionD4INode);
+		   	dimensionNode.add(dimensionMaloNode);
+	   			dimensionMaloNode.add(dimensionMaloLNode);
+	   			dimensionMaloNode.add(dimensionMaloPNode);
+	   			dimensionMaloNode.add(dimensionMaloRNode);
+	   			dimensionMaloNode.add(dimensionMaloENode);
+	   			dimensionMaloNode.add(dimensionMaloSNode);
+	   			dimensionMaloNode.add(dimensionMaloFNode);
+	   			dimensionMaloNode.add(dimensionMaloTNode);
+	   			dimensionMaloNode.add(dimensionMaloINode);
+	   		dimensionNode.add(dimensionMnogoNode);
+	   			dimensionMnogoNode.add(dimensionMnogoLNode);
+	   			dimensionMnogoNode.add(dimensionMnogoPNode);
+	   			dimensionMnogoNode.add(dimensionMnogoRNode);
+	   			dimensionMnogoNode.add(dimensionMnogoENode);
+	   			dimensionMnogoNode.add(dimensionMnogoSNode);
+	   			dimensionMnogoNode.add(dimensionMnogoFNode);
+	   			dimensionMnogoNode.add(dimensionMnogoTNode);
+	   			dimensionMnogoNode.add(dimensionMnogoINode);	
+			dimensionNode.add(dimensionOdnoNode);
+	   			dimensionOdnoNode.add(dimensionOdnoLNode);
+	   			dimensionOdnoNode.add(dimensionOdnoPNode);
+	   			dimensionOdnoNode.add(dimensionOdnoRNode);
+	   			dimensionOdnoNode.add(dimensionOdnoENode);
+	   			dimensionOdnoNode.add(dimensionOdnoSNode);
+	   			dimensionOdnoNode.add(dimensionOdnoFNode);
+	   			dimensionOdnoNode.add(dimensionOdnoTNode);
+	   			dimensionOdnoNode.add(dimensionOdnoINode);
+			dimensionNode.add(dimensionIndiNode);
+	   			dimensionIndiNode.add(dimensionIndiLNode);
+	   			dimensionIndiNode.add(dimensionIndiPNode);
+	   			dimensionIndiNode.add(dimensionIndiRNode);
+	   			dimensionIndiNode.add(dimensionIndiENode);
+	   			dimensionIndiNode.add(dimensionIndiSNode);
+	   			dimensionIndiNode.add(dimensionIndiFNode);
+	   			dimensionIndiNode.add(dimensionIndiTNode);
+	   			dimensionIndiNode.add(dimensionIndiINode);	
 		   
 	   rootNode.add(blockNode); 
 	   	blockNode.add(blockSuperegoNode);

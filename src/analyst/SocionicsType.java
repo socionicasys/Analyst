@@ -95,16 +95,16 @@ if (type.equals(SocionicsType.ILE)){
 	//block
 	if (secondAspect!=null){
 		if (aspect.equals(AData.L)){
-			return false;
+			if (!secondAspect.equals(AData.I)) return false;
 		}else		
 			if (aspect.equals(AData.P)){
-				return false;			
+				if (!secondAspect.equals(AData.T)) return false;			
 			}else
 				if (aspect.equals(AData.R)){
-					return false;					
+					if (!secondAspect.equals(AData.F)) return false;					
 				}else
 					if (aspect.equals(AData.E)){
-						return false;					
+						if (!secondAspect.equals(AData.S)) return false;					
 					}else
 						if (aspect.equals(AData.S)){
 							if (!secondAspect.equals(AData.E)) return false;					
@@ -141,6 +141,8 @@ if (type.equals(SocionicsType.ILE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//	||	dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)							
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -169,6 +171,8 @@ if (type.equals(SocionicsType.ILE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//	||  dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -194,6 +198,8 @@ if (type.equals(SocionicsType.ILE)){
 				
 				//		dimension.equals(AData.MALOMERNOST)
 						dimension.equals(AData.MNOGOMERNOST)
+				//	||	dimension.equals(AData.ODNOMERNOST)
+				//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					|| 	dimension.equals(AData.D2)
 					|| 	dimension.equals(AData.D3)
 					|| 	dimension.equals(AData.D4)
@@ -221,6 +227,8 @@ if (type.equals(SocionicsType.ILE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -248,6 +256,8 @@ if (type.equals(SocionicsType.ILE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -275,6 +285,8 @@ if (type.equals(SocionicsType.ILE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -302,6 +314,8 @@ if (type.equals(SocionicsType.ILE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//	||	dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -329,6 +343,8 @@ if (type.equals(SocionicsType.ILE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//	||	dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -347,29 +363,29 @@ if (type.equals(SocionicsType.SEI)){
 	//block
 	if (secondAspect!=null){
 		if (aspect.equals(AData.L)){
-			return false;
+			if (!secondAspect.equals(AData.I)) return false;
 		}else		
 			if (aspect.equals(AData.P)){
-				return false;			
+				if (!secondAspect.equals(AData.T)) return false;			
 			}else
 				if (aspect.equals(AData.R)){
-					return false;					
+					if (!secondAspect.equals(AData.F)) return false;					
 				}else
 					if (aspect.equals(AData.E)){
-						return false;					
-					}else
-						if (aspect.equals(AData.S)){
-							if (!secondAspect.equals(AData.E)) return false;					
+						if (!secondAspect.equals(AData.S)) return false;					
 						}else
-							if (aspect.equals(AData.F)){
-								if (!secondAspect.equals(AData.R)) return false;					
-							}else
-								if (aspect.equals(AData.T)){
-									if (!secondAspect.equals(AData.P)) return false;					
+							if (aspect.equals(AData.S)){
+								if (!secondAspect.equals(AData.E)) return false;					
+							}else							
+								if (aspect.equals(AData.F)){
+									if (!secondAspect.equals(AData.R)) return false;					
 								}else
-									if (aspect.equals(AData.I)){
-										if (!secondAspect.equals(AData.L)) return false;					
-									}
+									if (aspect.equals(AData.T)){
+										if (!secondAspect.equals(AData.P)) return false;					
+									}else
+										if (aspect.equals(AData.I)){
+											if (!secondAspect.equals(AData.L)) return false;					
+										}
 			
 	} //end Block
 	
@@ -391,11 +407,13 @@ if (type.equals(SocionicsType.SEI)){
 			if (dimension!=null){
 				if (		
 					
-					//		dimension.equals(AData.MALOMERNOST)
-							dimension.equals(AData.MNOGOMERNOST)
-					//	|| 	dimension.equals(AData.D2)
-						|| 	dimension.equals(AData.D3)
-						|| 	dimension.equals(AData.D4)
+						//		dimension.equals(AData.MALOMERNOST)
+								dimension.equals(AData.MNOGOMERNOST)
+							||	dimension.equals(AData.ODNOMERNOST)
+						//	||	dimension.equals(AData.INDIVIDUALNOST)							
+						//	|| 	dimension.equals(AData.D2)
+							|| 	dimension.equals(AData.D3)
+							|| 	dimension.equals(AData.D4)
 														)return false;
 			}//end dimension
 				
@@ -421,6 +439,8 @@ if (type.equals(SocionicsType.SEI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -445,7 +465,9 @@ if (type.equals(SocionicsType.SEI)){
 			if (		
 				
 						dimension.equals(AData.MALOMERNOST)
-				//	||	dimension.equals(AData.MNOGOMERNOST)
+				//		dimension.equals(AData.MNOGOMERNOST)
+					||	dimension.equals(AData.ODNOMERNOST)
+				//	||	dimension.equals(AData.INDIVIDUALNOST)								
 				//	|| 	dimension.equals(AData.D2)
 				//	|| 	dimension.equals(AData.D3)
 				//	|| 	dimension.equals(AData.D4)
@@ -473,6 +495,8 @@ if (type.equals(SocionicsType.SEI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -500,6 +524,8 @@ if (type.equals(SocionicsType.SEI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -527,6 +553,8 @@ if (type.equals(SocionicsType.SEI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -554,6 +582,8 @@ if (type.equals(SocionicsType.SEI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -581,6 +611,8 @@ if (type.equals(SocionicsType.SEI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -606,20 +638,19 @@ if (type.equals(SocionicsType.ESE)){
 				}else
 					if (aspect.equals(AData.E)){
 						if (!secondAspect.equals(AData.S)) return false;					
-					}else
-						if (aspect.equals(AData.S)){
-							return false;					
 						}else
-							if (aspect.equals(AData.F)){
-								 return false;					
-							}else
-								if (aspect.equals(AData.T)){
-									 return false;					
+							if (aspect.equals(AData.S)){
+								if (!secondAspect.equals(AData.E)) return false;					
+							}else							
+								if (aspect.equals(AData.F)){
+									if (!secondAspect.equals(AData.R)) return false;					
 								}else
-									if (aspect.equals(AData.I)){
-										return false;					
-									}
-			
+									if (aspect.equals(AData.T)){
+										if (!secondAspect.equals(AData.P)) return false;					
+									}else
+										if (aspect.equals(AData.I)){
+											if (!secondAspect.equals(AData.L)) return false;					
+										}
 	} //end Block
 	
 	//L
@@ -642,6 +673,8 @@ if (type.equals(SocionicsType.ESE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -670,6 +703,8 @@ if (type.equals(SocionicsType.ESE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -695,6 +730,8 @@ if (type.equals(SocionicsType.ESE)){
 				
 						dimension.equals(AData.MALOMERNOST)
 				//	||	dimension.equals(AData.MNOGOMERNOST)
+					||	dimension.equals(AData.ODNOMERNOST)
+				//	||	dimension.equals(AData.INDIVIDUALNOST)								
 				//	|| 	dimension.equals(AData.D2)
 				//	|| 	dimension.equals(AData.D3)
 					|| 	dimension.equals(AData.D4)
@@ -722,6 +759,8 @@ if (type.equals(SocionicsType.ESE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -749,6 +788,8 @@ if (type.equals(SocionicsType.ESE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -776,6 +817,8 @@ if (type.equals(SocionicsType.ESE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -803,6 +846,8 @@ if (type.equals(SocionicsType.ESE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -830,6 +875,8 @@ if (type.equals(SocionicsType.ESE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -857,19 +904,20 @@ if (type.equals(SocionicsType.LII)){
 				}else
 					if (aspect.equals(AData.E)){
 						if (!secondAspect.equals(AData.S)) return false;					
-					}else
-						if (aspect.equals(AData.S)){
-							return false;					
 						}else
-							if (aspect.equals(AData.F)){
-								 return false;					
-							}else
-								if (aspect.equals(AData.T)){
-									 return false;					
+							if (aspect.equals(AData.S)){
+								if (!secondAspect.equals(AData.E)) return false;					
+							}else							
+								if (aspect.equals(AData.F)){
+									if (!secondAspect.equals(AData.R)) return false;					
 								}else
-									if (aspect.equals(AData.I)){
-										return false;					
-									}
+									if (aspect.equals(AData.T)){
+										if (!secondAspect.equals(AData.P)) return false;					
+									}else
+										if (aspect.equals(AData.I)){
+											if (!secondAspect.equals(AData.L)) return false;					
+										}
+			
 			
 	} //end Block
 	
@@ -893,6 +941,8 @@ if (type.equals(SocionicsType.LII)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -921,6 +971,8 @@ if (type.equals(SocionicsType.LII)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -946,6 +998,8 @@ if (type.equals(SocionicsType.LII)){
 				
 				//		dimension.equals(AData.MALOMERNOST)
 						dimension.equals(AData.MNOGOMERNOST)
+					||	dimension.equals(AData.ODNOMERNOST)
+					||	dimension.equals(AData.INDIVIDUALNOST)								
 				//	|| 	dimension.equals(AData.D2)
 					|| 	dimension.equals(AData.D3)
 					|| 	dimension.equals(AData.D4)
@@ -973,6 +1027,8 @@ if (type.equals(SocionicsType.LII)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1000,6 +1056,8 @@ if (type.equals(SocionicsType.LII)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1027,6 +1085,8 @@ if (type.equals(SocionicsType.LII)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1054,6 +1114,8 @@ if (type.equals(SocionicsType.LII)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -1081,6 +1143,8 @@ if (type.equals(SocionicsType.LII)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1108,19 +1172,19 @@ if (type.equals(SocionicsType.EIE)){
 				}else
 					if (aspect.equals(AData.E)){
 						if (!secondAspect.equals(AData.T)) return false;					
-					}else
-						if (aspect.equals(AData.S)){
-							return false;					
 						}else
-							if (aspect.equals(AData.F)){
-								 return false;					
-							}else
-								if (aspect.equals(AData.T)){
-									 return false;					
+							if (aspect.equals(AData.S)){
+								if (!secondAspect.equals(AData.P)) return false;					
+							}else							
+								if (aspect.equals(AData.F)){
+									if (!secondAspect.equals(AData.L)) return false;					
 								}else
-									if (aspect.equals(AData.I)){
-										return false;					
-									}
+									if (aspect.equals(AData.T)){
+										if (!secondAspect.equals(AData.E)) return false;					
+									}else
+										if (aspect.equals(AData.I)){
+											if (!secondAspect.equals(AData.R)) return false;					
+										}
 			
 	} //end Block
 	
@@ -1144,6 +1208,8 @@ if (type.equals(SocionicsType.EIE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1172,6 +1238,8 @@ if (type.equals(SocionicsType.EIE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1197,6 +1265,8 @@ if (type.equals(SocionicsType.EIE)){
 				
 						dimension.equals(AData.MALOMERNOST)
 				//		dimension.equals(AData.MNOGOMERNOST)
+					||	dimension.equals(AData.ODNOMERNOST)
+				//	||	dimension.equals(AData.INDIVIDUALNOST)								
 				//	|| 	dimension.equals(AData.D2)
 				//	|| 	dimension.equals(AData.D3)
 					|| 	dimension.equals(AData.D4)
@@ -1224,6 +1294,8 @@ if (type.equals(SocionicsType.EIE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -1249,8 +1321,10 @@ if (type.equals(SocionicsType.EIE)){
 			if (dimension!=null){
 				if (		
 					
-							dimension.equals(AData.MALOMERNOST)
-					//		dimension.equals(AData.MNOGOMERNOST)
+					//		dimension.equals(AData.MALOMERNOST)
+							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1278,6 +1352,8 @@ if (type.equals(SocionicsType.EIE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1305,6 +1381,8 @@ if (type.equals(SocionicsType.EIE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1332,6 +1410,8 @@ if (type.equals(SocionicsType.EIE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -1359,19 +1439,19 @@ if (type.equals(SocionicsType.LSI)){
 				}else
 					if (aspect.equals(AData.E)){
 						if (!secondAspect.equals(AData.T)) return false;					
-					}else
-						if (aspect.equals(AData.S)){
-							return false;					
 						}else
-							if (aspect.equals(AData.F)){
-								 return false;					
-							}else
-								if (aspect.equals(AData.T)){
-									 return false;					
+							if (aspect.equals(AData.S)){
+								if (!secondAspect.equals(AData.P)) return false;					
+							}else							
+								if (aspect.equals(AData.F)){
+									if (!secondAspect.equals(AData.L)) return false;					
 								}else
-									if (aspect.equals(AData.I)){
-										return false;					
-									}
+									if (aspect.equals(AData.T)){
+										if (!secondAspect.equals(AData.E)) return false;					
+									}else
+										if (aspect.equals(AData.I)){
+											if (!secondAspect.equals(AData.R)) return false;					
+										}
 			
 	} //end Block
 	
@@ -1395,6 +1475,8 @@ if (type.equals(SocionicsType.LSI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -1423,6 +1505,8 @@ if (type.equals(SocionicsType.LSI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1448,6 +1532,8 @@ if (type.equals(SocionicsType.LSI)){
 				
 				//		dimension.equals(AData.MALOMERNOST)
 						dimension.equals(AData.MNOGOMERNOST)
+					||	dimension.equals(AData.ODNOMERNOST)
+					||	dimension.equals(AData.INDIVIDUALNOST)								
 				//	|| 	dimension.equals(AData.D2)
 					|| 	dimension.equals(AData.D3)
 					|| 	dimension.equals(AData.D4)
@@ -1475,6 +1561,8 @@ if (type.equals(SocionicsType.LSI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1502,6 +1590,8 @@ if (type.equals(SocionicsType.LSI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -1529,6 +1619,8 @@ if (type.equals(SocionicsType.LSI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1556,6 +1648,8 @@ if (type.equals(SocionicsType.LSI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1583,6 +1677,8 @@ if (type.equals(SocionicsType.LSI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1600,29 +1696,29 @@ if (type.equals(SocionicsType.SLE)){
 	//block
 	if (secondAspect!=null){
 		if (aspect.equals(AData.L)){
-			 return false;
+			if (!secondAspect.equals(AData.F)) return false;
 		}else		
 			if (aspect.equals(AData.P)){
-				 return false;			
+				if (!secondAspect.equals(AData.S)) return false;			
 			}else
 				if (aspect.equals(AData.R)){
-					 return false;					
+					if (!secondAspect.equals(AData.I)) return false;					
 				}else
 					if (aspect.equals(AData.E)){
-						 return false;					
-					}else
-						if (aspect.equals(AData.S)){
-							if (!secondAspect.equals(AData.P)) return false;return false;					
+						if (!secondAspect.equals(AData.T)) return false;					
 						}else
-							if (aspect.equals(AData.L)){
-								if (!secondAspect.equals(AData.F)) return false;return false;					
-							}else
-								if (aspect.equals(AData.T)){
-									if (!secondAspect.equals(AData.E)) return false;return false;					
+							if (aspect.equals(AData.S)){
+								if (!secondAspect.equals(AData.P)) return false;					
+							}else							
+								if (aspect.equals(AData.F)){
+									if (!secondAspect.equals(AData.L)) return false;					
 								}else
-									if (aspect.equals(AData.I)){
-										if (!secondAspect.equals(AData.R)) return false;return false;					
-									}
+									if (aspect.equals(AData.T)){
+										if (!secondAspect.equals(AData.E)) return false;					
+									}else
+										if (aspect.equals(AData.I)){
+											if (!secondAspect.equals(AData.R)) return false;					
+										}
 			
 	} //end Block
 	
@@ -1646,6 +1742,8 @@ if (type.equals(SocionicsType.SLE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1674,6 +1772,8 @@ if (type.equals(SocionicsType.SLE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -1699,6 +1799,8 @@ if (type.equals(SocionicsType.SLE)){
 				
 				//		dimension.equals(AData.MALOMERNOST)
 						dimension.equals(AData.MNOGOMERNOST)
+				//	||	dimension.equals(AData.ODNOMERNOST)
+				//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					|| 	dimension.equals(AData.D2)
 					|| 	dimension.equals(AData.D3)
 					|| 	dimension.equals(AData.D4)
@@ -1726,6 +1828,8 @@ if (type.equals(SocionicsType.SLE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1753,6 +1857,8 @@ if (type.equals(SocionicsType.SLE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1780,6 +1886,8 @@ if (type.equals(SocionicsType.SLE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -1807,6 +1915,8 @@ if (type.equals(SocionicsType.SLE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1834,6 +1944,8 @@ if (type.equals(SocionicsType.SLE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1851,29 +1963,29 @@ if (type.equals(SocionicsType.IEI)){
 	//block
 	if (secondAspect!=null){
 		if (aspect.equals(AData.L)){
-			 return false;
+			if (!secondAspect.equals(AData.F)) return false;
 		}else		
 			if (aspect.equals(AData.P)){
-				 return false;			
+				if (!secondAspect.equals(AData.S)) return false;			
 			}else
 				if (aspect.equals(AData.R)){
-					 return false;					
+					if (!secondAspect.equals(AData.I)) return false;					
 				}else
 					if (aspect.equals(AData.E)){
-						 return false;					
-					}else
-						if (aspect.equals(AData.S)){
-							if (!secondAspect.equals(AData.P)) return false;return false;					
+						if (!secondAspect.equals(AData.T)) return false;					
 						}else
-							if (aspect.equals(AData.F)){
-								if (!secondAspect.equals(AData.L)) return false;return false;					
-							}else
-								if (aspect.equals(AData.T)){
-									if (!secondAspect.equals(AData.E)) return false;return false;					
+							if (aspect.equals(AData.S)){
+								if (!secondAspect.equals(AData.P)) return false;					
+							}else							
+								if (aspect.equals(AData.F)){
+									if (!secondAspect.equals(AData.L)) return false;					
 								}else
-									if (aspect.equals(AData.I)){
-										if (!secondAspect.equals(AData.R)) return false;return false;					
-									}
+									if (aspect.equals(AData.T)){
+										if (!secondAspect.equals(AData.E)) return false;					
+									}else
+										if (aspect.equals(AData.I)){
+											if (!secondAspect.equals(AData.R)) return false;					
+										}
 					
 	} //end Block
 	
@@ -1897,6 +2009,8 @@ if (type.equals(SocionicsType.IEI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1925,6 +2039,8 @@ if (type.equals(SocionicsType.IEI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -1950,6 +2066,8 @@ if (type.equals(SocionicsType.IEI)){
 				
 						dimension.equals(AData.MALOMERNOST)
 				//		dimension.equals(AData.MNOGOMERNOST)
+					||	dimension.equals(AData.ODNOMERNOST)
+				//	||	dimension.equals(AData.INDIVIDUALNOST)								
 				//	|| 	dimension.equals(AData.D2)
 				//	|| 	dimension.equals(AData.D3)
 				//	|| 	dimension.equals(AData.D4)
@@ -1977,6 +2095,8 @@ if (type.equals(SocionicsType.IEI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2004,6 +2124,8 @@ if (type.equals(SocionicsType.IEI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2031,6 +2153,8 @@ if (type.equals(SocionicsType.IEI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2058,6 +2182,8 @@ if (type.equals(SocionicsType.IEI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -2085,6 +2211,8 @@ if (type.equals(SocionicsType.IEI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2102,16 +2230,16 @@ if (type.equals(SocionicsType.SEE)){
 	//block
 	if (secondAspect!=null){
 		if (aspect.equals(AData.L)){
-			return false;
+			if (!secondAspect.equals(AData.I)) return false;
 		}else		
 			if (aspect.equals(AData.P)){
-				return false;			
+				if (!secondAspect.equals(AData.T)) return false;			
 			}else
 				if (aspect.equals(AData.R)){
-					return false;					
+					if (!secondAspect.equals(AData.F)) return false;					
 				}else
 					if (aspect.equals(AData.E)){
-						return false;					
+						if (!secondAspect.equals(AData.S)) return false;					
 					}else
 						if (aspect.equals(AData.S)){
 							if (!secondAspect.equals(AData.E)) return false;					
@@ -2148,6 +2276,8 @@ if (type.equals(SocionicsType.SEE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2176,6 +2306,8 @@ if (type.equals(SocionicsType.SEE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2201,6 +2333,8 @@ if (type.equals(SocionicsType.SEE)){
 				
 						dimension.equals(AData.MALOMERNOST)
 				//	||	dimension.equals(AData.MNOGOMERNOST)
+					||	dimension.equals(AData.ODNOMERNOST)
+					||	dimension.equals(AData.INDIVIDUALNOST)								
 				//	|| 	dimension.equals(AData.D2)
 				//	|| 	dimension.equals(AData.D3)
 					|| 	dimension.equals(AData.D4)
@@ -2228,6 +2362,8 @@ if (type.equals(SocionicsType.SEE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -2255,6 +2391,8 @@ if (type.equals(SocionicsType.SEE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2282,6 +2420,8 @@ if (type.equals(SocionicsType.SEE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -2309,6 +2449,8 @@ if (type.equals(SocionicsType.SEE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2336,6 +2478,8 @@ if (type.equals(SocionicsType.SEE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2352,16 +2496,16 @@ if (type.equals(SocionicsType.ILI)){
 	//block
 	if (secondAspect!=null){
 		if (aspect.equals(AData.L)){
-			return false;
+			if (!secondAspect.equals(AData.I)) return false;
 		}else		
 			if (aspect.equals(AData.P)){
-				return false;			
+				if (!secondAspect.equals(AData.T)) return false;			
 			}else
 				if (aspect.equals(AData.R)){
-					return false;					
+					if (!secondAspect.equals(AData.F)) return false;					
 				}else
 					if (aspect.equals(AData.E)){
-						return false;					
+						if (!secondAspect.equals(AData.S)) return false;					
 					}else
 						if (aspect.equals(AData.S)){
 							if (!secondAspect.equals(AData.E)) return false;					
@@ -2398,6 +2542,8 @@ if (type.equals(SocionicsType.ILI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//	||	dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -2426,6 +2572,8 @@ if (type.equals(SocionicsType.ILI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//	||  dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2451,6 +2599,8 @@ if (type.equals(SocionicsType.ILI)){
 				
 				//		dimension.equals(AData.MALOMERNOST)
 						dimension.equals(AData.MNOGOMERNOST)
+					||	dimension.equals(AData.ODNOMERNOST)
+				//	||	dimension.equals(AData.INDIVIDUALNOST)								
 				//	|| 	dimension.equals(AData.D2)
 					|| 	dimension.equals(AData.D3)
 					|| 	dimension.equals(AData.D4)
@@ -2478,6 +2628,8 @@ if (type.equals(SocionicsType.ILI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2505,6 +2657,8 @@ if (type.equals(SocionicsType.ILI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2532,6 +2686,8 @@ if (type.equals(SocionicsType.ILI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2559,6 +2715,8 @@ if (type.equals(SocionicsType.ILI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//	||	dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -2586,6 +2744,8 @@ if (type.equals(SocionicsType.ILI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//	||	dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2615,20 +2775,19 @@ if (type.equals(SocionicsType.LIE)){
 				}else
 					if (aspect.equals(AData.E)){
 						if (!secondAspect.equals(AData.S)) return false;					
-					}else
-						if (aspect.equals(AData.S)){
-							return false;					
 						}else
-							if (aspect.equals(AData.F)){
-								 return false;					
-							}else
-								if (aspect.equals(AData.T)){
-									 return false;					
+							if (aspect.equals(AData.S)){
+								if (!secondAspect.equals(AData.E)) return false;					
+							}else							
+								if (aspect.equals(AData.F)){
+									if (!secondAspect.equals(AData.R)) return false;					
 								}else
-									if (aspect.equals(AData.I)){
-										return false;					
-									}
-	
+									if (aspect.equals(AData.T)){
+										if (!secondAspect.equals(AData.P)) return false;					
+									}else
+										if (aspect.equals(AData.I)){
+											if (!secondAspect.equals(AData.L)) return false;					
+										}
 	} //end Block
 	
 	//L
@@ -2651,6 +2810,8 @@ if (type.equals(SocionicsType.LIE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//	||	dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2679,6 +2840,8 @@ if (type.equals(SocionicsType.LIE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//	||  dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -2704,6 +2867,8 @@ if (type.equals(SocionicsType.LIE)){
 				
 				//		dimension.equals(AData.MALOMERNOST)
 						dimension.equals(AData.MNOGOMERNOST)
+				//	||	dimension.equals(AData.ODNOMERNOST)
+				//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					|| 	dimension.equals(AData.D2)
 					|| 	dimension.equals(AData.D3)
 					|| 	dimension.equals(AData.D4)
@@ -2731,6 +2896,8 @@ if (type.equals(SocionicsType.LIE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2759,6 +2926,8 @@ if (type.equals(SocionicsType.LIE)){
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
 						|| 	dimension.equals(AData.D2)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
 														)return false;
@@ -2785,6 +2954,8 @@ if (type.equals(SocionicsType.LIE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2812,6 +2983,8 @@ if (type.equals(SocionicsType.LIE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//	||	dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2839,6 +3012,8 @@ if (type.equals(SocionicsType.LIE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//	||	dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -2904,6 +3079,8 @@ if (type.equals(SocionicsType.ESI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2932,6 +3109,8 @@ if (type.equals(SocionicsType.ESI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -2957,6 +3136,8 @@ if (type.equals(SocionicsType.ESI)){
 				
 						dimension.equals(AData.MALOMERNOST)
 				//	||	dimension.equals(AData.MNOGOMERNOST)
+					||	dimension.equals(AData.ODNOMERNOST)
+					||	dimension.equals(AData.INDIVIDUALNOST)								
 				//	|| 	dimension.equals(AData.D2)
 				//	|| 	dimension.equals(AData.D3)
 				//	|| 	dimension.equals(AData.D4)
@@ -2984,6 +3165,8 @@ if (type.equals(SocionicsType.ESI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3011,6 +3194,8 @@ if (type.equals(SocionicsType.ESI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -3038,6 +3223,8 @@ if (type.equals(SocionicsType.ESI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3065,6 +3252,8 @@ if (type.equals(SocionicsType.ESI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3092,6 +3281,8 @@ if (type.equals(SocionicsType.ESI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3118,20 +3309,19 @@ if (type.equals(SocionicsType.LSE)){
 				}else
 					if (aspect.equals(AData.E)){
 						if (!secondAspect.equals(AData.T)) return false;					
-					}else
-						if (aspect.equals(AData.S)){
-							return false;					
 						}else
-							if (aspect.equals(AData.F)){
-								 return false;					
-							}else
-								if (aspect.equals(AData.T)){
-									 return false;					
+							if (aspect.equals(AData.S)){
+								if (!secondAspect.equals(AData.P)) return false;					
+							}else							
+								if (aspect.equals(AData.F)){
+									if (!secondAspect.equals(AData.L)) return false;					
 								}else
-									if (aspect.equals(AData.I)){
-										return false;					
-									}
-			
+									if (aspect.equals(AData.T)){
+										if (!secondAspect.equals(AData.E)) return false;					
+									}else
+										if (aspect.equals(AData.I)){
+											if (!secondAspect.equals(AData.R)) return false;					
+										}
 	} //end Block
 	
 	//L
@@ -3154,6 +3344,8 @@ if (type.equals(SocionicsType.LSE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3182,6 +3374,8 @@ if (type.equals(SocionicsType.LSE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -3207,6 +3401,8 @@ if (type.equals(SocionicsType.LSE)){
 				
 				//		dimension.equals(AData.MALOMERNOST)
 						dimension.equals(AData.MNOGOMERNOST)
+				//	||	dimension.equals(AData.ODNOMERNOST)
+				//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					|| 	dimension.equals(AData.D2)
 					|| 	dimension.equals(AData.D3)
 					|| 	dimension.equals(AData.D4)
@@ -3234,6 +3430,8 @@ if (type.equals(SocionicsType.LSE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3261,6 +3459,8 @@ if (type.equals(SocionicsType.LSE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3288,6 +3488,8 @@ if (type.equals(SocionicsType.LSE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -3315,6 +3517,8 @@ if (type.equals(SocionicsType.LSE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3342,6 +3546,8 @@ if (type.equals(SocionicsType.LSE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3369,19 +3575,19 @@ if (type.equals(SocionicsType.EII)){
 				}else
 					if (aspect.equals(AData.E)){
 						if (!secondAspect.equals(AData.T)) return false;					
-					}else
-						if (aspect.equals(AData.S)){
-							return false;					
 						}else
-							if (aspect.equals(AData.F)){
-								 return false;					
-							}else
-								if (aspect.equals(AData.T)){
-									 return false;					
+							if (aspect.equals(AData.S)){
+								if (!secondAspect.equals(AData.P)) return false;					
+							}else							
+								if (aspect.equals(AData.F)){
+									if (!secondAspect.equals(AData.L)) return false;					
 								}else
-									if (aspect.equals(AData.I)){
-										return false;					
-									}
+									if (aspect.equals(AData.T)){
+										if (!secondAspect.equals(AData.E)) return false;					
+									}else
+										if (aspect.equals(AData.I)){
+											if (!secondAspect.equals(AData.R)) return false;					
+										}
 					
 	} //end Block
 	
@@ -3405,6 +3611,8 @@ if (type.equals(SocionicsType.EII)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3433,6 +3641,8 @@ if (type.equals(SocionicsType.EII)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3458,6 +3668,8 @@ if (type.equals(SocionicsType.EII)){
 				
 						dimension.equals(AData.MALOMERNOST)
 				//		dimension.equals(AData.MNOGOMERNOST)
+					||	dimension.equals(AData.ODNOMERNOST)
+					||	dimension.equals(AData.INDIVIDUALNOST)								
 				//	|| 	dimension.equals(AData.D2)
 				//	|| 	dimension.equals(AData.D3)
 				//	|| 	dimension.equals(AData.D4)
@@ -3485,6 +3697,8 @@ if (type.equals(SocionicsType.EII)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3512,6 +3726,8 @@ if (type.equals(SocionicsType.EII)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3539,6 +3755,8 @@ if (type.equals(SocionicsType.EII)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3566,6 +3784,8 @@ if (type.equals(SocionicsType.EII)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -3593,6 +3813,8 @@ if (type.equals(SocionicsType.EII)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3610,29 +3832,29 @@ if (type.equals(SocionicsType.IEE)){
 	//block
 	if (secondAspect!=null){
 		if (aspect.equals(AData.L)){
-			 return false;
+			if (!secondAspect.equals(AData.F)) return false;
 		}else		
 			if (aspect.equals(AData.P)){
-				 return false;			
+				if (!secondAspect.equals(AData.S)) return false;			
 			}else
 				if (aspect.equals(AData.R)){
-					 return false;					
+					if (!secondAspect.equals(AData.I)) return false;					
 				}else
 					if (aspect.equals(AData.E)){
-						 return false;					
-					}else
-						if (aspect.equals(AData.S)){
-							if (!secondAspect.equals(AData.P)) return false;return false;					
+						if (!secondAspect.equals(AData.T)) return false;					
 						}else
-							if (aspect.equals(AData.F)){
-								if (!secondAspect.equals(AData.L)) return false;return false;					
-							}else
-								if (aspect.equals(AData.T)){
-									if (!secondAspect.equals(AData.E)) return false;return false;					
+							if (aspect.equals(AData.S)){
+								if (!secondAspect.equals(AData.P)) return false;					
+							}else							
+								if (aspect.equals(AData.F)){
+									if (!secondAspect.equals(AData.L)) return false;					
 								}else
-									if (aspect.equals(AData.I)){
-										if (!secondAspect.equals(AData.R)) return false;return false;					
-									}
+									if (aspect.equals(AData.T)){
+										if (!secondAspect.equals(AData.E)) return false;					
+									}else
+										if (aspect.equals(AData.I)){
+											if (!secondAspect.equals(AData.R)) return false;					
+										}
 			
 	} //end Block
 	
@@ -3656,6 +3878,8 @@ if (type.equals(SocionicsType.IEE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3684,6 +3908,8 @@ if (type.equals(SocionicsType.IEE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3709,6 +3935,8 @@ if (type.equals(SocionicsType.IEE)){
 				
 						dimension.equals(AData.MALOMERNOST)
 				//		dimension.equals(AData.MNOGOMERNOST)
+					||	dimension.equals(AData.ODNOMERNOST)
+					||	dimension.equals(AData.INDIVIDUALNOST)								
 				//	|| 	dimension.equals(AData.D2)
 				//	|| 	dimension.equals(AData.D3)
 					|| 	dimension.equals(AData.D4)
@@ -3736,6 +3964,8 @@ if (type.equals(SocionicsType.IEE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -3763,6 +3993,8 @@ if (type.equals(SocionicsType.IEE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3790,6 +4022,8 @@ if (type.equals(SocionicsType.IEE)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3817,6 +4051,8 @@ if (type.equals(SocionicsType.IEE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3844,6 +4080,8 @@ if (type.equals(SocionicsType.IEE)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -3861,30 +4099,29 @@ if (type.equals(SocionicsType.SLI)){
 	//block
 	if (secondAspect!=null){
 		if (aspect.equals(AData.L)){
-			 return false;
+			if (!secondAspect.equals(AData.F)) return false;
 		}else		
 			if (aspect.equals(AData.P)){
-				 return false;			
+				if (!secondAspect.equals(AData.S)) return false;			
 			}else
 				if (aspect.equals(AData.R)){
-					 return false;					
+					if (!secondAspect.equals(AData.I)) return false;					
 				}else
 					if (aspect.equals(AData.E)){
-						 return false;					
-					}else
-						if (aspect.equals(AData.S)){
-							if (!secondAspect.equals(AData.P)) return false;return false;					
+						if (!secondAspect.equals(AData.T)) return false;					
 						}else
-							if (aspect.equals(AData.F)){
-								if (!secondAspect.equals(AData.L)) return false;return false;					
-							}else
-								if (aspect.equals(AData.T)){
-									if (!secondAspect.equals(AData.E)) return false;return false;					
+							if (aspect.equals(AData.S)){
+								if (!secondAspect.equals(AData.P)) return false;					
+							}else							
+								if (aspect.equals(AData.F)){
+									if (!secondAspect.equals(AData.L)) return false;					
 								}else
-									if (aspect.equals(AData.I)){
-										if (!secondAspect.equals(AData.R)) return false;return false;					
-									}
-			
+									if (aspect.equals(AData.T)){
+										if (!secondAspect.equals(AData.E)) return false;					
+									}else
+										if (aspect.equals(AData.I)){
+											if (!secondAspect.equals(AData.R)) return false;					
+										}
 	} //end Block
 	
 	//L
@@ -3907,6 +4144,8 @@ if (type.equals(SocionicsType.SLI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -3935,6 +4174,8 @@ if (type.equals(SocionicsType.SLI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -3960,6 +4201,8 @@ if (type.equals(SocionicsType.SLI)){
 				
 				//		dimension.equals(AData.MALOMERNOST)
 						dimension.equals(AData.MNOGOMERNOST)
+					||	dimension.equals(AData.ODNOMERNOST)
+				//	||	dimension.equals(AData.INDIVIDUALNOST)								
 				//	|| 	dimension.equals(AData.D2)
 					|| 	dimension.equals(AData.D3)
 					|| 	dimension.equals(AData.D4)
@@ -3987,6 +4230,8 @@ if (type.equals(SocionicsType.SLI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -4014,6 +4259,8 @@ if (type.equals(SocionicsType.SLI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 					//	|| 	dimension.equals(AData.D4)
@@ -4041,6 +4288,8 @@ if (type.equals(SocionicsType.SLI)){
 					
 							dimension.equals(AData.MALOMERNOST)
 					//		dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 					//	|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -4068,6 +4317,8 @@ if (type.equals(SocionicsType.SLI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+						||	dimension.equals(AData.ODNOMERNOST)
+						||	dimension.equals(AData.INDIVIDUALNOST)								
 					//	|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
@@ -4095,6 +4346,8 @@ if (type.equals(SocionicsType.SLI)){
 					
 					//		dimension.equals(AData.MALOMERNOST)
 							dimension.equals(AData.MNOGOMERNOST)
+					//	||	dimension.equals(AData.ODNOMERNOST)
+					//	||	dimension.equals(AData.INDIVIDUALNOST)								
 						|| 	dimension.equals(AData.D2)
 						|| 	dimension.equals(AData.D3)
 						|| 	dimension.equals(AData.D4)
