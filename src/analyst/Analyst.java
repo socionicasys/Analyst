@@ -76,6 +76,8 @@ import analyst.ControlsPane.AspectSelectionListener;
     JFrame frame = this;
     String fileName = "";
     JPopupMenu popupMenu;
+    public final String version = "0.1";
+    
     
     
  static   String applicationName = "Информационный анализ";
@@ -109,6 +111,7 @@ import analyst.ControlsPane.AspectSelectionListener;
         textPane.setCaretPosition(0);
         textPane.setMargin(new Insets(5,5,5,5));
         textPane.setMinimumSize(new Dimension(400,400));
+        
         
         // binding the popup menu for textPane
         Toolkit.getDefaultToolkit().getSystemEventQueue().push(new MyEventQueue()); 
@@ -268,7 +271,13 @@ import analyst.ControlsPane.AspectSelectionListener;
 								    	 if (fileName.length() == 0) {	
 								    		 fc.setDialogTitle("Сохранение документа");
 									    	 int returnVal = fc.showDialog(Analyst.this, "Сохранить");
-									         if (returnVal == JFileChooser.APPROVE_OPTION) file = fc.getSelectedFile();
+									         	if (returnVal == JFileChooser.APPROVE_OPTION) { 
+									        	 			file = fc.getSelectedFile();
+									        	 			fileName = file.getAbsolutePath();
+									        	 			if (!fileName.endsWith(".htm")) fileName+=".htm";
+									        	 			file = new File(fileName);
+					        	 				}
+									         
 							       
 									         }
 									    	 else {
@@ -310,9 +319,14 @@ import analyst.ControlsPane.AspectSelectionListener;
 									    	 fc.setDialogTitle("Сохранение документа под новым именем");
 								    										    		 
 								    		 int returnVal = fc.showDialog(Analyst.this, "Сохранить как...");
-									         if (returnVal == JFileChooser.APPROVE_OPTION) file = fc.getSelectedFile();
+										         if (returnVal == JFileChooser.APPROVE_OPTION) {
+										        	 file = fc.getSelectedFile();
+										        	 fileName = file.getAbsolutePath();
+										        	 if (!fileName.endsWith(".htm")) fileName+=".htm";
+								        	 					file = new File(fileName);
+										         }
 									         
-									         if (file.exists()){
+									         if (file!=null && file.exists()){
 									        	  Object[] options =  {"Да","Нет"};
 									        	 if(JOptionPane.showOptionDialog(frame,
 									                 "Такой файл существует!\n\nХотите перезаписать этот файл?", "Предупреждение!!!",
@@ -659,6 +673,14 @@ import analyst.ControlsPane.AspectSelectionListener;
         a.putValue(Action.NAME, "Выделить всё");
         menu.add(a);
         popupMenu.add(a);
+        
+        menu.addSeparator();
+        popupMenu.addSeparator();
+        
+        a = new SearchAction((JTextComponent)textPane, aDoc);
+        menu.add(a);
+        popupMenu.add(a);
+        
         return menu;
     }
 
@@ -816,7 +838,7 @@ import analyst.ControlsPane.AspectSelectionListener;
 					"Программа \"Информационный Анализ\"\n"+
 					"(с) Виктор Пятницкий 2010 г. \n\n"+
 					"Школа системной соционики, Киев\n\n"+
-					"Версия \"Альфа\"", "О программе", 
+					"Версия: "+ version, "О программе", 
 					JOptionPane.INFORMATION_MESSAGE,
 					JOptionPane.PLAIN_MESSAGE,	
 					null,
@@ -985,8 +1007,8 @@ import analyst.ControlsPane.AspectSelectionListener;
 
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		if (saveConfirmation()!=JOptionPane.CANCEL_OPTION);	
-		System.exit(0);
+		if (saveConfirmation()!=JOptionPane.CANCEL_OPTION)
+									System.exit(0);
 	}
 
 	@Override

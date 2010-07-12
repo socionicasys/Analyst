@@ -41,6 +41,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	protected Vector <ADocumentChangeListener> listeners; 
 	public SimpleAttributeSet defaultStyle;
 	public SimpleAttributeSet defaultSectionAttributes;
+	public SimpleAttributeSet defaultSearchHighlightAttributes;
 
 	
 	private class DocumentFlowEvent  {
@@ -119,6 +120,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	//style of a section with mark-up
 	defaultSectionAttributes = new SimpleAttributeSet();
 	defaultSectionAttributes.addAttribute(StyleConstants.Background, Color.decode("#E0ffff"));
+	defaultSearchHighlightAttributes = new SimpleAttributeSet();
+	defaultSearchHighlightAttributes.addAttribute(StyleConstants.Background, Color.decode("#ff0000"));
 
 	
 	//init new Document
