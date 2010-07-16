@@ -1,6 +1,7 @@
 package analyst;
 
 import java.awt.Color;
+import java.awt.Frame;
 import java.awt.Rectangle;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -17,6 +19,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 import javax.swing.JViewport;
 import javax.swing.event.*;
 import javax.swing.text.*;
@@ -26,14 +30,15 @@ import analyst.AData.ADataException;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 
 
-public class ADocument extends DefaultStyledDocument implements DocumentListener,  Serializable
+public class ADocument extends DefaultStyledDocument implements DocumentListener  
 																	  {
-	// document's properties
-	public static String TitleProperty1 	= "Документ:";
-	public static String ExpertProperty 	= "Эксперт:";
-	public static String ClientProperty		= "Типируемый:";
-	public static String DateProperty 		= "Дата:";
-	public static String CommentProperty 	= "Комментарий:";
+	public static final String DEFAULT_TITLE = "Новый документ";
+	// document's properties names
+	public static final String TitleProperty1 	= "Документ:";
+	public static final String ExpertProperty 	= "Эксперт:";
+	public static final String ClientProperty	= "Типируемый:";
+	public static final String DateProperty 	= "Дата:";
+	public static final String CommentProperty 	= "Комментарий:";
 
 	
 		
@@ -42,15 +47,18 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	public SimpleAttributeSet defaultStyle;
 	public SimpleAttributeSet defaultSectionAttributes;
 	public SimpleAttributeSet defaultSearchHighlightAttributes;
+	
+	private int progress = 0;
 
 	
-	private class DocumentFlowEvent  {
+	 private class DocumentFlowEvent  {
 	 protected 	int type, offset, sectionNo; 
 	 protected String style;
 	 protected String comment;
 	 public static final int LINE_BREAK 	= 1;
 	 public static final int SECTION_START 	= 2;
 	 public static final int SECTION_END 	= 3;
+	 
 
 	 
 
@@ -87,24 +95,24 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}	
 }//class DocumentFlowEvent
 	
-	private class RawAData{
+	public class RawAData{
 		protected int handle = -1, beg = -1, end = -1; 
 		
 		String aData, comment;
 		
 		public RawAData(int handle){this.handle = handle;}
 	
-		protected void setID (int handle){this.handle=handle;}
-		protected void setBegin (int beg){this.beg=beg;}
-		protected void setEnd (int end){this.end=end;}
-		protected void setAData (String aData){this.aData=aData;}
-		protected void setComment (String com){this.comment=com;}
+		public void setID (int handle){this.handle=handle;}
+		public void setBegin (int beg){this.beg=beg;}
+		public void setEnd (int end){this.end=end;}
+		public void setAData (String aData){this.aData=aData;}
+		public void setComment (String com){this.comment=com;}
 
-		protected int getID (){return handle;}
-		protected int getBegin (){return beg;}
-		protected int getEnd (){return end;}
-		protected String getAData (){return aData;}
-		protected String getComment (){return this.comment;}
+		public int getID (){return handle;}
+		public int getBegin (){return beg;}
+		public int getEnd (){return end;}
+		public String getAData (){return aData;}
+		public String getComment (){return this.comment;}
 		
 		
 		
@@ -112,6 +120,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	 	
 	ADocument(){
 	super();
+
 	addDocumentListener(this);
 
 	//style of general text
@@ -139,8 +148,14 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			System.out.println("Error in ADocument.initNew() :\n");
 			e.printStackTrace();
 		}
-		String name = "Новый документ";
-		putProperty((Object)Document.TitleProperty, (Object)name);
+		
+		putProperty((Object)TitleProperty,  (Object)DEFAULT_TITLE);
+		putProperty((Object)ExpertProperty, (Object)"");
+		putProperty((Object)ClientProperty, (Object)"");
+		Date date = new Date();
+		putProperty((Object)DateProperty, 	(Object) date.toLocaleString());
+		putProperty((Object)CommentProperty, (Object)"");
+
 		fireADocumentChanged();
 	}
 
@@ -325,6 +340,7 @@ public	void changedUpdate(DocumentEvent e) {
 
 	}//changedUpdate(); 	
 
+
 @Override
 protected void insertUpdate (AbstractDocument.DefaultDocumentEvent chng, AttributeSet set) {
 
@@ -420,7 +436,7 @@ public void addADocumentChangeListener (ADocumentChangeListener l){
 	listeners.add(l);
 }
 
-protected void fireADocumentChanged(){
+public void fireADocumentChanged(){
 	if (listeners == null) return;
 	for(int i=0; i<listeners.size(); i++){
 	listeners.get(i).aDocumentChanged(this);	
@@ -440,9 +456,17 @@ public HashMap<ASection, AData> getADataHashMap() {
 	
 }
 
-public void save(FileOutputStream fos){
+public void save(FileOutputStream fos, IOWorker iow) throws Exception {
+	
+	int headerSaveProgress = 20;
+	int writePreparationProgress = 20;
+	int textWriteProgress= 40;
+	int reportWriteProgress= 20;
+	
+	iow.setProgressValue(0);
+	
 if (fos == null){System.out.println("Error attempting to save file: FileOutputStream is null"); return;}	
-try {
+
 //writing the header
 String text = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"> \n";
 text += "<html> \n<head> \n<title> \n" + getProperty(TitleProperty) + " \n</title> \n" +
@@ -459,7 +483,7 @@ text += "<html> \n<head> \n<title> \n" + getProperty(TitleProperty) + " \n</titl
 
 	fos.write(text.getBytes());
 	
-	
+
 
 //document title
 	
@@ -491,6 +515,8 @@ text += "\n <table title=\"header\" border=1 width=\"40%\"> 	" 					+ "\n" +
 				"</table >"											+ "\n";
 	
 fos.write(text.getBytes());
+
+iow.setProgressValue(headerSaveProgress);
 
 //document content
 		text = "<br/>\n";
@@ -628,7 +654,9 @@ text = "";
 				        }		        
   }
   
-  
+
+iow.setProgressValue(	headerSaveProgress + 
+						writePreparationProgress);
 		// write contents
 
  // flowEvents.capacity();
@@ -648,24 +676,22 @@ if (flowEvents!=null && !flowEvents.isEmpty()){
 		pos1 = event.getOffset();
 		eventType = event.getType();	
 		
+
+		iow.setProgressValue(	headerSaveProgress + 
+								writePreparationProgress+
+								textWriteProgress*z/flowEvents.size());
+		
 		//writing text 
-		try {
+
 			String t = this.getText(pos0,pos1-pos0);
 			text += t;
-		} catch (BadLocationException e) {
-			System.out.println("Error retrieving text from Document when saving document:");
-			e.printStackTrace();
-		}
+
 		
 		// writing text remainder from last event to the end of the document
 		if (z == flowEvents.size()-1){
-			try { 
-				int finish = this. getLength();
-				  if (finish>pos1) text += this.getText(pos1, finish-pos1);
-			} catch (BadLocationException e) {
-				System.out.println("Error retrieving text from Document when saving document:");
-				e.printStackTrace();
-			}			
+					int finish = this. getLength();
+					if (finish>pos1) text += this.getText(pos1, finish-pos1);
+		
 		}
 		
 		//analyzing event and generating  mark-up
@@ -700,14 +726,16 @@ if (flowEvents!=null && !flowEvents.isEmpty()){
 				
 					if (!stack.isEmpty())text += "</span>";
 					text += "</td>\n";
-					text += "<td>"+ analisys+"</td>";
+					text += "<td>"+ analisys;
+					if (makeBreak) text += "<br/>";
+					text +="</td>";
 					analisys="";
 					if (!(z == flowEvents.size()-1)) text += "\n</tr>\n<tr>\n<td>";
 					if (!stack.isEmpty())
 						text += "<span style="+stack.getCurrentStyle()+">";
 					makeBreak = false;
 				}
-			 if (makeBreak) text += "<br/>";	
+			 	
 			} // event == LINE_BREAK
 		
 
@@ -715,33 +743,68 @@ if (flowEvents!=null && !flowEvents.isEmpty()){
 }//if
 	
 
-text += "		</td>" 														+ "\n"  +
+text += //"		</td>" 														+ "\n"  +
 		"</tr>" 															+ "\n" +		
-		"</table >"															+ "\n" +
+		"</table>"															+ "\n";
+//if not generating report
+Analyst an = iow.getProgressWindow().getAnalyst();
+if (!an.getGenerateReport()){
+	text +=
 		"</body >"															+ "\n" +
 		"</html >"															+ "\n";
+}		
+//fos.write(text.getBytes());
+
+iow.setProgressValue(	headerSaveProgress + 
+		writePreparationProgress+
+		textWriteProgress+
+		reportWriteProgress);
+
+// if generating report
+if (an.getGenerateReport()){
+	
+	
+	text += "<br/>" +	
+			"<h1> Анализ типирования </h1>" +
+			"<br/>" ;
+
+	text += an.getNavigeTree().getReport();
+	text += an.getAnalisysTree().getReport();	
+
+
+	
+	
+	text +=
+		"</body >"															+ "\n" +
+		"</html >"															+ "\n";
+}		
 fos.write(text.getBytes());
+
 fos.flush();
 fos.close();
-} catch (IOException e) {
-	System.out.println("Ошибка записи файла :");	
-	e.printStackTrace();
-	} catch (BadLocationException e) {
-	
-	e.printStackTrace();
-}
+
+iow.setProgressValue(100);
 	
 }//save()
 
 
 
-public void load(FileInputStream fis, boolean append){
+public void load(FileInputStream fis, boolean append, IOWorker iow) throws Exception
+															{
 //	
 	
 	InputStreamReader isr = new InputStreamReader(fis);
 	String leftColumn="";
     String rightColumn ="";
     String allText ="";
+    
+    int fileLoadProgress = 20;
+    int leftColumnParseProgress = 50;
+    int rightColumnParseProgress = 25;
+    int textAddProgress = 5;
+    int aDataCteationProgress = 0;
+    
+    
     int appendOffset=0;
     if (append) appendOffset = getLength();
 	
@@ -773,18 +836,18 @@ public void load(FileInputStream fis, boolean append){
 	public int getendPos()	{return endPos;}
 	}// class SectorData
 
-	
-	
 
       
     Vector <SectorData> sectorData = new Vector <SectorData>();
     boolean finished = false;
     // reading the file
-    try {
+    
 		int offset = 0;
 		int length = fis.available();
 		char[] buf = new char[length];
 		int bytesRead;
+		
+		iow.firePropertyChange("progress", null, new Integer(fileLoadProgress/2));	
 		
 			while(!finished){
 				    
@@ -796,15 +859,12 @@ public void load(FileInputStream fis, boolean append){
 							fis.close();
 					  }
 					}
-				
+	iow.firePropertyChange("progress", null, new Integer(fileLoadProgress));		
 		
-	} catch (IOException e) {
-				System.out.println("Ошибка чтения файла :");	
-				e.printStackTrace();
-			}
+	
 	//  PARSING THE INPUT DATA
 	finished = false;
-	int offset =0;
+	offset =0;
 	
 	// looking for the table "header"
 	int searchIndex =allText.indexOf("title=\"header\"", 0);
@@ -814,32 +874,31 @@ public void load(FileInputStream fis, boolean append){
 	String result=null;
 	String headerResult=null, leftHeaderColumn = null, rightHeaderColumn = null;
 	
+	String leftHeaderText  = allText.substring(searchIndex, allText.indexOf("</table", searchIndex));
 	
 	// looking through columns of table "header" and retreiving text of the left and right columns
-	Dictionary<Object, Object> properties = getDocumentProperties();
-	if (!append){
-		properties.remove(TitleProperty);
-		properties.remove(ExpertProperty);
-		properties.remove(ClientProperty);
-		properties.remove(DateProperty);
-		properties.remove(CommentProperty);
-	}
 
+	Dictionary<Object, Object> properties = getDocumentProperties();
+	
+
+	searchIndex=leftHeaderText.indexOf("<tr>", 0);
 	while(searchIndex>0){
 		
-		searchIndex=allText.indexOf("<tr>", searchIndex);
-		if (searchIndex>0) headerResult = findTagContent(allText, colStartToken,colEndToken,searchIndex); 
+	
+		
+		searchIndex=leftHeaderText.indexOf("<tr>", searchIndex);
+		if (searchIndex>0) headerResult = findTagContent(leftHeaderText, colStartToken,colEndToken,searchIndex); 
 			else break;
 		if (headerResult !=null){ 
 			leftHeaderColumn =headerResult.trim();
-			searchIndex = allText.indexOf(colEndToken, searchIndex)+colEndToken.length();
+			searchIndex = leftHeaderText.indexOf(colEndToken, searchIndex)+colEndToken.length();
 		}
 		
-		if (searchIndex>0) headerResult = findTagContent(allText, colStartToken,colEndToken,searchIndex);
+		if (searchIndex>0) headerResult = findTagContent(leftHeaderText, colStartToken,colEndToken,searchIndex);
 			else break;
 		if (headerResult !=null){ 
 			rightHeaderColumn =headerResult.trim();
-			searchIndex = allText.indexOf(colEndToken, searchIndex)+colEndToken.length();
+			searchIndex = leftHeaderText.indexOf(colEndToken, searchIndex)+colEndToken.length();
 		}
 		
 		//обработка заголовка
@@ -847,41 +906,41 @@ public void load(FileInputStream fis, boolean append){
 		rightHeaderColumn.replaceAll("\t", "");
 		
 		
-		
 		if(!append){
 			if (leftHeaderColumn.equals(TitleProperty1)) {
-				properties.put(TitleProperty, rightHeaderColumn);
+				iow.firePropertyChange("DocumentProperty", TitleProperty,  new String(rightHeaderColumn));
 			}
 			if (leftHeaderColumn.equals(ExpertProperty)){
-				properties.put(ExpertProperty, rightHeaderColumn);
+				iow.firePropertyChange("DocumentProperty", ExpertProperty,  new String(rightHeaderColumn));
 			} 
 			if (leftHeaderColumn.equals(ClientProperty)){
-				properties.put(ClientProperty, rightHeaderColumn);	
+				iow.firePropertyChange("DocumentProperty", ClientProperty,  new String(rightHeaderColumn));	
 			} 
-			if (leftHeaderColumn.equals(DateProperty)){
-				properties.put(DateProperty, rightHeaderColumn);
+			if (leftHeaderColumn.equals(ClientProperty)){
+				iow.firePropertyChange("DocumentProperty", ClientProperty,  new String(rightHeaderColumn));
 			} 
 			if (leftHeaderColumn.equals(CommentProperty)){				
-				properties.put(CommentProperty, rightHeaderColumn);
+				iow.firePropertyChange("DocumentProperty", CommentProperty,  new String(rightHeaderColumn));
 			} 
 		} else{
 			if (leftHeaderColumn.equals(ExpertProperty)){
 				String expert = (String)properties.get(ExpertProperty);
-				if (!expert.equals(rightHeaderColumn)){ 
-					properties.remove(ExpertProperty);
-					rightHeaderColumn = expert + "; " + rightHeaderColumn;
-					properties.put(ExpertProperty, rightHeaderColumn);
-				}
+				if (!expert.contains(rightHeaderColumn)) expert += "; " + rightHeaderColumn;
+					iow.firePropertyChange("DocumentProperty", ExpertProperty,  new String(expert));
+				
 			} 
 		}
-		 this.setDocumentProperties(properties);
+		 
 		
 	}
 	
-	
-	
+
 	// looking for the table "protocol"
-	searchIndex =allText.indexOf("title=\"protocol\"", 0);
+	searchIndex = allText.indexOf("title=\"protocol\"", 0);
+	
+	//limiting ourselves only to the Protocol table
+	int tableProtocolEndIndex = allText.indexOf("</table", searchIndex);
+	allText = allText.substring(0, tableProtocolEndIndex);
 	
 	// looking through columns of table "protocol" and retreiving text of the left and right columns
 	while(searchIndex>0){
@@ -927,6 +986,8 @@ public void load(FileInputStream fis, boolean append){
 		
 		// processing the left column's content
 		while (leftColumn.indexOf("[", 0)>=0 || leftColumn.indexOf("]", 0)>=0){
+				iow.setProgressValue( 	fileLoadProgress+
+										leftColumnParseProgress* posBeg/leftColumn.length());
 			int handle = -1;
 			int a = 0 ;
 			RawAData data = null;
@@ -936,15 +997,13 @@ public void load(FileInputStream fis, boolean append){
             	posBeg = leftColumn.indexOf("[");
             	handleNo = findTagContent(leftColumn, "[", "|", 0);
 				handle =Integer.parseInt(handleNo);
-				if(handle >127)
-					a = handle;
 				leftColumn=leftColumn.replace(findTag(leftColumn, "[", "|", 0), "");
 				data = new RawAData(handle);
 				data.setBegin(posBeg);
 				rawData.put(new Integer(handle), data);
 				//if we met the closing tag
             }else
-                if (leftColumn.indexOf("]", 0) >=0  ){
+                    if (leftColumn.indexOf("]", 0) >=0  ){
 	            	posEnd = leftColumn.indexOf("|");
 	            	handleNo = findTagContent(leftColumn, "|", "]", 0);
 					handle =Integer.parseInt(handleNo);
@@ -954,13 +1013,20 @@ public void load(FileInputStream fis, boolean append){
             }
 		}			
 
-		
+		iow.firePropertyChange("progress", null, new Integer(	
+												  				fileLoadProgress+
+																leftColumnParseProgress));
 		
 		posBeg = rightColumn.indexOf("{");
 		posEnd = -1;
 		
 		// processing the right column's content
 		while (posBeg>=0){
+			iow.firePropertyChange("progress", null, new Integer(	
+									fileLoadProgress+
+									leftColumnParseProgress+
+									rightColumnParseProgress*(posBeg/rightColumn.length())));
+			
 			String handleNo = findTagContent(rightColumn, "{", ":", posBeg);
 			int handle =Integer.parseInt(handleNo);
 			RawAData data = rawData.get(new Integer (handle));
@@ -988,47 +1054,32 @@ public void load(FileInputStream fis, boolean append){
 						
 			posBeg = rightColumn.indexOf("{", posBeg+1);
 		}
+			iow.firePropertyChange("progress", null, new Integer(	
+																	fileLoadProgress+
+																	leftColumnParseProgress+
+																	rightColumnParseProgress));
+		
 		/// adding plain text to the document
-		if (!append) aDataMap.clear();
-		try {
-			
-			if (!append) this.remove(0, this.getEndPosition().getOffset()-1);
-			if (append) leftColumn = leftColumn+ "\n";
-			this.insertString(appendOffset, leftColumn, defaultStyle);
-		} catch (BadLocationException e) {
-			
-			e.printStackTrace();
-		}
+		
+			iow.firePropertyChange("TextData", Integer.toString(appendOffset), leftColumn);
+			iow.firePropertyChange("RawData", null, rawData);
+			iow.firePropertyChange("progress", null, new Integer(	
+																	fileLoadProgress+
+																	leftColumnParseProgress+
+																	rightColumnParseProgress+
+																	textAddProgress));	 
 		
 		//creating and adding the segments AData info
+	//	HashMap <ASection, AData> tempADataMap = new HashMap <ASection, AData>();
+	
+
 		
-		Iterator <RawAData> it =  rawData.values().iterator();
-		RawAData temp = null;
-		while(it.hasNext()){
-			temp = it.next();
-			AData ad=null;
-			try {
-				ad = AData.parceAData(temp.getAData());
-				String ggg = temp.getComment();
-				ad.setComment(temp.getComment());
-				int beg = temp.getBegin();
-				int end = temp.getEnd();
-				aDataMap.put(new ASection(createPosition(beg+appendOffset), createPosition(end+appendOffset)), ad);
-				setCharacterAttributes(beg+appendOffset, end-beg, defaultSectionAttributes, false);
-			} catch (ADataException e) {
-				System.out.println("Ошибка разбора строки анализа при загрузке документа: "+ temp.getAData());
-				e.printStackTrace();
-			} catch (BadLocationException e) {
-				System.out.println("Ошибка создания позиций размеченного сегмента при загрузке документа: " +
-						"[" + temp.getBegin()+ "..." + temp.getEnd()+ "]");
-				e.printStackTrace();
-			}	
-		
+		//iow.firePropertyChange("AData", getADataMap(), tempADataMap);
+	
+		iow.firePropertyChange("progress", null, new Integer(100));	
+
 			
-			this.fireADocumentChanged();
-		}
-		
-		
+
 	
 }//load(FileInputStream fis)
 
@@ -1099,7 +1150,34 @@ public void insertUpdate(DocumentEvent e) {
 	// TODO Auto-generated method stub
 	
 }
-	
 
+public int getProgress(){return progress;}
+
+public void load(FileInputStream fis, ProgressWindow pw) throws Exception {
+	IOWorker iow = new IOWorker(pw, this, fis);
+	iow.setAppend(false);
+	iow.execute();
+	//while(!iow.isDone());
+	if (iow.getException()!=null) throw new Exception(iow.getException());
+}
+
+public void append(FileInputStream fis, ProgressWindow pw) throws Exception {
+	IOWorker iow = new IOWorker(pw, this, fis);
+	iow.setAppend(true);
+	iow.execute();
+	//while(!iow.isDone())Thread.currentThread().yield();
+	if (iow.getException()!=null) throw new Exception(iow.getException());
+}
+
+public void save(FileOutputStream fos, ProgressWindow pw, boolean append) {
+	IOWorker iow = new IOWorker(pw, this, fos);
+	iow.execute();
+	//while(!iow.isDone())Thread.currentThread().yield();
+	
+}
+
+public HashMap <ASection, AData> getADataMap(){return aDataMap;}
+
+public ASection createASection(int beg, int end) throws BadLocationException{return new ASection(createPosition(beg), createPosition(end));}
 																	  
 } // class ADocument

@@ -276,38 +276,38 @@ public class BTree  extends JTree implements
 					   
 				 
 		    Vector<SocionicsType> c = counter.getMatchTypes();
-			if (c.contains(SocionicsType.ILE))  ileMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								ileNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			if (c.contains(SocionicsType.SEI))	seiMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								seiNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false)); 
-			if (c.contains(SocionicsType.ESE)) 	eseMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								eseNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			if (c.contains(SocionicsType.LII)) 	liiMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								liiNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			if (c.contains(SocionicsType.EIE)) 	eieMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								eieNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			if (c.contains(SocionicsType.LSI)) 	lsiMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								lsiNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			if (c.contains(SocionicsType.SLE)) 	sleMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								sleNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			if (c.contains(SocionicsType.IEI))	ieiMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								ieiNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false)); 
-			if (c.contains(SocionicsType.SEE)) 	seeMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								seeNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			if (c.contains(SocionicsType.ILI)) 	iliMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								iliNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			if (c.contains(SocionicsType.LIE)) 	lieMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								lieNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			if (c.contains(SocionicsType.ESI))	esiMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								esiNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false)); 
-			if (c.contains(SocionicsType.LSE))	lseMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								lseNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false)); 
-			if (c.contains(SocionicsType.EII))	eiiMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								eiiNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false)); 
-			if (c.contains(SocionicsType.IEE)) 	ieeMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								ieeNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			if (c.contains(SocionicsType.SLI)) 	sliMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			else								sliNoMatchNode.add(new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+			if (c.contains(SocionicsType.ILE))  ileMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								ileNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			if (c.contains(SocionicsType.SEI))	seiMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								seiNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false)); 
+			if (c.contains(SocionicsType.ESE)) 	eseMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								eseNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			if (c.contains(SocionicsType.LII)) 	liiMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								liiNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			if (c.contains(SocionicsType.EIE)) 	eieMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								eieNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			if (c.contains(SocionicsType.LSI)) 	lsiMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								lsiNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			if (c.contains(SocionicsType.SLE)) 	sleMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								sleNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			if (c.contains(SocionicsType.IEI))	ieiMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								ieiNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false)); 
+			if (c.contains(SocionicsType.SEE)) 	seeMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								seeNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			if (c.contains(SocionicsType.ILI)) 	iliMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								iliNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			if (c.contains(SocionicsType.LIE)) 	lieMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								lieNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			if (c.contains(SocionicsType.ESI))	esiMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								esiNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false)); 
+			if (c.contains(SocionicsType.LSE))	lseMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								lseNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false)); 
+			if (c.contains(SocionicsType.EII))	eiiMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								eiiNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false)); 
+			if (c.contains(SocionicsType.IEE)) 	ieeMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								ieeNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			if (c.contains(SocionicsType.SLI)) 	sliMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			else								sliNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   
 					
 				} //end While()
@@ -412,5 +412,5 @@ public class BTree  extends JTree implements
         
      }
 	
-	
+
 }

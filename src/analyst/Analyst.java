@@ -67,7 +67,7 @@ import analyst.ControlsPane.AspectSelectionListener;
     JTextArea commentField;
     JTabbedPane navigateTabs;
     ControlsPane controlsPane;
-    StatusLabel caretListenerLabel;
+    StatusLabel status;
     ATree navigateTree;
     BTree analisysTree;
     CTree hystogramTree;
@@ -76,8 +76,9 @@ import analyst.ControlsPane.AspectSelectionListener;
     JFrame frame = this;
     String fileName = "";
     JPopupMenu popupMenu;
-    public final String version = "0.2";
-    
+    public final String version = "0.3";
+    private  boolean genetateReport = false;
+    JProgressBar progress;
     
     
  static   String applicationName = "Информационный анализ";
@@ -92,7 +93,7 @@ import analyst.ControlsPane.AspectSelectionListener;
     protected UndoManager undo = new UndoManager();
 
     public Analyst() {
-        super(applicationName);
+        super(applicationName+ " - " + ADocument.DEFAULT_TITLE);
         addWindowListener(this);
         setMinimumSize(new Dimension(600,400));
         setPreferredSize(new Dimension(1000,700));
@@ -154,10 +155,16 @@ import analyst.ControlsPane.AspectSelectionListener;
         
 
         //Create the status area.
-        JPanel statusPane = new JPanel(new GridLayout(1, 1));
-        caretListenerLabel =
+        JPanel statusPane = new JPanel(new BorderLayout() ); // GridLayout(1, 2));
+        status =
                 new StatusLabel("Откройте сохраненный документ или вставтьте анализируемый текст в центральное окно");
-        statusPane.add(caretListenerLabel);
+        progress = new JProgressBar(0,100);
+        progress.setSize(new Dimension(300,30));
+        
+        progress.setVisible(false);
+        statusPane.add(status, BorderLayout.WEST);
+        statusPane.add(progress, BorderLayout.CENTER);
+        
         // Create tabbed navigation pane
 
         navigateTree 	= new ATree (aDoc);
@@ -177,7 +184,7 @@ import analyst.ControlsPane.AspectSelectionListener;
 
         textPane.addCaretListener(controlsPane);
         controlsPane.addADataListener(controlsPane);
-        controlsPane.addADataListener(caretListenerLabel);
+        controlsPane.addADataListener(status);
         navigateTree.addTreeSelectionListener(controlsPane);
         analisysTree.addTreeSelectionListener(controlsPane);
         
@@ -210,12 +217,14 @@ import analyst.ControlsPane.AspectSelectionListener;
         JMenu fileMenu = createFileMenu();
         JMenu editMenu = createEditMenu();
         JMenu styleMenu = createStyleMenu();
+        JMenu settingsMenu = createSettingsMenu();
         JMenu infoMenu = createInfoMenu();
         JMenuBar mb = new JMenuBar();
         
         mb.add(fileMenu);
         mb.add(editMenu);
         mb.add(styleMenu);
+        mb.add(settingsMenu);
         mb.add(infoMenu);
         setJMenuBar(mb);
 
@@ -228,7 +237,7 @@ import analyst.ControlsPane.AspectSelectionListener;
 
         //Start watching for undoable edits and caret changes.
         doc.addUndoableEditListener(new MyUndoableEditListener());
-        textPane.addCaretListener(caretListenerLabel);
+        textPane.addCaretListener(status);
         doc.addDocumentListener(new MyDocumentListener());
     }
 
@@ -256,10 +265,12 @@ import analyst.ControlsPane.AspectSelectionListener;
         						{
 									@Override
 									public void actionPerformed(ActionEvent arg0) {
-										if (saveConfirmation()!= JOptionPane.CANCEL_OPTION)	
-																						aDoc.initNew();	
+										if (saveConfirmation()!= JOptionPane.CANCEL_OPTION)	{
+											aDoc.initNew();	
+											frame.setTitle(applicationName +" - "+(String)aDoc.getProperty((Document.TitleProperty)));
+										}
 									}
-        						
+									
         						});
         
         JMenuItem exit = new JMenuItem("Выход");
@@ -300,11 +311,13 @@ import analyst.ControlsPane.AspectSelectionListener;
 								    		 
 								    	 if (file!=null){	 
 									         	FileOutputStream fos = new FileOutputStream(file); 
-												aDoc.save(fos);
+									         	ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
+									         	IOWorker iow = new IOWorker(pw,aDoc, fos);
+												iow.execute();
 								    	 }		
 
 								        
-										 } catch (IOException e) {
+										 } catch (Exception e) {
 										// 
 										System.out.println("Error writing document to file: ");
 										e.printStackTrace();
@@ -338,6 +351,7 @@ import analyst.ControlsPane.AspectSelectionListener;
 										        	 fileName = file.getAbsolutePath();
 										        	 if (!fileName.endsWith(".htm")) fileName+=".htm";
 								        	 					file = new File(fileName);
+								        	 					
 										         }
 									         
 									         if (file!=null && file.exists()){
@@ -351,14 +365,16 @@ import analyst.ControlsPane.AspectSelectionListener;
 									                	  				JOptionPane.NO_OPTION) return;
 									         }	
 									   
-								    		 
+									         		
 								    	 if (file!=null){	 
 									         	FileOutputStream fos = new FileOutputStream(file); 
-												aDoc.save(fos);
+									        	ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
+									         	IOWorker iow = new IOWorker(pw,aDoc, fos);
+												iow.execute();
 								    	 }		
 
-								        
-										 } catch (IOException e) {
+								    	 		frame.setTitle(applicationName + " - "+ fileName);
+										 } catch (Exception e) {
 										// 
 										System.out.println("Error writing document to file: ");
 										e.printStackTrace();
@@ -384,6 +400,7 @@ import analyst.ControlsPane.AspectSelectionListener;
 		
 		    try {
 		    	 fc.setDialogTitle("Открытие документа");
+		    	 status.setText("Открытие документа...");
 		    	 if (saveConfirmation() == JOptionPane.CANCEL_OPTION) return;
 		    	 int returnVal = fc.showDialog(Analyst.this, "Открыть");
 		    	 File file = null;
@@ -392,12 +409,16 @@ import analyst.ControlsPane.AspectSelectionListener;
 		    		 
 		        	 if (file!=null) {
 		        		 FileInputStream fis = new FileInputStream(file);
-						 aDoc.load(fis, false);
+		        		 ProgressWindow pw = new ProgressWindow(frame, "    Идет загрузка файла...   ");
+		        		 //IOWorker lw = new IOWorker(pw, aDoc, fis);
+		        		 aDoc.load(fis, pw);
+		        		 
 						 fileName = file.getAbsolutePath();
-						 frame.setTitle(applicationName + " - "+ fileName);
 						 
+						 		 
 		        	 }
   				 // after loading the document scroll it to the beginning
+		        	 	textPane.grabFocus();
 					    JViewport viewport = (JViewport) textPane.getParent();
 					    String d = textPane.getText();
 					    Rectangle rect = textPane.modelToView(0);	
@@ -405,9 +426,9 @@ import analyst.ControlsPane.AspectSelectionListener;
 					   // while (!viewport.isValid()){Thread.sleep(1000);};
 					   	viewport.scrollRectToVisible(rect);
 					  
-						//textPane.requestFocus();
-		       
-
+						
+					   	status.setText("");
+					   	frame.setTitle(applicationName + " - "+ fileName);
 			} catch (FileNotFoundException e  ) {
 				//
 				System.out.println("Error opening  file" );
@@ -446,8 +467,9 @@ import analyst.ControlsPane.AspectSelectionListener;
 		    		 
 		        	 if (file!=null) {
 		        		 FileInputStream fis = new FileInputStream(file);
-						 aDoc.load(fis, true);
-						// frame.setTitle(applicationName + " - "+file.getName());
+		        		 ProgressWindow pw = new ProgressWindow(frame, "    Идет загрузка файла...   ");
+		        		 aDoc.append(fis, pw);
+
 		        	 }
   				 // after loading the document scroll it to the beginning
 					    JViewport viewport = (JViewport) textPane.getParent();
@@ -774,10 +796,15 @@ import analyst.ControlsPane.AspectSelectionListener;
 				JTextArea commentArea 	= new JTextArea(5,30);	commentArea.setLineWrap(true);
 				
 				JLabel lt = new JLabel("Название:" );  		lt.setPreferredSize(new Dimension(100, 40));
+															lt.setMaximumSize(new Dimension(100, 40));
 				JLabel le = new JLabel("Эксперт(ы):" ); 	le.setPreferredSize(new Dimension(100, 40));
+															le.setMaximumSize(new Dimension(100, 40));
 				JLabel lc = new JLabel("Типируемый:" ); 	lc.setPreferredSize(new Dimension(100, 40));
+															lc.setMaximumSize(new Dimension(100, 40));
 				JLabel ld = new JLabel("Дата:" );  			ld.setPreferredSize(new Dimension(100, 40));
+															ld.setMaximumSize(new Dimension(100, 40));
 				JLabel lcm = new JLabel("Примечание:" );	lcm.setPreferredSize(new Dimension(100, 40));
+															lcm.setMaximumSize(new Dimension(100, 40));
 				
 				
 				
@@ -867,7 +894,7 @@ import analyst.ControlsPane.AspectSelectionListener;
 				
 			JOptionPane.showOptionDialog(frame, 
 					"Программа \"Информационный Анализ\"\n"+
-					"(с) Виктор Пятницкий 2010 г. \n\n"+
+					"© Виктор Пятницкий 2010 г. \n\n"+
 					"Школа системной соционики, Киев\n\n"+
 					"Версия: "+ version, "О программе", 
 					JOptionPane.INFORMATION_MESSAGE,
@@ -887,6 +914,27 @@ import analyst.ControlsPane.AspectSelectionListener;
         return menu;
     }
 
+    protected JMenu createSettingsMenu() {
+    	
+    	 JMenu menu = new JMenu("Установки");
+
+         //Settings.
+         JCheckBox reportCheckbox = new JCheckBox("Генерировать отчет при сохранении");
+         reportCheckbox.setSelected(genetateReport);
+         
+         
+         reportCheckbox.addActionListener(new ActionListener (){
+        	 	public void actionPerformed(ActionEvent ae) {
+        	 		genetateReport = ((JCheckBox)ae.getSource()).isSelected();
+        	 	}
+        	 
+         });	
+
+         menu.add(reportCheckbox);
+    	
+    	return menu;
+    }
+    
     protected void initDocument() {
        
     }
@@ -1094,11 +1142,13 @@ private int saveConfirmation(){
 						    		 
 						    	 if (file!=null){	 
 							         	FileOutputStream fos = new FileOutputStream(file); 
-										aDoc.save(fos);
+							        	ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
+							         	IOWorker iow = new IOWorker(pw,aDoc, fos);
+										iow.execute();
 							    	 }		
 				
 								        
-								 } catch (IOException e) {
+								 } catch (Exception e) {
 								// 
 								System.out.println("Error writing document to file: ");
 								e.printStackTrace();
@@ -1169,6 +1219,12 @@ public class MyEventQueue extends EventQueue{
         popupMenu.show(textPane, pt.x, pt.y);
     } 
 }
+
+public Frame getFrame(){return frame;}
+public ATree getNavigeTree(){return navigateTree;}
+public CTree getAnalisysTree(){return hystogramTree;}
+public boolean getGenerateReport(){return genetateReport;}
+
 
 }//end class Analyst
 

@@ -776,10 +776,11 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
        p1.add(d2);  	d2.addActionListener(this);
        p1.add(d3); 		d3.addActionListener(this);
        p1.add(d4); 		d4.addActionListener(this);
+       p2.add(indi); 	indi.addActionListener(this);
        p2.add(odno); 	odno.addActionListener(this);
        p2.add(malo); 	malo.addActionListener(this);
        p2.add(mnogo); 	mnogo.addActionListener(this);
-       p2.add(indi); 	indi.addActionListener(this);
+       
        
        p.add(p1);
        p.add(p2);
@@ -1028,14 +1029,22 @@ public void stateChanged(ChangeEvent e) {
 @Override
 public void valueChanged(TreeSelectionEvent e) {
 	
-		
-	String quote = e.getPath().getLastPathComponent().toString();
-	
+	Object obj = ((DefaultMutableTreeNode)(e.getPath().getLastPathComponent())). getUserObject();
+	String quote =null;
 	int index=0;
-	if (quote!=null && quote.startsWith("#") ){
-		String indexStr = quote.substring(1,quote.indexOf("::") ) ;
-		index = Integer.parseInt(indexStr);
-		
+	
+	if (obj instanceof EndNodeObject ){
+		quote	= ((EndNodeObject)obj).getString();
+		index	 =((EndNodeObject)obj).getOffset();	
+	}
+	//String quote = e.getPath().getLastPathComponent().toString();
+	else{	
+		quote =  obj.toString();
+		if (quote!=null && quote.startsWith("#") ){
+			String indexStr = quote.substring(1,quote.indexOf("::") ) ;
+			index = Integer.parseInt(indexStr);
+		}
+	}
 		//////////////test for text positioning in scroll pane////////////////////////
 		JViewport viewport = (JViewport) textPane.getParent();
 		
@@ -1079,7 +1088,7 @@ public void valueChanged(TreeSelectionEvent e) {
 	   		////////////////////////////////////////////	
 	
 		
-	}
+	
 
 }
     

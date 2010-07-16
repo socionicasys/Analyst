@@ -397,54 +397,54 @@ public EndTreeNode(Object o){
 				   
 				   if (aspect!=null && aspect.equals(AData.L )){
 					   if(sign!=null && sign.equals(AData.PLUS)){
-	 			    		aspectLSignPlusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signPlusLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectLSignPlusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signPlusLNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (sign!=null && sign.equals(AData.MINUS)){ 
-	 			    		aspectLSignMinusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signMinusLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectLSignMinusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signMinusLNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 
 					   if(dimension!=null && dimension.equals(AData.MALOMERNOST)){
-						    aspectLDimensionMalomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionMaloLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectLDimensionMalomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionMaloLNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
-	 			    		aspectLDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMnogoLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectLDimensionMnogomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionMnogoLNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} else	
 					   		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
-						    aspectLDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionOdnoLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectLDimensionOdnomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionOdnoLNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
-	 			    		aspectLDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionIndiLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectLDimensionIndividualnostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionIndiLNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 						   
 	 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
-	 			    		aspectLDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionD1LNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		//dimensionMaloLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectLDimensionD1Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionD1LNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		//dimensionMaloLNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
-		 			    	aspectLDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionD2LNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	//dimensionMaloLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	aspectLDimensionD2Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	dimensionD2LNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	//dimensionMaloLNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
-			 			    aspectLDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    dimensionD3LNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    dimensionMnogoLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+			 			    aspectLDimensionD3Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    dimensionD3LNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    dimensionMnogoLNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 		 			    	}	
 	 			    		else if (dimension!=null && dimension.equals(AData.D4)){ 
-				 			aspectLDimensionD4Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionD4LNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionMnogoLNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+				 			aspectLDimensionD4Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionD4LNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionMnogoLNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 			 			    }						   
 					   if(mv!=null && mv.equals(AData.MENTAL)){
-						    aspectLVMMentalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectLVMMentalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (mv!=null && mv.equals(AData.VITAL)){
-	 			    		aspectLVMVitalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectLVMVitalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 	
 
 				   } //aspect L
@@ -452,53 +452,53 @@ public EndTreeNode(Object o){
 				   	//aspect P	
 				   if (aspect!=null && aspect.equals(AData.P )){
 					   if(sign!=null && sign.equals(AData.PLUS)){
-	 			    		aspectPSignPlusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signPlusPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectPSignPlusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signPlusPNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (sign!=null && sign.equals(AData.MINUS)){ 
-	 			    		aspectPSignMinusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signMinusPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectPSignMinusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signMinusPNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 
 					   if(dimension!=null && dimension.equals(AData.MALOMERNOST)){
-						   	aspectPDimensionMalomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionMaloPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						   	aspectPDimensionMalomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionMaloPNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
-	 			    		aspectPDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMnogoPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectPDimensionMnogomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionMnogoPNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} else	
 					   		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
-						   	aspectPDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionOdnoPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						   	aspectPDimensionOdnomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionOdnoPNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
-	 			    		aspectPDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionIndiPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectPDimensionIndividualnostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionIndiPNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 		 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
-	 			    		aspectPDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionD1PNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		//dimensionMaloPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectPDimensionD1Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionD1PNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		//dimensionMaloPNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
-		 			    	aspectPDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionD2PNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	//dimensionMaloPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	aspectPDimensionD2Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	dimensionD2PNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	//dimensionMaloPNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
-			 			    aspectPDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    dimensionD3PNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    dimensionMnogoPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+			 			    aspectPDimensionD3Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    dimensionD3PNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    dimensionMnogoPNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 		 			    	}	
 	 			    		else if (dimension!=null && dimension.equals(AData.D4)){ 
-				 			aspectPDimensionD4Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionD4PNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionMnogoPNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+				 			aspectPDimensionD4Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionD4PNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionMnogoPNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 			 			    }						   
 					   if(mv!=null && mv.equals(AData.MENTAL)){
-						    aspectPVMMentalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectPVMMentalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (mv!=null && mv.equals(AData.VITAL)){
-	 			    		aspectPVMVitalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectPVMVitalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 	
 
 				   }//aspect P	 
@@ -506,161 +506,161 @@ public EndTreeNode(Object o){
 				   	//aspect R	
 				   if (aspect!=null && aspect.equals(AData.R )){
 					   if(sign!=null && sign.equals(AData.PLUS)){
-	 			    		aspectRSignPlusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signPlusRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectRSignPlusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signPlusRNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (sign!=null && sign.equals(AData.MINUS)){ 
-	 			    		aspectRSignMinusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signMinusRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectRSignMinusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signMinusRNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 
 					   if(dimension!=null && dimension.equals(AData.MALOMERNOST)){
-						    aspectRDimensionMalomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionMaloRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectRDimensionMalomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionMaloRNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
-	 			    		aspectRDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMnogoRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectRDimensionMnogomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionMnogoRNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 	else
 					   		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
-						    aspectRDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionOdnoRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectRDimensionOdnomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionOdnoRNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
-	 			    		aspectRDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionIndiRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectRDimensionIndividualnostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionIndiRNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 		 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
-	 			    		aspectRDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionD1RNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		//dimensionMaloRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectRDimensionD1Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionD1RNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		//dimensionMaloRNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
-		 			    	aspectRDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionD2RNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	//dimensionMaloRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	aspectRDimensionD2Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	dimensionD2RNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	//dimensionMaloRNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
-			 			    aspectRDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    dimensionD3RNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    dimensionMnogoRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+			 			    aspectRDimensionD3Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    dimensionD3RNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    dimensionMnogoRNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 		 			    	}	
 	 			    		else if (dimension!=null && dimension.equals(AData.D4)){ 
-				 			aspectRDimensionD4Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionD4RNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionMnogoRNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+				 			aspectRDimensionD4Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionD4RNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionMnogoRNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 			 			    }						   
 					   if(mv!=null && mv.equals(AData.MENTAL)){
-						    aspectRVMMentalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectRVMMentalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (mv!=null && mv.equals(AData.VITAL)){
-	 			    		aspectRVMVitalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectRVMVitalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 	
 				   }//aspect R	
 				   
 				   	//aspect E	
 				   if (aspect!=null && aspect.equals(AData.E )){
 					   if(sign!=null && sign.equals(AData.PLUS)){
-	 			    		aspectESignPlusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signPlusENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectESignPlusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signPlusENode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (sign!=null && sign.equals(AData.MINUS)){ 
-	 			    		aspectESignMinusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signMinusENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectESignMinusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signMinusENode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 
 					   if(dimension!=null && dimension.equals(AData.MALOMERNOST)){
-						    aspectEDimensionMalomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionMaloENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectEDimensionMalomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionMaloENode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
-	 			    		aspectEDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMnogoENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectEDimensionMnogomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionMnogoENode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 	else
 					   		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
-						    aspectEDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionOdnoENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectEDimensionOdnomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionOdnoENode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
-	 			    		aspectEDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionIndiENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectEDimensionIndividualnostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionIndiENode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 	
 	 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
-	 			    		aspectEDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionD1ENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMaloENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectEDimensionD1Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionD1ENode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionMaloENode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
-		 			    	aspectEDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionD2ENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	//dimensionMaloENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	aspectEDimensionD2Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	dimensionD2ENode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	//dimensionMaloENode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
-			 			    aspectEDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    dimensionD3ENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    //dimensionMnogoENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+			 			    aspectEDimensionD3Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    dimensionD3ENode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    //dimensionMnogoENode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 		 			    	}	
 	 			    		else if (dimension!=null && dimension.equals(AData.D4)){ 
-				 			aspectEDimensionD4Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionD4ENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionMnogoENode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+				 			aspectEDimensionD4Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionD4ENode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionMnogoENode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 			 			    }						   
 					   if(mv!=null && mv.equals(AData.MENTAL)){
-						    aspectEVMMentalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectEVMMentalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (mv!=null && mv.equals(AData.VITAL)){
-	 			    		aspectEVMVitalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectEVMVitalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 
 				   }//aspect E	 
 				   
 				   	//aspect S	
 				   if (aspect!=null && aspect.equals(AData.S )){
 					   if(sign!=null && sign.equals(AData.PLUS)){
-	 			    		aspectSSignPlusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signPlusSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectSSignPlusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signPlusSNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (sign!=null && sign.equals(AData.MINUS)){ 
-	 			    		aspectSSignMinusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signMinusSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectSSignMinusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signMinusSNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 
 					   if(dimension!=null && dimension.equals(AData.MALOMERNOST)){
-						    aspectSDimensionMalomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionMaloSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectSDimensionMalomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionMaloSNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
-	 			    		aspectSDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMnogoSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectSDimensionMnogomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionMnogoSNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} else	
 					   		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
-						    aspectSDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionOdnoSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectSDimensionOdnomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionOdnoSNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
-	 			    		aspectSDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionIndiSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectSDimensionIndividualnostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionIndiSNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 	
 	 		 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
-	 			    		aspectSDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionD1SNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		//dimensionMaloSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectSDimensionD1Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionD1SNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		//dimensionMaloSNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
-		 			    	aspectSDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionD2SNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	//dimensionMaloSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	aspectSDimensionD2Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	dimensionD2SNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	//dimensionMaloSNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
-			 			    aspectSDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    dimensionD3SNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    dimensionMnogoSNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+			 			    aspectSDimensionD3Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    dimensionD3SNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    dimensionMnogoSNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 		 			    	}	
 	 			    		else if (dimension!=null && dimension.equals(AData.D4)){ 
-				 			aspectSDimensionD4Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionD4SNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionMnogoSNode.add    (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+				 			aspectSDimensionD4Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionD4SNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionMnogoSNode.add    (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 			 			    }						   
 					   if(mv!=null && mv.equals(AData.MENTAL)){
-						    aspectSVMMentalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectSVMMentalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (mv!=null && mv.equals(AData.VITAL)){
-	 			    		aspectSVMVitalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectSVMVitalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 	
 
 				   }//aspect S	 
@@ -668,55 +668,55 @@ public EndTreeNode(Object o){
 				   	//aspect F	
 				   if (aspect!=null && aspect.equals(AData.F )){
 					   if(sign!=null && sign.equals(AData.PLUS)){
-	 			    		aspectFSignPlusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signPlusFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectFSignPlusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signPlusFNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (sign!=null && sign.equals(AData.MINUS)){ 
-	 			    		aspectFSignMinusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signMinusFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectFSignMinusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signMinusFNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 
 					   if(dimension!=null && dimension.equals(AData.MALOMERNOST)){
-						    aspectFDimensionMalomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionMaloFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectFDimensionMalomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionMaloFNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
-	 			    		aspectFDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMnogoFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectFDimensionMnogomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionMnogoFNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} else
 					   		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
-						    aspectFDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionOdnoFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectFDimensionOdnomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionOdnoFNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
-	 			    		aspectFDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionIndiFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectFDimensionIndividualnostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionIndiFNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 	
 
 	 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
-	 			    		aspectFDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionD1FNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		//dimensionMaloFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectFDimensionD1Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionD1FNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		//dimensionMaloFNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
-		 			    	aspectFDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionD2FNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	//dimensionMaloFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	aspectFDimensionD2Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	dimensionD2FNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	//dimensionMaloFNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
-			 			    aspectFDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    dimensionD3FNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    dimensionMnogoFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+			 			    aspectFDimensionD3Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    dimensionD3FNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    dimensionMnogoFNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 		 			    	}	
 	 			    		else if (dimension!=null && dimension.equals(AData.D4)){ 
-				 			aspectFDimensionD4Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionD4FNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionMnogoFNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+				 			aspectFDimensionD4Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionD4FNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionMnogoFNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 			 			    }						   
 					   if(mv!=null && mv.equals(AData.MENTAL)){
-						    aspectFVMMentalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectFVMMentalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (mv!=null && mv.equals(AData.VITAL)){
-	 			    		aspectFVMVitalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectFVMVitalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 	
 
 				   }//aspect F	 
@@ -724,54 +724,54 @@ public EndTreeNode(Object o){
 				   	//aspect T	
 				   if (aspect!=null && aspect.equals(AData.T )){
 					   if(sign!=null && sign.equals(AData.PLUS)){
-	 			    		aspectTSignPlusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signPlusTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectTSignPlusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signPlusTNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (sign!=null && sign.equals(AData.MINUS)){ 
-	 			    		aspectTSignMinusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signMinusTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectTSignMinusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signMinusTNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 
 					   if(dimension!=null && dimension.equals(AData.MALOMERNOST)){
-						    aspectTDimensionMalomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionMaloTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectTDimensionMalomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionMaloTNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
-	 			    		aspectTDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMnogoTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectTDimensionMnogomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionMnogoTNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 	else
 	 			    		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
-						    aspectTDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionOdnoTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectTDimensionOdnomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionOdnoTNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
-	 			    		aspectTDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionIndiTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectTDimensionIndividualnostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionIndiTNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 	
 	 	 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
-	 			    		aspectTDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionD1TNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		//dimensionMaloTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectTDimensionD1Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionD1TNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		//dimensionMaloTNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
-		 			    	aspectTDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionD2TNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	//dimensionMaloTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	aspectTDimensionD2Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	dimensionD2TNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	//dimensionMaloTNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
-			 			    aspectTDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    dimensionD3TNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    dimensionMnogoTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+			 			    aspectTDimensionD3Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    dimensionD3TNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    dimensionMnogoTNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 		 			    	}	
 	 			    		else if (dimension!=null && dimension.equals(AData.D4)){ 
-				 			aspectTDimensionD4Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionD4TNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionMnogoTNode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+				 			aspectTDimensionD4Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionD4TNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionMnogoTNode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 			 			    }						   
 					   if(mv!=null && mv.equals(AData.MENTAL)){
-						    aspectTVMMentalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectTVMMentalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (mv!=null && mv.equals(AData.VITAL)){
-	 			    		aspectTVMVitalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectTVMVitalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 	
 
 				   }//aspect T	 
@@ -779,114 +779,114 @@ public EndTreeNode(Object o){
 				   	//aspect I	
 				   if (aspect!=null && aspect.equals(AData.I )){
 					   if(sign!=null && sign.equals(AData.PLUS)){
-	 			    		aspectISignPlusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signPlusINode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectISignPlusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signPlusINode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (sign!=null && sign.equals(AData.MINUS)){ 
-	 			    		aspectISignMinusNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-					        signMinusINode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectISignMinusNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+					        signMinusINode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 
 					   if(dimension!=null && dimension.equals(AData.MALOMERNOST)){
-						    aspectIDimensionMalomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionMaloINode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectIDimensionMalomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionMaloINode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.MNOGOMERNOST)){
-	 			    		aspectIDimensionMnogomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionMnogoINode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectIDimensionMnogomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionMnogoINode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}
 					   		if(dimension!=null && dimension.equals(AData.ODNOMERNOST)){
-						    aspectIDimensionOdnomernostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-						    dimensionOdnoINode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectIDimensionOdnomernostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+						    dimensionOdnoINode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (dimension!=null && dimension.equals(AData.INDIVIDUALNOST)){
-	 			    		aspectIDimensionIndividualnostNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionIndiINode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectIDimensionIndividualnostNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionIndiINode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 	
 	 			    		else if (dimension!=null && dimension.equals(AData.D1)){ 
-	 			    		aspectIDimensionD1Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		dimensionD1INode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-	 			    		//dimensionMaloINode.add    (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectIDimensionD1Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		dimensionD1INode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+	 			    		//dimensionMaloINode.add    (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}
 	 			    		else if (dimension!=null && dimension.equals(AData.D2)){ 
-		 			    	aspectIDimensionD2Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	dimensionD2INode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-		 			    	//dimensionMaloINode.add    (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+		 			    	aspectIDimensionD2Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	dimensionD2INode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+		 			    	//dimensionMaloINode.add    (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		}		
 	 			    		else if (dimension!=null && dimension.equals(AData.D3)){ 
-			 			    aspectIDimensionD3Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    dimensionD3INode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-			 			    dimensionMnogoINode.add   (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+			 			    aspectIDimensionD3Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    dimensionD3INode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+			 			    dimensionMnogoINode.add   (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 		 			    	}	
 	 			    		else if (dimension!=null && dimension.equals(AData.D4)){ 
-				 			aspectIDimensionD4Node.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionD4INode.add      (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
-				 			dimensionMnogoINode.add   (  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+				 			aspectIDimensionD4Node.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionD4INode.add      (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
+				 			dimensionMnogoINode.add   (  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 			 			    }						   
 					   if(mv!=null && mv.equals(AData.MENTAL)){
-						    aspectIVMMentalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+						    aspectIVMMentalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 					   		}
 	 			    		else if (mv!=null && mv.equals(AData.VITAL)){
-	 			    		aspectIVMVitalNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+	 			    		aspectIVMVitalNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 	 			    		} 	
 
 				   }//aspect I	 
 				   
 				   // blocks	
 				   if(mv!=null && mv.equals(AData.SUPEREGO)){
-					    blockSuperegoNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+					    blockSuperegoNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 				   		}	
 				   
 				   if(mv!=null && mv.equals(AData.SUPERID)){
-					    blockSuperidNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+					    blockSuperidNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 				   		}						   
 				   if (modifier != null && modifier.equals(AData.BLOCK) && aspect !=null && secondAspect!=null ){
 						   if(aspect.equals(AData.L) && secondAspect.equals(AData.I)){
-							    blockLINode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							    blockLINode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		}  
 						   if(aspect.equals(AData.L) && secondAspect.equals(AData.F)){
-							   blockLFNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							   blockLFNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		}
 						   if(aspect.equals(AData.P) && secondAspect.equals(AData.T)){
-							   blockPTNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							   blockPTNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		}
 						   if(aspect.equals(AData.P) && secondAspect.equals(AData.S)){
-							   blockPSNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							   blockPSNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		}
 						   if(aspect.equals(AData.R) && secondAspect.equals(AData.I)){
-							   blockRINode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							   blockRINode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		}
 						   if(aspect.equals(AData.R) && secondAspect.equals(AData.F)){
-							   blockRFNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							   blockRFNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		}
 						   if(aspect.equals(AData.E) && secondAspect.equals(AData.T)){
-							   blockETNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							   blockETNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		}
 						   if(aspect.equals(AData.E) && secondAspect.equals(AData.S)){
-							   blockESNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							   blockESNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		}
 						   if(aspect.equals(AData.S) && secondAspect.equals(AData.P)){
-							   blockSPNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							   blockSPNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		}
 						   if(aspect.equals(AData.S) && secondAspect.equals(AData.E)){
-							   blockSENode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							   blockSENode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		}
 						   if(aspect.equals(AData.F) && secondAspect.equals(AData.L)){
-							   blockFLNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							   blockFLNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		}
 						   if(aspect.equals(AData.F) && secondAspect.equals(AData.R)){
-							   blockFRNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							   blockFRNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		}
 						   if(aspect.equals(AData.T) && secondAspect.equals(AData.P)){
-							   blockTPNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							   blockTPNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		}
 						   if(aspect.equals(AData.T) && secondAspect.equals(AData.E)){
-							   blockTENode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							   blockTENode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		}
 						   if(aspect.equals(AData.I) && secondAspect.equals(AData.L)){
-							   blockILNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							   blockILNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		}
 						   if(aspect.equals(AData.I) && secondAspect.equals(AData.R)){
-							   blockIRNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +quote + "...", false));
+							   blockIRNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		} 
 				   }
 				   // blocks	
@@ -894,12 +894,12 @@ public EndTreeNode(Object o){
 				   
 				    // doubt
 				  if (aspect!=null && aspect.equals(AData.DOUBT )){ 
-					  doubtNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: ..." +comment + "...", false));
+					  doubtNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +comment + "..."), false));
 				  }  // doubt
 				  
 				    // jumps
 				  if (modifier!=null && modifier.equals(AData.JUMP )){ 
-					  jumpNode.add(  new DefaultMutableTreeNode("#"+ sectionOffset + ":: Перевод " +aspect+ " -> "+secondAspect, false));
+					  jumpNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset , " Перевод " +aspect+ " -> "+secondAspect), false));
 				  }  // doubt
 			//TODO	   
 				//treeModel.reload();
@@ -1409,6 +1409,166 @@ public void aDocumentChanged(ADocument doc) {
 	
 }
 
+public String getReport(){
+String report = "";	
+
+report = 	
+		"<br/>" +
+		"<h2> Выявленные параметры функций ИМ: </h2>" +
+		"<br/>" +
+		"<table title=\"function analysis\" border=2 width=\"80%\">" +
+		"<tr>" 															+ "\n" +
+		"	<th width=\"20%\">  </th>"					+ "\n" +
+		"	<th width=\"10%\"> БЛ </th>"  					+ "\n" +
+		"	<th width=\"10%\"> ЧЛ </th>"  					+ "\n" +
+		"	<th width=\"10%\"> БЭ </th>"  					+ "\n" +
+		"	<th width=\"10%\"> ЧЭ </th>"  					+ "\n" +
+		"	<th width=\"10%\"> БС </th>"  					+ "\n" +
+		"	<th width=\"10%\"> ЧС </th>"  					+ "\n" +
+		"	<th width=\"10%\"> БИ </th>"  					+ "\n" +
+		"	<th width=\"10%\"> ЧИ </th>"  					+ "\n" +
+		"</tr>" 														+ "\n"  +
+		"<tr>" 															+ "\n" +		
+		"	<td style=\"font-weight:bold\"> Ментал 				</td>"	+ "\n" +	
+		"		<td align=\"center\">" + aspectLVMMentalNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\">" + aspectPVMMentalNode.getChildCount()+ " </td>"  + "\n" +		
+		"		<td align=\"center\">" + aspectRVMMentalNode.getChildCount()+ " </td>"  + "\n" +		
+		"		<td align=\"center\" >" + aspectEVMMentalNode.getChildCount()+ " </td>"  + "\n" +		
+		"		<td align=\"center\" >" + aspectSVMMentalNode.getChildCount()+ " </td>"  + "\n" +		
+		"		<td align=\"center\" >" + aspectFVMMentalNode.getChildCount()+ " </td>"  + "\n" +		
+		"		<td align=\"center\" >" + aspectTVMMentalNode.getChildCount()+ " </td>"  + "\n" +		
+		"		<td align=\"center\" >" + aspectIVMMentalNode.getChildCount()+ " </td>"  + "\n" +		"</tr>" 														+ "\n"  +		
+		"</tr>" 														+ "\n"  +		
+		"<tr>" 															+ "\n" +		
+		"	<td style=\"font-weight:bold\"> Витал					</td>"	+ "\n" +			
+		"		<td align=\"center\" >" + aspectLVMVitalNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectPVMVitalNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectRVMVitalNode.getChildCount()+ " </td>"  + "\n" +		
+		"		<td align=\"center\" >" + aspectEVMVitalNode.getChildCount()+ " </td>"  + "\n" +		
+		"		<td align=\"center\" >" + aspectSVMVitalNode.getChildCount()+ " </td>"  + "\n" +		
+		"		<td align=\"center\" >" + aspectFVMVitalNode.getChildCount()+ " </td>"  + "\n" +		
+		"		<td align=\"center\" >" + aspectTVMVitalNode.getChildCount()+ " </td>"  + "\n" +		
+		"		<td align=\"center\" >" + aspectIVMVitalNode.getChildCount()+ " </td>"  + "\n" +		
+		"</tr>" 														+ "\n"  +		
+		"<tr>" 															+ "\n" +		
+		"	<td style=\"font-weight:bold\"> Знак \"+\" 			</td>"	+ "\n" +			
+		"		<td align=\"center\" >" + aspectLSignPlusNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectPSignPlusNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectRSignPlusNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectESignPlusNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectSSignPlusNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectFSignPlusNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectTSignPlusNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectISignPlusNode.getChildCount()+ " </td>"  + "\n" +
+		"</tr>" 														+ "\n"  +		
+		"<tr>" 															+ "\n" +		
+		"	<td style=\"font-weight:bold\"> Знак \"-\" 			</td>"	+ "\n" +			
+		"		<td align=\"center\" >" + aspectLSignMinusNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectPSignMinusNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectRSignMinusNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectESignMinusNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectSSignMinusNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectFSignMinusNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectTSignMinusNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectISignMinusNode.getChildCount()+ " </td>"  + "\n" +
+		"</tr>" 														+ "\n"  +		
+		"<tr>" 															+ "\n" +		
+		"	<td style=\"font-weight:bold\"> Ex 					</td>"	+ "\n" +			
+		"		<td align=\"center\" >" + aspectLDimensionD1Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectPDimensionD1Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectRDimensionD1Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectEDimensionD1Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectSDimensionD1Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectFDimensionD1Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectTDimensionD1Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectIDimensionD1Node.getChildCount()+ " </td>"  + "\n" +
+		"</tr>" 														+ "\n"  +		
+		"<tr>" 															+ "\n" +		
+		"	<td style=\"font-weight:bold\"> Nm 					</td>"	+ "\n" +			
+		"		<td align=\"center\" >" + aspectLDimensionD2Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectPDimensionD2Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectRDimensionD2Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectEDimensionD2Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectSDimensionD2Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectFDimensionD2Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectTDimensionD2Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectIDimensionD2Node.getChildCount()+ " </td>"  + "\n" +
+		"</tr>" 														+ "\n"  +		
+		"<tr>" 															+ "\n" +		
+		"	<td style=\"font-weight:bold\"> St 					</td>"	+ "\n" +			
+		"		<td align=\"center\" >" + aspectLDimensionD3Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectPDimensionD3Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectRDimensionD3Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectEDimensionD3Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectSDimensionD3Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectFDimensionD3Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectTDimensionD3Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectIDimensionD3Node.getChildCount()+ " </td>"  + "\n" +
+		"</tr>" 														+ "\n"  +		
+		"<tr>" 															+ "\n" +		
+		"	<td style=\"font-weight:bold\"> Tm 					</td>"	+ "\n" +			
+		"		<td align=\"center\" >" + aspectLDimensionD4Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectPDimensionD4Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectRDimensionD4Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectEDimensionD4Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectSDimensionD4Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectFDimensionD4Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectTDimensionD4Node.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectIDimensionD4Node.getChildCount()+ " </td>"  + "\n" +
+		"</tr>" 														+ "\n"  +		
+		"<tr>" 															+ "\n" +		
+		"	<td style=\"font-weight:bold\"> Одномерность 			</td>"	+ "\n" +			
+		"		<td align=\"center\" >" + aspectLDimensionOdnomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectPDimensionOdnomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectRDimensionOdnomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectEDimensionOdnomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectSDimensionOdnomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectFDimensionOdnomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectTDimensionOdnomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectIDimensionOdnomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"</tr>" 														+ "\n"  +		
+		"<tr>" 															+ "\n" +		
+		"	<td style=\"font-weight:bold\"> Маломерность 			</td>"	+ "\n" +			
+		"		<td align=\"center\" >" + aspectLDimensionMalomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectPDimensionMalomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectRDimensionMalomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectEDimensionMalomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectSDimensionMalomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectFDimensionMalomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectTDimensionMalomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectIDimensionMalomernostNode.getChildCount()+ " </td>"  + "\n" +
+
+		"</tr>" 														+ "\n"  +		
+		"<tr>" 															+ "\n" +		
+		"	<td style=\"font-weight:bold\"> Многомерность 			</td>"	+ "\n" +			
+		"		<td align=\"center\" >" + aspectLDimensionMnogomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectPDimensionMnogomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectRDimensionMnogomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectEDimensionMnogomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectSDimensionMnogomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectFDimensionMnogomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectTDimensionMnogomernostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectIDimensionMnogomernostNode.getChildCount()+ " </td>"  + "\n" +
+
+		"</tr>" 														+ "\n"  +		
+		"<tr>" 															+ "\n" +		
+		"	<td style=\"font-weight:bold\"> Индивидуальность 		</td>"	+ "\n" +			
+		"		<td align=\"center\" >" + aspectLDimensionIndividualnostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectPDimensionIndividualnostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectRDimensionIndividualnostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectEDimensionIndividualnostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectSDimensionIndividualnostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectFDimensionIndividualnostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectTDimensionIndividualnostNode.getChildCount()+ " </td>"  + "\n" +
+		"		<td align=\"center\" >" + aspectIDimensionIndividualnostNode.getChildCount()+ " </td>"  + "\n" +
+
+		"</tr>" 																	   + "\n" +		
+		"</table>";
+		
+
+	
+return report;	
+}
 
 
 
