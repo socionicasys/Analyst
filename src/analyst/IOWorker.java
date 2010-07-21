@@ -134,7 +134,6 @@ public void propertyChange(PropertyChangeEvent evt) {
 			try{	
 				if (!append) {
 					aDoc.getADataHashMap().clear();
-					aDoc.remove(0, aDoc.getEndPosition().getOffset()-1);
 				}
 				
 				aDoc.insertString(appendOffset, plainText, aDoc.defaultStyle);

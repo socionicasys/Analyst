@@ -1,15 +1,11 @@
 package analyst;
 
 import java.awt.Color;
-import java.awt.Frame;
-import java.awt.Rectangle;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -18,16 +14,11 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
-import javax.swing.JViewport;
 import javax.swing.event.*;
 import javax.swing.text.*;
-
-import analyst.AData.ADataException;
-
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 
 public class ADocument extends DefaultStyledDocument implements DocumentListener  
@@ -51,17 +42,18 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	private int progress = 0;
 
 	
-	 private class DocumentFlowEvent  {
+	private class DocumentFlowEvent implements Comparable<DocumentFlowEvent> {
 	 protected 	int type, offset, sectionNo; 
 	 protected String style;
 	 protected String comment;
 	 public static final int LINE_BREAK 	= 1;
 	 public static final int SECTION_START 	= 2;
 	 public static final int SECTION_END 	= 3;
-	 
-
-	 
-
+	 public static final int NEW_ROW		= 4;
+	 public static final int BOLD_START		= 5;
+	 public static final int BOLD_END		= 6;
+	 public static final int ITALIC_START	= 7;
+	 public static final int ITALIC_END		= 8;
 	 
 	public DocumentFlowEvent (int type, int offset, String style, String comment, int sectionNo){
 		this.offset=offset;
@@ -92,6 +84,14 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	public int getSectionNo() {
 		
 		return sectionNo;
+	}
+
+	@Override
+	public int compareTo(DocumentFlowEvent o) {
+		// Реализация интерфейса java.lang.Comparable<T>
+		// Делает возможной сортировку массива из DocumentFlowEvent-ов
+		// Сравнение происходит только по позиции (offset)
+		return this.offset - o.offset;
 	}	
 }//class DocumentFlowEvent
 	
@@ -547,7 +547,7 @@ text = "";
 		}
 	}
 
-  Set keySet= aDataMap.keySet();
+  Set<ASection> keySet= aDataMap.keySet();
   Vector <ASection> sectionStart = new Vector<ASection>();
   Vector <ASection> sectionEnd = new Vector<ASection>();
   if (keySet!=null){
@@ -560,7 +560,7 @@ text = "";
 	  }
   }
   
-  Vector temp = new Vector();
+  Vector<ASection> temp = new Vector<ASection>();
   int index=Analyst.MAX_CHARACTERS;
   
   ASection sec = null;
@@ -579,7 +579,7 @@ text = "";
   
   sectionStart = temp;
   
-  temp = new Vector();
+  temp = new Vector<ASection>();
 
   while (!sectionEnd.isEmpty()){
 	   index=Analyst.MAX_CHARACTERS;
@@ -603,57 +603,81 @@ text = "";
   int seIndex = 0;
   int mark = 0;
 */
-  
-  int ssNo = 1;
-  int seNo =1;
-  
-  while (!(  lineBreaks.isEmpty()
-		  && sectionStart.isEmpty()
-		  && sectionEnd.isEmpty() )){
-	  
-			  int lb = Analyst.MAX_CHARACTERS;
-			  int ssOffset = Analyst.MAX_CHARACTERS;
-			  int seOffset = Analyst.MAX_CHARACTERS; 
-			  ASection ss = null;
-			  ASection se = null;			  
-			  
-	            if (!sectionStart.isEmpty()){ss = sectionStart.get(0); ssOffset = ss.getStartOffset();}
-	            if (!sectionEnd.isEmpty())  {se = sectionEnd.get(0);   seOffset = se.getEndOffset();}
-	            if (!lineBreaks.isEmpty())  lb = lineBreaks.get(0).getOffset();
-	    
-	
-		        if ((ssOffset <= lb ) && (ssOffset <= seOffset )){
-		        	flowEvents.add( new DocumentFlowEvent(DocumentFlowEvent.SECTION_START, 
-		        										 ssOffset, 
-		        										 getHTMLStyleForAData(aDataMap.get(ss)),
-		        										 "{"+ssNo+ ": " + aDataMap.get(ss).toString()+"} "+ aDataMap.get(ss).getComment()+"\n",
-		        										 ssNo));
-		        	sectionStart.remove(0);
-		        	ssNo++;
-		        }
-		        else 
-		        	
-			        if ((seOffset <= lb ) && (seOffset <= ssOffset )){
-			        	flowEvents.add( new DocumentFlowEvent(DocumentFlowEvent.SECTION_END, 
-			        										 seOffset, 
-			        										 getHTMLStyleForAData(aDataMap.get(se)),
-			        										 aDataMap.get(se).getComment(),
-			        										 seNo));
-			        	sectionEnd.remove(0);
-			        	seNo++;
-			        }
-			        else 
-			        	
-				        if (( lb<=  seOffset) && (lb <= ssOffset )){
-				        	flowEvents.add( new DocumentFlowEvent(DocumentFlowEvent.LINE_BREAK, 
-				        										 lb, 
-				        										 null,
-				        										 null,
-				        										 0 ));
-				        	lineBreaks.remove(0);
-				        }		        
-  }
-  
+	for (int ssNo = 1; ssNo <= sectionStart.size(); ssNo++) {
+		ASection ss = sectionStart.get(ssNo - 1);
+		int ssOffset = ss.getStartOffset();
+		flowEvents.add(new DocumentFlowEvent(
+				DocumentFlowEvent.SECTION_START,
+				ssOffset,
+				getHTMLStyleForAData(aDataMap.get(ss)),
+				"{" + ssNo + ": " + aDataMap.get(ss).toString() + "} " + aDataMap.get(ss).getComment() + "\n",
+				ssNo)
+		);
+	}
+	for (int seNo = 1; seNo <= sectionEnd.size(); seNo++) {
+		ASection se = sectionEnd.get(seNo - 1);
+		int seOffset = se.getEndOffset();
+		flowEvents.add(new DocumentFlowEvent(
+				DocumentFlowEvent.SECTION_END,
+				seOffset,
+				getHTMLStyleForAData(aDataMap.get(se)),
+				aDataMap.get(se).getComment(),
+				seNo)
+		);
+	}
+	Element rootElem = this.getDefaultRootElement();
+	SimpleAttributeSet boldAttribute = new SimpleAttributeSet();
+	StyleConstants.setBold(boldAttribute, true);
+	SimpleAttributeSet italicAttribute = new SimpleAttributeSet();
+	StyleConstants.setItalic(italicAttribute, true);
+	for (int parIndex = 0; parIndex < rootElem.getElementCount(); parIndex++) {
+		Element parElem = rootElem.getElement(parIndex);
+		for (int i = 0; i < parElem.getElementCount(); i++) {
+			Element e = parElem.getElement(i);
+			int elemStart = e.getStartOffset();
+			int elemEnd = e.getEndOffset();
+			AttributeSet attrs = e.getAttributes();
+			if (attrs.containsAttributes(boldAttribute)) {
+				flowEvents.add(new DocumentFlowEvent(DocumentFlowEvent.BOLD_START,
+						elemStart, null, null, 0));
+				flowEvents.add(new DocumentFlowEvent(DocumentFlowEvent.BOLD_END,
+						elemEnd, null, null, 0));
+			}
+			if (attrs.containsAttributes(italicAttribute)) {
+				flowEvents.add(new DocumentFlowEvent(DocumentFlowEvent.ITALIC_START,
+						elemStart, null, null, 0));
+				flowEvents.add(new DocumentFlowEvent(DocumentFlowEvent.ITALIC_END,
+						elemEnd, null, null, 0));
+			}
+		}
+	}
+	for (Position position : lineBreaks) {
+		int lb = position.getOffset();
+		boolean replaceBreak = false;
+		if (!flowEvents.isEmpty()) {
+			DocumentFlowEvent prevEvent = flowEvents.lastElement();
+			if (prevEvent.type == DocumentFlowEvent.LINE_BREAK &&
+				prevEvent.offset == lb - 1) {
+				// Заменяем два идущих подряд LINE_BREAK на NEW_ROW
+				replaceBreak = true;
+			}
+		}
+		if (replaceBreak) {
+			flowEvents.set(flowEvents.size() - 1,
+				new DocumentFlowEvent(DocumentFlowEvent.NEW_ROW,
+					lb - 1, null, null, 0));
+		}
+		else {
+			flowEvents.add(new DocumentFlowEvent(
+					DocumentFlowEvent.LINE_BREAK, lb, null, null, 0));
+		}
+	}
+	Collections.sort(flowEvents);
+	if (flowEvents.lastElement().getType() != DocumentFlowEvent.NEW_ROW) {
+		flowEvents.add(new DocumentFlowEvent(
+				DocumentFlowEvent.NEW_ROW, this.getEndPosition().getOffset() - 1,
+				null, null, 0));
+	}
 
 iow.setProgressValue(	headerSaveProgress + 
 						writePreparationProgress);
@@ -716,29 +740,38 @@ if (flowEvents!=null && !flowEvents.isEmpty()){
 					text += "<span style="+stack.getCurrentStyle()+">";
 				}
 			}
-		} // event == SECTION_END	
-		
-			if (eventType == DocumentFlowEvent.LINE_BREAK || z == flowEvents.size()-1){
-				boolean makeBreak = true;	
-				if (z>0 && (flowEvents.get(z-1).getType()==DocumentFlowEvent.SECTION_END)||
-						(z<flowEvents.size()-1 && flowEvents.get(z+1).getType()==DocumentFlowEvent.SECTION_START)||
-						(z == flowEvents.size()-1)){
-				
-					if (!stack.isEmpty())text += "</span>";
-					text += "</td>\n";
-					text += "<td>"+ analisys;
-					if (makeBreak) text += "<br/>";
-					text +="</td>";
-					analisys="";
-					if (!(z == flowEvents.size()-1)) text += "\n</tr>\n<tr>\n<td>";
-					if (!stack.isEmpty())
-						text += "<span style="+stack.getCurrentStyle()+">";
-					makeBreak = false;
-				}
-			 	
-			} // event == LINE_BREAK
-		
-
+		} // event == SECTION_END
+		else if (eventType == DocumentFlowEvent.BOLD_START) {
+			text += "<b>";
+		}
+		else if (eventType == DocumentFlowEvent.BOLD_END) {
+			text += "</b>";
+		}
+		else if (eventType == DocumentFlowEvent.ITALIC_START) {
+			text += "<i>";
+		}
+		else if (eventType == DocumentFlowEvent.ITALIC_END) {
+			text += "</i>";
+		}
+		else if (eventType == DocumentFlowEvent.NEW_ROW || z == flowEvents.size() - 1) {
+			if (!stack.isEmpty()) {
+				text += "</span>";
+			}
+			text += "</td>\n";
+			text += "<td>" + analisys;
+			text += "</td>";
+			analisys = "";
+			if (z != flowEvents.size() - 1) {
+				text += "\n</tr>\n<tr>\n<td>";
+			}
+			if (!stack.isEmpty()) {
+				text += "<span style=" + stack.getCurrentStyle() + ">";
+			}
+		} // eventType == DocumentFlowEvent.NEW_ROW
+		else if (eventType == DocumentFlowEvent.LINE_BREAK)
+		{
+			text += "<br/>";
+		} // eventType == DocumentFlowEvent.LINE_BREAK
 	}//for
 }//if
 	
@@ -949,7 +982,7 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 		if (searchIndex>0) result = findTagContent(allText, colStartToken,colEndToken,searchIndex); 
 			else break;
 		if (result !=null) {leftColumn +=result;
-							leftColumn +="<br/>";//adding breaks because there are no breaks on row boundaries
+							leftColumn +="<br/><br/>";//adding breaks because there are no breaks on row boundaries
 							searchIndex = allText.indexOf(colEndToken, searchIndex)+colEndToken.length();
 							 
 		}
@@ -966,6 +999,7 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 	//leftColumn = leftColumn.replaceAll("\t", "");
 	leftColumn = leftColumn.replaceAll("\n", "");
 	leftColumn = leftColumn.replace("<br/>", "\n");
+	leftColumn = leftColumn.trim();
 	
 	rightColumn= rightColumn.replaceAll("\n", "");	
 	//rightColumn= rightColumn.replaceAll("\t", "");	
@@ -1059,15 +1093,66 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 																	leftColumnParseProgress+
 																	rightColumnParseProgress));
 		
-		/// adding plain text to the document
+		// Обрабатываем стили в уже прочитанном тексте
+		SimpleAttributeSet currentStyle = new SimpleAttributeSet(this.defaultStyle);
+		Pattern styleTag = Pattern.compile("</?[bi]>");
+		String sourceText = leftColumn;
+		Matcher styleMatcher = styleTag.matcher(sourceText);
+		int sourcePosition = 0;
+		int sourceOffset = 0;
+		int docPosition = appendOffset;
+		while (styleMatcher.find()) {
+			String currentTag = styleMatcher.group();
+			int tagLenth = currentTag.length();
+			int tagStart = styleMatcher.start();
+			int tagEnd = styleMatcher.end();
+			String textBlock = sourceText.substring(sourcePosition, tagStart);
+			
+			// Добавляем в документ текст перед текущим тегом
+			this.insertString(docPosition, textBlock, currentStyle);
+			// Исправляем ошибку insertString: текст вставляется без стилей 
+			this.setCharacterAttributes(docPosition, textBlock.length(),
+					currentStyle, true);
+			docPosition += textBlock.length();
+			sourcePosition = tagEnd;
 		
-			iow.firePropertyChange("TextData", Integer.toString(appendOffset), leftColumn);
+			// Так как мы удаляем теги из основного текста, необходимо сместить
+			// пометки типировщика, находящиеся после тега
+			for (RawAData rd : rawData.values()) {
+				if (rd.beg >= tagEnd - sourceOffset) {
+					rd.beg -= tagLenth;
+				}
+				if (rd.end >= tagEnd - sourceOffset) {
+					rd.end -= tagLenth;
+				}
+			}
+			sourceOffset += tagLenth;
+			
+			// Стиль следующего текста в зависимости от текущего тега
+			if (currentTag.equals("<b>")) {
+				StyleConstants.setBold(currentStyle, true);
+			}
+			else if (currentTag.equals("</b>")) {
+				StyleConstants.setBold(currentStyle, false);
+			}
+			else if (currentTag.equals("<i>")) {
+				StyleConstants.setItalic(currentStyle, true);
+			}
+			else if (currentTag.equals("</i>")) {
+				StyleConstants.setItalic(currentStyle, false);
+			}
+		}
+		// Добавляем в документ текст за последним тегом
+		this.insertString(docPosition, sourceText.substring(sourcePosition), currentStyle);
+		
+		/// adding plain text to the document
+			iow.firePropertyChange("TextData", Integer.toString(appendOffset), "");
 			iow.firePropertyChange("RawData", null, rawData);
 			iow.firePropertyChange("progress", null, new Integer(	
 																	fileLoadProgress+
 																	leftColumnParseProgress+
 																	rightColumnParseProgress+
-																	textAddProgress));	 
+																	textAddProgress));		
 		
 		//creating and adding the segments AData info
 	//	HashMap <ASection, AData> tempADataMap = new HashMap <ASection, AData>();
@@ -1077,10 +1162,6 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 		//iow.firePropertyChange("AData", getADataMap(), tempADataMap);
 	
 		iow.firePropertyChange("progress", null, new Integer(100));	
-
-			
-
-	
 }//load(FileInputStream fis)
 
 private String removeTag(String source, String startToken,
@@ -1155,6 +1236,7 @@ public int getProgress(){return progress;}
 
 public void load(FileInputStream fis, ProgressWindow pw) throws Exception {
 	IOWorker iow = new IOWorker(pw, this, fis);
+	this.remove(0, this.getEndPosition().getOffset() - 1);
 	iow.setAppend(false);
 	iow.execute();
 	//while(!iow.isDone());

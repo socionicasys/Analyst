@@ -1,34 +1,3 @@
-/*
- * Copyright (c) 1995 - 2008 Sun Microsystems, Inc.  All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   - Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   - Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *
- *   - Neither the name of Sun Microsystems nor the names of its
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
- * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */ 
-
 package analyst;
 /*
  * TextComponentDemo.java requires one additional file:
@@ -37,24 +6,16 @@ package analyst;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeListener;
 import java.io.*;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Dictionary;
-import java.util.Locale;
-import java.util.Vector;
-
 import javax.swing.*;
 import javax.swing.text.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.undo.*;
 
 import analyst.ADocument.ASection;
-import analyst.ControlsPane.AspectSelectionListener;
 
 
 @SuppressWarnings("serial")
@@ -76,7 +37,7 @@ import analyst.ControlsPane.AspectSelectionListener;
     JFrame frame = this;
     String fileName = "";
     JPopupMenu popupMenu;
-    public final String version = "0.3";
+    public final String version = "0.4";
     private  boolean genetateReport = false;
     JProgressBar progress;
     
@@ -352,9 +313,11 @@ import analyst.ControlsPane.AspectSelectionListener;
 										        	 if (!fileName.endsWith(".htm")) fileName+=".htm";
 								        	 					file = new File(fileName);
 								        	 					
+										         } else {
+										        	 return;
 										         }
 									         
-									         if (file!=null && file.exists()){
+									         if (file.exists()) {
 									        	  Object[] options =  {"Да","Нет"};
 									        	 if(JOptionPane.showOptionDialog(frame,
 									                 "Такой файл существует!\n\nХотите перезаписать этот файл?", "Предупреждение!!!",
@@ -366,14 +329,12 @@ import analyst.ControlsPane.AspectSelectionListener;
 									         }	
 									   
 									         		
-								    	 if (file!=null){	 
 									         	FileOutputStream fos = new FileOutputStream(file); 
 									        	ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
 									         	IOWorker iow = new IOWorker(pw,aDoc, fos);
 												iow.execute();
-								    	 }		
 
-								    	 		frame.setTitle(applicationName + " - "+ fileName);
+								    	 		frame.setTitle(applicationName + " - "+ file.getName());
 										 } catch (Exception e) {
 										// 
 										System.out.println("Error writing document to file: ");
@@ -404,19 +365,18 @@ import analyst.ControlsPane.AspectSelectionListener;
 		    	 if (saveConfirmation() == JOptionPane.CANCEL_OPTION) return;
 		    	 int returnVal = fc.showDialog(Analyst.this, "Открыть");
 		    	 File file = null;
-		         if (returnVal == JFileChooser.APPROVE_OPTION) 
-		        	 	file = fc.getSelectedFile();
+		         if (returnVal == JFileChooser.APPROVE_OPTION) { 
+		        	 file = fc.getSelectedFile();
+		         } else {
+		        	 return;
+		         }
 		    		 
-		        	 if (file!=null) {
 		        		 FileInputStream fis = new FileInputStream(file);
 		        		 ProgressWindow pw = new ProgressWindow(frame, "    Идет загрузка файла...   ");
 		        		 //IOWorker lw = new IOWorker(pw, aDoc, fis);
 		        		 aDoc.load(fis, pw);
 		        		 
 						 fileName = file.getAbsolutePath();
-						 
-						 		 
-		        	 }
   				 // after loading the document scroll it to the beginning
 		        	 	textPane.grabFocus();
 					    JViewport viewport = (JViewport) textPane.getParent();
@@ -428,7 +388,7 @@ import analyst.ControlsPane.AspectSelectionListener;
 					  
 						
 					   	status.setText("");
-					   	frame.setTitle(applicationName + " - "+ fileName);
+					   	frame.setTitle(applicationName + " - "+ file.getName());
 			} catch (FileNotFoundException e  ) {
 				//
 				System.out.println("Error opening  file" );
@@ -742,41 +702,12 @@ import analyst.ControlsPane.AspectSelectionListener;
         JMenu menu = new JMenu("Стиль");
 
         Action action = new StyledEditorKit.BoldAction();
-        action.putValue(Action.NAME, "Жирный");
+        action.putValue(Action.NAME, "Вопрос");
         menu.add(action);
 
         action = new StyledEditorKit.ItalicAction();
-        action.putValue(Action.NAME, "Курсив");
+        action.putValue(Action.NAME, "Цитата");
         menu.add(action);
-
-        action = new StyledEditorKit.UnderlineAction();
-        action.putValue(Action.NAME, "Подчеркнутый");
-        menu.add(action);
-
-        menu.addSeparator();
-
-        menu.add(new StyledEditorKit.FontSizeAction("12", 12));
-        menu.add(new StyledEditorKit.FontSizeAction("14", 14));
-        menu.add(new StyledEditorKit.FontSizeAction("18", 18));
-
-        menu.addSeparator();
-
-        menu.add(new StyledEditorKit.FontFamilyAction("Serif",
-                                                      "Serif"));
-        menu.add(new StyledEditorKit.FontFamilyAction("SansSerif",
-                                                      "SansSerif"));
-
-        menu.addSeparator();
-
-        menu.add(new StyledEditorKit.ForegroundAction("Красный ",
-                                                      Color.red));
-        menu.add(new StyledEditorKit.ForegroundAction("Зеленый",
-                                                      Color.green));
-        menu.add(new StyledEditorKit.ForegroundAction("Синий",
-                                                      Color.blue));
-        menu.add(new StyledEditorKit.ForegroundAction("Черный",
-                                                      Color.black));
-
         return menu;
     }
   
