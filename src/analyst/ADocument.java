@@ -1220,6 +1220,7 @@ public String getHTMLStyleForAData(AData data){
 	if (dim !=null &&
 		(	dim.equals(AData.D1) ||
 		    dim.equals(AData.D2) ||	
+		    dim.equals(AData.ODNOMERNOST)||
 		    dim.equals(AData.MALOMERNOST) )												) {
 		res += "background-color:#AAEEEE;";	
 	} else
