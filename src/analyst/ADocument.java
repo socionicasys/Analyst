@@ -1114,6 +1114,7 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 		int sourcePosition = 0;
 		int sourceOffset = 0;
 		int docPosition = appendOffset;
+		Vector<StyledText> styledTextBlocks = new Vector<StyledText>();
 		while (styleMatcher.find()) {
 			String currentTag = styleMatcher.group();
 			int tagLenth = currentTag.length();
@@ -1122,10 +1123,7 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 			String textBlock = sourceText.substring(sourcePosition, tagStart);
 			
 			// Добавляем в документ текст перед текущим тегом
-			this.insertString(docPosition, textBlock, currentStyle);
-			// Исправляем ошибку insertString: текст вставляется без стилей 
-			this.setCharacterAttributes(docPosition, textBlock.length(),
-					currentStyle, true);
+			styledTextBlocks.add(new StyledText(textBlock, currentStyle));
 			docPosition += textBlock.length();
 			sourcePosition = tagEnd;
 		
@@ -1156,10 +1154,11 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 			}
 		}
 		// Добавляем в документ текст за последним тегом
-		this.insertString(docPosition, sourceText.substring(sourcePosition), currentStyle);
+		styledTextBlocks.add(new StyledText(sourceText.substring(sourcePosition),
+				currentStyle));
+		iow.firePropertyChange("AppendStyledText", null, styledTextBlocks);
 		
 		/// adding plain text to the document
-			iow.firePropertyChange("TextData", Integer.toString(appendOffset), "");
 			iow.firePropertyChange("RawData", null, rawData);
 			iow.firePropertyChange("progress", null, new Integer(	
 																	fileLoadProgress+
@@ -1250,7 +1249,6 @@ public int getProgress(){return progress;}
 
 public void load(FileInputStream fis, ProgressWindow pw) throws Exception {
 	IOWorker iow = new IOWorker(pw, this, fis);
-	this.remove(0, this.getEndPosition().getOffset() - 1);
 	iow.setAppend(false);
 	iow.execute();
 	//while(!iow.isDone());

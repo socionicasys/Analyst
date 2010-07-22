@@ -39,7 +39,7 @@ import analyst.ADocument.ASection;
     JFrame frame = this;
     String fileName = "";
     JPopupMenu popupMenu;
-    public final static String version = "0.46";
+    public final static String version = "0.47";
     private  boolean genetateReport = false;
     JProgressBar progress;
     boolean programExit = false;

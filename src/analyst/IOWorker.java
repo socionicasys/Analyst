@@ -1,20 +1,19 @@
 package analyst;
 
-import java.awt.Frame;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Vector;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
 
-import analyst.ADocument.ASection;
 import analyst.ADocument.RawAData;
 
 public class IOWorker  extends SwingWorker implements PropertyChangeListener{
@@ -22,16 +21,13 @@ public class IOWorker  extends SwingWorker implements PropertyChangeListener{
 	private FileInputStream fis;
 	private FileOutputStream fos;
 	boolean append = false;
-	private String plainText = null;
+	private boolean firstWrite = true;
 	private ADocument aDoc;
 	HashMap<ADocument.ASection, AData> aData = null;
 	Analyst frame;
 	private ProgressWindow pw;
 	private Operation op;
 	private Exception exception = null;
-	private boolean textDataLoaded = false;
-	private boolean rawDataLoaded = false;
-	private boolean docLoaded = false;
 	private int appendOffset = 0;
 	private Hashtable <Integer, ADocument.RawAData>  rawData = null;
 	
@@ -117,29 +113,41 @@ public void propertyChange(PropertyChangeEvent evt) {
 					props.put(new String(docPropName), new String((String)newValue));
 				}
 		}
-		if (name.equals("TextData")){
-			//getting plain text
-				plainText = (String) newValue;
-				appendOffset = Integer.parseInt((String)oldValue);
-				textDataLoaded = true;
+		if (name.equals("AppendStyledText")) {
+			@SuppressWarnings("unchecked")
+			Vector<StyledText> styledTextBlocks = (Vector<StyledText>) newValue;
+			for (StyledText styledText : styledTextBlocks) {
+				String textBlock = styledText.getText();
+				AttributeSet textStyle = styledText.getStyle();
+				try {
+					if (firstWrite) {
+						firstWrite = false;
+						if (append) {
+							appendOffset = aDoc.getLength();
+						}
+						else {
+							// ≈сли мы не добавл€ем в старый документ, то перед
+							// первой записью его нужно очистить
+							appendOffset = 0;
+							aDoc.getADataHashMap().clear();
+							aDoc.remove(0, aDoc.getEndPosition().getOffset() - 1);
+						}
+					}
+					int docPosition = aDoc.getEndPosition().getOffset() - 1;
+					aDoc.insertString(docPosition, textBlock, textStyle);
+					// »справл€ем ошибку insertString: текст вставл€етс€ без стилей
+					aDoc.setCharacterAttributes(docPosition, textBlock.length(),
+							textStyle, true);
+				}
+				catch (BadLocationException e) {
+				}
+			}
 		}
-		
 		if (name.equals("RawData")){
-			
 			//getting AData
 			rawData = (Hashtable <Integer, RawAData> )newValue;
-			rawDataLoaded = true;
-		}
-		
-		if (!docLoaded && textDataLoaded && rawDataLoaded){
-	
+
 			try{	
-				if (!append) {
-					aDoc.getADataHashMap().clear();
-				}
-				
-				aDoc.insertString(appendOffset, plainText, aDoc.defaultStyle);
-				
 				Iterator <ADocument.RawAData> it =  (rawData.values()).iterator();
 				RawAData temp = null;
 				while(it.hasNext()){
@@ -147,7 +155,6 @@ public void propertyChange(PropertyChangeEvent evt) {
 					AData ad=null;
 					
 						ad = AData.parceAData(temp.getAData());
-						String ggg = temp.getComment();
 						ad.setComment(temp.getComment());
 						int beg = temp.getBegin();
 						int end = temp.getEnd();
@@ -162,10 +169,6 @@ public void propertyChange(PropertyChangeEvent evt) {
 				this.exception = e;
 				this.cancel(true);
 			}
-			
-
-		docLoaded = true;		
-			
 		}
 				
 	}//if load
