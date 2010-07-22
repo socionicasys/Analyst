@@ -154,7 +154,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		putProperty((Object)ClientProperty, (Object)"");
 		Date date = new Date();
 		putProperty((Object)DateProperty, 	(Object) date.toLocaleString());
-		putProperty((Object)CommentProperty, (Object)"");
+		putProperty((Object)CommentProperty, "");
 
 		fireADocumentChanged();
 	}
@@ -463,7 +463,7 @@ public void save(FileOutputStream fos, IOWorker iow) throws Exception {
 	int textWriteProgress= 40;
 	int reportWriteProgress= 20;
 	
-	iow.setProgressValue(0);
+	iow.firePropertyChange("progress", null, new Integer(0));
 	
 if (fos == null){System.out.println("Error attempting to save file: FileOutputStream is null"); return;}	
 
@@ -489,6 +489,18 @@ text += "<html> \n<head> \n<title> \n" + getProperty(TitleProperty) + " \n</titl
 	
 text = "\n<h1>" + getProperty(TitleProperty) + "</h1>\n";
 
+//saved with version
+String comm =(String)getProperty(CommentProperty);
+if (comm != null){ 
+	
+	int ind = comm.indexOf("Сохранено версией:");
+	if (ind >=0){
+		comm = comm.substring(0,ind);
+	}
+		else if (comm.length()>0) comm = comm + "<br/>";
+	comm += "Сохранено версией:"  + Analyst.version;
+}
+
 //document header
 text += "<br/>\n<br/>";
 text += "\n <table title=\"header\" border=1 width=\"40%\"> 	" 					+ "\n" +
@@ -510,13 +522,13 @@ text += "\n <table title=\"header\" border=1 width=\"40%\"> 	" 					+ "\n" +
 				"</tr>"												+ "\n" +
 				"<tr>" 												+ "\n" +
 				"	<td>      "+CommentProperty+"     </td>"		+ "\n" +
-				"	<td>" + this.getProperty(CommentProperty)+" </td>"		+ "\n" +
+				"	<td>" + comm +" </td>"		+ "\n" +
 				"</tr>"												+ "\n" +
 				"</table >"											+ "\n";
 	
 fos.write(text.getBytes());
 
-iow.setProgressValue(headerSaveProgress);
+iow.firePropertyChange("progress", null, new Integer(headerSaveProgress));
 
 //document content
 		text = "<br/>\n";
@@ -679,8 +691,8 @@ text = "";
 				null, null, 0));
 	}
 
-iow.setProgressValue(	headerSaveProgress + 
-						writePreparationProgress);
+	iow.firePropertyChange("progress", null, new Integer(headerSaveProgress + 
+						writePreparationProgress));
 		// write contents
 
  // flowEvents.capacity();
@@ -701,9 +713,9 @@ if (flowEvents!=null && !flowEvents.isEmpty()){
 		eventType = event.getType();	
 		
 
-		iow.setProgressValue(	headerSaveProgress + 
+		iow.firePropertyChange("progress", null, new Integer(headerSaveProgress + 
 								writePreparationProgress+
-								textWriteProgress*z/flowEvents.size());
+								textWriteProgress*z/flowEvents.size()));
 		
 		//writing text 
 
@@ -788,10 +800,10 @@ if (!an.getGenerateReport()){
 }		
 //fos.write(text.getBytes());
 
-iow.setProgressValue(	headerSaveProgress + 
+iow.firePropertyChange("progress", null, new Integer(headerSaveProgress + 
 		writePreparationProgress+
 		textWriteProgress+
-		reportWriteProgress);
+		reportWriteProgress));
 
 // if generating report
 if (an.getGenerateReport()){
@@ -816,7 +828,7 @@ fos.write(text.getBytes());
 fos.flush();
 fos.close();
 
-iow.setProgressValue(100);
+iow.firePropertyChange("progress", null, new Integer(100));
 	
 }//save()
 
@@ -937,6 +949,7 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 		//обработка заголовка
 		leftHeaderColumn.replaceAll("\t", "");
 		rightHeaderColumn.replaceAll("\t", "");
+		rightHeaderColumn = rightHeaderColumn.replaceAll("<br/>", "\n");
 		
 		
 		if(!append){
@@ -1017,11 +1030,11 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 	
 		int posBeg = leftColumn.indexOf("[");
 		int posEnd = -1;
-		
+		iow.firePropertyChange("progress", null, new Integer(fileLoadProgress/2));
 		// processing the left column's content
 		while (leftColumn.indexOf("[", 0)>=0 || leftColumn.indexOf("]", 0)>=0){
-				iow.setProgressValue( 	fileLoadProgress+
-										leftColumnParseProgress* posBeg/leftColumn.length());
+			iow.firePropertyChange("progress", null, new Integer( 	fileLoadProgress+
+										leftColumnParseProgress* posBeg/leftColumn.length()));
 			int handle = -1;
 			int a = 0 ;
 			RawAData data = null;
@@ -1263,3 +1276,7 @@ public HashMap <ASection, AData> getADataMap(){return aDataMap;}
 public ASection createASection(int beg, int end) throws BadLocationException{return new ASection(createPosition(beg), createPosition(end));}
 																	  
 } // class ADocument
+
+
+
+

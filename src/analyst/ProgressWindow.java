@@ -98,17 +98,7 @@ public void addUserInterruptListener(ActionListener al){
 	listeners.add(al);
 }
 
-private void fireUserInterrupt(){
-	
-	if (listeners!=null)
-		for (int i=0; i<listeners.size();i++){
-			
-			listeners.get(i).actionPerformed(new ActionEvent((Object)this, 0, "User Interrupt"));
-		}
-	
-}
-
-	@Override
+@Override
 	public void propertyChange(PropertyChangeEvent pce) {
 		String propName = pce.getPropertyName();
 		
@@ -125,6 +115,7 @@ private void fireUserInterrupt(){
 		}
 		if (propName.equals("status") ){
 			int value = ((Integer)pce.getNewValue()).intValue();
+			
 			if (value > minValue && value <= maxValue){ 
 				close();
 								

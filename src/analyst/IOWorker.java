@@ -5,6 +5,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -24,7 +25,7 @@ public class IOWorker  extends SwingWorker implements PropertyChangeListener{
 	private String plainText = null;
 	private ADocument aDoc;
 	HashMap<ADocument.ASection, AData> aData = null;
-//	Frame frame;
+	Analyst frame;
 	private ProgressWindow pw;
 	private Operation op;
 	private Exception exception = null;
@@ -38,7 +39,7 @@ public class IOWorker  extends SwingWorker implements PropertyChangeListener{
 	IOWorker(ProgressWindow pw, ADocument aDoc, FileInputStream fis){
 		this.fis = fis;
 		this.aDoc = aDoc;
-//		this.frame = f;		
+		this.frame = pw.getAnalyst();		
 		this.pw = pw;
 		this.op=Operation.LOAD;
 		
@@ -49,12 +50,13 @@ public class IOWorker  extends SwingWorker implements PropertyChangeListener{
 	IOWorker(ProgressWindow pw, ADocument aDoc, FileOutputStream fos){
 		this.fos = fos;
 		this.aDoc = aDoc;
-//		this.frame = f;		
+        this.frame = pw.getAnalyst();		
 		this.pw = pw;
 		this.op=Operation.SAVE;
 		
 
 		addPropertyChangeListener(pw);
+		addPropertyChangeListener(frame);
 		addPropertyChangeListener(this);
 
 	}

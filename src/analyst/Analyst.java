@@ -6,6 +6,8 @@ package analyst;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Dictionary;
@@ -20,7 +22,7 @@ import analyst.ADocument.ASection;
 
 @SuppressWarnings("serial")
 
-  public class Analyst extends JFrame implements WindowListener{
+  public class Analyst extends JFrame implements WindowListener, PropertyChangeListener{
 	JTextPane textPane;
     AbstractDocument doc;
     ADocument aDoc;   
@@ -37,9 +39,10 @@ import analyst.ADocument.ASection;
     JFrame frame = this;
     String fileName = "";
     JPopupMenu popupMenu;
-    public final String version = "0.4";
+    public final static String version = "0.45";
     private  boolean genetateReport = false;
     JProgressBar progress;
+    boolean programExit = false;
     
     
  static   String applicationName = "Информационный анализ";
@@ -72,7 +75,7 @@ import analyst.ADocument.ASection;
         
         textPane.setCaretPosition(0);
         //textPane.setMargin(new Insets(5,5,5,5));
-        textPane.setMinimumSize(new Dimension(400,250));
+        textPane.setMinimumSize(new Dimension(400,100));
         
         
         // binding the popup menu for textPane
@@ -102,9 +105,11 @@ import analyst.ADocument.ASection;
         commentField.setEditable(false);
         commentField.setLineWrap(true);
         commentField.setWrapStyleWord(true);
+        commentField.setMaximumSize(new Dimension(400,30));
         
         JScrollPane scrollPaneForComment = new JScrollPane(commentField);
         scrollPaneForComment.setMinimumSize(new Dimension(400,30));
+        scrollPaneForComment.setMaximumSize(new Dimension(400,30));
         scrollPaneForComment.setPreferredSize(new Dimension(400,30));
         
         //Create a split pane for the change log and the text area.
@@ -112,9 +117,7 @@ import analyst.ADocument.ASection;
                                        JSplitPane.VERTICAL_SPLIT,
                                        scrollPane, scrollPaneForComment);
         splitPaneV.setOneTouchExpandable(false);
-        
-        
-
+ 
         //Create the status area.
         JPanel statusPane = new JPanel(new BorderLayout() ); // GridLayout(1, 2));
         status =
@@ -239,8 +242,15 @@ import analyst.ADocument.ASection;
         						{
 									@Override
 									public void actionPerformed(ActionEvent arg0) {
-										if (saveConfirmation()!= JOptionPane.CANCEL_OPTION)	
-																						System.exit(0);	
+										programExit = true;
+										int option = saveConfirmation();
+										if (option == JOptionPane.CANCEL_OPTION)	programExit =false;
+											else
+											if (option == JOptionPane.YES_OPTION) ;
+												else
+													if (option == JOptionPane.NO_OPTION)	System.exit(0);
+																			
+										
 									}
         						
         						});
@@ -675,6 +685,8 @@ import analyst.ADocument.ASection;
         menu.add(a);
         popupMenu.add(a);
         
+        ActionMap am = textPane.getActionMap();
+        
         //Ctrl-A select all
         key = KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK);
         keyMap.addActionForKeyStroke(key, a);
@@ -700,14 +712,21 @@ import analyst.ADocument.ASection;
     //Create the style menu.
     protected JMenu createStyleMenu() {
         JMenu menu = new JMenu("Стиль");
-
+        
+        InputMap keyMap = menu.getInputMap();
+        
         Action action = new StyledEditorKit.BoldAction();
         action.putValue(Action.NAME, "Вопрос");
         menu.add(action);
+        
+        // Это не рабоатет не знаю почему            
+        KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_B, Event.CTRL_MASK);
+        keyMap.put(key, action);
 
         action = new StyledEditorKit.ItalicAction();
         action.putValue(Action.NAME, "Цитата");
         menu.add(action);
+ 
         return menu;
     }
   
@@ -825,8 +844,9 @@ import analyst.ADocument.ASection;
 				
 			JOptionPane.showOptionDialog(frame, 
 					"Программа \"Информационный Анализ\"\n"+
-					"© Виктор Пятницкий 2010 г. \n\n"+
-					"Школа системной соционики, Киев\n\n"+
+					"\n"+
+					"© Школа системной соционики, Киев\n"+
+					"www.socionicasys.ru\n"+
 					"Версия: "+ version, "О программе", 
 					JOptionPane.INFORMATION_MESSAGE,
 					JOptionPane.PLAIN_MESSAGE,	
@@ -1017,9 +1037,18 @@ import analyst.ADocument.ASection;
 
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		if (saveConfirmation()!=JOptionPane.CANCEL_OPTION)
-									System.exit(0);
+		programExit = true;
+		int option = saveConfirmation();
+		if (option == JOptionPane.CANCEL_OPTION)	programExit =false;
+			else
+			if (option == JOptionPane.YES_OPTION) ;
+				else
+					if (option == JOptionPane.NO_OPTION)	System.exit(0);
+											
+		
 	}
+						
+
 
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
@@ -1044,7 +1073,7 @@ import analyst.ADocument.ASection;
 	
 
 private int saveConfirmation(){
-	int choice = JOptionPane.YES_OPTION;
+	int choice = JOptionPane.NO_OPTION;
 	// if existing document is not empty
 	if (aDoc.getLength()>0){
 		choice = JOptionPane.showOptionDialog(frame, 
@@ -1076,6 +1105,7 @@ private int saveConfirmation(){
 							        	ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
 							         	IOWorker iow = new IOWorker(pw,aDoc, fos);
 										iow.execute();
+										
 							    	 }		
 				
 								        
@@ -1155,6 +1185,16 @@ public Frame getFrame(){return frame;}
 public ATree getNavigeTree(){return navigateTree;}
 public CTree getAnalisysTree(){return hystogramTree;}
 public boolean getGenerateReport(){return genetateReport;}
+
+@Override
+public void propertyChange(PropertyChangeEvent evt) {
+	
+	if (!programExit) return;
+		   if (evt.getPropertyName().equals("state")&& (evt.getNewValue()).toString().equals("DONE")){
+			   System.exit(0);
+	   }
+	
+}
 
 
 }//end class Analyst

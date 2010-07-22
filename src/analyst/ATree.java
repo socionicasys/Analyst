@@ -964,6 +964,10 @@ public EndTreeNode(Object o){
         aspectEDimensionD2Node.removeAllChildren();
         aspectEDimensionD3Node.removeAllChildren();
         aspectEDimensionD4Node.removeAllChildren();
+        aspectEDimensionMalomernostNode.removeAllChildren();
+        aspectEDimensionMnogomernostNode.removeAllChildren();
+        aspectEDimensionOdnomernostNode.removeAllChildren();
+        aspectEDimensionIndividualnostNode.removeAllChildren();
         aspectEVMMentalNode.removeAllChildren();
         aspectEVMVitalNode.removeAllChildren();
         aspectSSignPlusNode.removeAllChildren();
@@ -1412,10 +1416,13 @@ public void aDocumentChanged(ADocument doc) {
 public String getReport(){
 String report = "";	
 
-report = 	
+report = 
 		"<br/>" +
 		"<h2> Выявленные параметры функций ИМ: </h2>" +
-		"<br/>" +
+//		"<br/>" +
+		"Каждый из отмеченных экспертом фрагментов текста представляет собой анализ аспектного содержания фрагмета и <br/>" +
+		"парметров обработки этой информации. <br/>" +
+		"Приведенная ниже таблица иллюстрирует распределение ответов типируемого по парметрам модели А<br/><br/>" +
 		"<table title=\"function analysis\" border=2 width=\"80%\">" +
 		"<tr>" 															+ "\n" +
 		"	<th width=\"20%\">  </th>"					+ "\n" +
