@@ -39,7 +39,7 @@ import analyst.ADocument.ASection;
     JFrame frame = this;
     String fileName = "";
     JPopupMenu popupMenu;
-    public final static String version = "0.47";
+    public final static String version = "0.51";
     private  boolean genetateReport = false;
     JProgressBar progress;
     boolean programExit = false;
@@ -843,10 +843,10 @@ import analyst.ADocument.ASection;
 			public void actionPerformed(ActionEvent arg0) {
 				
 			JOptionPane.showOptionDialog(frame, 
-					"Программа \"Информационный Анализ\"\n"+
+					"Программа \"Информационный анализ\"\n"+
 					"\n"+
-					"© Школа системной соционики, Киев\n"+
-					"www.socionicasys.ru\n"+
+					"© Школа системной соционики, Киев, 2010 г.\n"+
+					"http://www.socionicasys.ru\n"+
 					"Версия: "+ version, "О программе", 
 					JOptionPane.INFORMATION_MESSAGE,
 					JOptionPane.PLAIN_MESSAGE,	

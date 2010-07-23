@@ -189,7 +189,7 @@ public class BTree  extends JTree implements
 	 
 			//Analyze document structure and update tree nodes
 			try {
-				HashMap <ASection, AData> aDataMap = aDoc.getADataHashMap();
+				HashMap <ASection, AData> aDataMap = aDoc.getADataMap();
 				
 	        	removeAllChildren();	
 

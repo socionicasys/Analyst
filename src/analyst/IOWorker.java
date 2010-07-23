@@ -129,7 +129,7 @@ public void propertyChange(PropertyChangeEvent evt) {
 							// Если мы не добавляем в старый документ, то перед
 							// первой записью его нужно очистить
 							appendOffset = 0;
-							aDoc.getADataHashMap().clear();
+							aDoc.getADataMap().clear();
 							aDoc.remove(0, aDoc.getEndPosition().getOffset() - 1);
 						}
 					}
@@ -159,7 +159,7 @@ public void propertyChange(PropertyChangeEvent evt) {
 						int beg = temp.getBegin();
 						int end = temp.getEnd();
 						
-						aDoc.getADataHashMap().put(aDoc.createASection(beg+appendOffset, end+appendOffset), ad);
+						aDoc.getADataMap().put(aDoc.createASection(beg+appendOffset, end+appendOffset), ad);
 						aDoc.setCharacterAttributes(beg+appendOffset, end-beg, aDoc.defaultSectionAttributes, false);
 				}
 				aDoc.fireADocumentChanged();

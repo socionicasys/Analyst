@@ -1,5 +1,6 @@
 package analyst;
 
+import analyst.StyledText;
 import java.awt.Color;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -443,18 +444,7 @@ public void fireADocumentChanged(){
 	}
 }
 
-public ASection getAnyAData() {
-	if (aDataMap!=null && !aDataMap.isEmpty()) {
-		Set keys = aDataMap.keySet();
-		return (ASection)keys.iterator().next();
-	}
-	return null;
-}
 
-public HashMap<ASection, AData> getADataHashMap() {
-	return aDataMap;
-	
-}
 
 public void save(FileOutputStream fos, IOWorker iow) throws Exception {
 	
@@ -793,11 +783,7 @@ text += //"		</td>" 														+ "\n"  +
 		"</table>"															+ "\n";
 //if not generating report
 Analyst an = iow.getProgressWindow().getAnalyst();
-if (!an.getGenerateReport()){
-	text +=
-		"</body >"															+ "\n" +
-		"</html >"															+ "\n";
-}		
+		
 //fos.write(text.getBytes());
 
 iow.firePropertyChange("progress", null, new Integer(headerSaveProgress + 
@@ -815,14 +801,19 @@ if (an.getGenerateReport()){
 
 	text += an.getNavigeTree().getReport();
 	text += an.getAnalisysTree().getReport();	
+}
 
-
+    text += 
+    		"<br/>"+
+    		"Протокол типирования создан программой \"Информационный анализ\"<br/>"+
+    		"© Школа системной соционики, Киев.<br/>"+
+			"http://www.socionicasys.ru\n";
 	
 	
 	text +=
 		"</body >"															+ "\n" +
 		"</html >"															+ "\n";
-}		
+		
 fos.write(text.getBytes());
 
 fos.flush();

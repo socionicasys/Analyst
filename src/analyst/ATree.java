@@ -34,6 +34,7 @@ public class ATree extends JTree implements
 	DefaultMutableTreeNode rootNode;
 	DefaultTreeModel treeModel;
 	TreePath path; 
+	JumpCounter jc;
 
 	
 	DefaultMutableTreeNode aspectNode = new DefaultMutableTreeNode("Аспекты");
@@ -322,6 +323,7 @@ public EndTreeNode(Object o){
         this.setModel(treeModel);
 		this.aDoc = doc;
 		doc.addADocumentChangeListener(this);
+		jc = new JumpCounter();
 		init();
 		
 	}
@@ -353,14 +355,10 @@ public EndTreeNode(Object o){
  
 		//Analyze document structure and update tree nodes
 		try {
-			HashMap <ASection, AData> aDataMap = aDoc.getADataHashMap();
-			
-			//just to test
-			//aspectLDimensionD1Node= new EndTreeNode("Ex");
+			HashMap <ASection, AData> aDataMap = aDoc.getADataMap();
+	
         	removeAllChildren();	
-//			this.treeModel.reload();
-//			treeModel.nodeChanged(aspectLDimensionD1Node);
-			
+
 			Set <ASection> set =  aDataMap.keySet();
 			Iterator <ASection> it = set.iterator();
 			ASection section = null;
@@ -889,23 +887,19 @@ public EndTreeNode(Object o){
 							   blockIRNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +quote + "..."), false));
 						   		} 
 				   }
-				   // blocks	
+				   //end blocks	
 				   
 				   
 				    // doubt
 				  if (aspect!=null && aspect.equals(AData.DOUBT )){ 
 					  doubtNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." +comment + "..."), false));
-				  }  // doubt
+				  }  
 				  
 				    // jumps
 				  if (modifier!=null && modifier.equals(AData.JUMP )){ 
 					  jumpNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset , " Перевод " +aspect+ " -> "+secondAspect), false));
-				  }  // doubt
-			//TODO	   
-				//treeModel.reload();
-				//System.out.println(((DefaultMutableTreeNode)path.getLastPathComponent()).isLeaf());
-			
-				
+					  jc.addJump(secondAspect, aspect);
+				  }  
 			}
 		} catch (BadLocationException e) {
 			System.out.println("Exception in ATree.updateTree() :");
@@ -1135,6 +1129,8 @@ public EndTreeNode(Object o){
         
                 doubtNode.removeAllChildren();
                 jumpNode.removeAllChildren();
+                
+                jc.clear();
 	}
 
 	public JScrollPane getContainer(){
@@ -1413,8 +1409,11 @@ public void aDocumentChanged(ADocument doc) {
 	
 }
 
+
 public String getReport(){
 String report = "";	
+
+if (!aDoc.getADataMap().isEmpty()){
 
 report = 
 		"<br/>" +
@@ -1571,9 +1570,128 @@ report =
 
 		"</tr>" 																	   + "\n" +		
 		"</table>";
-		
 
+//Переводы
+if (!jc.isEmpty()){
 	
+	report +=
+			"<br/>" +
+			"<h2> Переводы управления </h2>" +
+			//"<br/>" +
+			"Иногда типируемый вместо того, чтобы отвечать по аспекту вопроса, переводит ответ в другой аспект<br/>" +
+			"В этом случае, часто перевод происходит в более мерную функцию от менее мерной. <br/>" +
+			"Таким образом фунция, в которую наиболее часто происходят переводы, скорее всего, является многомерной<br/><br/>" +
+			"<table title=\"jumps\" border=2 width=\"80%\">" +
+			"<tr>" 															+ "\n" +
+			"	<th width=\"20%\"> Перевод в аспект\\из аспекта </th>"		+ "\n" +
+			"	<th width=\"10%\"> БЛ </th>"  					+ "\n" +
+			"	<th width=\"10%\"> ЧЛ </th>"  					+ "\n" +
+			"	<th width=\"10%\"> БЭ </th>"  					+ "\n" +
+			"	<th width=\"10%\"> ЧЭ </th>"  					+ "\n" +
+			"	<th width=\"10%\"> БС </th>"  					+ "\n" +
+			"	<th width=\"10%\"> ЧС </th>"  					+ "\n" +
+			"	<th width=\"10%\"> БИ </th>"  					+ "\n" +
+			"	<th width=\"10%\"> ЧИ </th>"  					+ "\n" +
+			"</tr>" 														+ "\n"  +
+			"<tr>" 															+ "\n" +		
+			"	<td style=\"font-weight:bold\"> БЛ </td>"	+ "\n" +	
+			"		<td align=\"center\">" + "X" + " </td>"  + "\n" +
+			"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.P) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.R) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.E) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.S) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.F) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.T) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.I) + " </td>"  + "\n" +		
+			"</tr>" 																	   + "\n"  +		
+			"<tr>" 																		   + "\n" +		
+			"	<td style=\"font-weight:bold\"> ЧЛ </td>"	+ "\n" +			
+			"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.L) + " </td>"  + "\n" +
+			"		<td align=\"center\">" + "X"  + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.R) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.E) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.S) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.F) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.T) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.I) + " </td>"  + "\n" +		
+			"</tr>" 														+ "\n"  +		
+			"<tr>" 															+ "\n" +		
+			"	<td style=\"font-weight:bold\"> БЭ </td>"	+ "\n" +			
+			"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.L) + " </td>"  + "\n" +
+			"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.P) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + "X"  + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.E) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.S) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.F) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.T) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.I) + " </td>"  + "\n" +		
+		"</tr>" 														+ "\n"  +		
+			"<tr>" 															+ "\n" +		
+			"	<td style=\"font-weight:bold\"> ЧЭ </td>"	+ "\n" +			
+			"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.L) + " </td>"  + "\n" +
+			"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.P) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.R) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + "X"  + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.S) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.F) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.T) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.I) + " </td>"  + "\n" +		
+			"</tr>" 														+ "\n"  +		
+			"<tr>" 															+ "\n" +		
+			"	<td style=\"font-weight:bold\"> БС </td>"	+ "\n" +			
+			"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.L) + " </td>"  + "\n" +
+			"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.P) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.R) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.E) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + "X"  + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.F) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.T) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.I) + " </td>"  + "\n" +		
+			"</tr>" 														+ "\n"  +		
+			"<tr>" 															+ "\n" +		
+			"	<td style=\"font-weight:bold\"> ЧС </td>"	+ "\n" +			
+			"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.L) + " </td>"  + "\n" +
+			"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.P) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.R) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.E) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.S) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + "X"  + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.T) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.I) + " </td>"  + "\n" +		
+			"</tr>" 														+ "\n"  +		
+			"<tr>" 															+ "\n" +		
+			"	<td style=\"font-weight:bold\"> БИ </td>"	+ "\n" +			
+			"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.L) + " </td>"  + "\n" +
+			"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.P) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.R) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.E) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.S) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.F) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + "X"  + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.I) + " </td>"  + "\n" +		
+			"</tr>" 														+ "\n"  +		
+			"<tr>" 															+ "\n" +		
+			"	<td style=\"font-weight:bold\"> ЧИ </td>"	+ "\n" +			
+			"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.L) + " </td>"  + "\n" +
+			"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.P)  + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.R) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.E) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.S) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.F) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.T) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + "X"  + " </td>"  + "\n" +		
+			"</tr>" 														+ "\n"  +	
+			"</table>";
+}
+} // end if !ADataMap.isEmpty() 
+ else {
+	 report = 
+			"<br/>" +
+			"<h2> В документе отсутствует анализ </h2>"+
+	 		"<br/>";
+ }
+
+			
 return report;	
 }
 
