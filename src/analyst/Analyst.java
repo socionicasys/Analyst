@@ -23,26 +23,28 @@ import analyst.ADocument.ASection;
 @SuppressWarnings("serial")
 
   public class Analyst extends JFrame implements WindowListener, PropertyChangeListener{
-	JTextPane textPane;
-    AbstractDocument doc;
-    ADocument aDoc;   
+	public final static String version = "0.52";
+	private JTextPane textPane;
+	private AbstractDocument doc;
+	ADocument aDoc;   
     static final int MAX_CHARACTERS = 10000000;
-    JTextArea commentField;
-    JTabbedPane navigateTabs;
-    ControlsPane controlsPane;
-    StatusLabel status;
-    ATree navigateTree;
-    BTree analisysTree;
-    CTree hystogramTree;
-    JFileChooser fc;
-    JOptionPane optionPane;
-    JFrame frame = this;
-    String fileName = "";
-    JPopupMenu popupMenu;
-    public final static String version = "0.51";
+    private JTextArea commentField;
+    private JTabbedPane navigateTabs;
+    private ControlsPane controlsPane;
+    private StatusLabel status;
+    private ATree navigateTree;
+    private BTree analisysTree;
+    private CTree hystogramTree;
+    private JFileChooser fc;
+    private JOptionPane optionPane;
+    private JFrame frame = this;
+    private String fileName = "";
+    private JPopupMenu popupMenu;
+   
     private  boolean genetateReport = false;
     JProgressBar progress;
-    boolean programExit = false;
+    private boolean programExit = false;
+    private boolean makeNewDocument  = false;
     
     
  static   String applicationName = "Информационный анализ";
@@ -55,6 +57,7 @@ import analyst.ADocument.ASection;
     protected UndoAction undoAction;
     protected RedoAction redoAction;
     protected UndoManager undo = new UndoManager();
+	 
 
     public Analyst() {
         super(applicationName+ " - " + ADocument.DEFAULT_TITLE);
@@ -229,10 +232,13 @@ import analyst.ADocument.ASection;
         						{
 									@Override
 									public void actionPerformed(ActionEvent arg0) {
-										if (saveConfirmation()!= JOptionPane.CANCEL_OPTION)	{
-											aDoc.initNew();	
-											frame.setTitle(applicationName +" - "+(String)aDoc.getProperty((Document.TitleProperty)));
-										}
+										int option =saveConfirmation();
+										if (option == JOptionPane.YES_OPTION)	{
+											makeNewDocument = true;
+										}else
+											if(option == JOptionPane.NO_OPTION){
+												 initNewDocument(); 
+											}
 									}
 									
         						});
@@ -272,6 +278,19 @@ import analyst.ADocument.ASection;
 									        	 			fileName = file.getAbsolutePath();
 									        	 			if (!fileName.endsWith(".htm")) fileName+=".htm";
 									        	 			file = new File(fileName);
+									        	 			
+													        if (file.exists()) {
+													        	  Object[] options =  {"Да","Нет"};
+													        	 if(JOptionPane.showOptionDialog(frame,
+													                 "Такой файл существует!\n\nХотите перезаписать этот файл?", "Предупреждение!!!",
+													                  JOptionPane.YES_NO_OPTION, 
+													                  JOptionPane.QUESTION_MESSAGE,
+													                  null, 
+													                  options,null) ==
+													                	  				JOptionPane.NO_OPTION) return;
+													         }	
+													   
+													    
 					        	 				}
 									         
 							       
@@ -370,9 +389,10 @@ import analyst.ADocument.ASection;
 		public void actionPerformed(ActionEvent arg0) {
 		
 		    try {
-		    	 fc.setDialogTitle("Открытие документа");
+		    	 
 		    	 status.setText("Открытие документа...");
 		    	 if (saveConfirmation() == JOptionPane.CANCEL_OPTION) return;
+		    	 fc.setDialogTitle("Открытие документа");
 		    	 int returnVal = fc.showDialog(Analyst.this, "Открыть");
 		    	 File file = null;
 		         if (returnVal == JFileChooser.APPROVE_OPTION) { 
@@ -1088,11 +1108,34 @@ private int saveConfirmation(){
 			File file = null;
 	    	
 			if (fileName == null ||(fileName!=null && fileName.length() == 0)) {	
+				 boolean cancel = false;
+				 boolean overwrite= false;
+				 int returnVal= 0;
+				 int option  = 0;
+				 
+				 while(! (cancel || overwrite)){
 	    		 fc.setDialogTitle("Сохранение документа");
-		    	 int returnVal = fc.showDialog(Analyst.this, "Сохранить");
-		         if (returnVal == JFileChooser.APPROVE_OPTION) file = fc.getSelectedFile();
-       
-		         }
+	    		 returnVal= fc.showDialog(Analyst.this, "Сохранить");
+			         if (returnVal == JFileChooser.APPROVE_OPTION){ 
+			        	 file = fc.getSelectedFile();
+			     
+			        	 fileName = file.getAbsolutePath();
+					        if (file.exists()) {
+					        	  Object[] options =  {"Да","Нет"};
+					        	  option = JOptionPane.showOptionDialog(frame,
+					                 "Такой файл существует!\n\nХотите перезаписать этот файл?", "Предупреждение!!!",
+					                  JOptionPane.YES_NO_OPTION, 
+					                  JOptionPane.QUESTION_MESSAGE,
+					                  null, 
+					                  options,null);
+					        	  if (option==JOptionPane.YES_OPTION) overwrite =true;
+					         }	//if file doesn't exist
+					        	else cancel = true;
+					 }
+			         else 
+			        	 if(returnVal == JFileChooser.CANCEL_OPTION)cancel =true;
+				 } //end while
+		      }
 				
 
 				if (fileName!= null & fileName.length()>0){
@@ -1189,13 +1232,23 @@ public boolean getGenerateReport(){return genetateReport;}
 @Override
 public void propertyChange(PropertyChangeEvent evt) {
 	
-	if (!programExit) return;
+	if (programExit) 
 		   if (evt.getPropertyName().equals("state")&& (evt.getNewValue()).toString().equals("DONE")){
 			   System.exit(0);
 	   }
-	
+	if (makeNewDocument)
+	   if (evt.getPropertyName().equals("state")&& (evt.getNewValue()).toString().equals("DONE")){
+		   initNewDocument(); 
+   }
+			
 }
 
+private  void initNewDocument(){
+	   aDoc.initNew();
+	   frame.setTitle(applicationName +" - "+(String)aDoc.getProperty((Document.TitleProperty)));
+	   fileName="";
+	   makeNewDocument = false;
+}
 
 }//end class Analyst
 
