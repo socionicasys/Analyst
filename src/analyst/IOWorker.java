@@ -67,6 +67,7 @@ public class IOWorker  extends SwingWorker implements PropertyChangeListener{
 		} catch (Exception e){
 			pw.close();
 			this.exception = e;
+			e.printStackTrace();
 		}
 		
 		

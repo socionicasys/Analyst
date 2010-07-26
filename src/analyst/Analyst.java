@@ -23,7 +23,7 @@ import analyst.ADocument.ASection;
 @SuppressWarnings("serial")
 
   public class Analyst extends JFrame implements WindowListener, PropertyChangeListener{
-	public final static String version = "0.52";
+	public final static String version = "0.53";
 	private JTextPane textPane;
 	private AbstractDocument doc;
 	ADocument aDoc;   
@@ -289,7 +289,7 @@ import analyst.ADocument.ASection;
 													                  options,null) ==
 													                	  				JOptionPane.NO_OPTION) return;
 													         }	
-													   
+													       
 													    
 					        	 				}
 									         
@@ -304,6 +304,7 @@ import analyst.ADocument.ASection;
 									         	ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
 									         	IOWorker iow = new IOWorker(pw,aDoc, fos);
 												iow.execute();
+												frame.setTitle(applicationName + " - "+ file.getName());
 								    	 }		
 
 								        

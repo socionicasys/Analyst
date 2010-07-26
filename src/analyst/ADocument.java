@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Dictionary;
@@ -24,6 +25,7 @@ import javax.swing.text.*;
 
 public class ADocument extends DefaultStyledDocument implements DocumentListener  
 																	  {
+	public static final String ENCODING = "UTF-8";
 	public static final String DEFAULT_TITLE = "Новый документ";
 	// document's properties names
 	public static final String TitleProperty1 	= "Документ:";
@@ -459,6 +461,7 @@ if (fos == null){System.out.println("Error attempting to save file: FileOutputSt
 
 //writing the header
 String text = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"> \n";
+text += "<meta http-equiv=\"Content-Type\" content=\"text/html charset=" + ENCODING + "\"/>";
 text += "<html> \n<head> \n<title> \n" + getProperty(TitleProperty) + " \n</title> \n" +
 "	<style>"+
 "			body 	{font-size:14px;color:black}\n"+
@@ -471,7 +474,7 @@ text += "<html> \n<head> \n<title> \n" + getProperty(TitleProperty) + " \n</titl
 "</head> \n"+
 "<body> \n";
 
-	fos.write(text.getBytes());
+	fos.write(text.getBytes(ENCODING));
 	
 
 
@@ -516,7 +519,7 @@ text += "\n <table title=\"header\" border=1 width=\"40%\"> 	" 					+ "\n" +
 				"</tr>"												+ "\n" +
 				"</table >"											+ "\n";
 	
-fos.write(text.getBytes());
+fos.write(text.getBytes(ENCODING));
 
 iow.firePropertyChange("progress", null, new Integer(headerSaveProgress));
 
@@ -532,7 +535,7 @@ iow.firePropertyChange("progress", null, new Integer(headerSaveProgress));
 		"	<td>"																
 		;
 		
-fos.write(text.getBytes());
+fos.write(text.getBytes(ENCODING));
 text = "";
 // PREPARING  
 	Vector <DocumentFlowEvent> flowEvents = new Vector<DocumentFlowEvent>();
@@ -675,7 +678,8 @@ text = "";
 		}
 	}
 	Collections.sort(flowEvents);
-	if (flowEvents.lastElement().getType() != DocumentFlowEvent.NEW_ROW) {
+	
+	if (!flowEvents.isEmpty() && (flowEvents.lastElement().getType() != DocumentFlowEvent.NEW_ROW)) {
 		flowEvents.add(new DocumentFlowEvent(
 				DocumentFlowEvent.NEW_ROW, this.getEndPosition().getOffset() - 1,
 				null, null, 0));
@@ -776,7 +780,11 @@ if (flowEvents!=null && !flowEvents.isEmpty()){
 		} // eventType == DocumentFlowEvent.LINE_BREAK
 	}//for
 }//if
-	
+	// если в документе нет разметки - просто пишем текст в левый столбец таблицы
+	else{
+		text += getText(0, getLength());
+		text += "</td><td></td>";
+	}
 
 text += //"		</td>" 														+ "\n"  +
 		"</tr>" 															+ "\n" +		
@@ -784,7 +792,7 @@ text += //"		</td>" 														+ "\n"  +
 //if not generating report
 Analyst an = iow.getProgressWindow().getAnalyst();
 		
-//fos.write(text.getBytes());
+//fos.write(text.getBytes(ENCODING));
 
 iow.firePropertyChange("progress", null, new Integer(headerSaveProgress + 
 		writePreparationProgress+
@@ -814,7 +822,7 @@ if (an.getGenerateReport()){
 		"</body >"															+ "\n" +
 		"</html >"															+ "\n";
 		
-fos.write(text.getBytes());
+fos.write(text.getBytes(ENCODING));
 
 fos.flush();
 fos.close();
@@ -829,7 +837,7 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 															{
 //	
 	
-	InputStreamReader isr = new InputStreamReader(fis);
+	InputStreamReader isr = new InputStreamReader(fis);//, Charset.forName(ENCODING));
 	String leftColumn="";
     String rightColumn ="";
     String allText ="";
@@ -888,7 +896,7 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 			while(!finished){
 				    
 					bytesRead = isr.read(buf, 0, length);
-					if (bytesRead > 0) allText += String.valueOf(buf, 0, bytesRead);
+					if (bytesRead > 0) allText +=  new String(buf, 0, bytesRead);
 					//offset += bytesRead;
 					  else {finished = true;
 							isr.close();
