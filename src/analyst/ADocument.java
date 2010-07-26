@@ -837,7 +837,7 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 															{
 //	
 	
-	InputStreamReader isr = new InputStreamReader(fis);//, Charset.forName(ENCODING));
+	InputStreamReader isr = new InputStreamReader(fis, Charset.forName(ENCODING));
 	String leftColumn="";
     String rightColumn ="";
     String allText ="";
