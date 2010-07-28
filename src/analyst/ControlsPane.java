@@ -17,6 +17,8 @@ import javax.swing.text.Document;
 import javax.swing.text.Position;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+
+
 import analyst.ADocument.ASection;
 
 import java.awt.*;
@@ -45,6 +47,7 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
 	Vector <ADataChangeListener> aDataListeners;
 	ADocument.ASection currentASection = null;
 	JTextArea commentField;
+	private Object oldTreeObject = null;
 	
 	
 	//constructor
@@ -1030,12 +1033,20 @@ public void stateChanged(ChangeEvent e) {
 public void valueChanged(TreeSelectionEvent e) {
 	
 	Object obj = ((DefaultMutableTreeNode)(e.getPath().getLastPathComponent())). getUserObject();
+	
+	if (obj.equals(oldTreeObject)) {
+		//oldTreeObject=null;
+		return;
+	}
+		else oldTreeObject = obj;
+	
 	String quote =null;
 	int index=0;
 	
 	if (obj instanceof EndNodeObject ){
 		quote	= ((EndNodeObject)obj).getString();
 		index	 =((EndNodeObject)obj).getOffset();	
+		
 	}
 	//String quote = e.getPath().getLastPathComponent().toString();
 	else{	
@@ -1077,7 +1088,7 @@ public void valueChanged(TreeSelectionEvent e) {
 				rect = textPane.modelToView(offset);
 				//System.out.println("offset = "+offset+" rectangle = "+rect);
 				viewport.scrollRectToVisible(rect);
-				textPane.requestFocus();
+				textPane.grabFocus();
 				
 			} catch (BadLocationException e1) {
 				//

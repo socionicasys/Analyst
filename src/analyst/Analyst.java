@@ -23,7 +23,7 @@ import analyst.ADocument.ASection;
 @SuppressWarnings("serial")
 
   public class Analyst extends JFrame implements WindowListener, PropertyChangeListener{
-	public final static String version = "0.54";
+	public final static String version = "0.56";
 	private JTextPane textPane;
 	private AbstractDocument doc;
 	ADocument aDoc;   
@@ -83,7 +83,7 @@ import analyst.ADocument.ASection;
         
         // binding the popup menu for textPane
         Toolkit.getDefaultToolkit().getSystemEventQueue().push(new MyEventQueue()); 
-
+        
 
         fc = new JFileChooser();
         fc.addChoosableFileFilter( new FileNameExtensionFilter("Файлы .htm", "htm"));
@@ -537,64 +537,7 @@ import analyst.ADocument.ASection;
         	
    } //caretUpdate()
  
- /*
-        protected void displayStructureInfo(final int dot,
-                final int mark) {     
-        	Element dre = aDoc.getDefaultRootElement();
-        	Element ee = aDoc.getCharacterElement(dot); 
-        	commentField.append("=====================================\n");
-        	commentField.append("DOT = " + dot+"; MARK = "+ mark+ "\n");
-        	commentField.append("DefaultRootElement = " +dre.getName()+ "\n");
-        	if (ee!=null)commentField.append("CharacterElement at dot " + dot + " = " +ee.getName()+ "\n"); 
-        	  else commentField.append("Element at dot " + dot + " = null\n");
-        	
-        	printElementInfo(ee);
-       	
- /*       	for (int i=0; i<dre.getElementCount(); i++){
-        		Element z =dre.getElement(i);
-        		commentField.append("Element [" +i+ "] ="+z.getName()+ "\n");
-        		commentField.append("Element [" +i+ "] ="+z.getName()+ "\n");
-        		
-        		AttributeSet as = z.getAttributes();
-        		Enumeration names=null; 
-        		if (as!=null)names = as.getAttributeNames();   
-        		  else commentField.append("    No attributes for element " + i +"\n");
-        		
-        		while(names!=null && names.hasMoreElements()){
-        		  String attr = as.getAttribute(names.nextElement()).toString(); 	
-        		  commentField.append("    Attribute = "+ attr + "\n");
-        		}// while
-        	}//for i
-  	
-        }
  
-        
-        public void printElementInfo(Element e){
-        	
-        		Element z = e;
-        		String elementName =z.getName(); 
-        		commentField.append("___________________________________________\n");
-        		commentField.append("Element "+elementName+  "; Parent = " + z.getParentElement()+"\n");
-        		if (z.isLeaf())commentField.append("  ...isLeaf"); 
-        		commentField.append("\n");
-        		
-        		AttributeSet as = z.getAttributes();
-        		
-        		Enumeration names=null;
-        		
-        		if (as!=null){names = as.getAttributeNames();   
-        		}
-        		  else commentField.append("    No attributes for element "+ elementName +"\n");
-        		
-        		while(names!=null && names.hasMoreElements()){
-        		  Object attrName = names.nextElement();	
-        		  String attr = as.getAttribute(attrName).toString(); 	
-        		  commentField.append("    Attribute: " + attrName+ " = "+ attr + "\n");
-        		}// while
-        		if (z.getParentElement()!=null)printElementInfo(z.getParentElement());
-        	
-        }
- */       
 
 		@Override
 		public void aDataChanged(int start, int end, AData data) {
@@ -668,28 +611,40 @@ import analyst.ADocument.ASection;
 
     //Create the edit menu.
     protected JMenu createEditMenu() {
+        InputMap inputMap = textPane.getInputMap();
+        Keymap keyMap = textPane.getKeymap();
+        KeyStroke key = null;
+        JMenuItem menuItem = null;
+      
+    
         JMenu menu = new JMenu("Редактирование");
 
         //Undo and redo are actions of our own creation.
         undoAction = new UndoAction();
         undoAction.putValue(Action.NAME, "Отменить действие");
-        menu.add(undoAction);
+        menuItem = new JMenuItem(undoAction);
+        key = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK);
+        menuItem.setAccelerator(key);
+        menu.add(menuItem);
+  
+//        menu.add(undoAction);
 
         redoAction = new RedoAction();
         redoAction.putValue(Action.NAME, "Повторить действие");
-        menu.add(redoAction);
+        menuItem = new JMenuItem(redoAction);
+        key = KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK);
+        menuItem.setAccelerator(key);
+        menu.add(menuItem);
+//        menu.add(redoAction);
 
         menu.addSeparator();
         
-        InputMap inputMap = textPane.getInputMap();
-        Keymap keyMap = textPane.getKeymap();
-        KeyStroke key = null;
-      
-       
+   
         //These actions come from the default editor kit.
         //Get the ones we want and stick them in the menu.
         Action a = getActionByName(DefaultEditorKit.cutAction);
         a.putValue(Action.NAME, "Вырезать");
+
         menu.add(a);
         popupMenu.add(a);
         a = getActionByName(DefaultEditorKit.copyAction);
@@ -706,12 +661,6 @@ import analyst.ADocument.ASection;
         menu.add(a);
         popupMenu.add(a);
         
-        ActionMap am = textPane.getActionMap();
-        
-        //Ctrl-A select all
-        key = KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK);
-        keyMap.addActionForKeyStroke(key, a);
-        
         menu.addSeparator();
         popupMenu.addSeparator();
         
@@ -719,13 +668,16 @@ import analyst.ADocument.ASection;
         
         
         a = new SearchAction((JTextComponent)textPane, aDoc);
-        menu.add(a);
+        a.putValue(Action.NAME, "Поиск");
+        menuItem = new JMenuItem(a);
+        menuItem.setAction(a);
+        key = KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK);
+        menuItem.setAccelerator(key);
+        menuItem.setAction(a);
+        menu.add(menuItem);
         popupMenu.add(a);
         
-        //Ctrl-F search
-        key = KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK);
-        keyMap.removeKeyStrokeBinding(key);
-        keyMap.addActionForKeyStroke(key, a);
+
         
         return menu;
     }
@@ -734,20 +686,28 @@ import analyst.ADocument.ASection;
     protected JMenu createStyleMenu() {
         JMenu menu = new JMenu("Стиль");
         
+        JMenuItem menuItem = new JMenuItem();
+        
+        
         InputMap keyMap = menu.getInputMap();
         
         Action action = new StyledEditorKit.BoldAction();
         action.putValue(Action.NAME, "Вопрос");
-        menu.add(action);
-        
-        // Это не рабоатет не знаю почему            
+        menuItem.setAction(action);
         KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_B, Event.CTRL_MASK);
-        keyMap.put(key, action);
+        menuItem.setAccelerator(key);        
+        menu.add(menuItem);
+        
+     
 
         action = new StyledEditorKit.ItalicAction();
         action.putValue(Action.NAME, "Цитата");
-        menu.add(action);
- 
+        menuItem = new JMenuItem();
+        menuItem.setAction(action);
+        key = KeyStroke.getKeyStroke(KeyEvent.VK_I, Event.CTRL_MASK);
+        menuItem.setAccelerator(key);        
+        menu.add(menuItem);
+        
         return menu;
     }
   
