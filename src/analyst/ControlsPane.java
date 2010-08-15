@@ -888,7 +888,8 @@ public void caretUpdate (CaretEvent e) {
 	int mark = e.getMark();
 	int begin = Math.min(dot, mark);
 //	int length = Math.abs(dot-mark); 
-	
+
+
 
 	//try to find current ASection to edit
 	
@@ -940,6 +941,7 @@ public void caretUpdate (CaretEvent e) {
 
 	} else {aspectPanel.setPanelEnabled(false); }
 	
+
 
 }
 
@@ -1004,17 +1006,26 @@ private void fireADataChanged() {
 public void aDataChanged(int start, int end, AData data) {
 	
 	//currentASection = aDoc.getASectionThatStartsAt(start);
-	if ((data == null) && (currentASection!=null)){aDoc.removeASection(currentASection); 
+	if ((data == null) && (currentASection!=null)){
+													aDoc.startCompoundEdit();
+													aDoc.removeASection(currentASection); 
+													aDoc.endCompoundEdit(null);
 													currentASection = null;
 													}
 	 else
-	    if ((data != null) && (currentASection!=null)){aDoc.updateASection(currentASection, data); }
+	    if ((data != null) && (currentASection!=null)){
+	    											aDoc.startCompoundEdit();
+	    											aDoc.updateASection(currentASection, data); 
+	    											aDoc.endCompoundEdit(null);}
 	    else 
 	    	 if ((data != null) && (currentASection==null)){
 	   		 
 	    		 try {
 					    currentASection = aDoc.new ASection( aDoc.createPosition(start), aDoc.createPosition(end));
-					    aDoc.addASection(currentASection, data); 
+					    currentASection.setAttributes(aDoc.defaultSectionAttributes);
+					    aDoc.startCompoundEdit();
+					    aDoc.addASection(currentASection, data);
+					    aDoc.endCompoundEdit(null);
 				 } catch (BadLocationException e) {
 					System.out.println("Exception in ControlsPane.aDataChanged():2");
 					e.printStackTrace();
@@ -1095,7 +1106,7 @@ public void valueChanged(TreeSelectionEvent e) {
 				System.out.println(" error setting model to view :: bad location");
 			}
 			
-		} else System.out.println(" Не найдена секция");
+		} else ; //System.out.println(" Не найдена секция");
 	   		////////////////////////////////////////////	
 	
 		
@@ -1103,6 +1114,11 @@ public void valueChanged(TreeSelectionEvent e) {
 
 }
     
-    
+   public void update(){
+	 if (currentASection!=null) { 
+	 AData data = aDoc.getADataMap().get(currentASection);	 
+	 setContols(data);  
+	 }
+   } 
 
 }//class ControlsPane

@@ -21,6 +21,11 @@ import java.util.regex.Pattern;
 
 import javax.swing.event.*;
 import javax.swing.text.*;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.CompoundEdit;
+import javax.swing.undo.UndoableEdit;
 
 
 public class ADocument extends DefaultStyledDocument implements DocumentListener  
@@ -43,7 +48,11 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	public SimpleAttributeSet defaultSearchHighlightAttributes;
 	
 	private int progress = 0;
-
+	private CompoundEdit currentCompoundEdit = null;
+	private boolean blockUndoEvents = false;
+//	private boolean blockremoveUpdate = false;
+	private boolean blockRemoveUpdate;
+	private String keyword;
 	
 	private class DocumentFlowEvent implements Comparable<DocumentFlowEvent> {
 	 protected 	int type, offset, sectionNo; 
@@ -128,7 +137,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 	//style of general text
 	defaultStyle = new SimpleAttributeSet();
-	defaultStyle. addAttribute(StyleConstants.FontSize, new Integer(16));
+	defaultStyle.addAttribute(StyleConstants.FontSize, new Integer(16));
+	defaultStyle.addAttribute(StyleConstants.Background, Color.white);
 	//style of a section with mark-up
 	defaultSectionAttributes = new SimpleAttributeSet();
 	defaultSectionAttributes.addAttribute(StyleConstants.Background, Color.decode("#E0ffff"));
@@ -159,7 +169,9 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		putProperty((Object)DateProperty, 	(Object) date.toLocaleString());
 		putProperty((Object)CommentProperty, "");
 
+		setCharacterAttributes(0, 1, defaultStyle, true);
 		fireADocumentChanged();
+		Analyst.initUndoManager();
 	}
 
 	public class ASection implements Serializable{
@@ -208,7 +220,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		}
 	
 	public boolean isCollapsed(){
-		if ( start.getOffset() ==  end.getOffset() ) return true;
+		if (end.getOffset() - start.getOffset() <=1 ) return true;
 		return false;
 		}
 	
@@ -217,6 +229,24 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	int e = end.getOffset();
 	if ( b<e && offset >= b  && offset < e ) return true;
 	return false;
+	}
+
+	public void setEndOffset(int arg) {
+		try {
+			this.end = createPosition(arg);
+		} catch (BadLocationException e) {
+				e.printStackTrace();
+		}
+		
+	}
+
+	public void setStartOffset(int arg) {
+		try {
+			this.start = createPosition(arg);
+		} catch (BadLocationException e) {
+				e.printStackTrace();
+		}
+		
 	}
 	
 		
@@ -346,19 +376,90 @@ public	void changedUpdate(DocumentEvent e) {
 
 @Override
 protected void insertUpdate (AbstractDocument.DefaultDocumentEvent chng, AttributeSet set) {
-
+	
+	
+	//if insert is on the section end - do not extend the section to the inserted text
+	/*
+	int offset = chng.getOffset();
+	int length = chng.getLength();
+	
+	Set<ASection> s = aDataMap.keySet();
+	Iterator<ASection> it = s.iterator ();
+	int  start= -1;
+	AData aData = null;
+	HashMap <ASection, AData> tempMap = null;
+	
+	while(it.hasNext()){
+		ASection sect = it.next(); 
+		if (sect.getEndOffset()==offset+length){ 
+			if (tempMap ==null) tempMap = new HashMap <ASection, AData>();
+			start = sect.getStartOffset();
+			aData = aDataMap.get(sect);
+			it.remove();
+			try {
+				sect = new ASection(createPosition(start), createPosition(offset));
+			} catch (BadLocationException e) {
+				
+				e.printStackTrace();
+			}
+			tempMap.put(sect, aData);
+		}
+	}
+	
+	if (tempMap !=null) aDataMap.putAll(tempMap);
+	
 set =  defaultStyle;
-
+*/
 super.insertUpdate(chng, set);
+
+//insertCleanup();
 
 }
 
 
 protected void removeUpdate(AbstractDocument.DefaultDocumentEvent chng){
-	super.removeUpdate(chng);	
-	//int position = chng.getOffset();
-	//chng.end();
-	//this.setCharacterAttributes(position, 1,  defaultStyle, false);
+	
+	if (blockRemoveUpdate){
+		
+		return;}
+	startCompoundEdit();
+	
+
+	//blockUndoEvents(true);
+	int offset =  chng.getOffset();
+	int length = chng.getLength();
+	
+	//ADocumentFragment fragment = getADocFragment((ADocument)chng.getDocument(),offset, length);
+	//UndoableEdit edit = new ADocDeleteEdit(offset, fragment);
+	
+/*	
+	try {
+		blockRemoveUpdate = true;
+		this.remove(offset, length);
+		blockRemoveUpdate = false;
+	} catch (BadLocationException e) {
+		e.printStackTrace();
+	}
+		
+*/	
+	
+
+	//blockUndoEvents(false);	
+	
+	removeCleanup(offset, offset+length); 
+	super.removeUpdate(chng);
+	
+	//fireUndoableEditUpdate(new UndoableEditEvent(this, edit));
+	//Analyst.undo.addEdit((UndoableEdit) new UndoableEditEvent(this, edit));
+	
+	fireADocumentChanged(); 
+	endCompoundEdit(null);
+
+
+
+//	fireUndoableEditUpdate(new UndoableEditEvent(this, new ADocDeleteEdit(chng.getOffset(), getADocFragment(this, chng.getOffset(),chng.getLength(),false))));
+
+
 }
 
 @Override
@@ -366,21 +467,65 @@ public void removeUpdate(DocumentEvent e) {
 
 } //removeUpdate()
 
-public void removeCleanup(int offset){
-	//int offset = e.getOffset();
-	
-//	this.setCharacterAttributes(offset, 1, defaultSectionAttributes, true);
+public void removeCleanup(int start, int end){
 	
 	// проверяет не нужно ли удалить схлопнувшиеся сегменты
 	Set<ASection> s = aDataMap.keySet();
 	Iterator<ASection> it = s.iterator ();
 	boolean foundCollapsed = false;
+	Vector <ASection> toRemove = new Vector <ASection>();
 	while(it.hasNext()){
 		ASection sect = it.next(); 
-		if (sect.isCollapsed()){ it.remove(); foundCollapsed = true;}
+		if (sect.getStartOffset()> start &&
+			sect.getStartOffset()<= end	 &&	
+			sect.getEndOffset()> start &&
+			sect.getEndOffset()<= end	
+										){ //it.remove(); 
+											toRemove.add(sect);
+											foundCollapsed = true;}
 	
 	}
+	
+	for (int i = 0; i<toRemove.size(); i++){
+		removeASection(toRemove.get(i));
+		
+	}
 	if (foundCollapsed) fireADocumentChanged();
+}
+
+
+public void insertCleanup(){
+/*	
+	if (aDataMap == null ) return;
+	// проверяет не нужно ли объединить пересекающиеся сегменты с одинаковыми данными
+	Set<ASection> s = aDataMap.keySet();
+	Iterator<ASection> it = s.iterator ();
+	ASection[] sections = s.toArray(new ASection[]{});
+	boolean foundCollapsed = false;
+	while(it.hasNext()){
+		ASection sect = it.next(); 
+		AData dat = this.getAData(sect);
+		for (int i = 0; i< sections.length; i++){
+			ASection curSect = sections[i];
+			AData curData = this.getAData(curSect);
+			if (dat.equals(curData)&& sect!= curSect){
+				if (sect.getStartOffset()>= curSect.getStartOffset()   &&
+					sect.getStartOffset()<= curSect.getEndOffset()){
+					(sections[i]).setEndOffset(Math.max(sect.getEndOffset(), curSect.getEndOffset()));
+					it.remove();
+					foundCollapsed = true;
+				}	 
+				if (sect.getEndOffset()  >= curSect.getStartOffset()   &&
+					sect.getEndOffset()  <= curSect.getEndOffset()){ 
+					(sections[i]).setStartOffset(Math.min(sect.getEndOffset(), curSect.getEndOffset()));
+					it.remove();
+					foundCollapsed = true;
+				}
+			}	
+		}
+	}
+	if (foundCollapsed) fireADocumentChanged();
+*/	
 }
 
 
@@ -392,22 +537,27 @@ public AData getAData(ASection section) {
 
 public void removeASection(ASection aSection) {
 	if (aSection==null) return;
-	
+	AData data = aDataMap.get(aSection);
 	aDataMap.remove(aSection);
 	
 	int st = aSection.getStartOffset();
 	int en = aSection.getEndOffset();
-	SimpleAttributeSet attr = new SimpleAttributeSet();
-	attr.addAttribute(StyleConstants.Background, Color.white);
-	setCharacterAttributes(st, en-st, attr, false);	
+	
+	//startCompoundEdit();
+	setCharacterAttributes(st, en-st, defaultStyle, false);	
+	fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionDeletionEdit(aSection,data)));
+	//endCompoundEdit();
 	fireADocumentChanged();
 }
 
 
 public void updateASection(ASection aSection, AData data) {
-	removeASection(aSection);
-	addASection(aSection, data);
-//	fireADocumentChanged();
+	AData oldData = aDataMap.get(aSection);
+	aDataMap.remove(aSection);
+	aDataMap.put(aSection, data);
+		fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionChangeEdit(aSection,oldData, data)));
+	
+	fireADocumentChanged();
 }
 
 
@@ -428,9 +578,13 @@ public void addASection(ASection aSection, AData data) {
 		if (sect.getStartOffset() == beg && sect.getEndOffset() == beg+len) it.remove();
 	}
 	
+	//startCompoundEdit();
+
+	setCharacterAttributes(beg, len, aSection.getAttributes(), false);
 	aDataMap.put(aSection, data);
+	fireUndoableEditUpdate(new UndoableEditEvent(this,new ASectionAdditionEdit(aSection,data)));
+	//endCompoundEdit();
 	
-	setCharacterAttributes(beg, len, defaultSectionAttributes, false);
 	fireADocumentChanged();
 }
 
@@ -484,6 +638,7 @@ text = "\n<h1>" + getProperty(TitleProperty) + "</h1>\n";
 
 //saved with version
 String comm =(String)getProperty(CommentProperty);
+/*
 if (comm != null){ 
 	
 	int ind = comm.indexOf("Сохранено версией:");
@@ -493,7 +648,7 @@ if (comm != null){
 		else if (comm.length()>0) comm = comm + "<br/>";
 	comm += "Сохранено версией:"  + Analyst.version;
 }
-
+*/
 //document header
 text += "<br/>\n<br/>";
 text += "\n <table title=\"header\" border=1 width=\"40%\"> 	" 					+ "\n" +
@@ -804,7 +959,7 @@ if (an.getGenerateReport()){
 	
 	
 	text += "<br/>" +	
-			"<h1> Анализ типирования </h1>" +
+			"<h1> Определение ТИМа </h1>" +
 			"<br/>" ;
 
 	text += an.getNavigeTree().getReport();
@@ -813,7 +968,7 @@ if (an.getGenerateReport()){
 
     text += 
     		"<br/>"+
-    		"Протокол типирования создан программой \"Информационный анализ\"<br/>"+
+    		"Протокол определения ТИМа создан программой \"Информационный анализ\", верисия: "+ Analyst.version+ " <br/>"+
     		"© Школа системной соционики, Киев.<br/>"+
 			"http://www.socionicasys.ru\n";
 	
@@ -960,9 +1115,6 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 			} 
 			if (leftHeaderColumn.equals(ClientProperty)){
 				iow.firePropertyChange("DocumentProperty", ClientProperty,  new String(rightHeaderColumn));	
-			} 
-			if (leftHeaderColumn.equals(ClientProperty)){
-				iow.firePropertyChange("DocumentProperty", ClientProperty,  new String(rightHeaderColumn));
 			} 
 			if (leftHeaderColumn.equals(CommentProperty)){				
 				iow.firePropertyChange("DocumentProperty", CommentProperty,  new String(rightHeaderColumn));
@@ -1233,14 +1385,14 @@ public String getHTMLStyleForAData(AData data){
 	//Если не задан другой стиль, то будет этот стиль
 	if (res.equals("\""))res += "text-decoration:underline";
 	
-	//TODO доделать разметку для случая перевода с одного аспекта на другой
+	
 	res += "\"";
 	return res;
 }//getStyleForAData()
 
 @Override
 public void insertUpdate(DocumentEvent e) {
-	// TODO Auto-generated method stub
+
 	
 }
 
@@ -1272,7 +1424,495 @@ public void save(FileOutputStream fos, ProgressWindow pw, boolean append) {
 public HashMap <ASection, AData> getADataMap(){return aDataMap;}
 
 public ASection createASection(int beg, int end) throws BadLocationException{return new ASection(createPosition(beg), createPosition(end));}
-																	  
+
+public void startCompoundEdit(){
+	if (currentCompoundEdit != null) endCompoundEdit(null);
+		currentCompoundEdit = new CompoundEdit();
+		keyword = null;
+
+}
+
+public void endCompoundEdit(String s) {
+	
+	if (currentCompoundEdit == null) return;
+/*	if (!currentCompoundEdit.canUndo() && !currentCompoundEdit.canRedo()) {
+		currentCompoundEdit =null;
+		return;
+	}
+*/
+	if (s == null){
+		currentCompoundEdit.end();
+		fireUndoableEditUpdate(new UndoableEditEvent(this, (UndoableEdit)currentCompoundEdit));
+		currentCompoundEdit = null;
+	} else keyword = s;
+	
+
+}
+
+
+//@override
+protected void fireUndoableEditUpdate(UndoableEditEvent e){
+	String s =  e.getEdit().getPresentationName();
+	if( keyword != null && s.contains(keyword)){
+		currentCompoundEdit.addEdit(e.getEdit());
+		currentCompoundEdit.end();
+		keyword=null;
+		//fireUndoableEditUpdate(new UndoableEditEvent(this, (UndoableEdit)currentCompoundEdit));
+	}
+
+
+	if (currentCompoundEdit!=null && currentCompoundEdit.isInProgress()){
+		currentCompoundEdit.addEdit(e.getEdit());
+	}
+	else super.fireUndoableEditUpdate(e);
+
+}
+
+
+//===================================================================
+private class ASectionAdditionEdit extends AbstractUndoableEdit{
+	
+	boolean canUndo, canRedo;
+	ASection section;
+	AData data;
+	
+	public ASectionAdditionEdit(ASection section, AData data){
+		this.section=section;
+		this.data=data;
+		canUndo = true;
+		canRedo = false;
+	}
+	
+	public boolean canUndo(){return canUndo;}
+	public boolean canRedo(){return canRedo;}	
+	
+	public void undo() throws  CannotUndoException {
+		if (!canUndo) throw new CannotUndoException();
+	
+		
+		//blockUndoEvents(true);
+		/* setCharacterAttributes(	section.getStartOffset(),
+								Math.abs(section.getEndOffset()-section.getStartOffset()), 
+								defaultStyle, false);
+		*/
+		//blockUndoEvents(false);
+		aDataMap.remove(section);
+		canUndo = false;
+		canRedo = true;
+		fireADocumentChanged();
+	}
+	public void redo() throws  CannotRedoException {
+		if (!canRedo) throw new CannotRedoException();
+		//blockUndoEvents(true);
+		/*setCharacterAttributes(	section.getStartOffset(), 
+								section.getEndOffset()-section.getStartOffset(), 
+								section.getAttributes(), false);
+		*/
+		//blockUndoEvents(false);
+		aDataMap.put(section, data);
+		canUndo = true;
+		canRedo = false;
+		fireADocumentChanged();
+	}
+	
+	public String getUndoPresentationName() {return "Отменить вставку сегмента анализа";}
+	public String getPresentationName() {return "Вставка сегмента анализа";}
+	public String getRedoPresentationName() {return "Вернуть вставку сегмента анализа";}
+	public boolean isSignificant(){return true;}
+	public boolean addEdit(UndoableEdit e) {return false;}
+	public boolean replaceEdit(UndoableEdit e) {return false;}
+} // end class ASectionAdditionEdit
+
+
+//===================================================================
+private class ASectionDeletionEdit extends AbstractUndoableEdit{
+	
+	boolean canUndo, canRedo;
+	ASection section;
+	AData data;
+
+	
+	public ASectionDeletionEdit( ASection section, AData data){
+		this.section=section;
+		this.data=data;
+
+		canUndo = true;
+		canRedo = false;
+	}
+	
+	public boolean canUndo(){return canUndo;}
+	public boolean canRedo(){return canRedo;}	
+	
+	public void undo() throws  CannotUndoException {
+		if (!canUndo) throw new CannotUndoException();
+		//blockUndoEvents(true);
+		aDataMap.put(section, data);
+		/*
+		setCharacterAttributes(	section.getStartOffset(), 
+				section.getEndOffset()-section.getStartOffset(), 
+				section.getAttributes(), false);
+		*/
+		//blockUndoEvents(false);
+
+		canUndo = false;
+		canRedo = true;
+		fireADocumentChanged();
+	}
+	public void redo() throws  CannotRedoException {
+		if (!canRedo) throw new CannotRedoException();
+		//blockUndoEvents(true);
+		aDataMap.remove(section);
+		/*
+		setCharacterAttributes(	section.getStartOffset(), 
+				section.getEndOffset()-section.getStartOffset(), 
+				defaultStyle, false);
+		*/
+		//blockUndoEvents(false);
+
+		canUndo = true;
+		canRedo = false;
+		fireADocumentChanged();
+	}
+	
+	public String getUndoPresentationName() {return "Отменить очистку сегмента анализа";}
+	public String getPresentationName() {return "Очистка сегмента анализа";}
+	public String getRedoPresentationName() {return "Вернуть очитску сегмента анализа";}
+	public boolean isSignificant(){return true;}
+	public boolean addEdit(UndoableEdit e) {return false;}
+	public boolean replaceEdit(UndoableEdit e) {return false;}
+} // end class ASectionDeletionEdit
+
+
+//===================================================================
+private class ASectionChangeEdit extends AbstractUndoableEdit{
+	
+	boolean canUndo, canRedo;
+	ASection section;
+	AData oldData, newData;
+
+	
+	public ASectionChangeEdit( ASection section, AData oldData, AData newData){
+		this.section=section;
+		this.oldData=oldData;
+		this.newData=newData;		
+
+		canUndo = true;
+		canRedo = false;
+	}
+	
+	public boolean canUndo(){return canUndo;}
+	public boolean canRedo(){return canRedo;}	
+	
+	public void undo() throws  CannotUndoException {
+		if (!canUndo) throw new CannotUndoException();
+
+		aDataMap.remove(section);
+		aDataMap.put(section, oldData);
+
+		canUndo = false;
+		canRedo = true;
+		fireADocumentChanged();
+	}
+		public void redo() throws  CannotRedoException {
+		if (!canRedo) throw new CannotRedoException();
+
+		aDataMap.remove(section);
+		aDataMap.put(section, newData);
+
+		canUndo = true;
+		canRedo = false;
+		fireADocumentChanged();
+	}
+	
+	public String getUndoPresentationName() {return "Отменить редактирование сегмента анализа";}
+	public String getPresentationName() {return "Редактирование сегмента анализа";}
+	public String getRedoPresentationName() {return "Вернуть редактирование сегмента анализа";}
+	public boolean isSignificant(){return true;}
+	public boolean addEdit(UndoableEdit e) {
+		if ((e instanceof ASectionChangeEdit)&& ((ASectionChangeEdit)e).getSection().equals(section)){
+			newData = ((ASectionChangeEdit)e).getNewData();
+			return true;
+		}else
+		return false;}
+	public boolean replaceEdit(UndoableEdit e) {
+		if ((e instanceof ASectionChangeEdit)&& ((ASectionChangeEdit)e).getSection().equals(section)){
+			newData = ((ASectionChangeEdit)e).getNewData();
+			return true;
+		}else
+		return false;}
+	
+	public AData getNewData(){return newData;}
+	public ASection getSection(){return section;}
+} // end class ASectionChangeEdit
+
+//===================================================================
+private class ADocDeleteEdit extends AbstractUndoableEdit{
+	
+	int position;
+	ADocumentFragment fragment;
+	boolean canUndo;
+	boolean canRedo;
+	private boolean blockRemoveEvents;
+	
+	public ADocDeleteEdit( int position, ADocumentFragment fragment){
+		this.position=position;
+		this.fragment=fragment;
+		canUndo = true;
+		canRedo = false;
+	}
+	
+	public boolean canUndo(){return canUndo;}
+	public boolean canRedo(){return canRedo;}	
+	
+	public void undo() throws  CannotUndoException {
+		if (!canUndo) throw new CannotUndoException();
+		blockUndoEvents(true);
+		pasteADocFragment(ADocument.this, position, fragment);
+		
+		fireADocumentChanged();
+		canUndo = false;
+		canRedo = true;
+		blockUndoEvents(false);
+	}
+		public void redo() throws  CannotRedoException {
+		if (!canRedo) throw new CannotRedoException();
+		blockUndoEvents(true);
+		try {
+			blockRemoveUpdate = true;
+			ADocument.this.remove(position, fragment.getText().length());
+			removeCleanup(position, position+ fragment.getText().length());
+			blockRemoveUpdate = false;
+		} catch (BadLocationException e) {
+		
+			e.printStackTrace();
+		}
+		fireADocumentChanged();
+		canUndo = true;
+		canRedo = false;
+		blockUndoEvents(false);	
+	}
+	
+	public String getUndoPresentationName() {return "Отменить удаление";}
+	public String getPresentationName() {return "Удаление";}
+	public String getRedoPresentationName() {return "Вернуть удаление";}
+	public boolean isSignificant(){return true;}
+	public boolean addEdit(UndoableEdit e) {return false;}
+	public boolean replaceEdit(UndoableEdit e) {return false;}
+
+} // end class ADocDeleteEdit
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+//===================================================================
+public class ADocFragmentPasteEdit extends AbstractUndoableEdit{
+	
+	int position;
+	ADocument aDoc;
+	ADocumentFragment fragment;
+	boolean canUndo;
+	boolean canRedo;
+	private boolean blockRemoveEvents;
+	
+	public ADocFragmentPasteEdit( int position, ADocument aDoc, ADocumentFragment fragment){
+		this.position=position;
+		this.aDoc =aDoc;
+		this.fragment=fragment;
+		canUndo = true;
+		canRedo = false;
+	}
+	
+	public boolean canUndo(){return canUndo;}
+	public boolean canRedo(){return canRedo;}	
+	
+	public void undo() throws  CannotUndoException {
+		if (!canUndo) throw new CannotUndoException();
+		blockUndoEvents(true);
+		
+		try {
+			blockRemoveUpdate = true;
+			aDoc.remove(position, fragment.getText().length());
+			removeCleanup(position, fragment.getText().length());
+			blockRemoveUpdate = false;
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
+		
+		fireADocumentChanged();
+		canUndo = false;
+		canRedo = true;
+		blockUndoEvents(false);
+	}
+		public void redo() throws  CannotRedoException {
+		if (!canRedo) throw new CannotRedoException();
+		blockUndoEvents(true);
+		pasteADocFragment(ADocument.this, position, fragment);
+
+		fireADocumentChanged();
+		canUndo = true;
+		canRedo = false;
+		blockUndoEvents(false);	
+	}
+	
+	public String getUndoPresentationName() {return "Отменить вставку";}
+	public String getPresentationName() {return "Вставка";}
+	public String getRedoPresentationName() {return "Вернуть вставку";}
+	public boolean isSignificant(){return true;}
+	public boolean addEdit(UndoableEdit e) {return false;}
+	public boolean replaceEdit(UndoableEdit e) {return false;}
+
+} // end class ADocFragmentPasteEdit
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+public void blockUndoEvents(boolean block){
+	blockUndoEvents = block;
+}
+
+public static ADocumentFragment getADocFragment(ADocument aDoc, int offset, int length){
+	
+	int selectionEnd = offset+length;
+	String text = null;
+	HashMap <DocSection, AttributeSet> styleMap =  new HashMap  <DocSection, AttributeSet>();
+	HashMap <DocSection, AData> docMap = null;   
+	
+		try {
+			text = aDoc.getText(offset, length);
+			
+			//putting styles to a HashMap
+			Element e = null;
+			AttributeSet as = null;
+			int styleRunStart = offset;
+			AttributeSet currentSet = null;
+			for(int i = offset; i <= offset+length; i++){
+				e = aDoc.getCharacterElement(i);
+				as = e.getAttributes();
+				if (currentSet == null) currentSet = as;
+				if (!as.isEqual(currentSet) || i == (selectionEnd)){
+					
+					styleMap.put(new DocSection(styleRunStart-offset, i-offset), new SimpleAttributeSet(currentSet));
+					currentSet = as;
+					styleRunStart = i;
+				}
+/*				if (i == (selectionEnd)){
+					styleMap.put(new DocSection(styleRunStart-selectionStart, i-selectionStart), new SimpleAttributeSet(currentSet));
+				} */
+			}
+			
+			//putting AData to a HashMap
+			HashMap<ASection, AData> aDataMap = aDoc.getADataMap();
+			
+			if (aDataMap !=null){
+				docMap  = new HashMap <DocSection, AData> ();
+				Set <ASection> keys = aDataMap.keySet();
+				Iterator <ASection> it = keys.iterator();
+				ASection section = null;
+				int secSt;
+				int secEnd;
+				while (it.hasNext()){
+					section = it.next();
+					secSt = section.getStartOffset();
+					secEnd = section.getEndOffset();
+					
+					if ( secSt>=offset && secEnd<=selectionEnd){
+						docMap.put(new DocSection(	secSt-offset, secEnd-offset), 
+													aDataMap.get(section));
+					}
+					
+					if (secSt<offset && secEnd>selectionEnd){
+							docMap.put(new DocSection(0, length), 
+														aDataMap.get(section));
+					}																		
+					if (secSt<offset && secEnd<selectionEnd && secEnd>offset){
+						docMap.put(new DocSection(0, secEnd-offset), 
+													aDataMap.get(section));
+					}		
+					if (secSt>offset && secSt<selectionEnd && secEnd>selectionEnd){
+						docMap.put(new DocSection(secSt-offset, length), 
+													aDataMap.get(section));
+					}	
+				}
+				
+			}		
+			
+		} catch (BadLocationException e) {
+				e.printStackTrace();
+		}
+	
+	return	new ADocumentFragment(text, styleMap , docMap);
+}
+
+public static void pasteADocFragment(ADocument aDoc, int position, ADocumentFragment fragment){
+	String text = fragment.getText();
+	HashMap <DocSection, AttributeSet> styleMap = fragment.getStyleMap(); 
+	HashMap <DocSection, AData> fragMap = fragment.getaDataMap();        
+	
+	
+	try {
+		// inserting plain text
+		    //aDoc.blockUndoEvents(true);
+			if (text != null )aDoc.insertString(position, text, aDoc.defaultStyle);
+			
+		//  inserting styles
+		if (styleMap !=null){
+			Set <DocSection> keys = styleMap.keySet();
+			Iterator <DocSection> it = keys.iterator();
+			DocSection section = null;
+
+			while (it.hasNext()){
+				section = it.next();
+				aDoc.setCharacterAttributes(position+section.getStart(), 
+											section.getLength(), 
+											styleMap.get(section), 
+											true);
+			}
+			
+		}	
+		
+		//  inserting AData
+		
+		if (fragMap !=null){
+			HashMap<ASection, AData> aDataMap = aDoc.getADataMap();
+			
+			Set <DocSection> keys = fragMap.keySet();
+			Iterator <DocSection> it = keys.iterator();
+			DocSection section = null;
+
+			while (it.hasNext()){
+				section = it.next();
+				aDataMap.put(aDoc.new ASection(	aDoc.createPosition(position+section.getStart()), aDoc.createPosition(position+section.getEnd())), 
+											fragMap.get(section));
+			}
+			
+		}				
+		//aDoc.blockUndoEvents(false);
+	} catch (BadLocationException e) {
+		e.printStackTrace();
+	}
+	
+}
+
+public boolean containsAnyASection(int min, int max) {
+	
+	Set<ASection> s = aDataMap.keySet();
+	Iterator<ASection> it = s.iterator ();
+	boolean found = false;
+
+	while(it.hasNext()){
+		ASection sect = it.next(); 
+		if ((sect.getStartOffset()> min &&
+			sect.getStartOffset()<= max)	 ||	
+			(sect.getEndOffset()> min &&
+			sect.getEndOffset()<= max)	
+										){ 
+											found = true;}
+	
+	}
+	return found;
+}
+
+
+
 } // class ADocument
 
 

@@ -37,7 +37,7 @@ public class ATree extends JTree implements
 	JumpCounter jc;
 
 	
-	DefaultMutableTreeNode aspectNode = new DefaultMutableTreeNode("Аспекты");
+	DefaultMutableTreeNode aspectNode = new DefaultMutableTreeNode("Функции");
 		DefaultMutableTreeNode aspectLNode= new DefaultMutableTreeNode("БЛ");
 			DefaultMutableTreeNode aspectLSignNode= new DefaultMutableTreeNode("Знаки");
 				DefaultMutableTreeNode aspectLSignPlusNode= new EndTreeNode(" + ");
@@ -1419,9 +1419,9 @@ report =
 		"<br/>" +
 		"<h2> Выявленные параметры функций ИМ: </h2>" +
 //		"<br/>" +
-		"Каждый из отмеченных экспертом фрагментов текста представляет собой анализ аспектного содержания фрагмета и <br/>" +
-		"парметров обработки этой информации. <br/>" +
-		"Приведенная ниже таблица иллюстрирует распределение ответов типируемого по парметрам модели А<br/><br/>" +
+		"Каждый из отмеченных экспертом фрагментов текста представляет собой анализ аспектного содержания фрагмента и <br/>" +
+		"параметров обработки этой информации. <br/>" +
+		"Приведенная ниже таблица иллюстрирует распределение ответов типируемого по параметрам модели А.<br/><br/>" +
 		"<table title=\"function analysis\" border=2 width=\"80%\">" +
 		"<tr>" 															+ "\n" +
 		"	<th width=\"20%\">  </th>"					+ "\n" +

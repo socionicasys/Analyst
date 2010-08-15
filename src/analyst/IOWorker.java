@@ -14,6 +14,7 @@ import javax.swing.SwingWorker;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 
+import analyst.ADocument.ASection;
 import analyst.ADocument.RawAData;
 
 public class IOWorker  extends SwingWorker implements PropertyChangeListener{
@@ -160,7 +161,9 @@ public void propertyChange(PropertyChangeEvent evt) {
 						int beg = temp.getBegin();
 						int end = temp.getEnd();
 						
-						aDoc.getADataMap().put(aDoc.createASection(beg+appendOffset, end+appendOffset), ad);
+						ASection section = aDoc.createASection(beg+appendOffset, end+appendOffset);
+						section.setAttributes( aDoc.defaultSectionAttributes);
+						aDoc.getADataMap().put(section, ad);
 						aDoc.setCharacterAttributes(beg+appendOffset, end-beg, aDoc.defaultSectionAttributes, false);
 				}
 				aDoc.fireADocumentChanged();
@@ -171,7 +174,7 @@ public void propertyChange(PropertyChangeEvent evt) {
 				this.cancel(true);
 			}
 		}
-				
+		Analyst.initUndoManager();		
 	}//if load
 
 	

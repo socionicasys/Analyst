@@ -23,7 +23,7 @@ import analyst.ADocument.ASection;
 @SuppressWarnings("serial")
 
   public class Analyst extends JFrame implements WindowListener, PropertyChangeListener{
-	public final static String version = "0.56";
+	public final static String version = "0.61";
 	private JTextPane textPane;
 	private AbstractDocument doc;
 	ADocument aDoc;   
@@ -54,9 +54,9 @@ import analyst.ADocument.ASection;
     HashMap<Object, Action> actions;
 
     //undo helpers
-    protected UndoAction undoAction;
-    protected RedoAction redoAction;
-    protected UndoManager undo = new UndoManager();
+    protected static UndoAction undoAction = null;
+    protected static RedoAction redoAction = null;
+    protected static UndoManager undo = new UndoManager();
 	 
 
     public Analyst() {
@@ -89,7 +89,9 @@ import analyst.ADocument.ASection;
         fc.addChoosableFileFilter( new FileNameExtensionFilter("Файлы .htm", "htm"));
         optionPane = new JOptionPane();
         aDoc = new ADocument();
+        textPane.setEditorKit(new AEditorKit());
         textPane.setDocument(aDoc);
+        
     
         if (aDoc instanceof AbstractDocument) {
             doc = (AbstractDocument)aDoc;
@@ -197,9 +199,7 @@ import analyst.ADocument.ASection;
 
         //Add some key bindings.
         addBindings();
-
-        //Put the initial text into the text pane.
-        initDocument();
+        
         textPane.setCaretPosition(0);
 
         //Start watching for undoable edits and caret changes.
@@ -561,12 +561,12 @@ import analyst.ADocument.ASection;
 	            undoAction.updateUndoState();
 	            redoAction.updateRedoState();
 	            
-	            if (e.getEdit().getPresentationName().equals("deletion")){
+	            if (e.getEdit().getPresentationName().contains("deletion")){
 	        		if (docDeleteConfirmation() ==JOptionPane.NO_OPTION){
 	        			undo.undo();
 	        		}
 	        	}
-        
+      
         }
     }
 
@@ -589,23 +589,26 @@ import analyst.ADocument.ASection;
 
     //Add a couple of emacs key bindings for navigation.
     protected void addBindings() {
-        InputMap inputMap = textPane.getInputMap();
-
-        //Ctrl-c cut
-        KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK);
-        inputMap.put(key, DefaultEditorKit.copyAction);
-
-        //Ctrl-V paste
-        key = KeyStroke.getKeyStroke(KeyEvent.VK_V, Event.CTRL_MASK);
-        inputMap.put(key, DefaultEditorKit.pasteAction);
-
-        //Ctrl-p to go up one line
-        key = KeyStroke.getKeyStroke(KeyEvent.VK_P, Event.CTRL_MASK);
-        inputMap.put(key, DefaultEditorKit.upAction);
-
-        //Ctrl-f to go down one line
-        key = KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK);
-        inputMap.remove(key);
+    	
+    	  final JTextComponent.KeyBinding[] defaultBindings = {
+    		     new JTextComponent.KeyBinding(
+    		       KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK),
+    		       AEditorKit.copyAction),
+    		     new JTextComponent.KeyBinding(
+    		       KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK),
+    		       AEditorKit.pasteAction),
+    		     new JTextComponent.KeyBinding(
+    		       KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK),
+    		       AEditorKit.cutAction),
+    		   };
+    	  final Action[] defaultActions ={
+    			  new AEditorKit.CopyAction(textPane),
+    			  new AEditorKit.PasteAction(textPane),
+    			  new AEditorKit.CutAction(textPane),
+    	  								};
+    		   
+    		   Keymap k = textPane.getKeymap();
+    		   JTextComponent.loadKeymap(k, defaultBindings, defaultActions);
 
     }
 
@@ -630,7 +633,7 @@ import analyst.ADocument.ASection;
 //        menu.add(undoAction);
 
         redoAction = new RedoAction();
-        redoAction.putValue(Action.NAME, "Повторить действие");
+        redoAction.putValue(Action.NAME, "Вернуть действие");
         menuItem = new JMenuItem(redoAction);
         key = KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK);
         menuItem.setAccelerator(key);
@@ -640,25 +643,30 @@ import analyst.ADocument.ASection;
         menu.addSeparator();
         
    
-        //These actions come from the default editor kit.
-        //Get the ones we want and stick them in the menu.
-        Action a = getActionByName(DefaultEditorKit.cutAction);
+  
+        //Get the actions and stick them in the menu.
+        Action a = new AEditorKit.CutAction(textPane); //getActionByName(DefaultEditorKit.cutAction);
         a.putValue(Action.NAME, "Вырезать");
-
-        menu.add(a);
+        menuItem = new JMenuItem(a); menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK));
+        menu.add(menuItem);
         popupMenu.add(a);
-        a = getActionByName(DefaultEditorKit.copyAction);
+        a = new AEditorKit.CopyAction(textPane); //getActionByName(DefaultEditorKit.copyAction);
         a.putValue(Action.NAME, "Копировать");
-        menu.add(a);
+        menuItem = new JMenuItem(a); menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
+ 
+        menu.add(menuItem);
         popupMenu.add(a);
-        a = getActionByName(DefaultEditorKit.pasteAction);
+        a = new AEditorKit.PasteAction(textPane); //getActionByName(DefaultEditorKit.pasteAction);
         a.putValue(Action.NAME, "Вставить");
-        menu.add(a);
+        menuItem = new JMenuItem(a); menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Event.CTRL_MASK));
+        menu.add(menuItem);
+
         popupMenu.add(a);
         menu.addSeparator();
         a = getActionByName(DefaultEditorKit.selectAllAction);
         a.putValue(Action.NAME, "Выделить всё");
-        menu.add(a);
+        menuItem = new JMenuItem(a); menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK));
+        menu.add(menuItem);
         popupMenu.add(a);
         
         menu.addSeparator();
@@ -721,7 +729,8 @@ import analyst.ADocument.ASection;
 			public void actionPerformed(ActionEvent arg0) {
 				
 				JTextArea titleField 	= new JTextArea(1,30); 	titleField.setLineWrap(true);		
-				JTextArea expertField 	= new JTextArea(2,30);	expertField.setLineWrap(true);
+				JTextArea expertField 	= new JTextArea(4,30);	expertField.setLineWrap(true);
+																//expertField.setWrapStyleWord(true);
 				JTextArea clientField 	= new JTextArea(1,30);	clientField.setLineWrap(true);
 				JTextArea dateField 	= new JTextArea(1,30);	dateField.setLineWrap(true);
 				JTextArea commentArea 	= new JTextArea(5,30);	commentArea.setLineWrap(true);
@@ -738,10 +747,6 @@ import analyst.ADocument.ASection;
 															lcm.setMaximumSize(new Dimension(100, 40));
 				
 				
-				
-				
-
-				
 				Panel pt = new Panel();
 				Panel pe = new Panel(); 
 				Panel pc = new Panel(); 
@@ -753,38 +758,40 @@ import analyst.ADocument.ASection;
                 
                	pt.add(lt);
                	pt.setMinimumSize(new Dimension(500, 40));
-				pt.add(new JScrollPane(titleField));
+				pt.add(new JScrollPane(titleField, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER ));
 				pe.add(le);
 				pe.setMinimumSize(new Dimension(500, 50));
-				pe.add(new JScrollPane(expertField));
+				pe.add(new JScrollPane(expertField, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER ));
 				pc.add(lc);
 				pc.setMinimumSize(new Dimension(500, 40));
-				pc.add(new JScrollPane(clientField));
+				pc.add(new JScrollPane(clientField, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER ));
 				pd.add(ld);
 				pd.setMinimumSize(new Dimension(500, 40));
-				pd.add(new JScrollPane(dateField));
+				pd.add(new JScrollPane(dateField, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER ));
 				ppc.add(lcm);
 				ppc.setMinimumSize(new Dimension(500, 70));
-				ppc.add(new JScrollPane(commentArea)); 
+				ppc.add(new JScrollPane(commentArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER )); 
 				
 				String title	= (String) aDoc.getProperty(ADocument.TitleProperty);
 				String expert 	= (String) aDoc.getProperty(ADocument.ExpertProperty);
 				String client 	= (String) aDoc.getProperty(ADocument.ClientProperty);
 				String date 	= (String) aDoc.getProperty(ADocument.DateProperty);
 				String comment 	= (String) aDoc.getProperty(ADocument.CommentProperty);
-				
-				if (title	!=null) 	titleField.setText	(title	);
-				if (expert 	!=null) 	expertField.setText	(expert );
-				if (client 	!=null) 	clientField.setText	(client );
-				if (date 	!=null) 	dateField.setText	(date 	);
-				if (comment	!=null) 	commentArea.setText	(comment);
-				
+
 				panel.add(pt);
 				panel.add(pe);
 				panel.add(pc);
 				panel.add(pd);
 				panel.add(ppc);
 				//panel.add(new Panel());
+				
+				if (title	!=null) 	titleField.setText	(title	);
+				if (expert 	!=null) 	
+										expertField.setText	(expert );
+				if (client 	!=null) 	clientField.setText	(client );
+				if (date 	!=null) 	dateField.setText	(date 	);
+				if (comment	!=null) 	commentArea.setText	(comment);
+				
 				
 				if(JOptionPane.showOptionDialog(frame, 
 						panel, 
@@ -867,10 +874,6 @@ import analyst.ADocument.ASection;
     	return menu;
     }
     
-    protected void initDocument() {
-       
-    }
-
     protected SimpleAttributeSet[] initAttributes(int length) {
         //Hard-code some attributes.
         SimpleAttributeSet[] attrs = new SimpleAttributeSet[length];
@@ -909,6 +912,7 @@ import analyst.ADocument.ASection;
         for (int i = 0; i < actionsArray.length; i++) {
             Action a = actionsArray[i];
             actions.put(a.getValue(Action.NAME), a);
+            //System.out.println(a.getValue(Action.NAME));
         }
 	return actions;
     }
@@ -925,11 +929,12 @@ import analyst.ADocument.ASection;
 
         public void actionPerformed(ActionEvent e) {
             try {
-                undo.undo();
+               undo.undo();
             } catch (CannotUndoException ex) {
-                System.out.println("Unable to undo: " + ex);
+                System.out.println("Unable to undo: " + ex.getMessage());
                 ex.printStackTrace();
             }
+            controlsPane.update();
             updateUndoState();
             redoAction.updateRedoState();
         }
@@ -937,12 +942,19 @@ import analyst.ADocument.ASection;
         protected void updateUndoState() {
             if (undo.canUndo()) {
                 setEnabled(true);
-                putValue(Action.NAME, undo.getUndoPresentationName());
+                putValue(Action.NAME, getRussianUndoName(undo.getUndoPresentationName()));
             } else {
                 setEnabled(false);
-                putValue(Action.NAME, "Undo");
+                putValue(Action.NAME, "Отменить действие");
             }
         }
+
+		private Object getRussianUndoName(String undoPresentationName) {
+			if (undoPresentationName.contains("deletion")) return "Отменить удаление";
+			if (undoPresentationName.contains("style")) return "Отменить";
+			if (undoPresentationName.contains("addition")) return "Отменить ввод";
+			return undoPresentationName;
+		}
     }
 
     class RedoAction extends AbstractAction {
@@ -958,6 +970,7 @@ import analyst.ADocument.ASection;
                 System.out.println("Unable to redo: " + ex);
                 ex.printStackTrace();
             }
+            controlsPane.update();
             updateRedoState();
             undoAction.updateUndoState();
         }
@@ -965,17 +978,20 @@ import analyst.ADocument.ASection;
         protected void updateRedoState() {
             if (undo.canRedo()) {
                 setEnabled(true);
-                putValue(Action.NAME, undo.getRedoPresentationName());
+                putValue(Action.NAME,  getRussianRedoName(undo.getRedoPresentationName()));
             } else {
                 setEnabled(false);
-                putValue(Action.NAME, "Redo");
+                putValue(Action.NAME, "Вернуть действие");
             }
         }
+        
+		private Object getRussianRedoName(String redoPresentationName) {
+			if (redoPresentationName.contains("deletion")) return "Вернуть удаление";
+			if (redoPresentationName.contains("style")) return "Вернуть";
+			if (redoPresentationName.contains("addition")) return "Вернуть ввод";
+			return redoPresentationName;
+		}
     }
-
-    /* @INFO  Class to hold the UI Mental - Vital controls
-    */
-  
 
     /**
      * Create the GUI and show it.  For thread safety,
@@ -1136,6 +1152,7 @@ private int saveConfirmation(){
 public int docDeleteConfirmation(){
 	int choice = JOptionPane.YES_OPTION;
 	int offset = textPane.getCaret().getMark();
+	int dot    = textPane.getCaret().getDot();
 	if (aDoc.getASectionThatStartsAt(offset)!=null)
 	choice = JOptionPane.showOptionDialog(frame, 
 			"Вы собираетесь удалить размеченный фрагмент документа\n\nВы действительно хотите удалить фрагмент?", 
@@ -1146,7 +1163,7 @@ public int docDeleteConfirmation(){
 			new Object[]{"Удалить", "Не удалять"}, 
 			"Не удалять");
 	
-	if (choice == JOptionPane.YES_OPTION) aDoc.removeCleanup(offset);
+	if (choice == JOptionPane.YES_OPTION)  aDoc.removeCleanup(Math.min(offset,dot),Math.max(offset,dot));
 		else {
 			choice = JOptionPane.NO_OPTION;			
 		}
@@ -1209,6 +1226,12 @@ private  void initNewDocument(){
 	   frame.setTitle(applicationName +" - "+(String)aDoc.getProperty((Document.TitleProperty)));
 	   fileName="";
 	   makeNewDocument = false;
+}
+
+public static void initUndoManager(){
+	undo.discardAllEdits();
+	if (undoAction!=null)undoAction.updateUndoState();
+	if (redoAction!=null)redoAction.updateRedoState();
 }
 
 }//end class Analyst

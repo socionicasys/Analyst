@@ -289,4 +289,18 @@ private void setSecondAspect(String sa) {
 public class ADataException extends Exception implements Serializable{
 	ADataException(){super("Invalid argument");}
 }
+//@override
+public boolean equals(Object obj){
+	if (!(obj instanceof AData))	return false;
+	AData d = (AData) obj;
+	if ( (aspect !=null && aspect.equals(d.getAspect()) || (aspect==null && d.getAspect()==null)) &&
+	     (secondAspect!=null && secondAspect.equals(d.getSecondAspect()) || (secondAspect==null && d.getSecondAspect()== null)) &&	
+	     (modifier !=null && modifier.equals(d.getModifier()) || (modifier==null && d.getModifier()==null)) &&	
+	     (dimension !=null && dimension.equals(d.getDimension()) || (dimension==null && d.getDimension()==null)) &&	
+	     (sign !=null && sign.equals(d.getSign()) || (sign==null && d.getSign()==null)) &&
+	     (mv !=null && mv.equals(d.getMV()) || (mv==null && d.getMV()==null)) &&
+	     (comment !=null && comment.equals(d.getComment()) || (comment==null && d.getComment()==null)) 
+												) return true;
+	return false;
+}
 } //class AData
