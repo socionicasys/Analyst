@@ -23,7 +23,7 @@ import analyst.ADocument.ASection;
 @SuppressWarnings("serial")
 
   public class Analyst extends JFrame implements WindowListener, PropertyChangeListener{
-	public final static String version = "0.61";
+	public final static String version = "0.62";
 	private JTextPane textPane;
 	private AbstractDocument doc;
 	ADocument aDoc;   

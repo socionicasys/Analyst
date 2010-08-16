@@ -37,28 +37,36 @@ public class ADocumentFragment implements Transferable, Serializable{
 	@Override
 	public Object getTransferData(DataFlavor arg0)
 			throws UnsupportedFlavorException, IOException {
-			if(!arg0.getMimeType().equals(MIME_TYPE)) return null;
-			return this;
+			if(arg0.getMimeType().equals(MIME_TYPE)) return this;
+			if(arg0.getMimeType().equals(DataFlavor.stringFlavor.getMimeType())) return text;
+			return null;
 
 	}
 
 	@Override
 	public DataFlavor[] getTransferDataFlavors() {
 		DataFlavor df = null;
+		DataFlavor dfString = null;
 		try {
 			df = new DataFlavor(MIME_TYPE);
+			dfString =DataFlavor.stringFlavor;
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (df !=null)return new DataFlavor[] {df};
+		if (df !=null)return new DataFlavor[] {df, dfString};
 		else return null;
 	}
 
+
+
+	
 	@Override
 	public boolean isDataFlavorSupported(DataFlavor arg0) {
-		if(arg0.getMimeType().equals(MIME_TYPE)) return true;
+		if(arg0.getMimeType().equals(MIME_TYPE)||
+				arg0.getMimeType().equals(DataFlavor.stringFlavor.getMimeType())) return true;
 		else return false;
 	}
+
 
 }

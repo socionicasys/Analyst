@@ -379,7 +379,7 @@ protected void insertUpdate (AbstractDocument.DefaultDocumentEvent chng, Attribu
 	
 	
 	//if insert is on the section end - do not extend the section to the inserted text
-	/*
+	
 	int offset = chng.getOffset();
 	int length = chng.getLength();
 	
@@ -409,7 +409,7 @@ protected void insertUpdate (AbstractDocument.DefaultDocumentEvent chng, Attribu
 	if (tempMap !=null) aDataMap.putAll(tempMap);
 	
 set =  defaultStyle;
-*/
+
 super.insertUpdate(chng, set);
 
 //insertCleanup();
