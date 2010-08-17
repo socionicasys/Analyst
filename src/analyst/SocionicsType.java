@@ -3043,19 +3043,19 @@ if (type.equals(SocionicsType.ESI)){
 				}else
 					if (aspect.equals(AData.E)){
 						if (!secondAspect.equals(AData.S)) return false;					
-					}else
-						if (aspect.equals(AData.S)){
-							return false;					
 						}else
-							if (aspect.equals(AData.F)){
-								 return false;					
-							}else
-								if (aspect.equals(AData.T)){
-									 return false;					
+							if (aspect.equals(AData.S)){
+								if (!secondAspect.equals(AData.E)) return false;					
+							}else							
+								if (aspect.equals(AData.F)){
+									if (!secondAspect.equals(AData.R)) return false;					
 								}else
-									if (aspect.equals(AData.I)){
-										return false;					
-									}
+									if (aspect.equals(AData.T)){
+										if (!secondAspect.equals(AData.P)) return false;					
+									}else
+										if (aspect.equals(AData.I)){
+											if (!secondAspect.equals(AData.L)) return false;	
+										}	
 		
 	} //end Block
 	

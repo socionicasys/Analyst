@@ -9,10 +9,12 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Dictionary;
 import javax.swing.*;
 import javax.swing.text.*;
+import javax.swing.border.Border;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.undo.*;
@@ -23,8 +25,8 @@ import analyst.ADocument.ASection;
 @SuppressWarnings("serial")
 
   public class Analyst extends JFrame implements WindowListener, PropertyChangeListener{
-	public final static String version = "0.62";
-	private JTextPane textPane;
+	public final static String version = "0.65";
+	public JTextPane textPane;
 	private AbstractDocument doc;
 	ADocument aDoc;   
     static final int MAX_CHARACTERS = 10000000;
@@ -45,6 +47,7 @@ import analyst.ADocument.ASection;
     JProgressBar progress;
     private boolean programExit = false;
     private boolean makeNewDocument  = false;
+    private final static String extension = "htm";
     
     
  static   String applicationName = "Информационный анализ";
@@ -59,8 +62,10 @@ import analyst.ADocument.ASection;
     protected static UndoManager undo = new UndoManager();
 	 
 
-    public Analyst() {
+    public Analyst(String arg0) {
         super(applicationName+ " - " + ADocument.DEFAULT_TITLE);
+  
+        
         addWindowListener(this);
         setMinimumSize(new Dimension(600,400));
         setPreferredSize(new Dimension(1000,700));
@@ -86,7 +91,7 @@ import analyst.ADocument.ASection;
         
 
         fc = new JFileChooser();
-        fc.addChoosableFileFilter( new FileNameExtensionFilter("Файлы .htm", "htm"));
+        fc.addChoosableFileFilter( new FileNameExtensionFilter("Файлы ."+extension, extension));
         optionPane = new JOptionPane();
         aDoc = new ADocument();
         textPane.setEditorKit(new AEditorKit());
@@ -206,6 +211,28 @@ import analyst.ADocument.ASection;
         doc.addUndoableEditListener(new MyUndoableEditListener());
         textPane.addCaretListener(status);
         doc.addDocumentListener(new MyDocumentListener());
+        
+        // load document passed in the command line
+        if (arg0 != null){
+        	 File file = new File (arg0);
+        	 FileInputStream fis;
+			try {
+				fis = new FileInputStream(file);
+			
+    		 ProgressWindow pw = new ProgressWindow(frame, "    Идет загрузка файла...   ");
+    		 aDoc.load(fis, pw);
+    		 
+			 fileName = file.getAbsolutePath();
+ 	 	
+		   	status.setText("");
+		   	frame.setTitle(applicationName + " - "+ file.getName());
+		   	
+			} catch (Exception e1) {
+				System.out.println("Ошибка при загрузке файла: " + arg0);
+				e1.printStackTrace();
+			}
+        	
+        }
     }
 
     private JTabbedPane createTabPane() {
@@ -276,7 +303,7 @@ import analyst.ADocument.ASection;
 									         	if (returnVal == JFileChooser.APPROVE_OPTION) { 
 									        	 			file = fc.getSelectedFile();
 									        	 			fileName = file.getAbsolutePath();
-									        	 			if (!fileName.endsWith(".htm")) fileName+=".htm";
+									        	 			if (!fileName.endsWith("."+extension)) fileName+="."+extension;
 									        	 			file = new File(fileName);
 									        	 			
 													        if (file.exists()) {
@@ -340,7 +367,7 @@ import analyst.ADocument.ASection;
 										         if (returnVal == JFileChooser.APPROVE_OPTION) {
 										        	 file = fc.getSelectedFile();
 										        	 fileName = file.getAbsolutePath();
-										        	 if (!fileName.endsWith(".htm")) fileName+=".htm";
+										        	 if (!fileName.endsWith("."+extension)) fileName+="."+extension;
 								        	 					file = new File(fileName);
 								        	 					
 										         } else {
@@ -412,7 +439,7 @@ import analyst.ADocument.ASection;
 		        	 	textPane.grabFocus();
 					    JViewport viewport = (JViewport) textPane.getParent();
 					    String d = textPane.getText();
-					    Rectangle rect = textPane.modelToView(0);	
+					    Rectangle rect = textPane.modelToView(1);	
 					   // viewport.validate();
 					   // while (!viewport.isValid()){Thread.sleep(1000);};
 					   	viewport.scrollRectToVisible(rect);
@@ -830,12 +857,68 @@ import analyst.ADocument.ASection;
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				
-			JOptionPane.showOptionDialog(frame, 
+			JPanel panel = new JPanel();
+			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+			JTextArea info = new JTextArea(6,40);
+			info.setEditable(false);
+			info.setBackground(panel.getBackground());
+			info.setText(		
 					"Программа \"Информационный анализ\"\n"+
 					"\n"+
 					"© Школа системной соционики, Киев, 2010 г.\n"+
 					"http://www.socionicasys.ru\n"+
-					"Версия: "+ version, "О программе", 
+					"Версия: "+ version );
+			
+			JTextArea licText = new  JTextArea(15,40);
+			info.setEditable(false);
+			licText.setEditable(false);
+			licText.setLineWrap(true);
+			licText.setMargin(new Insets(3,3,3,3));
+			licText.setWrapStyleWord(true);
+			licText.setAutoscrolls(false);
+			
+			String license = "ВНИМАНИЕ!!! Не удалось отрыть файл лицензии.\n\n" +
+					"Согласно условий оригинальной лицензии GNU GPL, программное обеспечение должно поставляться вместе с текстом оригинальной лицензии.\n\n"+
+					"Отсутствие такой лицензии может неправомерно ограничивать ваши права как пользователя. \n\n" +
+					"Требуйте получение исходной лицензии от поставщика данного программного продукта.\n\n" +
+					"Оригинальный текст GNU GPL на английском языке вы можете прочитать здесь: http://www.gnu.org/copyleft/gpl.html";
+			
+			InputStream is = Analyst.class.getClassLoader().getResourceAsStream("analyst/license.txt");
+			InputStreamReader isr = null;
+			if (is !=null) {
+			BufferedReader br = new BufferedReader(new InputStreamReader(is,Charset.forName("UTF-8")));
+			license = "";
+			String next;
+				try {
+					next = br.readLine();
+					
+							while (next != null){
+								license += next+"\n";
+								next = br.readLine();
+							}
+				} catch (IOException e) {
+					System.out.println("Ошибка при открытии файла лицензии");
+					e.printStackTrace();
+				}
+			}
+			
+			licText.setText(license);
+			
+			JScrollPane licenseScrl = new JScrollPane(licText, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+				licText.getCaret().setDot(0); 
+				licText.insert("", 0);
+
+			
+			Border border = BorderFactory.createTitledBorder("Лицензия:");
+			licenseScrl.setBorder(border);
+			
+			panel.add(info);
+			panel.add(licenseScrl);
+				
+			JOptionPane.showOptionDialog(frame, 
+					panel,
+					"О программе",
 					JOptionPane.INFORMATION_MESSAGE,
 					JOptionPane.PLAIN_MESSAGE,	
 					null,
@@ -997,10 +1080,11 @@ import analyst.ADocument.ASection;
      * Create the GUI and show it.  For thread safety,
      * this method should be invoked from the
      * event dispatch thread.
+     * @param arg0 
      */
-    private static void createAndShowGUI() {
+    private static void createAndShowGUI(String arg0) {
         //Create and set up the window.
-        final Analyst frame = new Analyst();
+        final Analyst frame = new Analyst(arg0);
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 
@@ -1013,11 +1097,15 @@ import analyst.ADocument.ASection;
     public static void main(String[] args) {
         //Schedule a job for the event dispatch thread:
         //creating and showing this application's GUI.
+    	
+    	String  s = null;
+    	if (args!=null && args.length>0)s = args[0];
+    	final String arg0 = s;
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 //Turn off metal's use of bold fonts
 	        UIManager.put("swing.boldMetal", Boolean.FALSE);
-		createAndShowGUI();
+		createAndShowGUI(arg0);
             }
         });
     }
