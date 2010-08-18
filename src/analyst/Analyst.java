@@ -25,7 +25,7 @@ import analyst.ADocument.ASection;
 @SuppressWarnings("serial")
 
   public class Analyst extends JFrame implements WindowListener, PropertyChangeListener{
-	public final static String version = "0.65";
+	public final static String version = "1.00";
 	public JTextPane textPane;
 	private AbstractDocument doc;
 	ADocument aDoc;   
@@ -437,14 +437,7 @@ import analyst.ADocument.ASection;
 						 fileName = file.getAbsolutePath();
   				 // after loading the document scroll it to the beginning
 		        	 	textPane.grabFocus();
-					    JViewport viewport = (JViewport) textPane.getParent();
-					    String d = textPane.getText();
-					    Rectangle rect = textPane.modelToView(1);	
-					   // viewport.validate();
-					   // while (!viewport.isValid()){Thread.sleep(1000);};
-					   	viewport.scrollRectToVisible(rect);
-					  
-						
+
 					   	status.setText("");
 					   	frame.setTitle(applicationName + " - "+ file.getName());
 			} catch (FileNotFoundException e  ) {
