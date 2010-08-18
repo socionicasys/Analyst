@@ -1116,6 +1116,9 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 			if (leftHeaderColumn.equals(ClientProperty)){
 				iow.firePropertyChange("DocumentProperty", ClientProperty,  new String(rightHeaderColumn));	
 			} 
+			if (leftHeaderColumn.equals(DateProperty)){
+				iow.firePropertyChange("DocumentProperty", DateProperty,  new String(rightHeaderColumn));	
+			}
 			if (leftHeaderColumn.equals(CommentProperty)){				
 				iow.firePropertyChange("DocumentProperty", CommentProperty,  new String(rightHeaderColumn));
 			} 
