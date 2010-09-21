@@ -744,9 +744,9 @@ text = "";
   while (!sectionEnd.isEmpty()){
 	   index=Analyst.MAX_CHARACTERS;
 	   for (int j = 0; j < sectionEnd.size(); j++){
-		if (sectionEnd.get(j).getEndOffset()<= index){
+		if (sectionEnd.get(j).getStartOffset()<= index){
 			sec = sectionEnd.get(j);
-			index = sec.getEndOffset();
+			index = sec.getStartOffset();
 		}  
 	   }
 	   temp.add(sec);
