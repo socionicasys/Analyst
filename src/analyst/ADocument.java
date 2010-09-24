@@ -674,8 +674,33 @@ text += "\n <table title=\"header\" border=1 width=\"40%\"> 	" 					+ "\n" +
 				"</tr>"												+ "\n" +
 				"</table >"											+ "\n";
 	
-fos.write(text.getBytes(ENCODING));
 
+//  writing the color legend
+text += "<br/>\n<br/>";
+text += "<h3> Расшифровка цветовых обозначений: </h3>";
+
+		text += "\n <table title=\"legend\" border=0 width=\"40%\"> 	" 					+ "\n" +
+				"<tr>" 												+ "\n" +
+				"	<td style=\"background-color:#EAEAEA\">"    +  "Непонятное место"   +  "</td>"				+ "\n" +
+				"</tr>"												+ "\n" +
+				"<tr>" 												+ "\n" +
+				"	<td style=\"background-color:#AAEEEE;\">      "+"Маломерность"+"     </td>" 			+ "\n" +
+				"</tr>"												+ "\n" +
+				"<tr>" 												+ "\n" +
+				"	<td style=\"background-color:#AAEEAA;\">      "+"Многомерность"+"     </td>"		+ "\n" +
+				"</tr>"												+ "\n" +
+				"<tr>" 												+ "\n" +
+				"	<td  style=\"color:#FF0000;\">      		  "+"Фрагмент содержит информацию о знаке"+"     </td>"		+ "\n" +
+				"</tr>"												+ "\n" +
+				"<tr>" 												+ "\n" +
+				"	<td style=\"background-color:#FFFFCC;\">      "+"Фрагмент содержит информацию о ментале или витале"+"     </td>"		+ "\n" +
+				"</tr>"												+ "\n" +
+				"<tr>" 												+ "\n" +
+				"	<td style=\"text-decoration:underline\">      "+"Прочий выделенный фрагмент анализа"+"     </td>"		+ "\n" +
+				"</tr>"												+ "\n" +
+				"</table >"											+ "\n";
+
+fos.write(text.getBytes(ENCODING));
 iow.firePropertyChange("progress", null, new Integer(headerSaveProgress));
 
 //document content
@@ -1364,7 +1389,7 @@ private String findTag(String text, String startToken, String endToken,
 }
 
 public String getHTMLStyleForAData(AData data){
-	
+
 	if (data.getAspect().equals(AData.DOUBT)){return "background-color:#EAEAEA";}
 	String res = "\"";
 	String dim = data.getDimension();
