@@ -9,18 +9,22 @@
 	<property name="analyst.jar_name" value="${analyst.bin_dir}/Analyst-${analyst.version}.jar" />
 
 	<target name="clean">
-		<deltree dir="${analyst.output_dir}" />
-		<deltree dir="${analyst.bin_dir}" />
+		<delete dir="${analyst.output_dir}" />
+		<delete dir="${analyst.bin_dir}" />
 	</target>
 
 	<target name="compile">
 		<mkdir dir="${analyst.output_dir}" />
 		<javac srcdir="${analyst.source_dir}" destdir="${analyst.output_dir}" debug="false" />
+		<copy file="${analyst.base_dir}/license.txt" todir="${analyst.output_dir}/analyst" />
 	</target>
 
 	<target name="jar" depends="compile">
 		<mkdir dir="${analyst.bin_dir}" />
 		<jar destfile="${analyst.jar_name}" basedir="${analyst.output_dir}">
+			<zipfileset dir="${analyst.source_dir}" prefix="analyst/src">
+				<include name="**/*.java" />
+			</zipfileset>
 			<manifest>
 				<attribute name="Main-Class" value="${analyst.main_class}" />
 			</manifest>
