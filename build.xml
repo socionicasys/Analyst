@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="analyst" default="all">
+	<dirname property="analyst.base_dir" file="${ant.file}" />
+	<property file="build.properties" />
+	<property name="analyst.source_dir" value="${analyst.base_dir}/src" />
+	<property name="analyst.output_dir" value="${analyst.base_dir}/out/production/Analyst" />
+	<property name="analyst.bin_dir" value="${analyst.base_dir}/bin" />
+	<property name="analyst.main_class" value="analyst.Analyst" />
+	<property name="analyst.jar_name" value="${analyst.bin_dir}/Analyst-${analyst.version}.jar" />
+
+	<target name="clean">
+		<deltree dir="${analyst.output_dir}" />
+		<deltree dir="${analyst.bin_dir}" />
+	</target>
+
+	<target name="compile">
+		<mkdir dir="${analyst.output_dir}" />
+		<javac srcdir="${analyst.source_dir}" destdir="${analyst.output_dir}" debug="false" />
+	</target>
+
+	<target name="jar" depends="compile">
+		<mkdir dir="${analyst.bin_dir}" />
+		<jar destfile="${analyst.jar_name}" basedir="${analyst.output_dir}">
+			<manifest>
+				<attribute name="Main-Class" value="${analyst.main_class}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="all" depends="jar">
+	</target>
+</project>
