@@ -50,7 +50,7 @@ import analyst.ADocument.ASection;
     private final static String extension = "htm";
     
     
- static   String applicationName = "Информационный анализ";
+ static   String applicationName = "РРЅС„РѕСЂРјР°С†РёРѕРЅРЅС‹Р№ Р°РЅР°Р»РёР·";
  
     String newline = "\n";
     
@@ -91,7 +91,7 @@ import analyst.ADocument.ASection;
         
 
         fc = new JFileChooser();
-        fc.addChoosableFileFilter( new FileNameExtensionFilter("Файлы ."+extension, extension));
+        fc.addChoosableFileFilter( new FileNameExtensionFilter("Р¤Р°Р№Р»С‹ ."+extension, extension));
         optionPane = new JOptionPane();
         aDoc = new ADocument();
         textPane.setEditorKit(new AEditorKit());
@@ -131,7 +131,7 @@ import analyst.ADocument.ASection;
         //Create the status area.
         JPanel statusPane = new JPanel(new BorderLayout() ); // GridLayout(1, 2));
         status =
-                new StatusLabel("Откройте сохраненный документ или вставтьте анализируемый текст в центральное окно");
+                new StatusLabel("РћС‚РєСЂРѕР№С‚Рµ СЃРѕС…СЂР°РЅРµРЅРЅС‹Р№ РґРѕРєСѓРјРµРЅС‚ РёР»Рё РІСЃС‚Р°РІС‚СЊС‚Рµ Р°РЅР°Р»РёР·РёСЂСѓРµРјС‹Р№ С‚РµРєСЃС‚ РІ С†РµРЅС‚СЂР°Р»СЊРЅРѕРµ РѕРєРЅРѕ");
         progress = new JProgressBar(0,100);
         progress.setSize(new Dimension(300,30));
         
@@ -219,7 +219,7 @@ import analyst.ADocument.ASection;
 			try {
 				fis = new FileInputStream(file);
 			
-    		 ProgressWindow pw = new ProgressWindow(frame, "    Идет загрузка файла...   ");
+    		 ProgressWindow pw = new ProgressWindow(frame, "    РРґРµС‚ Р·Р°РіСЂСѓР·РєР° С„Р°Р№Р»Р°...   ");
     		 aDoc.load(fis, pw);
     		 
 			 fileName = file.getAbsolutePath();
@@ -228,7 +228,7 @@ import analyst.ADocument.ASection;
 		   	frame.setTitle(applicationName + " - "+ file.getName());
 		   	
 			} catch (Exception e1) {
-				System.out.println("Ошибка при загрузке файла: " + arg0);
+				System.out.println("РћС€РёР±РєР° РїСЂРё Р·Р°РіСЂСѓР·РєРµ С„Р°Р№Р»Р°: " + arg0);
 				e1.printStackTrace();
 			}
         	
@@ -238,9 +238,9 @@ import analyst.ADocument.ASection;
     private JTabbedPane createTabPane() {
     	JTabbedPane navigateTabs = new  JTabbedPane();
     	
-        navigateTabs.addTab("Навигация", navigateTree.getContainer());
-    	navigateTabs.addTab("Анализ", analisysTree.getContainer());
-    	navigateTabs.addTab("График", hystogramTree.getContainer());
+        navigateTabs.addTab("РќР°РІРёРіР°С†РёСЏ", navigateTree.getContainer());
+    	navigateTabs.addTab("РђРЅР°Р»РёР·", analisysTree.getContainer());
+    	navigateTabs.addTab("Р“СЂР°С„РёРє", hystogramTree.getContainer());
     	//navigateTabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
     	navigateTabs.setMinimumSize(new Dimension(200,400));
     	navigateTabs.setPreferredSize(new Dimension(300,400));
@@ -248,13 +248,13 @@ import analyst.ADocument.ASection;
 	}
 
 	protected JMenu createFileMenu() {
-    	JMenu menu = new JMenu("Файл");
+    	JMenu menu = new JMenu("Р¤Р°Р№Р»");
 
         //Undo and redo are actions of our own creation.
        
         menu.addSeparator();
         
-        JMenuItem newDocumnet = new JMenuItem("Создать новый документ");
+        JMenuItem newDocumnet = new JMenuItem("РЎРѕР·РґР°С‚СЊ РЅРѕРІС‹Р№ РґРѕРєСѓРјРµРЅС‚");
         newDocumnet.addActionListener( new ActionListener()
         						{
 									@Override
@@ -270,7 +270,7 @@ import analyst.ADocument.ASection;
 									
         						});
         
-        JMenuItem exit = new JMenuItem("Выход");
+        JMenuItem exit = new JMenuItem("Р’С‹С…РѕРґ");
         exit.addActionListener( new ActionListener()
         						{
 									@Override
@@ -289,7 +289,7 @@ import analyst.ADocument.ASection;
         						});
         
         
-        JMenuItem save = new JMenuItem("Сохранить");
+        JMenuItem save = new JMenuItem("РЎРѕС…СЂР°РЅРёС‚СЊ");
         save.addActionListener( new ActionListener()
         						{
 								@Override
@@ -298,8 +298,8 @@ import analyst.ADocument.ASection;
 								    try {
 								    	 File file = null;
 								    	 if (fileName.length() == 0) {	
-								    		 fc.setDialogTitle("Сохранение документа");
-									    	 int returnVal = fc.showDialog(Analyst.this, "Сохранить");
+								    		 fc.setDialogTitle("РЎРѕС…СЂР°РЅРµРЅРёРµ РґРѕРєСѓРјРµРЅС‚Р°");
+									    	 int returnVal = fc.showDialog(Analyst.this, "РЎРѕС…СЂР°РЅРёС‚СЊ");
 									         	if (returnVal == JFileChooser.APPROVE_OPTION) { 
 									        	 			file = fc.getSelectedFile();
 									        	 			fileName = file.getAbsolutePath();
@@ -307,9 +307,9 @@ import analyst.ADocument.ASection;
 									        	 			file = new File(fileName);
 									        	 			
 													        if (file.exists()) {
-													        	  Object[] options =  {"Да","Нет"};
+													        	  Object[] options =  {"Р”Р°","РќРµС‚"};
 													        	 if(JOptionPane.showOptionDialog(frame,
-													                 "Такой файл существует!\n\nХотите перезаписать этот файл?", "Предупреждение!!!",
+													                 "РўР°РєРѕР№ С„Р°Р№Р» СЃСѓС‰РµСЃС‚РІСѓРµС‚!\n\nРҐРѕС‚РёС‚Рµ РїРµСЂРµР·Р°РїРёСЃР°С‚СЊ СЌС‚РѕС‚ С„Р°Р№Р»?", "РџСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ!!!",
 													                  JOptionPane.YES_NO_OPTION, 
 													                  JOptionPane.QUESTION_MESSAGE,
 													                  null, 
@@ -328,7 +328,7 @@ import analyst.ADocument.ASection;
 								    		 
 								    	 if (file!=null){	 
 									         	FileOutputStream fos = new FileOutputStream(file); 
-									         	ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
+									         	ProgressWindow pw = new ProgressWindow(frame, "    РЎРѕС…СЂР°РЅРµРЅРёРµ С„Р°Р№Р»Р°: ");
 									         	IOWorker iow = new IOWorker(pw,aDoc, fos);
 												iow.execute();
 												frame.setTitle(applicationName + " - "+ file.getName());
@@ -340,12 +340,12 @@ import analyst.ADocument.ASection;
 										System.out.println("Error writing document to file: ");
 										e.printStackTrace();
 										JOptionPane.showOptionDialog(frame, 
-												"Ошибка сохранения файла: "+fileName + "\n\n" +e.getMessage(), 
-												"Ошибка сохранения файла", 
+												"РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ С„Р°Р№Р»Р°: "+fileName + "\n\n" +e.getMessage(), 
+												"РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ С„Р°Р№Р»Р°", 
 												JOptionPane.OK_OPTION, 
 												JOptionPane.ERROR_MESSAGE, 
 												null, 
-												new Object[]{"Закрыть"}, 
+												new Object[]{"Р—Р°РєСЂС‹С‚СЊ"}, 
 												null);
 									}
 									
@@ -353,7 +353,7 @@ import analyst.ADocument.ASection;
         						
         						});
         
-        JMenuItem saveAs = new JMenuItem("Сохранить как...");
+        JMenuItem saveAs = new JMenuItem("РЎРѕС…СЂР°РЅРёС‚СЊ РєР°Рє...");
         saveAs.addActionListener( new ActionListener()
         						{
 								@Override
@@ -361,9 +361,9 @@ import analyst.ADocument.ASection;
 									
 								    try {
 								    	 	 File file = null;
-									    	 fc.setDialogTitle("Сохранение документа под новым именем");
+									    	 fc.setDialogTitle("РЎРѕС…СЂР°РЅРµРЅРёРµ РґРѕРєСѓРјРµРЅС‚Р° РїРѕРґ РЅРѕРІС‹Рј РёРјРµРЅРµРј");
 								    										    		 
-								    		 int returnVal = fc.showDialog(Analyst.this, "Сохранить как...");
+								    		 int returnVal = fc.showDialog(Analyst.this, "РЎРѕС…СЂР°РЅРёС‚СЊ РєР°Рє...");
 										         if (returnVal == JFileChooser.APPROVE_OPTION) {
 										        	 file = fc.getSelectedFile();
 										        	 fileName = file.getAbsolutePath();
@@ -375,9 +375,9 @@ import analyst.ADocument.ASection;
 										         }
 									         
 									         if (file.exists()) {
-									        	  Object[] options =  {"Да","Нет"};
+									        	  Object[] options =  {"Р”Р°","РќРµС‚"};
 									        	 if(JOptionPane.showOptionDialog(frame,
-									                 "Такой файл существует!\n\nХотите перезаписать этот файл?", "Предупреждение!!!",
+									                 "РўР°РєРѕР№ С„Р°Р№Р» СЃСѓС‰РµСЃС‚РІСѓРµС‚!\n\nРҐРѕС‚РёС‚Рµ РїРµСЂРµР·Р°РїРёСЃР°С‚СЊ СЌС‚РѕС‚ С„Р°Р№Р»?", "РџСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ!!!",
 									                  JOptionPane.YES_NO_OPTION, 
 									                  JOptionPane.QUESTION_MESSAGE,
 									                  null, 
@@ -387,7 +387,7 @@ import analyst.ADocument.ASection;
 									   
 									         		
 									         	FileOutputStream fos = new FileOutputStream(file); 
-									        	ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
+									        	ProgressWindow pw = new ProgressWindow(frame, "    РЎРѕС…СЂР°РЅРµРЅРёРµ С„Р°Р№Р»Р°: ");
 									         	IOWorker iow = new IOWorker(pw,aDoc, fos);
 												iow.execute();
 
@@ -397,12 +397,12 @@ import analyst.ADocument.ASection;
 										System.out.println("Error writing document to file: ");
 										e.printStackTrace();
 										JOptionPane.showOptionDialog(frame, 
-												"Ошибка сохранения файла: "+fileName + "\n\n" +e.getMessage(), 
-												"Ошибка сохранения файла", 
+												"РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ С„Р°Р№Р»Р°: "+fileName + "\n\n" +e.getMessage(), 
+												"РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ С„Р°Р№Р»Р°", 
 												JOptionPane.OK_OPTION, 
 												JOptionPane.ERROR_MESSAGE, 
 												null, 
-												new Object[]{"Закрыть"}, 
+												new Object[]{"Р—Р°РєСЂС‹С‚СЊ"}, 
 												null);
 									}
 									
@@ -410,7 +410,7 @@ import analyst.ADocument.ASection;
         						
         						});
         
-        JMenuItem load = new JMenuItem("Открыть");
+        JMenuItem load = new JMenuItem("РћС‚РєСЂС‹С‚СЊ");
         load.addActionListener(new ActionListener()
 		{
 		@Override
@@ -418,10 +418,10 @@ import analyst.ADocument.ASection;
 		
 		    try {
 		    	 
-		    	 status.setText("Открытие документа...");
+		    	 status.setText("РћС‚РєСЂС‹С‚РёРµ РґРѕРєСѓРјРµРЅС‚Р°...");
 		    	 if (saveConfirmation() == JOptionPane.CANCEL_OPTION) return;
-		    	 fc.setDialogTitle("Открытие документа");
-		    	 int returnVal = fc.showDialog(Analyst.this, "Открыть");
+		    	 fc.setDialogTitle("РћС‚РєСЂС‹С‚РёРµ РґРѕРєСѓРјРµРЅС‚Р°");
+		    	 int returnVal = fc.showDialog(Analyst.this, "РћС‚РєСЂС‹С‚СЊ");
 		    	 File file = null;
 		         if (returnVal == JFileChooser.APPROVE_OPTION) { 
 		        	 file = fc.getSelectedFile();
@@ -430,7 +430,7 @@ import analyst.ADocument.ASection;
 		         }
 		    		 
 		        		 FileInputStream fis = new FileInputStream(file);
-		        		 ProgressWindow pw = new ProgressWindow(frame, "    Идет загрузка файла...   ");
+		        		 ProgressWindow pw = new ProgressWindow(frame, "    РРґРµС‚ Р·Р°РіСЂСѓР·РєР° С„Р°Р№Р»Р°...   ");
 		        		 //IOWorker lw = new IOWorker(pw, aDoc, fis);
 		        		 aDoc.load(fis, pw);
 		        		 
@@ -445,12 +445,12 @@ import analyst.ADocument.ASection;
 				System.out.println("Error opening  file" );
 				e.printStackTrace();
 				JOptionPane.showOptionDialog(frame, 
-						"Ошибка открытия файла: "+fileName + "\n\n" +e.getMessage(), 
-						"Ошибка открытия файла", 
+						"РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°: "+fileName + "\n\n" +e.getMessage(), 
+						"РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°", 
 						JOptionPane.OK_OPTION, 
 						JOptionPane.ERROR_MESSAGE, 
 						null, 
-						new Object[]{"Закрыть"}, 
+						new Object[]{"Р—Р°РєСЂС‹С‚СЊ"}, 
 						null);
 			
 			} 
@@ -463,22 +463,22 @@ import analyst.ADocument.ASection;
 		
 		});        
  
-        JMenuItem append = new JMenuItem("Открыть и присоединить");
+        JMenuItem append = new JMenuItem("РћС‚РєСЂС‹С‚СЊ Рё РїСЂРёСЃРѕРµРґРёРЅРёС‚СЊ");
         append.addActionListener(new ActionListener()
 		{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 		
 		    try {    
-		    	 fc.setDialogTitle("Открыть и присоединить документ");
-		    	 int returnVal = fc.showDialog(Analyst.this, "Открыть и присоединить");
+		    	 fc.setDialogTitle("РћС‚РєСЂС‹С‚СЊ Рё РїСЂРёСЃРѕРµРґРёРЅРёС‚СЊ РґРѕРєСѓРјРµРЅС‚");
+		    	 int returnVal = fc.showDialog(Analyst.this, "РћС‚РєСЂС‹С‚СЊ Рё РїСЂРёСЃРѕРµРґРёРЅРёС‚СЊ");
 		    	 File file = null;
 		         if (returnVal == JFileChooser.APPROVE_OPTION) 
 		        	 	file = fc.getSelectedFile();
 		    		 
 		        	 if (file!=null) {
 		        		 FileInputStream fis = new FileInputStream(file);
-		        		 ProgressWindow pw = new ProgressWindow(frame, "    Идет загрузка файла...   ");
+		        		 ProgressWindow pw = new ProgressWindow(frame, "    РРґРµС‚ Р·Р°РіСЂСѓР·РєР° С„Р°Р№Р»Р°...   ");
 		        		 aDoc.append(fis, pw);
 
 		        	 }
@@ -500,12 +500,12 @@ import analyst.ADocument.ASection;
 				System.out.println("Error opening  file" );
 				e.printStackTrace();
 				JOptionPane.showOptionDialog(frame, 
-						"Ошибка открытия файла: "+fileName + "\n\n" +e.getMessage(), 
-						"Ошибка открытия файла", 
+						"РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°: "+fileName + "\n\n" +e.getMessage(), 
+						"РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°", 
 						JOptionPane.OK_OPTION, 
 						JOptionPane.ERROR_MESSAGE, 
 						null, 
-						new Object[]{"Закрыть"}, 
+						new Object[]{"Р—Р°РєСЂС‹С‚СЊ"}, 
 						null);
 				
 			} 
@@ -546,14 +546,14 @@ import analyst.ADocument.ASection;
 	
         	ASection s;
         	s  = aDoc.getASectionThatStartsAt(textPane.getCaretPosition());
-        	if (textPane.getText().length()<=0)setText("Откройте сохраненный документ или вставтьте анализируемый текст в центральное окно");
+        	if (textPane.getText().length()<=0)setText("РћС‚РєСЂРѕР№С‚Рµ СЃРѕС…СЂР°РЅРµРЅРЅС‹Р№ РґРѕРєСѓРјРµРЅС‚ РёР»Рё РІСЃС‚Р°РІС‚СЊС‚Рµ Р°РЅР°Р»РёР·РёСЂСѓРµРјС‹Р№ С‚РµРєСЃС‚ РІ С†РµРЅС‚СЂР°Р»СЊРЅРѕРµ РѕРєРЅРѕ");
         	else
 			if(s  !=null){
         		setText(aDoc.getAData(s).toString());}
         		else 
         			if (e.getDot()==e.getMark())
-        			   setText("Выделите область текста чтобы начать анализ...");
-        			   else   setText("Выберите аспект  и параметры обработки, используя панель справа...");
+        			   setText("Р’С‹РґРµР»РёС‚Рµ РѕР±Р»Р°СЃС‚СЊ С‚РµРєСЃС‚Р° С‡С‚РѕР±С‹ РЅР°С‡Р°С‚СЊ Р°РЅР°Р»РёР·...");
+        			   else   setText("Р’С‹Р±РµСЂРёС‚Рµ Р°СЃРїРµРєС‚  Рё РїР°СЂР°РјРµС‚СЂС‹ РѕР±СЂР°Р±РѕС‚РєРё, РёСЃРїРѕР»СЊР·СѓСЏ РїР°РЅРµР»СЊ СЃРїСЂР°РІР°...");
         	
    } //caretUpdate()
  
@@ -640,11 +640,11 @@ import analyst.ADocument.ASection;
         JMenuItem menuItem = null;
       
     
-        JMenu menu = new JMenu("Редактирование");
+        JMenu menu = new JMenu("Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ");
 
         //Undo and redo are actions of our own creation.
         undoAction = new UndoAction();
-        undoAction.putValue(Action.NAME, "Отменить действие");
+        undoAction.putValue(Action.NAME, "РћС‚РјРµРЅРёС‚СЊ РґРµР№СЃС‚РІРёРµ");
         menuItem = new JMenuItem(undoAction);
         key = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK);
         menuItem.setAccelerator(key);
@@ -653,7 +653,7 @@ import analyst.ADocument.ASection;
 //        menu.add(undoAction);
 
         redoAction = new RedoAction();
-        redoAction.putValue(Action.NAME, "Вернуть действие");
+        redoAction.putValue(Action.NAME, "Р’РµСЂРЅСѓС‚СЊ РґРµР№СЃС‚РІРёРµ");
         menuItem = new JMenuItem(redoAction);
         key = KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK);
         menuItem.setAccelerator(key);
@@ -666,25 +666,25 @@ import analyst.ADocument.ASection;
   
         //Get the actions and stick them in the menu.
         Action a = new AEditorKit.CutAction(textPane); //getActionByName(DefaultEditorKit.cutAction);
-        a.putValue(Action.NAME, "Вырезать");
+        a.putValue(Action.NAME, "Р’С‹СЂРµР·Р°С‚СЊ");
         menuItem = new JMenuItem(a); menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK));
         menu.add(menuItem);
         popupMenu.add(a);
         a = new AEditorKit.CopyAction(textPane); //getActionByName(DefaultEditorKit.copyAction);
-        a.putValue(Action.NAME, "Копировать");
+        a.putValue(Action.NAME, "РљРѕРїРёСЂРѕРІР°С‚СЊ");
         menuItem = new JMenuItem(a); menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
  
         menu.add(menuItem);
         popupMenu.add(a);
         a = new AEditorKit.PasteAction(textPane); //getActionByName(DefaultEditorKit.pasteAction);
-        a.putValue(Action.NAME, "Вставить");
+        a.putValue(Action.NAME, "Р’СЃС‚Р°РІРёС‚СЊ");
         menuItem = new JMenuItem(a); menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Event.CTRL_MASK));
         menu.add(menuItem);
 
         popupMenu.add(a);
         menu.addSeparator();
         a = getActionByName(DefaultEditorKit.selectAllAction);
-        a.putValue(Action.NAME, "Выделить всё");
+        a.putValue(Action.NAME, "Р’С‹РґРµР»РёС‚СЊ РІСЃС‘");
         menuItem = new JMenuItem(a); menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK));
         menu.add(menuItem);
         popupMenu.add(a);
@@ -696,7 +696,7 @@ import analyst.ADocument.ASection;
         
         
         a = new SearchAction((JTextComponent)textPane, aDoc);
-        a.putValue(Action.NAME, "Поиск");
+        a.putValue(Action.NAME, "РџРѕРёСЃРє");
         menuItem = new JMenuItem(a);
         menuItem.setAction(a);
         key = KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK);
@@ -712,7 +712,7 @@ import analyst.ADocument.ASection;
 
     //Create the style menu.
     protected JMenu createStyleMenu() {
-        JMenu menu = new JMenu("Стиль");
+        JMenu menu = new JMenu("РЎС‚РёР»СЊ");
         
         JMenuItem menuItem = new JMenuItem();
         
@@ -720,7 +720,7 @@ import analyst.ADocument.ASection;
         InputMap keyMap = menu.getInputMap();
         
         Action action = new StyledEditorKit.BoldAction();
-        action.putValue(Action.NAME, "Вопрос");
+        action.putValue(Action.NAME, "Р’РѕРїСЂРѕСЃ");
         menuItem.setAction(action);
         KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_B, Event.CTRL_MASK);
         menuItem.setAccelerator(key);        
@@ -729,7 +729,7 @@ import analyst.ADocument.ASection;
      
 
         action = new StyledEditorKit.ItalicAction();
-        action.putValue(Action.NAME, "Цитата");
+        action.putValue(Action.NAME, "Р¦РёС‚Р°С‚Р°");
         menuItem = new JMenuItem();
         menuItem.setAction(action);
         key = KeyStroke.getKeyStroke(KeyEvent.VK_I, Event.CTRL_MASK);
@@ -741,7 +741,7 @@ import analyst.ADocument.ASection;
   
     // infoMenu
     protected JMenu createInfoMenu() {
-        JMenu menu = new JMenu("Информация");
+        JMenu menu = new JMenu("РРЅС„РѕСЂРјР°С†РёСЏ");
 
         Action docProperties = new AbstractAction (){
 
@@ -755,15 +755,15 @@ import analyst.ADocument.ASection;
 				JTextArea dateField 	= new JTextArea(1,30);	dateField.setLineWrap(true);
 				JTextArea commentArea 	= new JTextArea(5,30);	commentArea.setLineWrap(true);
 				
-				JLabel lt = new JLabel("Название:" );  		lt.setPreferredSize(new Dimension(100, 40));
+				JLabel lt = new JLabel("РќР°Р·РІР°РЅРёРµ:" );  		lt.setPreferredSize(new Dimension(100, 40));
 															lt.setMaximumSize(new Dimension(100, 40));
-				JLabel le = new JLabel("Эксперт(ы):" ); 	le.setPreferredSize(new Dimension(100, 40));
+				JLabel le = new JLabel("Р­РєСЃРїРµСЂС‚(С‹):" ); 	le.setPreferredSize(new Dimension(100, 40));
 															le.setMaximumSize(new Dimension(100, 40));
-				JLabel lc = new JLabel("Типируемый:" ); 	lc.setPreferredSize(new Dimension(100, 40));
+				JLabel lc = new JLabel("РўРёРїРёСЂСѓРµРјС‹Р№:" ); 	lc.setPreferredSize(new Dimension(100, 40));
 															lc.setMaximumSize(new Dimension(100, 40));
-				JLabel ld = new JLabel("Дата:" );  			ld.setPreferredSize(new Dimension(100, 40));
+				JLabel ld = new JLabel("Р”Р°С‚Р°:" );  			ld.setPreferredSize(new Dimension(100, 40));
 															ld.setMaximumSize(new Dimension(100, 40));
-				JLabel lcm = new JLabel("Примечание:" );	lcm.setPreferredSize(new Dimension(100, 40));
+				JLabel lcm = new JLabel("РџСЂРёРјРµС‡Р°РЅРёРµ:" );	lcm.setPreferredSize(new Dimension(100, 40));
 															lcm.setMaximumSize(new Dimension(100, 40));
 				
 				
@@ -815,11 +815,11 @@ import analyst.ADocument.ASection;
 				
 				if(JOptionPane.showOptionDialog(frame, 
 						panel, 
-						"Информация о документе", 
+						"РРЅС„РѕСЂРјР°С†РёСЏ Рѕ РґРѕРєСѓРјРµРЅС‚Рµ", 
 						JOptionPane.YES_NO_OPTION,
 						JOptionPane.INFORMATION_MESSAGE,	
 						null,
-						new Object[]{"Принять", "Отмена"},
+						new Object[]{"РџСЂРёРЅСЏС‚СЊ", "РћС‚РјРµРЅР°"},
 						null
 							) == JOptionPane.YES_OPTION){
 					
@@ -856,11 +856,11 @@ import analyst.ADocument.ASection;
 			info.setEditable(false);
 			info.setBackground(panel.getBackground());
 			info.setText(		
-					"Программа \"Информационный анализ\"\n"+
+					"РџСЂРѕРіСЂР°РјРјР° \"РРЅС„РѕСЂРјР°С†РёРѕРЅРЅС‹Р№ Р°РЅР°Р»РёР·\"\n"+
 					"\n"+
-					"© Школа системной соционики, Киев, 2010 г.\n"+
+					"В© РЁРєРѕР»Р° СЃРёСЃС‚РµРјРЅРѕР№ СЃРѕС†РёРѕРЅРёРєРё, РљРёРµРІ, 2010 Рі.\n"+
 					"http://www.socionicasys.ru\n"+
-					"Версия: "+ version );
+					"Р’РµСЂСЃРёСЏ: "+ version );
 			
 			JTextArea licText = new  JTextArea(15,40);
 			info.setEditable(false);
@@ -870,11 +870,11 @@ import analyst.ADocument.ASection;
 			licText.setWrapStyleWord(true);
 			licText.setAutoscrolls(false);
 			
-			String license = "ВНИМАНИЕ!!! Не удалось отрыть файл лицензии.\n\n" +
-					"Согласно условий оригинальной лицензии GNU GPL, программное обеспечение должно поставляться вместе с текстом оригинальной лицензии.\n\n"+
-					"Отсутствие такой лицензии может неправомерно ограничивать ваши права как пользователя. \n\n" +
-					"Требуйте получение исходной лицензии от поставщика данного программного продукта.\n\n" +
-					"Оригинальный текст GNU GPL на английском языке вы можете прочитать здесь: http://www.gnu.org/copyleft/gpl.html";
+			String license = "Р’РќРРњРђРќРР•!!! РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚СЂС‹С‚СЊ С„Р°Р№Р» Р»РёС†РµРЅР·РёРё.\n\n" +
+					"РЎРѕРіР»Р°СЃРЅРѕ СѓСЃР»РѕРІРёР№ РѕСЂРёРіРёРЅР°Р»СЊРЅРѕР№ Р»РёС†РµРЅР·РёРё GNU GPL, РїСЂРѕРіСЂР°РјРјРЅРѕРµ РѕР±РµСЃРїРµС‡РµРЅРёРµ РґРѕР»Р¶РЅРѕ РїРѕСЃС‚Р°РІР»СЏС‚СЊСЃСЏ РІРјРµСЃС‚Рµ СЃ С‚РµРєСЃС‚РѕРј РѕСЂРёРіРёРЅР°Р»СЊРЅРѕР№ Р»РёС†РµРЅР·РёРё.\n\n"+
+					"РћС‚СЃСѓС‚СЃС‚РІРёРµ С‚Р°РєРѕР№ Р»РёС†РµРЅР·РёРё РјРѕР¶РµС‚ РЅРµРїСЂР°РІРѕРјРµСЂРЅРѕ РѕРіСЂР°РЅРёС‡РёРІР°С‚СЊ РІР°С€Рё РїСЂР°РІР° РєР°Рє РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ. \n\n" +
+					"РўСЂРµР±СѓР№С‚Рµ РїРѕР»СѓС‡РµРЅРёРµ РёСЃС…РѕРґРЅРѕР№ Р»РёС†РµРЅР·РёРё РѕС‚ РїРѕСЃС‚Р°РІС‰РёРєР° РґР°РЅРЅРѕРіРѕ РїСЂРѕРіСЂР°РјРјРЅРѕРіРѕ РїСЂРѕРґСѓРєС‚Р°.\n\n" +
+					"РћСЂРёРіРёРЅР°Р»СЊРЅС‹Р№ С‚РµРєСЃС‚ GNU GPL РЅР° Р°РЅРіР»РёР№СЃРєРѕРј СЏР·С‹РєРµ РІС‹ РјРѕР¶РµС‚Рµ РїСЂРѕС‡РёС‚Р°С‚СЊ Р·РґРµСЃСЊ: http://www.gnu.org/copyleft/gpl.html";
 			
 			InputStream is = Analyst.class.getClassLoader().getResourceAsStream("analyst/license.txt");
 			InputStreamReader isr = null;
@@ -890,7 +890,7 @@ import analyst.ADocument.ASection;
 								next = br.readLine();
 							}
 				} catch (IOException e) {
-					System.out.println("Ошибка при открытии файла лицензии");
+					System.out.println("РћС€РёР±РєР° РїСЂРё РѕС‚РєСЂС‹С‚РёРё С„Р°Р№Р»Р° Р»РёС†РµРЅР·РёРё");
 					e.printStackTrace();
 				}
 			}
@@ -903,7 +903,7 @@ import analyst.ADocument.ASection;
 				licText.insert("", 0);
 
 			
-			Border border = BorderFactory.createTitledBorder("Лицензия:");
+			Border border = BorderFactory.createTitledBorder("Р›РёС†РµРЅР·РёСЏ:");
 			licenseScrl.setBorder(border);
 			
 			panel.add(info);
@@ -911,19 +911,19 @@ import analyst.ADocument.ASection;
 				
 			JOptionPane.showOptionDialog(frame, 
 					panel,
-					"О программе",
+					"Рћ РїСЂРѕРіСЂР°РјРјРµ",
 					JOptionPane.INFORMATION_MESSAGE,
 					JOptionPane.PLAIN_MESSAGE,	
 					null,
-					new Object[]{"Закрыть"},
+					new Object[]{"Р—Р°РєСЂС‹С‚СЊ"},
 					null
 						);
 				
 			}
         }; 
         
-        docProperties.putValue(Action.NAME, "Свойства документа");
-        about.putValue(Action.NAME, "О программе");
+        docProperties.putValue(Action.NAME, "РЎРІРѕР№СЃС‚РІР° РґРѕРєСѓРјРµРЅС‚Р°");
+        about.putValue(Action.NAME, "Рћ РїСЂРѕРіСЂР°РјРјРµ");
         menu.add(docProperties);
         menu.add(about);
         return menu;
@@ -931,10 +931,10 @@ import analyst.ADocument.ASection;
 
     protected JMenu createSettingsMenu() {
     	
-    	 JMenu menu = new JMenu("Установки");
+    	 JMenu menu = new JMenu("РЈСЃС‚Р°РЅРѕРІРєРё");
 
          //Settings.
-         JCheckBox reportCheckbox = new JCheckBox("Генерировать отчет при сохранении");
+         JCheckBox reportCheckbox = new JCheckBox("Р“РµРЅРµСЂРёСЂРѕРІР°С‚СЊ РѕС‚С‡РµС‚ РїСЂРё СЃРѕС…СЂР°РЅРµРЅРёРё");
          reportCheckbox.setSelected(genetateReport);
          
          
@@ -1021,14 +1021,14 @@ import analyst.ADocument.ASection;
                 putValue(Action.NAME, getRussianUndoName(undo.getUndoPresentationName()));
             } else {
                 setEnabled(false);
-                putValue(Action.NAME, "Отменить действие");
+                putValue(Action.NAME, "РћС‚РјРµРЅРёС‚СЊ РґРµР№СЃС‚РІРёРµ");
             }
         }
 
 		private Object getRussianUndoName(String undoPresentationName) {
-			if (undoPresentationName.contains("deletion")) return "Отменить удаление";
-			if (undoPresentationName.contains("style")) return "Отменить";
-			if (undoPresentationName.contains("addition")) return "Отменить ввод";
+			if (undoPresentationName.contains("deletion")) return "РћС‚РјРµРЅРёС‚СЊ СѓРґР°Р»РµРЅРёРµ";
+			if (undoPresentationName.contains("style")) return "РћС‚РјРµРЅРёС‚СЊ";
+			if (undoPresentationName.contains("addition")) return "РћС‚РјРµРЅРёС‚СЊ РІРІРѕРґ";
 			return undoPresentationName;
 		}
     }
@@ -1057,14 +1057,14 @@ import analyst.ADocument.ASection;
                 putValue(Action.NAME,  getRussianRedoName(undo.getRedoPresentationName()));
             } else {
                 setEnabled(false);
-                putValue(Action.NAME, "Вернуть действие");
+                putValue(Action.NAME, "Р’РµСЂРЅСѓС‚СЊ РґРµР№СЃС‚РІРёРµ");
             }
         }
         
 		private Object getRussianRedoName(String redoPresentationName) {
-			if (redoPresentationName.contains("deletion")) return "Вернуть удаление";
-			if (redoPresentationName.contains("style")) return "Вернуть";
-			if (redoPresentationName.contains("addition")) return "Вернуть ввод";
+			if (redoPresentationName.contains("deletion")) return "Р’РµСЂРЅСѓС‚СЊ СѓРґР°Р»РµРЅРёРµ";
+			if (redoPresentationName.contains("style")) return "Р’РµСЂРЅСѓС‚СЊ";
+			if (redoPresentationName.contains("addition")) return "Р’РµСЂРЅСѓС‚СЊ РІРІРѕРґ";
 			return redoPresentationName;
 		}
     }
@@ -1155,12 +1155,12 @@ private int saveConfirmation(){
 	// if existing document is not empty
 	if (aDoc.getLength()>0){
 		choice = JOptionPane.showOptionDialog(frame, 
-					"Текущий документ не пустой.\n\nСохранить текущий документ?", 
-					"Требуется подтверждение", 
+					"РўРµРєСѓС‰РёР№ РґРѕРєСѓРјРµРЅС‚ РЅРµ РїСѓСЃС‚РѕР№.\n\nРЎРѕС…СЂР°РЅРёС‚СЊ С‚РµРєСѓС‰РёР№ РґРѕРєСѓРјРµРЅС‚?", 
+					"РўСЂРµР±СѓРµС‚СЃСЏ РїРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ", 
 					JOptionPane.YES_NO_CANCEL_OPTION, 
 					JOptionPane.ERROR_MESSAGE, 
 					null, 
-					new Object[]{"Сохранить", "Не сохранять", "Отмена"}, 
+					new Object[]{"РЎРѕС…СЂР°РЅРёС‚СЊ", "РќРµ СЃРѕС…СЂР°РЅСЏС‚СЊ", "РћС‚РјРµРЅР°"}, 
 					null);
 		if (choice == JOptionPane.YES_OPTION){	
 			File file = null;
@@ -1172,16 +1172,16 @@ private int saveConfirmation(){
 				 int option  = 0;
 				 
 				 while(! (cancel || overwrite)){
-	    		 fc.setDialogTitle("Сохранение документа");
-	    		 returnVal= fc.showDialog(Analyst.this, "Сохранить");
+	    		 fc.setDialogTitle("РЎРѕС…СЂР°РЅРµРЅРёРµ РґРѕРєСѓРјРµРЅС‚Р°");
+	    		 returnVal= fc.showDialog(Analyst.this, "РЎРѕС…СЂР°РЅРёС‚СЊ");
 			         if (returnVal == JFileChooser.APPROVE_OPTION){ 
 			        	 file = fc.getSelectedFile();
 			     
 			        	 fileName = file.getAbsolutePath();
 					        if (file.exists()) {
-					        	  Object[] options =  {"Да","Нет"};
+					        	  Object[] options =  {"Р”Р°","РќРµС‚"};
 					        	  option = JOptionPane.showOptionDialog(frame,
-					                 "Такой файл существует!\n\nХотите перезаписать этот файл?", "Предупреждение!!!",
+					                 "РўР°РєРѕР№ С„Р°Р№Р» СЃСѓС‰РµСЃС‚РІСѓРµС‚!\n\nРҐРѕС‚РёС‚Рµ РїРµСЂРµР·Р°РїРёСЃР°С‚СЊ СЌС‚РѕС‚ С„Р°Р№Р»?", "РџСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ!!!",
 					                  JOptionPane.YES_NO_OPTION, 
 					                  JOptionPane.QUESTION_MESSAGE,
 					                  null, 
@@ -1203,7 +1203,7 @@ private int saveConfirmation(){
 						    		 
 						    	 if (file!=null){	 
 							         	FileOutputStream fos = new FileOutputStream(file); 
-							        	ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
+							        	ProgressWindow pw = new ProgressWindow(frame, "    РЎРѕС…СЂР°РЅРµРЅРёРµ С„Р°Р№Р»Р°: ");
 							         	IOWorker iow = new IOWorker(pw,aDoc, fos);
 										iow.execute();
 										
@@ -1215,12 +1215,12 @@ private int saveConfirmation(){
 								System.out.println("Error writing document to file: ");
 								e.printStackTrace();
 								JOptionPane.showOptionDialog(frame, 
-										"Ошибка сохранения файла: "+fileName + "\n\n" +e.getMessage(), 
-										"Ошибка сохранения файла", 
+										"РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ С„Р°Р№Р»Р°: "+fileName + "\n\n" +e.getMessage(), 
+										"РћС€РёР±РєР° СЃРѕС…СЂР°РЅРµРЅРёСЏ С„Р°Р№Р»Р°", 
 										JOptionPane.OK_OPTION, 
 										JOptionPane.ERROR_MESSAGE, 
 										null, 
-										new Object[]{"Закрыть"}, 
+										new Object[]{"Р—Р°РєСЂС‹С‚СЊ"}, 
 										null);
 							}
 								 
@@ -1236,13 +1236,13 @@ public int docDeleteConfirmation(){
 	int dot    = textPane.getCaret().getDot();
 	if (aDoc.getASectionThatStartsAt(offset)!=null)
 	choice = JOptionPane.showOptionDialog(frame, 
-			"Вы собираетесь удалить размеченный фрагмент документа\n\nВы действительно хотите удалить фрагмент?", 
-			"Подтверждение удаления", 
+			"Р’С‹ СЃРѕР±РёСЂР°РµС‚РµСЃСЊ СѓРґР°Р»РёС‚СЊ СЂР°Р·РјРµС‡РµРЅРЅС‹Р№ С„СЂР°РіРјРµРЅС‚ РґРѕРєСѓРјРµРЅС‚Р°\n\nР’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ С„СЂР°РіРјРµРЅС‚?", 
+			"РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ СѓРґР°Р»РµРЅРёСЏ", 
 			JOptionPane.YES_NO_OPTION, 
 			JOptionPane.INFORMATION_MESSAGE, 
 			null, 
-			new Object[]{"Удалить", "Не удалять"}, 
-			"Не удалять");
+			new Object[]{"РЈРґР°Р»РёС‚СЊ", "РќРµ СѓРґР°Р»СЏС‚СЊ"}, 
+			"РќРµ СѓРґР°Р»СЏС‚СЊ");
 	
 	if (choice == JOptionPane.YES_OPTION)  aDoc.removeCleanup(Math.min(offset,dot),Math.max(offset,dot));
 		else {

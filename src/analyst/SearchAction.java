@@ -49,36 +49,36 @@ public class SearchAction extends AbstractAction{
 	// constructor
 	public SearchAction(JTextComponent component, ADocument aDoc){
 		super();
-		putValue(Action.NAME, "Поиск");
+		putValue(Action.NAME, "РџРѕРёСЃРє");
 		this.aDoc = aDoc;
 		this.component = component;
 		viewport = (JViewport) component.getParent();
-		forwardDirection 	= new JRadioButton("Вперед"); forwardDirection.setActionCommand("f");
-		backwardDirection	= new JRadioButton("Назад");  backwardDirection.setActionCommand("b");
+		forwardDirection 	= new JRadioButton("Р’РїРµСЂРµРґ"); forwardDirection.setActionCommand("f");
+		backwardDirection	= new JRadioButton("РќР°Р·Р°Рґ");  backwardDirection.setActionCommand("b");
 		bg = new ButtonGroup();
 		bg.add(forwardDirection);
 		bg.add(backwardDirection);
 		forwardDirection.setSelected(true);
-		searchButton		= new JButton("Искать");
+		searchButton		= new JButton("РСЃРєР°С‚СЊ");
 		searchQuote 		= new JTextArea (3, 30);
 		searchQuote.setMaximumSize(new Dimension(400,100));
 		searchQuote.setMinimumSize(new Dimension(400,100));
 		searchQuote.setLineWrap(true);
 		searchQuote.setWrapStyleWord(true);
-		JLabel searchLabel	= new JLabel("Текст для поиска:"); 
+		JLabel searchLabel	= new JLabel("РўРµРєСЃС‚ РґР»СЏ РїРѕРёСЃРєР°:"); 
 		JPanel p1	= new JPanel();
 		JPanel p2	= new JPanel();
 		JPanel p3	= new JPanel();
 		mainPanel	= new JPanel();
-		caseCheckbox = new JCheckBox("С учетом регистра");
+		caseCheckbox = new JCheckBox("РЎ СѓС‡РµС‚РѕРј СЂРµРіРёСЃС‚СЂР°");
 		caseCheckbox.setSelected(false);
 		
 		//status.setForeground(Color.GRAY);
-		status = new JLabel ("   "); //("Введите строку поиска и нажмите кнопку \"Искать\"");
+		status = new JLabel ("   "); //("Р’РІРµРґРёС‚Рµ СЃС‚СЂРѕРєСѓ РїРѕРёСЃРєР° Рё РЅР°Р¶РјРёС‚Рµ РєРЅРѕРїРєСѓ \"РСЃРєР°С‚СЊ\"");
 		p2.setLayout(new BorderLayout());
 		//p1.add(searchLabel, BorderLayout.EAST);
 		JScrollPane scrl = new JScrollPane(searchQuote);
-		scrl.setBorder(new TitledBorder("Строка для поиска:"));
+		scrl.setBorder(new TitledBorder("РЎС‚СЂРѕРєР° РґР»СЏ РїРѕРёСЃРєР°:"));
 		p1.add(scrl, BorderLayout.CENTER);
 		
 		//p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
@@ -109,18 +109,18 @@ public class SearchAction extends AbstractAction{
     public void showSearchDialog(){
 		JOptionPane.showOptionDialog(	null, 
 										mainPanel, 
-										"Поиск", 
+										"РџРѕРёСЃРє", 
 										JOptionPane.OK_OPTION, 
 										JOptionPane.PLAIN_MESSAGE, 
 										null, 
-										new Object[]{"Закрыть"}, 
+										new Object[]{"Р—Р°РєСЂС‹С‚СЊ"}, 
 										null);
 
     }
 
 	@Override
 	public void actionPerformed(ActionEvent evt) {
-		if (evt.getActionCommand().equals("Поиск")){
+		if (evt.getActionCommand().equals("РџРѕРёСЃРє")){
 													status.setText("");
 													showSearchDialog();
 		}else
@@ -171,7 +171,7 @@ public class SearchAction extends AbstractAction{
 					}
 			
 			if (searchResult>=0){
-				status.setText("Найдено позиция: "+ searchResult);
+				status.setText("РќР°Р№РґРµРЅРѕ РїРѕР·РёС†РёСЏ: "+ searchResult);
 				//searchOffset = searchResult;
 					try {
 						//aDoc.replace(searchResult, searchText.length(), searchText, aDoc.defaultSearchHighlightAttributes);
@@ -187,7 +187,7 @@ public class SearchAction extends AbstractAction{
 						System.out.println("SearchPane: error setting model to view :: bad location");
 					}
 			}else{
-				status.setText("       ...cтрока не найдена...");
+				status.setText("       ...cС‚СЂРѕРєР° РЅРµ РЅР°Р№РґРµРЅР°...");
 			}
 			 searchQuote.selectAll();
 			 searchQuote.requestFocus();
