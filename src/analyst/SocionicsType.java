@@ -54,22 +54,22 @@ public class SocionicsType {
 	public String typeName(TypeEnum type){
 	 
 		switch(type){
-		case ILE   : return "»À› (ƒÓÌ  ËıÓÚ)";
-		case SEI   : return "—›» (ƒ˛Ï‡)";
-		case ESE   : return "›—› (√˛„Ó)";
-		case LII   : return "À»» (–Ó·ÂÒÔ¸Â)";
-		case EIE   : return "›»› (√‡ÏÎÂÚ)";
-		case LSI   : return "À—» (Ã‡ÍÒËÏ)";
-		case SLE   : return "—À› (∆ÛÍÓ‚)";
-		case IEI   : return "»›» (≈ÒÂÌËÌ)";
-		case SEE   : return "—›› (Õ‡ÔÓÎÂÓÌ)";
-		case ILI   : return "»À» (¡‡Î¸Á‡Í)";
-		case LIE   : return "À»› (ƒÊÂÍ)";
-		case ESI   : return "›—» (ƒ‡ÈÁÂ)";
-		case LSE   : return "À—› (ÿÚËÎËˆ)";
-		case EII   : return "›»» (ƒÓÒÚÓÂ‚ÒÍËÈ)";
-		case IEE   : return "»›› (√ÂÍÒÎË)";
-		case SLI   : return "—À» (√‡·ÂÌ)";
+		case ILE   : return "–ò–õ–≠ (–î–æ–Ω –ö–∏—Ö–æ—Ç)";
+		case SEI   : return "–°–≠–ò (–î—é–º–∞)";
+		case ESE   : return "–≠–°–≠ (–ì—é–≥–æ)";
+		case LII   : return "–õ–ò–ò (–†–æ–±–µ—Å–ø—å–µ—Ä)";
+		case EIE   : return "–≠–ò–≠ (–ì–∞–º–ª–µ—Ç)";
+		case LSI   : return "–õ–°–ò (–ú–∞–∫—Å–∏–º)";
+		case SLE   : return "–°–õ–≠ (–ñ—É–∫–æ–≤)";
+		case IEI   : return "–ò–≠–ò (–ï—Å–µ–Ω–∏–Ω)";
+		case SEE   : return "–°–≠–≠ (–ù–∞–ø–æ–ª–µ–æ–Ω)";
+		case ILI   : return "–ò–õ–ò (–ë–∞–ª—å–∑–∞–∫)";
+		case LIE   : return "–õ–ò–≠ (–î–∂–µ–∫)";
+		case ESI   : return "–≠–°–ò (–î—Ä–∞–π–∑–µ—Ä)";
+		case LSE   : return "–õ–°–≠ (–®—Ç–∏—Ä–ª–∏—Ü)";
+		case EII   : return "–≠–ò–ò (–î–æ—Å—Ç–æ–µ–≤—Å–∫–∏–π)";
+		case IEE   : return "–ò–≠–≠ (–ì–µ–∫—Å–ª–∏)";
+		case SLI   : return "–°–õ–ò (–ì–∞–±–µ–Ω)";
 		default:return null; 
 		 }	
 	}
@@ -89,7 +89,7 @@ if (	secondAspect == null
 		&& mv==null) 
 					return true;
 /////////////////////////////////////////////////////////////////////////////////////////
-//ƒÓÌ  ËıÓÚ
+//–î–æ–Ω –ö–∏—Ö–æ—Ç
 if (type.equals(SocionicsType.ILE)){
 
 	//block
@@ -357,7 +357,7 @@ if (type.equals(SocionicsType.ILE)){
 return true;
 } //end ILE
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//ƒﬁÃ¿
+//–î–Æ–ú–ê
 if (type.equals(SocionicsType.SEI)){
 
 	//block
@@ -622,7 +622,7 @@ if (type.equals(SocionicsType.SEI)){
 return true;
 } //end SEI
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//√ﬁ√Œ
+//–ì–Æ–ì–û
 if (type.equals(SocionicsType.ESE)){
 
 	//block
@@ -888,7 +888,7 @@ return true;
 } //end ESE	
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//–Œ¡≈—œ‹≈–
+//–†–û–ë–ï–°–ü–¨–ï–†
 if (type.equals(SocionicsType.LII)){
 
 	//block
@@ -1156,7 +1156,7 @@ return true;
 } //end LII	
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//√¿ÃÀ≈“
+//–ì–ê–ú–õ–ï–¢
 if (type.equals(SocionicsType.EIE)){
 
 	//block
@@ -1423,7 +1423,7 @@ return true;
 } //end EIE	
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//Ã¿ —»Ã
+//–ú–ê–ö–°–ò–ú
 if (type.equals(SocionicsType.LSI)){
 
 	//block
@@ -1690,7 +1690,7 @@ return true;
 } //end LSI	
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//∆” Œ¬
+//–ñ–£–ö–û–í
 if (type.equals(SocionicsType.SLE)){
 
 	//block
@@ -1957,7 +1957,7 @@ return true;
 } //end SLE	
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//≈—≈Õ»Õ
+//–ï–°–ï–ù–ò–ù
 if (type.equals(SocionicsType.IEI)){
 
 	//block
@@ -2224,7 +2224,7 @@ return true;
 } //end IEI	
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//Õ¿œŒÀ≈ŒÕ
+//–ù–ê–ü–û–õ–ï–û–ù
 if (type.equals(SocionicsType.SEE)){
 
 	//block
@@ -2490,7 +2490,7 @@ return true;
 } //end SEE
 
 /////////////////////////////////////////////////////////////////////////////////////////
-//¡¿À‹«¿ 
+//–ë–ê–õ–¨–ó–ê–ö
 if (type.equals(SocionicsType.ILI)){
 
 	//block
@@ -2759,7 +2759,7 @@ return true;
 } //end ILI
 
 /////////////////////////////////////////////////////////////////////////////////////////
-//ƒ∆≈ 
+//–î–ñ–ï–ö
 if (type.equals(SocionicsType.LIE)){
 
 	//block
@@ -3027,7 +3027,7 @@ return true;
 } //end LIE
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//ƒ–¿…«≈–
+//–î–†–ê–ô–ó–ï–†
 if (type.equals(SocionicsType.ESI)){
 
 	//block
@@ -3293,7 +3293,7 @@ return true;
 } //end ESI
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//ÿ“»ÀÀ»÷
+//–®–¢–ò–õ–õ–ò–¶
 if (type.equals(SocionicsType.LSE)){
 
 	//block
@@ -3559,7 +3559,7 @@ return true;
 } //end LSE	
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//ƒŒ—“Œ≈¬— »…
+//–î–û–°–¢–û–ï–í–°–ö–ò–ô
 if (type.equals(SocionicsType.EII)){
 
 	//block
@@ -3826,7 +3826,7 @@ return true;
 } //end EII	
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//√≈ —À»
+//–ì–ï–ö–°–õ–ò
 if (type.equals(SocionicsType.IEE)){
 
 	//block
@@ -4093,7 +4093,7 @@ return true;
 } //end IEE	
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-//√¿¡≈Õ
+//–ì–ê–ë–ï–ù
 if (type.equals(SocionicsType.SLI)){
 
 	//block

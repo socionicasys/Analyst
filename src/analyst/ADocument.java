@@ -31,13 +31,13 @@ import javax.swing.undo.UndoableEdit;
 public class ADocument extends DefaultStyledDocument implements DocumentListener  
 																	  {
 	public static final String ENCODING = "UTF-8";
-	public static final String DEFAULT_TITLE = "Новый документ";
+	public static final String DEFAULT_TITLE = "РќРѕРІС‹Р№ РґРѕРєСѓРјРµРЅС‚";
 	// document's properties names
-	public static final String TitleProperty1 	= "Документ:";
-	public static final String ExpertProperty 	= "Эксперт:";
-	public static final String ClientProperty	= "Типируемый:";
-	public static final String DateProperty 	= "Дата:";
-	public static final String CommentProperty 	= "Комментарий:";
+	public static final String TitleProperty1 	= "Р”РѕРєСѓРјРµРЅС‚:";
+	public static final String ExpertProperty 	= "Р­РєСЃРїРµСЂС‚:";
+	public static final String ClientProperty	= "РўРёРїРёСЂСѓРµРјС‹Р№:";
+	public static final String DateProperty 	= "Р”Р°С‚Р°:";
+	public static final String CommentProperty 	= "РљРѕРјРјРµРЅС‚Р°СЂРёР№:";
 
 	
 		
@@ -100,9 +100,9 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 	@Override
 	public int compareTo(DocumentFlowEvent o) {
-		// Реализация интерфейса java.lang.Comparable<T>
-		// Делает возможной сортировку массива из DocumentFlowEvent-ов
-		// Сравнение происходит только по позиции (offset)
+		// Р РµР°Р»РёР·Р°С†РёСЏ РёРЅС‚РµСЂС„РµР№СЃР° java.lang.Comparable<T>
+		// Р”РµР»Р°РµС‚ РІРѕР·РјРѕР¶РЅРѕР№ СЃРѕСЂС‚РёСЂРѕРІРєСѓ РјР°СЃСЃРёРІР° РёР· DocumentFlowEvent-РѕРІ
+		// РЎСЂР°РІРЅРµРЅРёРµ РїСЂРѕРёСЃС…РѕРґРёС‚ С‚РѕР»СЊРєРѕ РїРѕ РїРѕР·РёС†РёРё (offset)
 		return this.offset - o.offset;
 	}	
 }//class DocumentFlowEvent
@@ -469,7 +469,7 @@ public void removeUpdate(DocumentEvent e) {
 
 public void removeCleanup(int start, int end){
 	
-	// проверяет не нужно ли удалить схлопнувшиеся сегменты
+	// РїСЂРѕРІРµСЂСЏРµС‚ РЅРµ РЅСѓР¶РЅРѕ Р»Рё СѓРґР°Р»РёС‚СЊ СЃС…Р»РѕРїРЅСѓРІС€РёРµСЃСЏ СЃРµРіРјРµРЅС‚С‹
 	Set<ASection> s = aDataMap.keySet();
 	Iterator<ASection> it = s.iterator ();
 	boolean foundCollapsed = false;
@@ -497,7 +497,7 @@ public void removeCleanup(int start, int end){
 public void insertCleanup(){
 /*	
 	if (aDataMap == null ) return;
-	// проверяет не нужно ли объединить пересекающиеся сегменты с одинаковыми данными
+	// РїСЂРѕРІРµСЂСЏРµС‚ РЅРµ РЅСѓР¶РЅРѕ Р»Рё РѕР±СЉРµРґРёРЅРёС‚СЊ РїРµСЂРµСЃРµРєР°СЋС‰РёРµСЃСЏ СЃРµРіРјРµРЅС‚С‹ СЃ РѕРґРёРЅР°РєРѕРІС‹РјРё РґР°РЅРЅС‹РјРё
 	Set<ASection> s = aDataMap.keySet();
 	Iterator<ASection> it = s.iterator ();
 	ASection[] sections = s.toArray(new ASection[]{});
@@ -569,7 +569,7 @@ public void addASection(ASection aSection, AData data) {
 	int beg = Math.min(st, en);
 	int len = Math.abs(st-en);	
 	
-	// удаляет сегменты с такими же границами
+	// СѓРґР°Р»СЏРµС‚ СЃРµРіРјРµРЅС‚С‹ СЃ С‚Р°РєРёРјРё Р¶Рµ РіСЂР°РЅРёС†Р°РјРё
 	Set<ASection> s = aDataMap.keySet();
 	Iterator<ASection> it = s.iterator ();
 	
@@ -641,12 +641,12 @@ String comm =(String)getProperty(CommentProperty);
 /*
 if (comm != null){ 
 	
-	int ind = comm.indexOf("Сохранено версией:");
+	int ind = comm.indexOf("РЎРѕС…СЂР°РЅРµРЅРѕ РІРµСЂСЃРёРµР№:");
 	if (ind >=0){
 		comm = comm.substring(0,ind);
 	}
 		else if (comm.length()>0) comm = comm + "<br/>";
-	comm += "Сохранено версией:"  + Analyst.version;
+	comm += "РЎРѕС…СЂР°РЅРµРЅРѕ РІРµСЂСЃРёРµР№:"  + Analyst.version;
 }
 */
 //document header
@@ -677,26 +677,26 @@ text += "\n <table title=\"header\" border=1 width=\"40%\"> 	" 					+ "\n" +
 
 //  writing the color legend
 text += "<br/>\n<br/>";
-text += "<h3> Расшифровка цветовых обозначений: </h3>";
+text += "<h3> Р Р°СЃС€РёС„СЂРѕРІРєР° С†РІРµС‚РѕРІС‹С… РѕР±РѕР·РЅР°С‡РµРЅРёР№: </h3>";
 
 		text += "\n <table title=\"legend\" border=0 width=\"40%\"> 	" 					+ "\n" +
 				"<tr>" 												+ "\n" +
-				"	<td style=\"background-color:#EAEAEA\">"    +  "Непонятное место"   +  "</td>"				+ "\n" +
+				"	<td style=\"background-color:#EAEAEA\">"    +  "РќРµРїРѕРЅСЏС‚РЅРѕРµ РјРµСЃС‚Рѕ"   +  "</td>"				+ "\n" +
 				"</tr>"												+ "\n" +
 				"<tr>" 												+ "\n" +
-				"	<td style=\"background-color:#AAEEEE;\">      "+"Маломерность"+"     </td>" 			+ "\n" +
+				"	<td style=\"background-color:#AAEEEE;\">      "+"РњР°Р»РѕРјРµСЂРЅРѕСЃС‚СЊ"+"     </td>" 			+ "\n" +
 				"</tr>"												+ "\n" +
 				"<tr>" 												+ "\n" +
-				"	<td style=\"background-color:#AAEEAA;\">      "+"Многомерность"+"     </td>"		+ "\n" +
+				"	<td style=\"background-color:#AAEEAA;\">      "+"РњРЅРѕРіРѕРјРµСЂРЅРѕСЃС‚СЊ"+"     </td>"		+ "\n" +
 				"</tr>"												+ "\n" +
 				"<tr>" 												+ "\n" +
-				"	<td  style=\"color:#FF0000;\">      		  "+"Фрагмент содержит информацию о знаке"+"     </td>"		+ "\n" +
+				"	<td  style=\"color:#FF0000;\">      		  "+"Р¤СЂР°РіРјРµРЅС‚ СЃРѕРґРµСЂР¶РёС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ Р·РЅР°РєРµ"+"     </td>"		+ "\n" +
 				"</tr>"												+ "\n" +
 				"<tr>" 												+ "\n" +
-				"	<td style=\"background-color:#FFFFCC;\">      "+"Фрагмент содержит информацию о ментале или витале"+"     </td>"		+ "\n" +
+				"	<td style=\"background-color:#FFFFCC;\">      "+"Р¤СЂР°РіРјРµРЅС‚ СЃРѕРґРµСЂР¶РёС‚ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РјРµРЅС‚Р°Р»Рµ РёР»Рё РІРёС‚Р°Р»Рµ"+"     </td>"		+ "\n" +
 				"</tr>"												+ "\n" +
 				"<tr>" 												+ "\n" +
-				"	<td style=\"text-decoration:underline\">      "+"Прочий выделенный фрагмент анализа"+"     </td>"		+ "\n" +
+				"	<td style=\"text-decoration:underline\">      "+"РџСЂРѕС‡РёР№ РІС‹РґРµР»РµРЅРЅС‹Р№ С„СЂР°РіРјРµРЅС‚ Р°РЅР°Р»РёР·Р°"+"     </td>"		+ "\n" +
 				"</tr>"												+ "\n" +
 				"</table >"											+ "\n";
 
@@ -705,11 +705,11 @@ iow.firePropertyChange("progress", null, new Integer(headerSaveProgress));
 
 //document content
 		text = "<br/>\n";
-		text += "\n<h2>  АНАЛИЗ </h2>\n";		
+		text += "\n<h2>  РђРќРђР›РР— </h2>\n";		
 		text += "\n <table title=\"protocol\" border=2 width=\"100%\"> 	" 			+ "\n" +
 		"<tr>" 															+ "\n" +
-		"	<th width=\"60%\"> ВОПРОСЫ И ОТВЕТЫ </th>"					+ "\n" +
-		"	<th width=\"40%\"> АНАЛИЗ ЭКСПЕРТА</th>"  					+ "\n" +
+		"	<th width=\"60%\"> Р’РћРџР РћРЎР« Р РћРўР’Р•РўР« </th>"					+ "\n" +
+		"	<th width=\"40%\"> РђРќРђР›РР— Р­РљРЎРџР•Р РўРђ</th>"  					+ "\n" +
 		"</tr>" 														+ "\n"  +
 		"<tr>" 															+ "\n" +		
 		"	<td>"																
@@ -843,7 +843,7 @@ text = "";
 			DocumentFlowEvent prevEvent = flowEvents.lastElement();
 			if (prevEvent.type == DocumentFlowEvent.LINE_BREAK &&
 				prevEvent.offset == lb - 1) {
-				// Заменяем два идущих подряд LINE_BREAK на NEW_ROW
+				// Р—Р°РјРµРЅСЏРµРј РґРІР° РёРґСѓС‰РёС… РїРѕРґСЂСЏРґ LINE_BREAK РЅР° NEW_ROW
 				replaceBreak = true;
 			}
 		}
@@ -960,7 +960,7 @@ if (flowEvents!=null && !flowEvents.isEmpty()){
 		} // eventType == DocumentFlowEvent.LINE_BREAK
 	}//for
 }//if
-	// если в документе нет разметки - просто пишем текст в левый столбец таблицы
+	// РµСЃР»Рё РІ РґРѕРєСѓРјРµРЅС‚Рµ РЅРµС‚ СЂР°Р·РјРµС‚РєРё - РїСЂРѕСЃС‚Рѕ РїРёС€РµРј С‚РµРєСЃС‚ РІ Р»РµРІС‹Р№ СЃС‚РѕР»Р±РµС† С‚Р°Р±Р»РёС†С‹
 	else{
 		text += getText(0, getLength());
 		text += "</td><td></td>";
@@ -984,7 +984,7 @@ if (an.getGenerateReport()){
 	
 	
 	text += "<br/>" +	
-			"<h1> Определение ТИМа </h1>" +
+			"<h1> РћРїСЂРµРґРµР»РµРЅРёРµ РўРРњР° </h1>" +
 			"<br/>" ;
 
 	text += an.getNavigeTree().getReport();
@@ -993,8 +993,8 @@ if (an.getGenerateReport()){
 
     text += 
     		"<br/>"+
-    		"Протокол определения ТИМа создан программой \"Информационный анализ\", верисия: "+ Analyst.version+ " <br/>"+
-    		"© Школа системной соционики, Киев.<br/>"+
+    		"РџСЂРѕС‚РѕРєРѕР» РѕРїСЂРµРґРµР»РµРЅРёСЏ РўРРњР° СЃРѕР·РґР°РЅ РїСЂРѕРіСЂР°РјРјРѕР№ \"РРЅС„РѕСЂРјР°С†РёРѕРЅРЅС‹Р№ Р°РЅР°Р»РёР·\", РІРµСЂРёСЃРёСЏ: "+ Analyst.version+ " <br/>"+
+    		"В© РЁРєРѕР»Р° СЃРёСЃС‚РµРјРЅРѕР№ СЃРѕС†РёРѕРЅРёРєРё, РљРёРµРІ.<br/>"+
 			"http://www.socionicasys.ru\n";
 	
 	
@@ -1125,7 +1125,7 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 			searchIndex = leftHeaderText.indexOf(colEndToken, searchIndex)+colEndToken.length();
 		}
 		
-		//обработка заголовка
+		//РѕР±СЂР°Р±РѕС‚РєР° Р·Р°РіРѕР»РѕРІРєР°
 		leftHeaderColumn.replaceAll("\t", "");
 		rightHeaderColumn.replaceAll("\t", "");
 		rightHeaderColumn = rightHeaderColumn.replaceAll("<br/>", "\n");
@@ -1197,7 +1197,7 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 	//rightColumn= rightColumn.replaceAll("\t", "");	
 	rightColumn= rightColumn.replace("<br/>", "\n");
 
-	// Убираем все лишние теги 
+	// РЈР±РёСЂР°РµРј РІСЃРµ Р»РёС€РЅРёРµ С‚РµРіРё 
 	
 	leftColumn = removeTag (leftColumn , "<span", ">");
 	leftColumn = removeTag (leftColumn , "</span", ">");
@@ -1285,7 +1285,7 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 																	leftColumnParseProgress+
 																	rightColumnParseProgress));
 		
-		// Обрабатываем стили в уже прочитанном тексте
+		// РћР±СЂР°Р±Р°С‚С‹РІР°РµРј СЃС‚РёР»Рё РІ СѓР¶Рµ РїСЂРѕС‡РёС‚Р°РЅРЅРѕРј С‚РµРєСЃС‚Рµ
 		SimpleAttributeSet currentStyle = new SimpleAttributeSet(this.defaultStyle);
 		Pattern styleTag = Pattern.compile("</?[bi]>");
 		String sourceText = leftColumn;
@@ -1301,13 +1301,13 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 			int tagEnd = styleMatcher.end();
 			String textBlock = sourceText.substring(sourcePosition, tagStart);
 			
-			// Добавляем в документ текст перед текущим тегом
+			// Р”РѕР±Р°РІР»СЏРµРј РІ РґРѕРєСѓРјРµРЅС‚ С‚РµРєСЃС‚ РїРµСЂРµРґ С‚РµРєСѓС‰РёРј С‚РµРіРѕРј
 			styledTextBlocks.add(new StyledText(textBlock, currentStyle));
 			docPosition += textBlock.length();
 			sourcePosition = tagEnd;
 		
-			// Так как мы удаляем теги из основного текста, необходимо сместить
-			// пометки типировщика, находящиеся после тега
+			// РўР°Рє РєР°Рє РјС‹ СѓРґР°Р»СЏРµРј С‚РµРіРё РёР· РѕСЃРЅРѕРІРЅРѕРіРѕ С‚РµРєСЃС‚Р°, РЅРµРѕР±С…РѕРґРёРјРѕ СЃРјРµСЃС‚РёС‚СЊ
+			// РїРѕРјРµС‚РєРё С‚РёРїРёСЂРѕРІС‰РёРєР°, РЅР°С…РѕРґСЏС‰РёРµСЃСЏ РїРѕСЃР»Рµ С‚РµРіР°
 			for (RawAData rd : rawData.values()) {
 				if (rd.beg >= tagEnd - sourceOffset) {
 					rd.beg -= tagLenth;
@@ -1318,7 +1318,7 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 			}
 			sourceOffset += tagLenth;
 			
-			// Стиль следующего текста в зависимости от текущего тега
+			// РЎС‚РёР»СЊ СЃР»РµРґСѓСЋС‰РµРіРѕ С‚РµРєСЃС‚Р° РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ С‚РµРєСѓС‰РµРіРѕ С‚РµРіР°
 			if (currentTag.equals("<b>")) {
 				StyleConstants.setBold(currentStyle, true);
 			}
@@ -1332,7 +1332,7 @@ public void load(FileInputStream fis, boolean append, IOWorker iow) throws Excep
 				StyleConstants.setItalic(currentStyle, false);
 			}
 		}
-		// Добавляем в документ текст за последним тегом
+		// Р”РѕР±Р°РІР»СЏРµРј РІ РґРѕРєСѓРјРµРЅС‚ С‚РµРєСЃС‚ Р·Р° РїРѕСЃР»РµРґРЅРёРј С‚РµРіРѕРј
 		styledTextBlocks.add(new StyledText(sourceText.substring(sourcePosition),
 				currentStyle));
 		iow.firePropertyChange("AppendStyledText", null, styledTextBlocks);
@@ -1406,11 +1406,11 @@ public String getHTMLStyleForAData(AData data){
 				(	dim.equals(AData.D3) ||
 				    dim.equals(AData.D4) ||	
 				    dim.equals(AData.MNOGOMERNOST) )												) {
-			  // противный зеленый
+			  // РїСЂРѕС‚РёРІРЅС‹Р№ Р·РµР»РµРЅС‹Р№
 		res += "background-color:#AAEEAA;";}			
 	if (sign !=null){ res += "color:#FF0000;" ;}
 	if (mv   !=null){ res += "background-color:#FFFFCC;" ;}	
-	//Если не задан другой стиль, то будет этот стиль
+	//Р•СЃР»Рё РЅРµ Р·Р°РґР°РЅ РґСЂСѓРіРѕР№ СЃС‚РёР»СЊ, С‚Рѕ Р±СѓРґРµС‚ СЌС‚РѕС‚ СЃС‚РёР»СЊ
 	if (res.equals("\""))res += "text-decoration:underline";
 	
 	
@@ -1543,9 +1543,9 @@ private class ASectionAdditionEdit extends AbstractUndoableEdit{
 		fireADocumentChanged();
 	}
 	
-	public String getUndoPresentationName() {return "Отменить вставку сегмента анализа";}
-	public String getPresentationName() {return "Вставка сегмента анализа";}
-	public String getRedoPresentationName() {return "Вернуть вставку сегмента анализа";}
+	public String getUndoPresentationName() {return "РћС‚РјРµРЅРёС‚СЊ РІСЃС‚Р°РІРєСѓ СЃРµРіРјРµРЅС‚Р° Р°РЅР°Р»РёР·Р°";}
+	public String getPresentationName() {return "Р’СЃС‚Р°РІРєР° СЃРµРіРјРµРЅС‚Р° Р°РЅР°Р»РёР·Р°";}
+	public String getRedoPresentationName() {return "Р’РµСЂРЅСѓС‚СЊ РІСЃС‚Р°РІРєСѓ СЃРµРіРјРµРЅС‚Р° Р°РЅР°Р»РёР·Р°";}
 	public boolean isSignificant(){return true;}
 	public boolean addEdit(UndoableEdit e) {return false;}
 	public boolean replaceEdit(UndoableEdit e) {return false;}
@@ -1602,9 +1602,9 @@ private class ASectionDeletionEdit extends AbstractUndoableEdit{
 		fireADocumentChanged();
 	}
 	
-	public String getUndoPresentationName() {return "Отменить очистку сегмента анализа";}
-	public String getPresentationName() {return "Очистка сегмента анализа";}
-	public String getRedoPresentationName() {return "Вернуть очитску сегмента анализа";}
+	public String getUndoPresentationName() {return "РћС‚РјРµРЅРёС‚СЊ РѕС‡РёСЃС‚РєСѓ СЃРµРіРјРµРЅС‚Р° Р°РЅР°Р»РёР·Р°";}
+	public String getPresentationName() {return "РћС‡РёСЃС‚РєР° СЃРµРіРјРµРЅС‚Р° Р°РЅР°Р»РёР·Р°";}
+	public String getRedoPresentationName() {return "Р’РµСЂРЅСѓС‚СЊ РѕС‡РёС‚СЃРєСѓ СЃРµРіРјРµРЅС‚Р° Р°РЅР°Р»РёР·Р°";}
 	public boolean isSignificant(){return true;}
 	public boolean addEdit(UndoableEdit e) {return false;}
 	public boolean replaceEdit(UndoableEdit e) {return false;}
@@ -1652,9 +1652,9 @@ private class ASectionChangeEdit extends AbstractUndoableEdit{
 		fireADocumentChanged();
 	}
 	
-	public String getUndoPresentationName() {return "Отменить редактирование сегмента анализа";}
-	public String getPresentationName() {return "Редактирование сегмента анализа";}
-	public String getRedoPresentationName() {return "Вернуть редактирование сегмента анализа";}
+	public String getUndoPresentationName() {return "РћС‚РјРµРЅРёС‚СЊ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ СЃРµРіРјРµРЅС‚Р° Р°РЅР°Р»РёР·Р°";}
+	public String getPresentationName() {return "Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ СЃРµРіРјРµРЅС‚Р° Р°РЅР°Р»РёР·Р°";}
+	public String getRedoPresentationName() {return "Р’РµСЂРЅСѓС‚СЊ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ СЃРµРіРјРµРЅС‚Р° Р°РЅР°Р»РёР·Р°";}
 	public boolean isSignificant(){return true;}
 	public boolean addEdit(UndoableEdit e) {
 		if ((e instanceof ASectionChangeEdit)&& ((ASectionChangeEdit)e).getSection().equals(section)){
@@ -1720,9 +1720,9 @@ private class ADocDeleteEdit extends AbstractUndoableEdit{
 		blockUndoEvents(false);	
 	}
 	
-	public String getUndoPresentationName() {return "Отменить удаление";}
-	public String getPresentationName() {return "Удаление";}
-	public String getRedoPresentationName() {return "Вернуть удаление";}
+	public String getUndoPresentationName() {return "РћС‚РјРµРЅРёС‚СЊ СѓРґР°Р»РµРЅРёРµ";}
+	public String getPresentationName() {return "РЈРґР°Р»РµРЅРёРµ";}
+	public String getRedoPresentationName() {return "Р’РµСЂРЅСѓС‚СЊ СѓРґР°Р»РµРЅРёРµ";}
 	public boolean isSignificant(){return true;}
 	public boolean addEdit(UndoableEdit e) {return false;}
 	public boolean replaceEdit(UndoableEdit e) {return false;}
@@ -1781,9 +1781,9 @@ public class ADocFragmentPasteEdit extends AbstractUndoableEdit{
 		blockUndoEvents(false);	
 	}
 	
-	public String getUndoPresentationName() {return "Отменить вставку";}
-	public String getPresentationName() {return "Вставка";}
-	public String getRedoPresentationName() {return "Вернуть вставку";}
+	public String getUndoPresentationName() {return "РћС‚РјРµРЅРёС‚СЊ РІСЃС‚Р°РІРєСѓ";}
+	public String getPresentationName() {return "Р’СЃС‚Р°РІРєР°";}
+	public String getRedoPresentationName() {return "Р’РµСЂРЅСѓС‚СЊ РІСЃС‚Р°РІРєСѓ";}
 	public boolean isSignificant(){return true;}
 	public boolean addEdit(UndoableEdit e) {return false;}
 	public boolean replaceEdit(UndoableEdit e) {return false;}

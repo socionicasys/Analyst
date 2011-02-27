@@ -4,7 +4,7 @@
 package analyst;
 
 /**
- * @author Виктор
+ * @author Р’РёРєС‚РѕСЂ
  *
  */
 public class EndNodeObject extends Object {

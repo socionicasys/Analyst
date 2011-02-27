@@ -130,8 +130,8 @@ public void propertyChange(PropertyChangeEvent evt) {
 							appendOffset = aDoc.getLength();
 						}
 						else {
-							// Если мы не добавляем в старый документ, то перед
-							// первой записью его нужно очистить
+							// Р•СЃР»Рё РјС‹ РЅРµ РґРѕР±Р°РІР»СЏРµРј РІ СЃС‚Р°СЂС‹Р№ РґРѕРєСѓРјРµРЅС‚, С‚Рѕ РїРµСЂРµРґ
+							// РїРµСЂРІРѕР№ Р·Р°РїРёСЃСЊСЋ РµРіРѕ РЅСѓР¶РЅРѕ РѕС‡РёСЃС‚РёС‚СЊ
 							appendOffset = 0;
 							aDoc.getADataMap().clear();
 							aDoc.remove(0, aDoc.getEndPosition().getOffset() - 1);
@@ -139,7 +139,7 @@ public void propertyChange(PropertyChangeEvent evt) {
 					}
 					int docPosition = aDoc.getEndPosition().getOffset() - 1;
 					aDoc.insertString(docPosition, textBlock, textStyle);
-					// Исправляем ошибку insertString: текст вставляется без стилей
+					// РСЃРїСЂР°РІР»СЏРµРј РѕС€РёР±РєСѓ insertString: С‚РµРєСЃС‚ РІСЃС‚Р°РІР»СЏРµС‚СЃСЏ Р±РµР· СЃС‚РёР»РµР№
 					aDoc.setCharacterAttributes(docPosition, textBlock.length(),
 							textStyle, true);
 				}

@@ -23,7 +23,7 @@ import analyst.ADocument.ASection;
 
 
 /**
- * @author Виктор
+ * @author Р’РёРєС‚РѕСЂ
  *
  */
 @SuppressWarnings("serial")
@@ -38,7 +38,7 @@ public class BTree  extends JTree implements
 	TreePath path; 
 	
 	
-	 private  DefaultMutableTreeNode matchNode = new DefaultMutableTreeNode("Соответствие");
+	 private  DefaultMutableTreeNode matchNode = new DefaultMutableTreeNode("РЎРѕРѕС‚РІРµС‚СЃС‚РІРёРµ");
 	 	private  DefaultMutableTreeNode ileMatchNode =  	new EndTreeNode(SocionicsType.ILE); 
 	 	private  DefaultMutableTreeNode seiMatchNode =  	new EndTreeNode(SocionicsType.SEI);
 	 	private  DefaultMutableTreeNode eseMatchNode =  	new EndTreeNode(SocionicsType.ESE);
@@ -56,7 +56,7 @@ public class BTree  extends JTree implements
 	 	private  DefaultMutableTreeNode ieeMatchNode =  	new EndTreeNode(SocionicsType.IEE);
 	 	private  DefaultMutableTreeNode sliMatchNode =  	new EndTreeNode(SocionicsType.SLI);
 	 	
-	 private  DefaultMutableTreeNode noMatchNode = new DefaultMutableTreeNode("Несоответствие");
+	 private  DefaultMutableTreeNode noMatchNode = new DefaultMutableTreeNode("РќРµСЃРѕРѕС‚РІРµС‚СЃС‚РІРёРµ");
 	 	private  DefaultMutableTreeNode ileNoMatchNode =  	new EndTreeNode(SocionicsType.ILE);
 	 	private  DefaultMutableTreeNode seiNoMatchNode =  	new EndTreeNode(SocionicsType.SEI);
 	 	private  DefaultMutableTreeNode eseNoMatchNode =  	new EndTreeNode(SocionicsType.ESE);
@@ -226,7 +226,7 @@ public class BTree  extends JTree implements
 					   mv = data.getMV();
 					   quote = aDoc.getText(sectionOffset, quoteLength);
 					   
-					   //Отладка
+					   //РћС‚Р»Р°РґРєР°
 					   //if (!aspect.equals(AData.L)) continue;
 					   if (aspect.equals(AData.DOUBT)) continue;
 					   if (modifier!=null && modifier.equals(AData.JUMP))  continue;

@@ -21,7 +21,7 @@ import javax.swing.tree.*;
 
 import analyst.ADocument.ASection;
 /**
- * @author Виктор
+ * @author Р’РёРєС‚РѕСЂ
  *
  */
 public class ATree extends JTree implements  
@@ -37,265 +37,265 @@ public class ATree extends JTree implements
 	JumpCounter jc;
 
 	
-	DefaultMutableTreeNode aspectNode = new DefaultMutableTreeNode("Функции");
-		DefaultMutableTreeNode aspectLNode= new DefaultMutableTreeNode("БЛ");
-			DefaultMutableTreeNode aspectLSignNode= new DefaultMutableTreeNode("Знаки");
+	DefaultMutableTreeNode aspectNode = new DefaultMutableTreeNode("Р¤СѓРЅРєС†РёРё");
+		DefaultMutableTreeNode aspectLNode= new DefaultMutableTreeNode("Р‘Р›");
+			DefaultMutableTreeNode aspectLSignNode= new DefaultMutableTreeNode("Р—РЅР°РєРё");
 				DefaultMutableTreeNode aspectLSignPlusNode= new EndTreeNode(" + ");
 				DefaultMutableTreeNode aspectLSignMinusNode= new EndTreeNode(" - ");
-			DefaultMutableTreeNode aspectLDimensionNode= new DefaultMutableTreeNode("Размерности");
+			DefaultMutableTreeNode aspectLDimensionNode= new DefaultMutableTreeNode("Р Р°Р·РјРµСЂРЅРѕСЃС‚Рё");
 				DefaultMutableTreeNode aspectLDimensionD1Node= new EndTreeNode("Ex");
 				DefaultMutableTreeNode aspectLDimensionD2Node= new EndTreeNode("Nm");
 				DefaultMutableTreeNode aspectLDimensionD3Node= new EndTreeNode("St");
 				DefaultMutableTreeNode aspectLDimensionD4Node= new EndTreeNode("Tm");
-				DefaultMutableTreeNode aspectLDimensionOdnomernostNode= new EndTreeNode("Одномерность");
-				DefaultMutableTreeNode aspectLDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
-				DefaultMutableTreeNode aspectLDimensionMalomernostNode= new EndTreeNode("Маломерность");
-				DefaultMutableTreeNode aspectLDimensionMnogomernostNode= new EndTreeNode("Многомерность");
-			DefaultMutableTreeNode aspectLVMNode= new DefaultMutableTreeNode("Ментал/Витал");
-				DefaultMutableTreeNode aspectLVMMentalNode= new EndTreeNode("Ментал");
-				DefaultMutableTreeNode aspectLVMVitalNode= new EndTreeNode("Витал");
+				DefaultMutableTreeNode aspectLDimensionOdnomernostNode= new EndTreeNode("РћРґРЅРѕРјРµСЂРЅРѕСЃС‚СЊ");
+				DefaultMutableTreeNode aspectLDimensionIndividualnostNode= new EndTreeNode("РРЅРґРёРІРёРґСѓР°Р»СЊРЅРѕСЃС‚СЊ");
+				DefaultMutableTreeNode aspectLDimensionMalomernostNode= new EndTreeNode("РњР°Р»РѕРјРµСЂРЅРѕСЃС‚СЊ");
+				DefaultMutableTreeNode aspectLDimensionMnogomernostNode= new EndTreeNode("РњРЅРѕРіРѕРјРµСЂРЅРѕСЃС‚СЊ");
+			DefaultMutableTreeNode aspectLVMNode= new DefaultMutableTreeNode("РњРµРЅС‚Р°Р»/Р’РёС‚Р°Р»");
+				DefaultMutableTreeNode aspectLVMMentalNode= new EndTreeNode("РњРµРЅС‚Р°Р»");
+				DefaultMutableTreeNode aspectLVMVitalNode= new EndTreeNode("Р’РёС‚Р°Р»");
 
-				DefaultMutableTreeNode aspectPNode= new DefaultMutableTreeNode("ЧЛ");
-				DefaultMutableTreeNode aspectPSignNode= new DefaultMutableTreeNode("Знаки");
+				DefaultMutableTreeNode aspectPNode= new DefaultMutableTreeNode("Р§Р›");
+				DefaultMutableTreeNode aspectPSignNode= new DefaultMutableTreeNode("Р—РЅР°РєРё");
 					DefaultMutableTreeNode aspectPSignPlusNode= new EndTreeNode(" + ");
 					DefaultMutableTreeNode aspectPSignMinusNode= new EndTreeNode(" - ");
-				DefaultMutableTreeNode aspectPDimensionNode= new DefaultMutableTreeNode("Размерности");
+				DefaultMutableTreeNode aspectPDimensionNode= new DefaultMutableTreeNode("Р Р°Р·РјРµСЂРЅРѕСЃС‚Рё");
 					DefaultMutableTreeNode aspectPDimensionD1Node= new EndTreeNode("Ex");
 					DefaultMutableTreeNode aspectPDimensionD2Node= new EndTreeNode("Nm");
 					DefaultMutableTreeNode aspectPDimensionD3Node= new EndTreeNode("St");
 					DefaultMutableTreeNode aspectPDimensionD4Node= new EndTreeNode("Tm");
-					DefaultMutableTreeNode aspectPDimensionOdnomernostNode= new EndTreeNode("Одномерность");
-					DefaultMutableTreeNode aspectPDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
-					DefaultMutableTreeNode aspectPDimensionMalomernostNode= new EndTreeNode("Маломерность");
-					DefaultMutableTreeNode aspectPDimensionMnogomernostNode= new EndTreeNode("Многомерность");
-				DefaultMutableTreeNode aspectPVMNode= new DefaultMutableTreeNode("Ментал/Витал");
-					DefaultMutableTreeNode aspectPVMMentalNode= new EndTreeNode("Ментал");
-					DefaultMutableTreeNode aspectPVMVitalNode= new EndTreeNode("Витал");
+					DefaultMutableTreeNode aspectPDimensionOdnomernostNode= new EndTreeNode("РћРґРЅРѕРјРµСЂРЅРѕСЃС‚СЊ");
+					DefaultMutableTreeNode aspectPDimensionIndividualnostNode= new EndTreeNode("РРЅРґРёРІРёРґСѓР°Р»СЊРЅРѕСЃС‚СЊ");
+					DefaultMutableTreeNode aspectPDimensionMalomernostNode= new EndTreeNode("РњР°Р»РѕРјРµСЂРЅРѕСЃС‚СЊ");
+					DefaultMutableTreeNode aspectPDimensionMnogomernostNode= new EndTreeNode("РњРЅРѕРіРѕРјРµСЂРЅРѕСЃС‚СЊ");
+				DefaultMutableTreeNode aspectPVMNode= new DefaultMutableTreeNode("РњРµРЅС‚Р°Р»/Р’РёС‚Р°Р»");
+					DefaultMutableTreeNode aspectPVMMentalNode= new EndTreeNode("РњРµРЅС‚Р°Р»");
+					DefaultMutableTreeNode aspectPVMVitalNode= new EndTreeNode("Р’РёС‚Р°Р»");
 					
-					DefaultMutableTreeNode aspectRNode= new DefaultMutableTreeNode("БЭ");
-					DefaultMutableTreeNode aspectRSignNode= new DefaultMutableTreeNode("Знаки");
+					DefaultMutableTreeNode aspectRNode= new DefaultMutableTreeNode("Р‘Р­");
+					DefaultMutableTreeNode aspectRSignNode= new DefaultMutableTreeNode("Р—РЅР°РєРё");
 						DefaultMutableTreeNode aspectRSignPlusNode= new EndTreeNode(" + ");
 						DefaultMutableTreeNode aspectRSignMinusNode= new EndTreeNode(" - ");
-					DefaultMutableTreeNode aspectRDimensionNode= new DefaultMutableTreeNode("Размерности");
+					DefaultMutableTreeNode aspectRDimensionNode= new DefaultMutableTreeNode("Р Р°Р·РјРµСЂРЅРѕСЃС‚Рё");
 						DefaultMutableTreeNode aspectRDimensionD1Node= new EndTreeNode("Ex");
 						DefaultMutableTreeNode aspectRDimensionD2Node= new EndTreeNode("Nm");
 						DefaultMutableTreeNode aspectRDimensionD3Node= new EndTreeNode("St");
 						DefaultMutableTreeNode aspectRDimensionD4Node= new EndTreeNode("Tm");
-						DefaultMutableTreeNode aspectRDimensionOdnomernostNode= new EndTreeNode("Одномерность");
-						DefaultMutableTreeNode aspectRDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
-						DefaultMutableTreeNode aspectRDimensionMalomernostNode= new EndTreeNode("Маломерность");
-						DefaultMutableTreeNode aspectRDimensionMnogomernostNode= new EndTreeNode("Многомерность");
-					DefaultMutableTreeNode aspectRVMNode= new DefaultMutableTreeNode("Ментал/Витал");
-						DefaultMutableTreeNode aspectRVMMentalNode= new EndTreeNode("Ментал");
-						DefaultMutableTreeNode aspectRVMVitalNode= new EndTreeNode("Витал");				
+						DefaultMutableTreeNode aspectRDimensionOdnomernostNode= new EndTreeNode("РћРґРЅРѕРјРµСЂРЅРѕСЃС‚СЊ");
+						DefaultMutableTreeNode aspectRDimensionIndividualnostNode= new EndTreeNode("РРЅРґРёРІРёРґСѓР°Р»СЊРЅРѕСЃС‚СЊ");
+						DefaultMutableTreeNode aspectRDimensionMalomernostNode= new EndTreeNode("РњР°Р»РѕРјРµСЂРЅРѕСЃС‚СЊ");
+						DefaultMutableTreeNode aspectRDimensionMnogomernostNode= new EndTreeNode("РњРЅРѕРіРѕРјРµСЂРЅРѕСЃС‚СЊ");
+					DefaultMutableTreeNode aspectRVMNode= new DefaultMutableTreeNode("РњРµРЅС‚Р°Р»/Р’РёС‚Р°Р»");
+						DefaultMutableTreeNode aspectRVMMentalNode= new EndTreeNode("РњРµРЅС‚Р°Р»");
+						DefaultMutableTreeNode aspectRVMVitalNode= new EndTreeNode("Р’РёС‚Р°Р»");				
 
-						DefaultMutableTreeNode aspectENode= new DefaultMutableTreeNode("ЧЭ");
-						DefaultMutableTreeNode aspectESignNode= new DefaultMutableTreeNode("Знаки");
+						DefaultMutableTreeNode aspectENode= new DefaultMutableTreeNode("Р§Р­");
+						DefaultMutableTreeNode aspectESignNode= new DefaultMutableTreeNode("Р—РЅР°РєРё");
 							DefaultMutableTreeNode aspectESignPlusNode= new EndTreeNode(" + ");
 							DefaultMutableTreeNode aspectESignMinusNode= new EndTreeNode(" - ");
-						DefaultMutableTreeNode aspectEDimensionNode= new DefaultMutableTreeNode("Размерности");
+						DefaultMutableTreeNode aspectEDimensionNode= new DefaultMutableTreeNode("Р Р°Р·РјРµСЂРЅРѕСЃС‚Рё");
 							DefaultMutableTreeNode aspectEDimensionD1Node= new EndTreeNode("Ex");
 							DefaultMutableTreeNode aspectEDimensionD2Node= new EndTreeNode("Nm");
 							DefaultMutableTreeNode aspectEDimensionD3Node= new EndTreeNode("St");
 							DefaultMutableTreeNode aspectEDimensionD4Node= new EndTreeNode("Tm");
-							DefaultMutableTreeNode aspectEDimensionOdnomernostNode= new EndTreeNode("Одномерность");
-							DefaultMutableTreeNode aspectEDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
-							DefaultMutableTreeNode aspectEDimensionMalomernostNode= new EndTreeNode("Маломерность");
-							DefaultMutableTreeNode aspectEDimensionMnogomernostNode= new EndTreeNode("Многомерность");
-						DefaultMutableTreeNode aspectEVMNode= new DefaultMutableTreeNode("Ментал/Витал");
-							DefaultMutableTreeNode aspectEVMMentalNode= new EndTreeNode("Ментал");
-							DefaultMutableTreeNode aspectEVMVitalNode= new EndTreeNode("Витал");			
+							DefaultMutableTreeNode aspectEDimensionOdnomernostNode= new EndTreeNode("РћРґРЅРѕРјРµСЂРЅРѕСЃС‚СЊ");
+							DefaultMutableTreeNode aspectEDimensionIndividualnostNode= new EndTreeNode("РРЅРґРёРІРёРґСѓР°Р»СЊРЅРѕСЃС‚СЊ");
+							DefaultMutableTreeNode aspectEDimensionMalomernostNode= new EndTreeNode("РњР°Р»РѕРјРµСЂРЅРѕСЃС‚СЊ");
+							DefaultMutableTreeNode aspectEDimensionMnogomernostNode= new EndTreeNode("РњРЅРѕРіРѕРјРµСЂРЅРѕСЃС‚СЊ");
+						DefaultMutableTreeNode aspectEVMNode= new DefaultMutableTreeNode("РњРµРЅС‚Р°Р»/Р’РёС‚Р°Р»");
+							DefaultMutableTreeNode aspectEVMMentalNode= new EndTreeNode("РњРµРЅС‚Р°Р»");
+							DefaultMutableTreeNode aspectEVMVitalNode= new EndTreeNode("Р’РёС‚Р°Р»");			
 							
-							DefaultMutableTreeNode aspectSNode= new DefaultMutableTreeNode("БС");
-							DefaultMutableTreeNode aspectSSignNode= new DefaultMutableTreeNode("Знаки");
+							DefaultMutableTreeNode aspectSNode= new DefaultMutableTreeNode("Р‘РЎ");
+							DefaultMutableTreeNode aspectSSignNode= new DefaultMutableTreeNode("Р—РЅР°РєРё");
 								DefaultMutableTreeNode aspectSSignPlusNode= new EndTreeNode(" + ");
 								DefaultMutableTreeNode aspectSSignMinusNode= new EndTreeNode(" - ");
-							DefaultMutableTreeNode aspectSDimensionNode= new DefaultMutableTreeNode("Размерности");
+							DefaultMutableTreeNode aspectSDimensionNode= new DefaultMutableTreeNode("Р Р°Р·РјРµСЂРЅРѕСЃС‚Рё");
 								DefaultMutableTreeNode aspectSDimensionD1Node= new EndTreeNode("Ex");
 								DefaultMutableTreeNode aspectSDimensionD2Node= new EndTreeNode("Nm");
 								DefaultMutableTreeNode aspectSDimensionD3Node= new EndTreeNode("St");
 								DefaultMutableTreeNode aspectSDimensionD4Node= new EndTreeNode("Tm");
-								DefaultMutableTreeNode aspectSDimensionOdnomernostNode= new EndTreeNode("Одномерность");
-								DefaultMutableTreeNode aspectSDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
-								DefaultMutableTreeNode aspectSDimensionMalomernostNode= new EndTreeNode("Маломерность");
-								DefaultMutableTreeNode aspectSDimensionMnogomernostNode= new EndTreeNode("Многомерность");
-							DefaultMutableTreeNode aspectSVMNode= new DefaultMutableTreeNode("Ментал/Витал");
-								DefaultMutableTreeNode aspectSVMMentalNode= new EndTreeNode("Ментал");
-								DefaultMutableTreeNode aspectSVMVitalNode= new EndTreeNode("Витал");							
+								DefaultMutableTreeNode aspectSDimensionOdnomernostNode= new EndTreeNode("РћРґРЅРѕРјРµСЂРЅРѕСЃС‚СЊ");
+								DefaultMutableTreeNode aspectSDimensionIndividualnostNode= new EndTreeNode("РРЅРґРёРІРёРґСѓР°Р»СЊРЅРѕСЃС‚СЊ");
+								DefaultMutableTreeNode aspectSDimensionMalomernostNode= new EndTreeNode("РњР°Р»РѕРјРµСЂРЅРѕСЃС‚СЊ");
+								DefaultMutableTreeNode aspectSDimensionMnogomernostNode= new EndTreeNode("РњРЅРѕРіРѕРјРµСЂРЅРѕСЃС‚СЊ");
+							DefaultMutableTreeNode aspectSVMNode= new DefaultMutableTreeNode("РњРµРЅС‚Р°Р»/Р’РёС‚Р°Р»");
+								DefaultMutableTreeNode aspectSVMMentalNode= new EndTreeNode("РњРµРЅС‚Р°Р»");
+								DefaultMutableTreeNode aspectSVMVitalNode= new EndTreeNode("Р’РёС‚Р°Р»");							
 
-								DefaultMutableTreeNode aspectFNode= new DefaultMutableTreeNode("ЧС");
-								DefaultMutableTreeNode aspectFSignNode= new DefaultMutableTreeNode("Знаки");
+								DefaultMutableTreeNode aspectFNode= new DefaultMutableTreeNode("Р§РЎ");
+								DefaultMutableTreeNode aspectFSignNode= new DefaultMutableTreeNode("Р—РЅР°РєРё");
 									DefaultMutableTreeNode aspectFSignPlusNode= new EndTreeNode(" + ");
 									DefaultMutableTreeNode aspectFSignMinusNode= new EndTreeNode(" - ");
-								DefaultMutableTreeNode aspectFDimensionNode= new DefaultMutableTreeNode("Размерности");
+								DefaultMutableTreeNode aspectFDimensionNode= new DefaultMutableTreeNode("Р Р°Р·РјРµСЂРЅРѕСЃС‚Рё");
 									DefaultMutableTreeNode aspectFDimensionD1Node= new EndTreeNode("Ex");
 									DefaultMutableTreeNode aspectFDimensionD2Node= new EndTreeNode("Nm");
 									DefaultMutableTreeNode aspectFDimensionD3Node= new EndTreeNode("St");
 									DefaultMutableTreeNode aspectFDimensionD4Node= new EndTreeNode("Tm");
-									DefaultMutableTreeNode aspectFDimensionOdnomernostNode= new EndTreeNode("Одномерность");
-									DefaultMutableTreeNode aspectFDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
-									DefaultMutableTreeNode aspectFDimensionMalomernostNode= new EndTreeNode("Маломерность");
-									DefaultMutableTreeNode aspectFDimensionMnogomernostNode= new EndTreeNode("Многомерность");
-								DefaultMutableTreeNode aspectFVMNode= new DefaultMutableTreeNode("Ментал/Витал");
-									DefaultMutableTreeNode aspectFVMMentalNode= new EndTreeNode("Ментал");
-									DefaultMutableTreeNode aspectFVMVitalNode= new EndTreeNode("Витал");
+									DefaultMutableTreeNode aspectFDimensionOdnomernostNode= new EndTreeNode("РћРґРЅРѕРјРµСЂРЅРѕСЃС‚СЊ");
+									DefaultMutableTreeNode aspectFDimensionIndividualnostNode= new EndTreeNode("РРЅРґРёРІРёРґСѓР°Р»СЊРЅРѕСЃС‚СЊ");
+									DefaultMutableTreeNode aspectFDimensionMalomernostNode= new EndTreeNode("РњР°Р»РѕРјРµСЂРЅРѕСЃС‚СЊ");
+									DefaultMutableTreeNode aspectFDimensionMnogomernostNode= new EndTreeNode("РњРЅРѕРіРѕРјРµСЂРЅРѕСЃС‚СЊ");
+								DefaultMutableTreeNode aspectFVMNode= new DefaultMutableTreeNode("РњРµРЅС‚Р°Р»/Р’РёС‚Р°Р»");
+									DefaultMutableTreeNode aspectFVMMentalNode= new EndTreeNode("РњРµРЅС‚Р°Р»");
+									DefaultMutableTreeNode aspectFVMVitalNode= new EndTreeNode("Р’РёС‚Р°Р»");
 					
-									DefaultMutableTreeNode aspectTNode= new DefaultMutableTreeNode("БИ");
-									DefaultMutableTreeNode aspectTSignNode= new DefaultMutableTreeNode("Знаки");
+									DefaultMutableTreeNode aspectTNode= new DefaultMutableTreeNode("Р‘Р");
+									DefaultMutableTreeNode aspectTSignNode= new DefaultMutableTreeNode("Р—РЅР°РєРё");
 										DefaultMutableTreeNode aspectTSignPlusNode= new EndTreeNode(" + ");
 										DefaultMutableTreeNode aspectTSignMinusNode= new EndTreeNode(" - ");
-									DefaultMutableTreeNode aspectTDimensionNode= new DefaultMutableTreeNode("Размерности");
+									DefaultMutableTreeNode aspectTDimensionNode= new DefaultMutableTreeNode("Р Р°Р·РјРµСЂРЅРѕСЃС‚Рё");
 										DefaultMutableTreeNode aspectTDimensionD1Node= new EndTreeNode("Ex");
 										DefaultMutableTreeNode aspectTDimensionD2Node= new EndTreeNode("Nm");
 										DefaultMutableTreeNode aspectTDimensionD3Node= new EndTreeNode("St");
 										DefaultMutableTreeNode aspectTDimensionD4Node= new EndTreeNode("Tm");
-										DefaultMutableTreeNode aspectTDimensionOdnomernostNode= new EndTreeNode("Одномерность");
-										DefaultMutableTreeNode aspectTDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
-										DefaultMutableTreeNode aspectTDimensionMalomernostNode= new EndTreeNode("Маломерность");
-										DefaultMutableTreeNode aspectTDimensionMnogomernostNode= new EndTreeNode("Многомерность");
-									DefaultMutableTreeNode aspectTVMNode= new DefaultMutableTreeNode("Ментал/Витал");
-										DefaultMutableTreeNode aspectTVMMentalNode= new EndTreeNode("Ментал");
-										DefaultMutableTreeNode aspectTVMVitalNode= new EndTreeNode("Витал");									
+										DefaultMutableTreeNode aspectTDimensionOdnomernostNode= new EndTreeNode("РћРґРЅРѕРјРµСЂРЅРѕСЃС‚СЊ");
+										DefaultMutableTreeNode aspectTDimensionIndividualnostNode= new EndTreeNode("РРЅРґРёРІРёРґСѓР°Р»СЊРЅРѕСЃС‚СЊ");
+										DefaultMutableTreeNode aspectTDimensionMalomernostNode= new EndTreeNode("РњР°Р»РѕРјРµСЂРЅРѕСЃС‚СЊ");
+										DefaultMutableTreeNode aspectTDimensionMnogomernostNode= new EndTreeNode("РњРЅРѕРіРѕРјРµСЂРЅРѕСЃС‚СЊ");
+									DefaultMutableTreeNode aspectTVMNode= new DefaultMutableTreeNode("РњРµРЅС‚Р°Р»/Р’РёС‚Р°Р»");
+										DefaultMutableTreeNode aspectTVMMentalNode= new EndTreeNode("РњРµРЅС‚Р°Р»");
+										DefaultMutableTreeNode aspectTVMVitalNode= new EndTreeNode("Р’РёС‚Р°Р»");									
 				
-										DefaultMutableTreeNode aspectINode= new DefaultMutableTreeNode("ЧИ");
-										DefaultMutableTreeNode aspectISignNode= new DefaultMutableTreeNode("Знаки");
+										DefaultMutableTreeNode aspectINode= new DefaultMutableTreeNode("Р§Р");
+										DefaultMutableTreeNode aspectISignNode= new DefaultMutableTreeNode("Р—РЅР°РєРё");
 											DefaultMutableTreeNode aspectISignPlusNode= new EndTreeNode(" + ");
 											DefaultMutableTreeNode aspectISignMinusNode= new EndTreeNode(" - ");
-										DefaultMutableTreeNode aspectIDimensionNode= new DefaultMutableTreeNode("Размерности");
+										DefaultMutableTreeNode aspectIDimensionNode= new DefaultMutableTreeNode("Р Р°Р·РјРµСЂРЅРѕСЃС‚Рё");
 											DefaultMutableTreeNode aspectIDimensionD1Node= new EndTreeNode("Ex");
 											DefaultMutableTreeNode aspectIDimensionD2Node= new EndTreeNode("Nm");
 											DefaultMutableTreeNode aspectIDimensionD3Node= new EndTreeNode("St");
 											DefaultMutableTreeNode aspectIDimensionD4Node= new EndTreeNode("Tm");
-											DefaultMutableTreeNode aspectIDimensionOdnomernostNode= new EndTreeNode("Одномерность");
-											DefaultMutableTreeNode aspectIDimensionIndividualnostNode= new EndTreeNode("Индивидуальность");
-											DefaultMutableTreeNode aspectIDimensionMalomernostNode= new EndTreeNode("Маломерность");
-											DefaultMutableTreeNode aspectIDimensionMnogomernostNode= new EndTreeNode("Многомерность");
-										DefaultMutableTreeNode aspectIVMNode= new DefaultMutableTreeNode("Ментал/Витал");
-											DefaultMutableTreeNode aspectIVMMentalNode= new EndTreeNode("Ментал");
-											DefaultMutableTreeNode aspectIVMVitalNode= new EndTreeNode("Витал");										
+											DefaultMutableTreeNode aspectIDimensionOdnomernostNode= new EndTreeNode("РћРґРЅРѕРјРµСЂРЅРѕСЃС‚СЊ");
+											DefaultMutableTreeNode aspectIDimensionIndividualnostNode= new EndTreeNode("РРЅРґРёРІРёРґСѓР°Р»СЊРЅРѕСЃС‚СЊ");
+											DefaultMutableTreeNode aspectIDimensionMalomernostNode= new EndTreeNode("РњР°Р»РѕРјРµСЂРЅРѕСЃС‚СЊ");
+											DefaultMutableTreeNode aspectIDimensionMnogomernostNode= new EndTreeNode("РњРЅРѕРіРѕРјРµСЂРЅРѕСЃС‚СЊ");
+										DefaultMutableTreeNode aspectIVMNode= new DefaultMutableTreeNode("РњРµРЅС‚Р°Р»/Р’РёС‚Р°Р»");
+											DefaultMutableTreeNode aspectIVMMentalNode= new EndTreeNode("РњРµРЅС‚Р°Р»");
+											DefaultMutableTreeNode aspectIVMVitalNode= new EndTreeNode("Р’РёС‚Р°Р»");										
 										
-	DefaultMutableTreeNode dimensionNode = new DefaultMutableTreeNode("Размерности");
-		DefaultMutableTreeNode dimensionD1Node = new DefaultMutableTreeNode("Опыт");
-			DefaultMutableTreeNode dimensionD1LNode = new EndTreeNode("БЛ");
-			DefaultMutableTreeNode dimensionD1PNode = new EndTreeNode("ЧЛ");
-			DefaultMutableTreeNode dimensionD1RNode = new EndTreeNode("БЭ");
-			DefaultMutableTreeNode dimensionD1ENode = new EndTreeNode("ЧЭ");
-			DefaultMutableTreeNode dimensionD1SNode = new EndTreeNode("БС");
-			DefaultMutableTreeNode dimensionD1FNode = new EndTreeNode("ЧС");
-			DefaultMutableTreeNode dimensionD1TNode = new EndTreeNode("БИ");
-			DefaultMutableTreeNode dimensionD1INode = new EndTreeNode("ЧИ");
-		DefaultMutableTreeNode dimensionD2Node = new DefaultMutableTreeNode("Норма");
-			DefaultMutableTreeNode dimensionD2LNode = new EndTreeNode("БЛ");
-			DefaultMutableTreeNode dimensionD2PNode = new EndTreeNode("ЧЛ");
-			DefaultMutableTreeNode dimensionD2RNode = new EndTreeNode("БЭ");
-			DefaultMutableTreeNode dimensionD2ENode = new EndTreeNode("ЧЭ");
-			DefaultMutableTreeNode dimensionD2SNode = new EndTreeNode("БС");
-			DefaultMutableTreeNode dimensionD2FNode = new EndTreeNode("ЧС");
-			DefaultMutableTreeNode dimensionD2TNode = new EndTreeNode("БИ");
-			DefaultMutableTreeNode dimensionD2INode = new EndTreeNode("ЧИ");
+	DefaultMutableTreeNode dimensionNode = new DefaultMutableTreeNode("Р Р°Р·РјРµСЂРЅРѕСЃС‚Рё");
+		DefaultMutableTreeNode dimensionD1Node = new DefaultMutableTreeNode("РћРїС‹С‚");
+			DefaultMutableTreeNode dimensionD1LNode = new EndTreeNode("Р‘Р›");
+			DefaultMutableTreeNode dimensionD1PNode = new EndTreeNode("Р§Р›");
+			DefaultMutableTreeNode dimensionD1RNode = new EndTreeNode("Р‘Р­");
+			DefaultMutableTreeNode dimensionD1ENode = new EndTreeNode("Р§Р­");
+			DefaultMutableTreeNode dimensionD1SNode = new EndTreeNode("Р‘РЎ");
+			DefaultMutableTreeNode dimensionD1FNode = new EndTreeNode("Р§РЎ");
+			DefaultMutableTreeNode dimensionD1TNode = new EndTreeNode("Р‘Р");
+			DefaultMutableTreeNode dimensionD1INode = new EndTreeNode("Р§Р");
+		DefaultMutableTreeNode dimensionD2Node = new DefaultMutableTreeNode("РќРѕСЂРјР°");
+			DefaultMutableTreeNode dimensionD2LNode = new EndTreeNode("Р‘Р›");
+			DefaultMutableTreeNode dimensionD2PNode = new EndTreeNode("Р§Р›");
+			DefaultMutableTreeNode dimensionD2RNode = new EndTreeNode("Р‘Р­");
+			DefaultMutableTreeNode dimensionD2ENode = new EndTreeNode("Р§Р­");
+			DefaultMutableTreeNode dimensionD2SNode = new EndTreeNode("Р‘РЎ");
+			DefaultMutableTreeNode dimensionD2FNode = new EndTreeNode("Р§РЎ");
+			DefaultMutableTreeNode dimensionD2TNode = new EndTreeNode("Р‘Р");
+			DefaultMutableTreeNode dimensionD2INode = new EndTreeNode("Р§Р");
 		
-		DefaultMutableTreeNode dimensionD3Node = new DefaultMutableTreeNode("Ситуация");
-			DefaultMutableTreeNode dimensionD3LNode = new EndTreeNode("БЛ");
-			DefaultMutableTreeNode dimensionD3PNode = new EndTreeNode("ЧЛ");
-			DefaultMutableTreeNode dimensionD3RNode = new EndTreeNode("БЭ");
-			DefaultMutableTreeNode dimensionD3ENode = new EndTreeNode("ЧЭ");
-			DefaultMutableTreeNode dimensionD3SNode = new EndTreeNode("БС");
-			DefaultMutableTreeNode dimensionD3FNode = new EndTreeNode("ЧС");
-			DefaultMutableTreeNode dimensionD3TNode = new EndTreeNode("БИ");
-			DefaultMutableTreeNode dimensionD3INode = new EndTreeNode("ЧИ");
+		DefaultMutableTreeNode dimensionD3Node = new DefaultMutableTreeNode("РЎРёС‚СѓР°С†РёСЏ");
+			DefaultMutableTreeNode dimensionD3LNode = new EndTreeNode("Р‘Р›");
+			DefaultMutableTreeNode dimensionD3PNode = new EndTreeNode("Р§Р›");
+			DefaultMutableTreeNode dimensionD3RNode = new EndTreeNode("Р‘Р­");
+			DefaultMutableTreeNode dimensionD3ENode = new EndTreeNode("Р§Р­");
+			DefaultMutableTreeNode dimensionD3SNode = new EndTreeNode("Р‘РЎ");
+			DefaultMutableTreeNode dimensionD3FNode = new EndTreeNode("Р§РЎ");
+			DefaultMutableTreeNode dimensionD3TNode = new EndTreeNode("Р‘Р");
+			DefaultMutableTreeNode dimensionD3INode = new EndTreeNode("Р§Р");
 			
-		DefaultMutableTreeNode dimensionD4Node = new DefaultMutableTreeNode("Время");
-			DefaultMutableTreeNode dimensionD4LNode = new EndTreeNode("БЛ");
-			DefaultMutableTreeNode dimensionD4PNode = new EndTreeNode("ЧЛ");
-			DefaultMutableTreeNode dimensionD4RNode = new EndTreeNode("БЭ");
-			DefaultMutableTreeNode dimensionD4ENode = new EndTreeNode("ЧЭ");
-			DefaultMutableTreeNode dimensionD4SNode = new EndTreeNode("БС");
-			DefaultMutableTreeNode dimensionD4FNode = new EndTreeNode("ЧС");
-			DefaultMutableTreeNode dimensionD4TNode = new EndTreeNode("БИ");
-			DefaultMutableTreeNode dimensionD4INode = new EndTreeNode("ЧИ");
+		DefaultMutableTreeNode dimensionD4Node = new DefaultMutableTreeNode("Р’СЂРµРјСЏ");
+			DefaultMutableTreeNode dimensionD4LNode = new EndTreeNode("Р‘Р›");
+			DefaultMutableTreeNode dimensionD4PNode = new EndTreeNode("Р§Р›");
+			DefaultMutableTreeNode dimensionD4RNode = new EndTreeNode("Р‘Р­");
+			DefaultMutableTreeNode dimensionD4ENode = new EndTreeNode("Р§Р­");
+			DefaultMutableTreeNode dimensionD4SNode = new EndTreeNode("Р‘РЎ");
+			DefaultMutableTreeNode dimensionD4FNode = new EndTreeNode("Р§РЎ");
+			DefaultMutableTreeNode dimensionD4TNode = new EndTreeNode("Р‘Р");
+			DefaultMutableTreeNode dimensionD4INode = new EndTreeNode("Р§Р");
 			
-DefaultMutableTreeNode dimensionMaloNode = new DefaultMutableTreeNode("Маломерность");
-			DefaultMutableTreeNode dimensionMaloLNode = new EndTreeNode("БЛ");
-			DefaultMutableTreeNode dimensionMaloPNode = new EndTreeNode("ЧЛ");
-			DefaultMutableTreeNode dimensionMaloRNode = new EndTreeNode("БЭ");
-			DefaultMutableTreeNode dimensionMaloENode = new EndTreeNode("ЧЭ");
-			DefaultMutableTreeNode dimensionMaloSNode = new EndTreeNode("БС");
-			DefaultMutableTreeNode dimensionMaloFNode = new EndTreeNode("ЧС");
-			DefaultMutableTreeNode dimensionMaloTNode = new EndTreeNode("БИ");
-			DefaultMutableTreeNode dimensionMaloINode = new EndTreeNode("ЧИ");
+DefaultMutableTreeNode dimensionMaloNode = new DefaultMutableTreeNode("РњР°Р»РѕРјРµСЂРЅРѕСЃС‚СЊ");
+			DefaultMutableTreeNode dimensionMaloLNode = new EndTreeNode("Р‘Р›");
+			DefaultMutableTreeNode dimensionMaloPNode = new EndTreeNode("Р§Р›");
+			DefaultMutableTreeNode dimensionMaloRNode = new EndTreeNode("Р‘Р­");
+			DefaultMutableTreeNode dimensionMaloENode = new EndTreeNode("Р§Р­");
+			DefaultMutableTreeNode dimensionMaloSNode = new EndTreeNode("Р‘РЎ");
+			DefaultMutableTreeNode dimensionMaloFNode = new EndTreeNode("Р§РЎ");
+			DefaultMutableTreeNode dimensionMaloTNode = new EndTreeNode("Р‘Р");
+			DefaultMutableTreeNode dimensionMaloINode = new EndTreeNode("Р§Р");
 			
-DefaultMutableTreeNode dimensionMnogoNode = new DefaultMutableTreeNode("Многомерность");
-			DefaultMutableTreeNode dimensionMnogoLNode = new EndTreeNode("БЛ");
-			DefaultMutableTreeNode dimensionMnogoPNode = new EndTreeNode("ЧЛ");
-			DefaultMutableTreeNode dimensionMnogoRNode = new EndTreeNode("БЭ");
-			DefaultMutableTreeNode dimensionMnogoENode = new EndTreeNode("ЧЭ");
-			DefaultMutableTreeNode dimensionMnogoSNode = new EndTreeNode("БС");
-			DefaultMutableTreeNode dimensionMnogoFNode = new EndTreeNode("ЧС");
-			DefaultMutableTreeNode dimensionMnogoTNode = new EndTreeNode("БИ");
-			DefaultMutableTreeNode dimensionMnogoINode = new EndTreeNode("ЧИ");			
+DefaultMutableTreeNode dimensionMnogoNode = new DefaultMutableTreeNode("РњРЅРѕРіРѕРјРµСЂРЅРѕСЃС‚СЊ");
+			DefaultMutableTreeNode dimensionMnogoLNode = new EndTreeNode("Р‘Р›");
+			DefaultMutableTreeNode dimensionMnogoPNode = new EndTreeNode("Р§Р›");
+			DefaultMutableTreeNode dimensionMnogoRNode = new EndTreeNode("Р‘Р­");
+			DefaultMutableTreeNode dimensionMnogoENode = new EndTreeNode("Р§Р­");
+			DefaultMutableTreeNode dimensionMnogoSNode = new EndTreeNode("Р‘РЎ");
+			DefaultMutableTreeNode dimensionMnogoFNode = new EndTreeNode("Р§РЎ");
+			DefaultMutableTreeNode dimensionMnogoTNode = new EndTreeNode("Р‘Р");
+			DefaultMutableTreeNode dimensionMnogoINode = new EndTreeNode("Р§Р");			
 
-DefaultMutableTreeNode dimensionOdnoNode = new DefaultMutableTreeNode("Одномерность");
-			DefaultMutableTreeNode dimensionOdnoLNode = new EndTreeNode("БЛ");
-			DefaultMutableTreeNode dimensionOdnoPNode = new EndTreeNode("ЧЛ");
-			DefaultMutableTreeNode dimensionOdnoRNode = new EndTreeNode("БЭ");
-			DefaultMutableTreeNode dimensionOdnoENode = new EndTreeNode("ЧЭ");
-			DefaultMutableTreeNode dimensionOdnoSNode = new EndTreeNode("БС");
-			DefaultMutableTreeNode dimensionOdnoFNode = new EndTreeNode("ЧС");
-			DefaultMutableTreeNode dimensionOdnoTNode = new EndTreeNode("БИ");
-			DefaultMutableTreeNode dimensionOdnoINode = new EndTreeNode("ЧИ");			
+DefaultMutableTreeNode dimensionOdnoNode = new DefaultMutableTreeNode("РћРґРЅРѕРјРµСЂРЅРѕСЃС‚СЊ");
+			DefaultMutableTreeNode dimensionOdnoLNode = new EndTreeNode("Р‘Р›");
+			DefaultMutableTreeNode dimensionOdnoPNode = new EndTreeNode("Р§Р›");
+			DefaultMutableTreeNode dimensionOdnoRNode = new EndTreeNode("Р‘Р­");
+			DefaultMutableTreeNode dimensionOdnoENode = new EndTreeNode("Р§Р­");
+			DefaultMutableTreeNode dimensionOdnoSNode = new EndTreeNode("Р‘РЎ");
+			DefaultMutableTreeNode dimensionOdnoFNode = new EndTreeNode("Р§РЎ");
+			DefaultMutableTreeNode dimensionOdnoTNode = new EndTreeNode("Р‘Р");
+			DefaultMutableTreeNode dimensionOdnoINode = new EndTreeNode("Р§Р");			
 
-DefaultMutableTreeNode dimensionIndiNode = new DefaultMutableTreeNode("Индивидуальность");
-			DefaultMutableTreeNode dimensionIndiLNode = new EndTreeNode("БЛ");
-			DefaultMutableTreeNode dimensionIndiPNode = new EndTreeNode("ЧЛ");
-			DefaultMutableTreeNode dimensionIndiRNode = new EndTreeNode("БЭ");
-			DefaultMutableTreeNode dimensionIndiENode = new EndTreeNode("ЧЭ");
-			DefaultMutableTreeNode dimensionIndiSNode = new EndTreeNode("БС");
-			DefaultMutableTreeNode dimensionIndiFNode = new EndTreeNode("ЧС");
-			DefaultMutableTreeNode dimensionIndiTNode = new EndTreeNode("БИ");
-			DefaultMutableTreeNode dimensionIndiINode = new EndTreeNode("ЧИ");			
+DefaultMutableTreeNode dimensionIndiNode = new DefaultMutableTreeNode("РРЅРґРёРІРёРґСѓР°Р»СЊРЅРѕСЃС‚СЊ");
+			DefaultMutableTreeNode dimensionIndiLNode = new EndTreeNode("Р‘Р›");
+			DefaultMutableTreeNode dimensionIndiPNode = new EndTreeNode("Р§Р›");
+			DefaultMutableTreeNode dimensionIndiRNode = new EndTreeNode("Р‘Р­");
+			DefaultMutableTreeNode dimensionIndiENode = new EndTreeNode("Р§Р­");
+			DefaultMutableTreeNode dimensionIndiSNode = new EndTreeNode("Р‘РЎ");
+			DefaultMutableTreeNode dimensionIndiFNode = new EndTreeNode("Р§РЎ");
+			DefaultMutableTreeNode dimensionIndiTNode = new EndTreeNode("Р‘Р");
+			DefaultMutableTreeNode dimensionIndiINode = new EndTreeNode("Р§Р");			
 
-	DefaultMutableTreeNode blockNode = new DefaultMutableTreeNode("Блоки");
-		DefaultMutableTreeNode blockSuperegoNode = new EndTreeNode("Супер-ЭГО");
-		DefaultMutableTreeNode blockSuperidNode = new EndTreeNode("Супер-ИД");		
-		DefaultMutableTreeNode blockLINode = new EndTreeNode("БЛ-ЧИ");
-		DefaultMutableTreeNode blockLFNode = new EndTreeNode("БЛ-ЧС");
-		DefaultMutableTreeNode blockPTNode = new EndTreeNode("ЧЛ-БИ");
-		DefaultMutableTreeNode blockPSNode = new EndTreeNode("ЧЛ-БС");
-		DefaultMutableTreeNode blockRINode = new EndTreeNode("БЭ-ЧИ");
-		DefaultMutableTreeNode blockRFNode = new EndTreeNode("БЭ-ЧС");
-		DefaultMutableTreeNode blockETNode = new EndTreeNode("ЧЭ-БИ");
-		DefaultMutableTreeNode blockESNode = new EndTreeNode("ЧЭ-БС");
-		DefaultMutableTreeNode blockSPNode = new EndTreeNode("БС-ЧЛ");
-		DefaultMutableTreeNode blockSENode = new EndTreeNode("БС-ЧЭ");
-		DefaultMutableTreeNode blockFLNode = new EndTreeNode("ЧС-БЛ");
-		DefaultMutableTreeNode blockFRNode = new EndTreeNode("ЧС-БЭ");
-		DefaultMutableTreeNode blockTPNode = new EndTreeNode("БИ-ЧЛ");
-		DefaultMutableTreeNode blockTENode = new EndTreeNode("БИ-ЧЭ");
-		DefaultMutableTreeNode blockILNode = new EndTreeNode("ЧИ-БЛ");
-		DefaultMutableTreeNode blockIRNode = new EndTreeNode("ЧИ-БЭ");
+	DefaultMutableTreeNode blockNode = new DefaultMutableTreeNode("Р‘Р»РѕРєРё");
+		DefaultMutableTreeNode blockSuperegoNode = new EndTreeNode("РЎСѓРїРµСЂ-Р­Р“Рћ");
+		DefaultMutableTreeNode blockSuperidNode = new EndTreeNode("РЎСѓРїРµСЂ-РР”");		
+		DefaultMutableTreeNode blockLINode = new EndTreeNode("Р‘Р›-Р§Р");
+		DefaultMutableTreeNode blockLFNode = new EndTreeNode("Р‘Р›-Р§РЎ");
+		DefaultMutableTreeNode blockPTNode = new EndTreeNode("Р§Р›-Р‘Р");
+		DefaultMutableTreeNode blockPSNode = new EndTreeNode("Р§Р›-Р‘РЎ");
+		DefaultMutableTreeNode blockRINode = new EndTreeNode("Р‘Р­-Р§Р");
+		DefaultMutableTreeNode blockRFNode = new EndTreeNode("Р‘Р­-Р§РЎ");
+		DefaultMutableTreeNode blockETNode = new EndTreeNode("Р§Р­-Р‘Р");
+		DefaultMutableTreeNode blockESNode = new EndTreeNode("Р§Р­-Р‘РЎ");
+		DefaultMutableTreeNode blockSPNode = new EndTreeNode("Р‘РЎ-Р§Р›");
+		DefaultMutableTreeNode blockSENode = new EndTreeNode("Р‘РЎ-Р§Р­");
+		DefaultMutableTreeNode blockFLNode = new EndTreeNode("Р§РЎ-Р‘Р›");
+		DefaultMutableTreeNode blockFRNode = new EndTreeNode("Р§РЎ-Р‘Р­");
+		DefaultMutableTreeNode blockTPNode = new EndTreeNode("Р‘Р-Р§Р›");
+		DefaultMutableTreeNode blockTENode = new EndTreeNode("Р‘Р-Р§Р­");
+		DefaultMutableTreeNode blockILNode = new EndTreeNode("Р§Р-Р‘Р›");
+		DefaultMutableTreeNode blockIRNode = new EndTreeNode("Р§Р-Р‘Р­");
 		
-	DefaultMutableTreeNode signNode = new DefaultMutableTreeNode("Знаки");
+	DefaultMutableTreeNode signNode = new DefaultMutableTreeNode("Р—РЅР°РєРё");
 		DefaultMutableTreeNode signPlusNode = new DefaultMutableTreeNode(" + ");
-			DefaultMutableTreeNode signPlusLNode = new EndTreeNode("БЛ");
-			DefaultMutableTreeNode signPlusPNode = new EndTreeNode("ЧЛ");
-			DefaultMutableTreeNode signPlusRNode = new EndTreeNode("БЭ");
-			DefaultMutableTreeNode signPlusENode = new EndTreeNode("ЧЭ");
-			DefaultMutableTreeNode signPlusSNode = new EndTreeNode("БС");
-			DefaultMutableTreeNode signPlusFNode = new EndTreeNode("ЧС");
-			DefaultMutableTreeNode signPlusTNode = new EndTreeNode("БИ");
-			DefaultMutableTreeNode signPlusINode = new EndTreeNode("ЧИ");
+			DefaultMutableTreeNode signPlusLNode = new EndTreeNode("Р‘Р›");
+			DefaultMutableTreeNode signPlusPNode = new EndTreeNode("Р§Р›");
+			DefaultMutableTreeNode signPlusRNode = new EndTreeNode("Р‘Р­");
+			DefaultMutableTreeNode signPlusENode = new EndTreeNode("Р§Р­");
+			DefaultMutableTreeNode signPlusSNode = new EndTreeNode("Р‘РЎ");
+			DefaultMutableTreeNode signPlusFNode = new EndTreeNode("Р§РЎ");
+			DefaultMutableTreeNode signPlusTNode = new EndTreeNode("Р‘Р");
+			DefaultMutableTreeNode signPlusINode = new EndTreeNode("Р§Р");
 		DefaultMutableTreeNode signMinusNode = new DefaultMutableTreeNode(" - ");
-			DefaultMutableTreeNode signMinusLNode = new EndTreeNode("БЛ");
-			DefaultMutableTreeNode signMinusPNode = new EndTreeNode("ЧЛ");
-			DefaultMutableTreeNode signMinusRNode = new EndTreeNode("БЭ");
-			DefaultMutableTreeNode signMinusENode = new EndTreeNode("ЧЭ");
-			DefaultMutableTreeNode signMinusSNode = new EndTreeNode("БС");
-			DefaultMutableTreeNode signMinusFNode = new EndTreeNode("ЧС");
-			DefaultMutableTreeNode signMinusTNode = new EndTreeNode("БИ");
-			DefaultMutableTreeNode signMinusINode = new EndTreeNode("ЧИ");
+			DefaultMutableTreeNode signMinusLNode = new EndTreeNode("Р‘Р›");
+			DefaultMutableTreeNode signMinusPNode = new EndTreeNode("Р§Р›");
+			DefaultMutableTreeNode signMinusRNode = new EndTreeNode("Р‘Р­");
+			DefaultMutableTreeNode signMinusENode = new EndTreeNode("Р§Р­");
+			DefaultMutableTreeNode signMinusSNode = new EndTreeNode("Р‘РЎ");
+			DefaultMutableTreeNode signMinusFNode = new EndTreeNode("Р§РЎ");
+			DefaultMutableTreeNode signMinusTNode = new EndTreeNode("Р‘Р");
+			DefaultMutableTreeNode signMinusINode = new EndTreeNode("Р§Р");
 
-	DefaultMutableTreeNode doubtNode = new EndTreeNode("Непонятные места");
-	DefaultMutableTreeNode jumpNode = new EndTreeNode("Переводы");
+	DefaultMutableTreeNode doubtNode = new EndTreeNode("РќРµРїРѕРЅСЏС‚РЅС‹Рµ РјРµСЃС‚Р°");
+	DefaultMutableTreeNode jumpNode = new EndTreeNode("РџРµСЂРµРІРѕРґС‹");
 		
 	
 
@@ -897,7 +897,7 @@ public EndTreeNode(Object o){
 				  
 				    // jumps
 				  if (modifier!=null && modifier.equals(AData.JUMP )){ 
-					  jumpNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset , " Перевод " +aspect+ " -> "+secondAspect), false));
+					  jumpNode.add(  new DefaultMutableTreeNode(new EndNodeObject(sectionOffset , " РџРµСЂРµРІРѕРґ " +aspect+ " -> "+secondAspect), false));
 					  jc.addJump(secondAspect, aspect);
 				  }  
 			}
@@ -1417,25 +1417,25 @@ if (!aDoc.getADataMap().isEmpty()){
 
 report = 
 		"<br/>" +
-		"<h2> Выявленные параметры функций ИМ: </h2>" +
+		"<h2> Р’С‹СЏРІР»РµРЅРЅС‹Рµ РїР°СЂР°РјРµС‚СЂС‹ С„СѓРЅРєС†РёР№ РРњ: </h2>" +
 //		"<br/>" +
-		"Каждый из отмеченных экспертом фрагментов текста представляет собой анализ аспектного содержания фрагмента и <br/>" +
-		"параметров обработки этой информации. <br/>" +
-		"Приведенная ниже таблица иллюстрирует распределение ответов типируемого по параметрам модели А.<br/><br/>" +
+		"РљР°Р¶РґС‹Р№ РёР· РѕС‚РјРµС‡РµРЅРЅС‹С… СЌРєСЃРїРµСЂС‚РѕРј С„СЂР°РіРјРµРЅС‚РѕРІ С‚РµРєСЃС‚Р° РїСЂРµРґСЃС‚Р°РІР»СЏРµС‚ СЃРѕР±РѕР№ Р°РЅР°Р»РёР· Р°СЃРїРµРєС‚РЅРѕРіРѕ СЃРѕРґРµСЂР¶Р°РЅРёСЏ С„СЂР°РіРјРµРЅС‚Р° Рё <br/>" +
+		"РїР°СЂР°РјРµС‚СЂРѕРІ РѕР±СЂР°Р±РѕС‚РєРё СЌС‚РѕР№ РёРЅС„РѕСЂРјР°С†РёРё. <br/>" +
+		"РџСЂРёРІРµРґРµРЅРЅР°СЏ РЅРёР¶Рµ С‚Р°Р±Р»РёС†Р° РёР»Р»СЋСЃС‚СЂРёСЂСѓРµС‚ СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµ РѕС‚РІРµС‚РѕРІ С‚РёРїРёСЂСѓРµРјРѕРіРѕ РїРѕ РїР°СЂР°РјРµС‚СЂР°Рј РјРѕРґРµР»Рё Рђ.<br/><br/>" +
 		"<table title=\"function analysis\" border=2 width=\"80%\">" +
 		"<tr>" 															+ "\n" +
 		"	<th width=\"20%\">  </th>"					+ "\n" +
-		"	<th width=\"10%\"> БЛ </th>"  					+ "\n" +
-		"	<th width=\"10%\"> ЧЛ </th>"  					+ "\n" +
-		"	<th width=\"10%\"> БЭ </th>"  					+ "\n" +
-		"	<th width=\"10%\"> ЧЭ </th>"  					+ "\n" +
-		"	<th width=\"10%\"> БС </th>"  					+ "\n" +
-		"	<th width=\"10%\"> ЧС </th>"  					+ "\n" +
-		"	<th width=\"10%\"> БИ </th>"  					+ "\n" +
-		"	<th width=\"10%\"> ЧИ </th>"  					+ "\n" +
+		"	<th width=\"10%\"> Р‘Р› </th>"  					+ "\n" +
+		"	<th width=\"10%\"> Р§Р› </th>"  					+ "\n" +
+		"	<th width=\"10%\"> Р‘Р­ </th>"  					+ "\n" +
+		"	<th width=\"10%\"> Р§Р­ </th>"  					+ "\n" +
+		"	<th width=\"10%\"> Р‘РЎ </th>"  					+ "\n" +
+		"	<th width=\"10%\"> Р§РЎ </th>"  					+ "\n" +
+		"	<th width=\"10%\"> Р‘Р </th>"  					+ "\n" +
+		"	<th width=\"10%\"> Р§Р </th>"  					+ "\n" +
 		"</tr>" 														+ "\n"  +
 		"<tr>" 															+ "\n" +		
-		"	<td style=\"font-weight:bold\"> Ментал 				</td>"	+ "\n" +	
+		"	<td style=\"font-weight:bold\"> РњРµРЅС‚Р°Р» 				</td>"	+ "\n" +	
 		"		<td align=\"center\">" + aspectLVMMentalNode.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\">" + aspectPVMMentalNode.getChildCount()+ " </td>"  + "\n" +		
 		"		<td align=\"center\">" + aspectRVMMentalNode.getChildCount()+ " </td>"  + "\n" +		
@@ -1446,7 +1446,7 @@ report =
 		"		<td align=\"center\" >" + aspectIVMMentalNode.getChildCount()+ " </td>"  + "\n" +		"</tr>" 														+ "\n"  +		
 		"</tr>" 														+ "\n"  +		
 		"<tr>" 															+ "\n" +		
-		"	<td style=\"font-weight:bold\"> Витал					</td>"	+ "\n" +			
+		"	<td style=\"font-weight:bold\"> Р’РёС‚Р°Р»					</td>"	+ "\n" +			
 		"		<td align=\"center\" >" + aspectLVMVitalNode.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectPVMVitalNode.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectRVMVitalNode.getChildCount()+ " </td>"  + "\n" +		
@@ -1457,7 +1457,7 @@ report =
 		"		<td align=\"center\" >" + aspectIVMVitalNode.getChildCount()+ " </td>"  + "\n" +		
 		"</tr>" 														+ "\n"  +		
 		"<tr>" 															+ "\n" +		
-		"	<td style=\"font-weight:bold\"> Знак \"+\" 			</td>"	+ "\n" +			
+		"	<td style=\"font-weight:bold\"> Р—РЅР°Рє \"+\" 			</td>"	+ "\n" +			
 		"		<td align=\"center\" >" + aspectLSignPlusNode.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectPSignPlusNode.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectRSignPlusNode.getChildCount()+ " </td>"  + "\n" +
@@ -1468,7 +1468,7 @@ report =
 		"		<td align=\"center\" >" + aspectISignPlusNode.getChildCount()+ " </td>"  + "\n" +
 		"</tr>" 														+ "\n"  +		
 		"<tr>" 															+ "\n" +		
-		"	<td style=\"font-weight:bold\"> Знак \"-\" 			</td>"	+ "\n" +			
+		"	<td style=\"font-weight:bold\"> Р—РЅР°Рє \"-\" 			</td>"	+ "\n" +			
 		"		<td align=\"center\" >" + aspectLSignMinusNode.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectPSignMinusNode.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectRSignMinusNode.getChildCount()+ " </td>"  + "\n" +
@@ -1523,7 +1523,7 @@ report =
 		"		<td align=\"center\" >" + aspectIDimensionD4Node.getChildCount()+ " </td>"  + "\n" +
 		"</tr>" 														+ "\n"  +		
 		"<tr>" 															+ "\n" +		
-		"	<td style=\"font-weight:bold\"> Одномерность 			</td>"	+ "\n" +			
+		"	<td style=\"font-weight:bold\"> РћРґРЅРѕРјРµСЂРЅРѕСЃС‚СЊ 			</td>"	+ "\n" +			
 		"		<td align=\"center\" >" + aspectLDimensionOdnomernostNode.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectPDimensionOdnomernostNode.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectRDimensionOdnomernostNode.getChildCount()+ " </td>"  + "\n" +
@@ -1534,7 +1534,7 @@ report =
 		"		<td align=\"center\" >" + aspectIDimensionOdnomernostNode.getChildCount()+ " </td>"  + "\n" +
 		"</tr>" 														+ "\n"  +		
 		"<tr>" 															+ "\n" +		
-		"	<td style=\"font-weight:bold\"> Маломерность 			</td>"	+ "\n" +			
+		"	<td style=\"font-weight:bold\"> РњР°Р»РѕРјРµСЂРЅРѕСЃС‚СЊ 			</td>"	+ "\n" +			
 		"		<td align=\"center\" >" + aspectLDimensionMalomernostNode.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectPDimensionMalomernostNode.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectRDimensionMalomernostNode.getChildCount()+ " </td>"  + "\n" +
@@ -1546,7 +1546,7 @@ report =
 
 		"</tr>" 														+ "\n"  +		
 		"<tr>" 															+ "\n" +		
-		"	<td style=\"font-weight:bold\"> Многомерность 			</td>"	+ "\n" +			
+		"	<td style=\"font-weight:bold\"> РњРЅРѕРіРѕРјРµСЂРЅРѕСЃС‚СЊ 			</td>"	+ "\n" +			
 		"		<td align=\"center\" >" + aspectLDimensionMnogomernostNode.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectPDimensionMnogomernostNode.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectRDimensionMnogomernostNode.getChildCount()+ " </td>"  + "\n" +
@@ -1558,7 +1558,7 @@ report =
 
 		"</tr>" 														+ "\n"  +		
 		"<tr>" 															+ "\n" +		
-		"	<td style=\"font-weight:bold\"> Индивидуальность 		</td>"	+ "\n" +			
+		"	<td style=\"font-weight:bold\"> РРЅРґРёРІРёРґСѓР°Р»СЊРЅРѕСЃС‚СЊ 		</td>"	+ "\n" +			
 		"		<td align=\"center\" >" + aspectLDimensionIndividualnostNode.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectPDimensionIndividualnostNode.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectRDimensionIndividualnostNode.getChildCount()+ " </td>"  + "\n" +
@@ -1571,31 +1571,31 @@ report =
 		"</tr>" 																	   + "\n" +		
 		"</table>";
 
-//Переводы
+//РџРµСЂРµРІРѕРґС‹
 if (!jc.isEmpty()){
 	
 	report +=
 			"<br/>" +
-			"<h2> Переводы управления </h2>" +
+			"<h2> РџРµСЂРµРІРѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ </h2>" +
 			//"<br/>" +
-			"Это наблюдаемый перевод ответа из одного аспекта в другой. <br/>" +
-			"Перевод осуществляется: <br/>" +
-			"1) из  менее мерной функции в более мерную функцию (внутри блока или кольца); <br/>" +
-			"2) из витала в ментал.	<br/><br/>" +
+			"Р­С‚Рѕ РЅР°Р±Р»СЋРґР°РµРјС‹Р№ РїРµСЂРµРІРѕРґ РѕС‚РІРµС‚Р° РёР· РѕРґРЅРѕРіРѕ Р°СЃРїРµРєС‚Р° РІ РґСЂСѓРіРѕР№. <br/>" +
+			"РџРµСЂРµРІРѕРґ РѕСЃСѓС‰РµСЃС‚РІР»СЏРµС‚СЃСЏ: <br/>" +
+			"1) РёР·  РјРµРЅРµРµ РјРµСЂРЅРѕР№ С„СѓРЅРєС†РёРё РІ Р±РѕР»РµРµ РјРµСЂРЅСѓСЋ С„СѓРЅРєС†РёСЋ (РІРЅСѓС‚СЂРё Р±Р»РѕРєР° РёР»Рё РєРѕР»СЊС†Р°); <br/>" +
+			"2) РёР· РІРёС‚Р°Р»Р° РІ РјРµРЅС‚Р°Р».	<br/><br/>" +
 			"<table title=\"jumps\" border=2 width=\"80%\">" +
 			"<tr>" 															+ "\n" +
-			"	<th width=\"20%\">Переводы <br/>из функции "+'\u25ba'+"<br/>в функцию <br/> "+'\u25bc'+" </th>"		+ "\n" +
-			"	<th width=\"10%\"> БЛ </th>"  					+ "\n" +
-			"	<th width=\"10%\"> ЧЛ </th>"  					+ "\n" +
-			"	<th width=\"10%\"> БЭ </th>"  					+ "\n" +
-			"	<th width=\"10%\"> ЧЭ </th>"  					+ "\n" +
-			"	<th width=\"10%\"> БС </th>"  					+ "\n" +
-			"	<th width=\"10%\"> ЧС </th>"  					+ "\n" +
-			"	<th width=\"10%\"> БИ </th>"  					+ "\n" +
-			"	<th width=\"10%\"> ЧИ </th>"  					+ "\n" +
+			"	<th width=\"20%\">РџРµСЂРµРІРѕРґС‹ <br/>РёР· С„СѓРЅРєС†РёРё "+'\u25ba'+"<br/>РІ С„СѓРЅРєС†РёСЋ <br/> "+'\u25bc'+" </th>"		+ "\n" +
+			"	<th width=\"10%\"> Р‘Р› </th>"  					+ "\n" +
+			"	<th width=\"10%\"> Р§Р› </th>"  					+ "\n" +
+			"	<th width=\"10%\"> Р‘Р­ </th>"  					+ "\n" +
+			"	<th width=\"10%\"> Р§Р­ </th>"  					+ "\n" +
+			"	<th width=\"10%\"> Р‘РЎ </th>"  					+ "\n" +
+			"	<th width=\"10%\"> Р§РЎ </th>"  					+ "\n" +
+			"	<th width=\"10%\"> Р‘Р </th>"  					+ "\n" +
+			"	<th width=\"10%\"> Р§Р </th>"  					+ "\n" +
 			"</tr>" 														+ "\n"  +
 			"<tr>" 															+ "\n" +		
-			"	<td style=\"font-weight:bold\"> БЛ </td>"	+ "\n" +	
+			"	<td style=\"font-weight:bold\"> Р‘Р› </td>"	+ "\n" +	
 			"		<td align=\"center\">" + "X" + " </td>"  + "\n" +
 			"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.P) + " </td>"  + "\n" +		
 			"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.R) + " </td>"  + "\n" +		
@@ -1606,7 +1606,7 @@ if (!jc.isEmpty()){
 			"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.I) + " </td>"  + "\n" +		
 			"</tr>" 																	   + "\n"  +		
 			"<tr>" 																		   + "\n" +		
-			"	<td style=\"font-weight:bold\"> ЧЛ </td>"	+ "\n" +			
+			"	<td style=\"font-weight:bold\"> Р§Р› </td>"	+ "\n" +			
 			"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.L) + " </td>"  + "\n" +
 			"		<td align=\"center\">" + "X"  + " </td>"  + "\n" +		
 			"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.R) + " </td>"  + "\n" +		
@@ -1617,7 +1617,7 @@ if (!jc.isEmpty()){
 			"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.I) + " </td>"  + "\n" +		
 			"</tr>" 														+ "\n"  +		
 			"<tr>" 															+ "\n" +		
-			"	<td style=\"font-weight:bold\"> БЭ </td>"	+ "\n" +			
+			"	<td style=\"font-weight:bold\"> Р‘Р­ </td>"	+ "\n" +			
 			"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.L) + " </td>"  + "\n" +
 			"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.P) + " </td>"  + "\n" +		
 			"		<td align=\"center\">" + "X"  + " </td>"  + "\n" +		
@@ -1628,7 +1628,7 @@ if (!jc.isEmpty()){
 			"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.I) + " </td>"  + "\n" +		
 		"</tr>" 														+ "\n"  +		
 			"<tr>" 															+ "\n" +		
-			"	<td style=\"font-weight:bold\"> ЧЭ </td>"	+ "\n" +			
+			"	<td style=\"font-weight:bold\"> Р§Р­ </td>"	+ "\n" +			
 			"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.L) + " </td>"  + "\n" +
 			"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.P) + " </td>"  + "\n" +		
 			"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.R) + " </td>"  + "\n" +		
@@ -1639,7 +1639,7 @@ if (!jc.isEmpty()){
 			"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.I) + " </td>"  + "\n" +		
 			"</tr>" 														+ "\n"  +		
 			"<tr>" 															+ "\n" +		
-			"	<td style=\"font-weight:bold\"> БС </td>"	+ "\n" +			
+			"	<td style=\"font-weight:bold\"> Р‘РЎ </td>"	+ "\n" +			
 			"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.L) + " </td>"  + "\n" +
 			"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.P) + " </td>"  + "\n" +		
 			"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.R) + " </td>"  + "\n" +		
@@ -1650,7 +1650,7 @@ if (!jc.isEmpty()){
 			"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.I) + " </td>"  + "\n" +		
 			"</tr>" 														+ "\n"  +		
 			"<tr>" 															+ "\n" +		
-			"	<td style=\"font-weight:bold\"> ЧС </td>"	+ "\n" +			
+			"	<td style=\"font-weight:bold\"> Р§РЎ </td>"	+ "\n" +			
 			"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.L) + " </td>"  + "\n" +
 			"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.P) + " </td>"  + "\n" +		
 			"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.R) + " </td>"  + "\n" +		
@@ -1661,7 +1661,7 @@ if (!jc.isEmpty()){
 			"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.I) + " </td>"  + "\n" +		
 			"</tr>" 														+ "\n"  +		
 			"<tr>" 															+ "\n" +		
-			"	<td style=\"font-weight:bold\"> БИ </td>"	+ "\n" +			
+			"	<td style=\"font-weight:bold\"> Р‘Р </td>"	+ "\n" +			
 			"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.L) + " </td>"  + "\n" +
 			"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.P) + " </td>"  + "\n" +		
 			"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.R) + " </td>"  + "\n" +		
@@ -1672,7 +1672,7 @@ if (!jc.isEmpty()){
 			"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.I) + " </td>"  + "\n" +		
 			"</tr>" 														+ "\n"  +		
 			"<tr>" 															+ "\n" +		
-			"	<td style=\"font-weight:bold\"> ЧИ </td>"	+ "\n" +			
+			"	<td style=\"font-weight:bold\"> Р§Р </td>"	+ "\n" +			
 			"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.L) + " </td>"  + "\n" +
 			"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.P)  + " </td>"  + "\n" +		
 			"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.R) + " </td>"  + "\n" +		
@@ -1688,7 +1688,7 @@ if (!jc.isEmpty()){
  else {
 	 report = 
 			"<br/>" +
-			"<h2> В документе отсутствует анализ </h2>"+
+			"<h2> Р’ РґРѕРєСѓРјРµРЅС‚Рµ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ Р°РЅР°Р»РёР· </h2>"+
 	 		"<br/>";
  }
 

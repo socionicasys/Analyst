@@ -4,55 +4,55 @@ import java.io.Serializable;
 
 public class AData implements Serializable {
 
-public final static  String L = "БЛ";
-public final static  String P = "ЧЛ";
-public final static  String R = "БЭ";
-public final static  String E = "ЧЭ";
-public final static  String S = "БС";
-public final static  String F = "ЧС";
-public final static  String T = "БИ";
-public final static  String I = "ЧИ";
+public final static  String L = "Р‘Р›";
+public final static  String P = "Р§Р›";
+public final static  String R = "Р‘Р­";
+public final static  String E = "Р§Р­";
+public final static  String S = "Р‘РЎ";
+public final static  String F = "Р§РЎ";
+public final static  String T = "Р‘Р";
+public final static  String I = "Р§Р";
 
-public final static  String LI = "БЛ-ЧИ";
-public final static  String LF = "БЛ-ЧС";
-public final static  String PS = "ЧЛ-БС";
-public final static  String PT = "ЧЛ-БИ";
-public final static  String RI = "БЭ-ЧИ";
-public final static  String RF = "БЭ-ЧС";
-public final static  String ES = "ЧЭ-БС";
-public final static  String ET = "ЧЭ-БИ";
-public final static  String SP = "БС-ЧЛ";
-public final static  String SE = "БС-ЧЭ";
-public final static  String FL = "ЧС-БЛ";
-public final static  String FR = "ЧС-БЭ";
-public final static  String TP = "БИ-ЧЛ";
-public final static  String TE = "БИ-ЧЭ";
-public final static  String IL = "ЧИ-БЛ";
-public final static  String IR = "ЧИ-БЭ";
+public final static  String LI = "Р‘Р›-Р§Р";
+public final static  String LF = "Р‘Р›-Р§РЎ";
+public final static  String PS = "Р§Р›-Р‘РЎ";
+public final static  String PT = "Р§Р›-Р‘Р";
+public final static  String RI = "Р‘Р­-Р§Р";
+public final static  String RF = "Р‘Р­-Р§РЎ";
+public final static  String ES = "Р§Р­-Р‘РЎ";
+public final static  String ET = "Р§Р­-Р‘Р";
+public final static  String SP = "Р‘РЎ-Р§Р›";
+public final static  String SE = "Р‘РЎ-Р§Р­";
+public final static  String FL = "Р§РЎ-Р‘Р›";
+public final static  String FR = "Р§РЎ-Р‘Р­";
+public final static  String TP = "Р‘Р-Р§Р›";
+public final static  String TE = "Р‘Р-Р§Р­";
+public final static  String IL = "Р§Р-Р‘Р›";
+public final static  String IR = "Р§Р-Р‘Р­";
 
-public final static  String DOUBT = "Фрагмент требует уточнения";
+public final static  String DOUBT = "Р¤СЂР°РіРјРµРЅС‚ С‚СЂРµР±СѓРµС‚ СѓС‚РѕС‡РЅРµРЅРёСЏ";
 
-public final static  String BLOCK = "БЛОК";
+public final static  String BLOCK = "Р‘Р›РћРљ";
 public final static  String BLOCK_TOKEN  = "~";
-public final static  String JUMP  = "ПЕРЕВОД";
+public final static  String JUMP  = "РџР•Р Р•Р’РћР”";
 public final static  String JUMP_TOKEN  = ">";
 public final static  String SEPARATOR  = ";";
 
-public final static  String PLUS = "ПЛЮС";
-public final static  String MINUS = "МИНУС";
-public final static  String MENTAL = "Ментал";
-public final static  String VITAL = "Витал";
-public final static  String D1 = "Размерность ОПЫТ";
-public final static  String D2 = "Размерность НОРМА";
-public final static  String D3 = "Размерность СИТУАЦИЯ";
-public final static  String D4 = "Размерность ВРЕМЯ";
-public static final  String ODNOMERNOST = "Одномерность";
-public static final  String INDIVIDUALNOST = "Индивидуальность";
-public final static  String MALOMERNOST = "Маломерность";
-public final static  String MNOGOMERNOST = "Многомерность";
+public final static  String PLUS = "РџР›Р®РЎ";
+public final static  String MINUS = "РњРРќРЈРЎ";
+public final static  String MENTAL = "РњРµРЅС‚Р°Р»";
+public final static  String VITAL = "Р’РёС‚Р°Р»";
+public final static  String D1 = "Р Р°Р·РјРµСЂРЅРѕСЃС‚СЊ РћРџР«Рў";
+public final static  String D2 = "Р Р°Р·РјРµСЂРЅРѕСЃС‚СЊ РќРћР РњРђ";
+public final static  String D3 = "Р Р°Р·РјРµСЂРЅРѕСЃС‚СЊ РЎРРўРЈРђР¦РРЇ";
+public final static  String D4 = "Р Р°Р·РјРµСЂРЅРѕСЃС‚СЊ Р’Р Р•РњРЇ";
+public static final  String ODNOMERNOST = "РћРґРЅРѕРјРµСЂРЅРѕСЃС‚СЊ";
+public static final  String INDIVIDUALNOST = "РРЅРґРёРІРёРґСѓР°Р»СЊРЅРѕСЃС‚СЊ";
+public final static  String MALOMERNOST = "РњР°Р»РѕРјРµСЂРЅРѕСЃС‚СЊ";
+public final static  String MNOGOMERNOST = "РњРЅРѕРіРѕРјРµСЂРЅРѕСЃС‚СЊ";
 
-public final static  String SUPERID = "Супер-Ид";
-public final static  String SUPEREGO = "Супер-Эго";
+public final static  String SUPERID = "РЎСѓРїРµСЂ-РРґ";
+public final static  String SUPEREGO = "РЎСѓРїРµСЂ-Р­РіРѕ";
 
 
 	

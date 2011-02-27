@@ -28,7 +28,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 /**
- * @author Âèêòîð
+ * @author Ð’Ð¸ÐºÑ‚Ð¾Ñ€
  *
  */
 public class ProgressWindow extends JProgressBar implements PropertyChangeListener {
@@ -71,7 +71,7 @@ public class ProgressWindow extends JProgressBar implements PropertyChangeListen
 		
 		
 		
-		dialog=new JDialog((Frame)null,"Ïîäîæäèòå ïîæàëóéñòà, âûïîëíÿåòñÿ îïåðàöèÿ...", false);
+		dialog=new JDialog((Frame)null,"ÐŸÐ¾Ð´Ð¾Ð¶Ð´Ð¸Ñ‚Ðµ Ð¿Ð¾Ð¶Ð°Ð»ÑƒÐ¹ÑÑ‚Ð°, Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÑÐµÑ‚ÑÑ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ñ...", false);
 		dialog.setContentPane(p);
 		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		dialog.setSize(new Dimension(500, 100));
@@ -106,7 +106,7 @@ public void addUserInterruptListener(ActionListener al){
 			int value = ((Integer)pce.getNewValue()).intValue();
 			if (value >= minValue && value <= maxValue){ 
 				setValue(value);
-				label.setText("      Âûïîëíåíî :" + value + "%");
+				label.setText("      Ð’Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¾ :" + value + "%");
 								
 			}
 			else{

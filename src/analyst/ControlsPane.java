@@ -30,7 +30,7 @@ import java.util.Vector;
 
 
 /**
- * @author Виктор
+ * @author Р’РёРєС‚РѕСЂ
  *
  */
 public class ControlsPane extends JToolBar  implements 	CaretListener, 
@@ -52,7 +52,7 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
 	
 	//constructor
 	public ControlsPane(){
-        super("Панель разметки", JToolBar.VERTICAL);
+        super("РџР°РЅРµР»СЊ СЂР°Р·РјРµС‚РєРё", JToolBar.VERTICAL);
         
         //setOrientation(JToolBar.VERTICAL);
 		aDataListeners = new Vector <ADataChangeListener>();
@@ -118,10 +118,10 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
   
         public MVPanel(){
         	super();
-        	vitalButton = new JRadioButton("Витал");	
-        	mentalButton = new JRadioButton("Ментал");	
-        	superidButton = new JRadioButton("Супер-ИД");	
-        	superegoButton = new JRadioButton("Супер-ЭГО");	
+        	vitalButton = new JRadioButton("Р’РёС‚Р°Р»");	
+        	mentalButton = new JRadioButton("РњРµРЅС‚Р°Р»");	
+        	superidButton = new JRadioButton("РЎСѓРїРµСЂ-РР”");	
+        	superegoButton = new JRadioButton("РЎСѓРїРµСЂ-Р­Р“Рћ");	
         	
         	vitalButton.addActionListener(this); 	vitalButton.setActionCommand(AData.VITAL);
         	mentalButton.addActionListener(this);	mentalButton.setActionCommand(AData.MENTAL);
@@ -130,7 +130,7 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
         	
         	mvButtonGroup = new ButtonGroup();
         	mvButtonGroup.clearSelection();
-        	clearMVSelection = new JButton("Очистить");
+        	clearMVSelection = new JButton("РћС‡РёСЃС‚РёС‚СЊ");
         	     	
         	mvButtonGroup.add(vitalButton);		
         	mvButtonGroup.add(mentalButton);
@@ -165,7 +165,7 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
         
         add(pp);
         add(clearMVSelection);
-        setBorder(new TitledBorder ("Ментал/Витал"));
+        setBorder(new TitledBorder ("РњРµРЅС‚Р°Р»/Р’РёС‚Р°Р»"));
   
         } //constructor MVPanel
         
@@ -231,7 +231,7 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
             	minusButton.addActionListener(this);	minusButton.setActionCommand(AData.MINUS);
             	signButtonGroup = new ButtonGroup();
             	signButtonGroup.clearSelection();
-            	clearSignSelection = new JButton("Очистить");
+            	clearSignSelection = new JButton("РћС‡РёСЃС‚РёС‚СЊ");
             	     	
             	signButtonGroup.add(plusButton);		
             	signButtonGroup.add(minusButton);	
@@ -255,7 +255,7 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
             
             add(pp);
             add(clearSignSelection);
-            setBorder(new TitledBorder("Знак"));
+            setBorder(new TitledBorder("Р—РЅР°Рє"));
            
       
             } //constructor MVPanel
@@ -311,27 +311,27 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
             
         public AspectPanel (){
         super();
-        l = new JRadioButton("БЛ"); l.addItemListener(this); 	l.setActionCommand(AData.L);
-        p = new JRadioButton("ЧЛ"); p.addItemListener(this);	p.setActionCommand(AData.P);
-        i = new JRadioButton("ЧИ"); i.addItemListener(this); 	i.setActionCommand(AData.I);
-        t = new JRadioButton("БИ"); t.addItemListener(this);	t.setActionCommand(AData.T);
-        s = new JRadioButton("БС"); s.addItemListener(this);	s.setActionCommand(AData.S);
-        f = new JRadioButton("ЧС"); f.addItemListener(this);	f.setActionCommand(AData.F);
-        r = new JRadioButton("БЭ"); r.addItemListener(this);	r.setActionCommand(AData.R);
-        e = new JRadioButton("ЧЭ"); e.addItemListener(this);	e.setActionCommand(AData.E);
+        l = new JRadioButton("Р‘Р›"); l.addItemListener(this); 	l.setActionCommand(AData.L);
+        p = new JRadioButton("Р§Р›"); p.addItemListener(this);	p.setActionCommand(AData.P);
+        i = new JRadioButton("Р§Р"); i.addItemListener(this); 	i.setActionCommand(AData.I);
+        t = new JRadioButton("Р‘Р"); t.addItemListener(this);	t.setActionCommand(AData.T);
+        s = new JRadioButton("Р‘РЎ"); s.addItemListener(this);	s.setActionCommand(AData.S);
+        f = new JRadioButton("Р§РЎ"); f.addItemListener(this);	f.setActionCommand(AData.F);
+        r = new JRadioButton("Р‘Р­"); r.addItemListener(this);	r.setActionCommand(AData.R);
+        e = new JRadioButton("Р§Р­"); e.addItemListener(this);	e.setActionCommand(AData.E);
         
-        l2 = new JRadioButton("БЛ"); l2.addItemListener(this);  l2.setActionCommand(AData.L);
-        p2 = new JRadioButton("ЧЛ"); p2.addItemListener(this);	p2.setActionCommand(AData.P);
-        i2 = new JRadioButton("ЧИ"); i2.addItemListener(this);  i2.setActionCommand(AData.I);
-        t2 = new JRadioButton("БИ"); t2.addItemListener(this);	t2.setActionCommand(AData.T);
-        s2 = new JRadioButton("БС"); s2.addItemListener(this);	s2.setActionCommand(AData.S);
-        f2 = new JRadioButton("ЧС"); f2.addItemListener(this);	f2.setActionCommand(AData.F);
-        r2 = new JRadioButton("БЭ"); r2.addItemListener(this);	r2.setActionCommand(AData.R);
-        e2 = new JRadioButton("ЧЭ"); e2.addItemListener(this);	e2.setActionCommand(AData.E);
+        l2 = new JRadioButton("Р‘Р›"); l2.addItemListener(this);  l2.setActionCommand(AData.L);
+        p2 = new JRadioButton("Р§Р›"); p2.addItemListener(this);	p2.setActionCommand(AData.P);
+        i2 = new JRadioButton("Р§Р"); i2.addItemListener(this);  i2.setActionCommand(AData.I);
+        t2 = new JRadioButton("Р‘Р"); t2.addItemListener(this);	t2.setActionCommand(AData.T);
+        s2 = new JRadioButton("Р‘РЎ"); s2.addItemListener(this);	s2.setActionCommand(AData.S);
+        f2 = new JRadioButton("Р§РЎ"); f2.addItemListener(this);	f2.setActionCommand(AData.F);
+        r2 = new JRadioButton("Р‘Р­"); r2.addItemListener(this);	r2.setActionCommand(AData.R);
+        e2 = new JRadioButton("Р§Р­"); e2.addItemListener(this);	e2.setActionCommand(AData.E);
                                                                                              
-        aspect 	= new JRadioButton("Аспект"); 	aspect.addItemListener(this);	aspect.setActionCommand("aspect");
-        block 	= new JRadioButton("Блок");		block.addItemListener(this);	block.setActionCommand("block");
-        jump 	= new JRadioButton("Перевод"); 	jump.addItemListener(this);		jump.setActionCommand("jump");
+        aspect 	= new JRadioButton("РђСЃРїРµРєС‚"); 	aspect.addItemListener(this);	aspect.setActionCommand("aspect");
+        block 	= new JRadioButton("Р‘Р»РѕРє");		block.addItemListener(this);	block.setActionCommand("block");
+        jump 	= new JRadioButton("РџРµСЂРµРІРѕРґ"); 	jump.addItemListener(this);		jump.setActionCommand("jump");
         
         d = new JRadioButton("???");  d.getModel().addItemListener(this); 	d.setActionCommand(AData.DOUBT);
         
@@ -362,7 +362,7 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
         controlGroup.add(block);	block.addActionListener(this);
         controlGroup.add(jump);	jump.addActionListener(this);
        
-        clearAspectSelection  = new JButton("Очистить");
+        clearAspectSelection  = new JButton("РћС‡РёСЃС‚РёС‚СЊ");
         
        setMinimumSize(new Dimension(200, 270)); 
        setMaximumSize(new Dimension(200, 270));
@@ -422,7 +422,7 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
        add(pA, BorderLayout.WEST);
        add(pB, BorderLayout.EAST);
       
-       setBorder(new TitledBorder ("Аспект/Блок"));
+       setBorder(new TitledBorder ("РђСЃРїРµРєС‚/Р‘Р»РѕРє"));
 
        aspectGroup.clearSelection();
        secondAspectGroup.clearSelection();
@@ -657,7 +657,7 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
         
 		@Override
 		public void itemStateChanged(ItemEvent arg0) {
-		//извещение от поля комментария	
+		//РёР·РІРµС‰РµРЅРёРµ РѕС‚ РїРѕР»СЏ РєРѕРјРјРµРЅС‚Р°СЂРёСЏ	
 		 informListeners(isAspectSelected());			
 		}
 
@@ -743,10 +743,10 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
         d2 = new JRadioButton("Nm");		d2.setActionCommand(AData.D2);
         d3 = new JRadioButton("St");		d3.setActionCommand(AData.D3);
         d4 = new JRadioButton("Tm");		d4.setActionCommand(AData.D4);
-        odno = new JRadioButton("Одномерность");		odno.setActionCommand(AData.ODNOMERNOST);
-        malo = new JRadioButton("Маломерность");		malo.setActionCommand(AData.MALOMERNOST);
-        mnogo = new JRadioButton("Многомерность");		mnogo.setActionCommand(AData.MNOGOMERNOST);
-        indi = new JRadioButton("Индивидуальность");	indi.setActionCommand(AData.INDIVIDUALNOST);
+        odno = new JRadioButton("РћРґРЅРѕРјРµСЂРЅРѕСЃС‚СЊ");		odno.setActionCommand(AData.ODNOMERNOST);
+        malo = new JRadioButton("РњР°Р»РѕРјРµСЂРЅРѕСЃС‚СЊ");		malo.setActionCommand(AData.MALOMERNOST);
+        mnogo = new JRadioButton("РњРЅРѕРіРѕРјРµСЂРЅРѕСЃС‚СЊ");		mnogo.setActionCommand(AData.MNOGOMERNOST);
+        indi = new JRadioButton("РРЅРґРёРІРёРґСѓР°Р»СЊРЅРѕСЃС‚СЊ");	indi.setActionCommand(AData.INDIVIDUALNOST);
         
         dimensionGroup=new ButtonGroup();
         dimensionGroup.add(d1);	
@@ -758,7 +758,7 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
         dimensionGroup.add(mnogo);
         dimensionGroup.add(indi);
         dimensionGroup.clearSelection();
-        clearDimensionSelection = new JButton("Очистить");      
+        clearDimensionSelection = new JButton("РћС‡РёСЃС‚РёС‚СЊ");      
         clearDimensionSelection.addActionListener(this);
         
  //       setLayout(new GridLayout(8,2));
@@ -791,7 +791,7 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); 
        add(p);
        add(clearDimensionSelection);
-       setBorder(new TitledBorder ("Размерность"));
+       setBorder(new TitledBorder ("Р Р°Р·РјРµСЂРЅРѕСЃС‚СЊ"));
       
         }    //constructor
         
@@ -1106,7 +1106,7 @@ public void valueChanged(TreeSelectionEvent e) {
 				System.out.println(" error setting model to view :: bad location");
 			}
 			
-		} else ; //System.out.println(" Не найдена секция");
+		} else ; //System.out.println(" РќРµ РЅР°Р№РґРµРЅР° СЃРµРєС†РёСЏ");
 	   		////////////////////////////////////////////	
 	
 		
