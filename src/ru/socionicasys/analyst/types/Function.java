@@ -57,10 +57,18 @@ public class Function {
 	 * @return размерность функции
 	 */
 	public int getDimension() {
-		if (position <= 4) {
+		if (isMental()) {
 			return 5 - position;
 		} else {
 			return position - 4;
 		}
+	}
+
+	/**
+	 * Проверка функции на ментальность (1-4) или витальность (5-8).
+	 * @return является ли функция ментальной
+	 */
+	public boolean isMental() {
+		return (position <= 4);
 	}
 }
