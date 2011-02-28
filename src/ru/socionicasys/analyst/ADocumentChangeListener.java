@@ -1,4 +1,4 @@
-package analyst;
+package ru.socionicasys.analyst;
 
 public interface ADocumentChangeListener {
 

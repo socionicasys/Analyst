@@ -1,7 +1,7 @@
 /**
  *
  */
-package analyst;
+package ru.socionicasys.analyst;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -26,7 +26,7 @@ import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import analyst.ADocument.ASection;
+import ru.socionicasys.analyst.ADocument.ASection;
 
 
 /**

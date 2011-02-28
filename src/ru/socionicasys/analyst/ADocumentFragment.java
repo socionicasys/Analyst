@@ -1,4 +1,4 @@
-package analyst;
+package ru.socionicasys.analyst;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -9,11 +9,11 @@ import java.util.HashMap;
 
 import javax.swing.text.AttributeSet;
 
-import analyst.ADocument.ASection;
+import ru.socionicasys.analyst.ADocument.ASection;
 
 public class ADocumentFragment implements Transferable, Serializable {
 
-	public static String MIME_TYPE = "application/x-java-serialized-object; class=analyst.ADocumentFragment";
+	public static String MIME_TYPE = "application/x-java-serialized-object; class=ru.socionicasys.analyst.ADocumentFragment";
 
 	private String text;
 	private HashMap<DocSection, AttributeSet> styleMap;

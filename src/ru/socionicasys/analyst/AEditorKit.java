@@ -1,4 +1,4 @@
-package analyst;
+package ru.socionicasys.analyst;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -25,7 +25,7 @@ import javax.swing.text.StyledEditorKit;
 import javax.swing.text.TextAction;
 import javax.swing.undo.UndoableEdit;
 
-import analyst.ADocument.ASection;
+import ru.socionicasys.analyst.ADocument.ASection;
 
 public class AEditorKit extends StyledEditorKit {
 

@@ -1,4 +1,4 @@
-package analyst;
+package ru.socionicasys.analyst;
 /*
  * TextComponentDemo.java requires one additional file:
  *   DocumentSizeFilter.java
@@ -19,7 +19,7 @@ import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.undo.*;
 
-import analyst.ADocument.ASection;
+import ru.socionicasys.analyst.ADocument.ASection;
 
 
 @SuppressWarnings("serial")

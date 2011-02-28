@@ -29,7 +29,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package analyst;
+package ru.socionicasys.analyst;
 
 /* A 1.4 class used by TextComponentDemo.java. */
 

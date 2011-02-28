@@ -1,4 +1,4 @@
-package analyst;
+package ru.socionicasys.analyst;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

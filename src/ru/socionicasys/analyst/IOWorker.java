@@ -1,4 +1,4 @@
-package analyst;
+package ru.socionicasys.analyst;
 
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
@@ -16,8 +16,8 @@ import javax.swing.SwingWorker;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 
-import analyst.ADocument.ASection;
-import analyst.ADocument.RawAData;
+import ru.socionicasys.analyst.ADocument.ASection;
+import ru.socionicasys.analyst.ADocument.RawAData;
 
 public class IOWorker extends SwingWorker implements PropertyChangeListener {
 

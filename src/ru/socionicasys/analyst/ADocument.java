@@ -1,6 +1,6 @@
-package analyst;
+package ru.socionicasys.analyst;
 
-import analyst.StyledText;
+import ru.socionicasys.analyst.StyledText;
 
 import java.awt.Color;
 import java.io.FileInputStream;

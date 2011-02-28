@@ -1,7 +1,7 @@
 /**
  *
  */
-package analyst;
+package ru.socionicasys.analyst;
 
 import java.awt.Dimension;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.tree.*;
 
-import analyst.ADocument.ASection;
+import ru.socionicasys.analyst.ADocument.ASection;
 
 /**
  * @author Виктор

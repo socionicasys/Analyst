@@ -1,7 +1,7 @@
 /**
  *
  */
-package analyst;
+package ru.socionicasys.analyst;
 
 /**
  * @author Виктор

@@ -1,7 +1,7 @@
 /**
  *
  */
-package analyst;
+package ru.socionicasys.analyst;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -18,7 +18,7 @@ import javax.swing.text.Position;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 
-import analyst.ADocument.ASection;
+import ru.socionicasys.analyst.ADocument.ASection;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

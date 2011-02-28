@@ -1,4 +1,4 @@
-package analyst;
+package ru.socionicasys.analyst;
 
 import java.util.Hashtable;
 import java.util.Vector;
