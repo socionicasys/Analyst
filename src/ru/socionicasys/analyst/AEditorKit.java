@@ -1,31 +1,17 @@
 package ru.socionicasys.analyst;
 
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.swing.JMenu;
-import javax.swing.JTextPane;
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.text.AttributeSet;
+import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
-import javax.swing.text.Element;
-import javax.swing.text.JTextComponent;
-import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.TextAction;
-import javax.swing.undo.UndoableEdit;
-
-import ru.socionicasys.analyst.ADocument.ASection;
 
 public class AEditorKit extends StyledEditorKit {
 

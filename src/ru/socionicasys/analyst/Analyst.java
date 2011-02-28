@@ -1,8 +1,6 @@
 package ru.socionicasys.analyst;
-/*
- * TextComponentDemo.java requires one additional file:
- *   DocumentSizeFilter.java
- */
+
+import ru.socionicasys.analyst.ADocument.ASection;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -10,24 +8,21 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.nio.charset.Charset;
-import java.util.HashMap;
 import java.util.Dictionary;
+import java.util.HashMap;
 import javax.swing.*;
-import javax.swing.text.*;
 import javax.swing.border.Border;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.undo.*;
-
-import ru.socionicasys.analyst.ADocument.ASection;
-
+import javax.swing.text.*;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
 
 @SuppressWarnings("serial")
-
 public class Analyst extends JFrame implements WindowListener, PropertyChangeListener {
 	public final static String version = "1.03";
 	public JTextPane textPane;
-	private AbstractDocument doc;
 	ADocument aDoc;
 	static final int MAX_CHARACTERS = 10000000;
 	private JTextArea commentField;
@@ -38,7 +33,6 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 	private BTree analisysTree;
 	private CTree hystogramTree;
 	private JFileChooser fc;
-	private JOptionPane optionPane;
 	private JFrame frame = this;
 	private String fileName = "";
 	private JPopupMenu popupMenu;
@@ -62,7 +56,7 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 	protected static UndoManager undo = new UndoManager();
 
 
-	public Analyst(String arg0) {
+	public Analyst(String startupFilename) {
 		super(applicationName + " - " + ADocument.DEFAULT_TITLE);
 
 		addWindowListener(this);
@@ -76,8 +70,6 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 			new DefaultCaret() {
 				public void focusLost(FocusEvent e) {
 				}
-
-				;
 			}
 		);
 		// popup menu for the textPane
@@ -92,14 +84,12 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 
 		fc = new JFileChooser();
 		fc.addChoosableFileFilter(new FileNameExtensionFilter("Файлы ." + extension, extension));
-		optionPane = new JOptionPane();
 		aDoc = new ADocument();
 		textPane.setEditorKit(new AEditorKit());
 		textPane.setDocument(aDoc);
 
-		if (aDoc instanceof AbstractDocument) {
-			doc = (AbstractDocument) aDoc;
-			doc.setDocumentFilter(new DocumentSizeFilter(MAX_CHARACTERS));
+		if (aDoc != null) {
+			aDoc.setDocumentFilter(new DocumentSizeFilter(MAX_CHARACTERS));
 		} else {
 			System.err.println("Text pane's document isn't an AbstractDocument!");
 			System.exit(-1);
@@ -138,7 +128,6 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 		statusPane.add(progress, BorderLayout.CENTER);
 
 		// Create tabbed navigation pane
-
 		navigateTree = new ATree(aDoc);
 		analisysTree = new BTree(aDoc);
 		hystogramTree = new CTree(aDoc);
@@ -200,13 +189,13 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 		textPane.setCaretPosition(0);
 
 		//Start watching for undoable edits and caret changes.
-		doc.addUndoableEditListener(new MyUndoableEditListener());
+		aDoc.addUndoableEditListener(new MyUndoableEditListener());
 		textPane.addCaretListener(status);
-		doc.addDocumentListener(new MyDocumentListener());
+		aDoc.addDocumentListener(new MyDocumentListener());
 
 		// load document passed in the command line
-		if (arg0 != null) {
-			File file = new File(arg0);
+		if (startupFilename != null) {
+			File file = new File(startupFilename);
 			FileInputStream fis;
 			try {
 				fis = new FileInputStream(file);
@@ -218,9 +207,9 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 
 				status.setText("");
 				frame.setTitle(applicationName + " - " + file.getName());
-			} catch (Exception e1) {
-				System.out.println("Ошибка при загрузке файла: " + arg0);
-				e1.printStackTrace();
+			} catch (Exception e) {
+				System.out.println("Ошибка при загрузке файла: " + startupFilename);
+				e.printStackTrace();
 			}
 		}
 	}
@@ -263,9 +252,12 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 			public void actionPerformed(ActionEvent arg0) {
 				programExit = true;
 				int option = saveConfirmation();
-				if (option == JOptionPane.CANCEL_OPTION) programExit = false;
-				else if (option == JOptionPane.YES_OPTION) ;
-				else if (option == JOptionPane.NO_OPTION) System.exit(0);
+				if (option == JOptionPane.CANCEL_OPTION) {
+					programExit = false;
+				}
+				else if (option == JOptionPane.NO_OPTION) {
+					System.exit(0);
+				}
 			}
 		});
 
@@ -273,7 +265,6 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 		save.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
 				try {
 					File file = null;
 					if (fileName.length() == 0) {
@@ -282,7 +273,9 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 						if (returnVal == JFileChooser.APPROVE_OPTION) {
 							file = fc.getSelectedFile();
 							fileName = file.getAbsolutePath();
-							if (!fileName.endsWith("." + extension)) fileName += "." + extension;
+							if (!fileName.endsWith("." + extension)) {
+								fileName += "." + extension;
+							}
 							file = new File(fileName);
 
 							if (file.exists()) {
@@ -308,7 +301,6 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 						frame.setTitle(applicationName + " - " + file.getName());
 					}
 				} catch (Exception e) {
-					//
 					System.out.println("Error writing document to file: ");
 					e.printStackTrace();
 					JOptionPane.showOptionDialog(frame,
@@ -327,7 +319,6 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 		saveAs.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
 				try {
 					File file = null;
 					fc.setDialogTitle("Сохранение документа под новым именем");
@@ -360,7 +351,6 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 
 					frame.setTitle(applicationName + " - " + file.getName());
 				} catch (Exception e) {
-					//
 					System.out.println("Error writing document to file: ");
 					e.printStackTrace();
 					JOptionPane.showOptionDialog(frame,
@@ -379,11 +369,11 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 		load.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
 				try {
-
 					status.setText("Открытие документа...");
-					if (saveConfirmation() == JOptionPane.CANCEL_OPTION) return;
+					if (saveConfirmation() == JOptionPane.CANCEL_OPTION) {
+						return;
+					}
 					fc.setDialogTitle("Открытие документа");
 					int returnVal = fc.showDialog(Analyst.this, "Открыть");
 					File file = null;
@@ -433,8 +423,9 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 					fc.setDialogTitle("Открыть и присоединить документ");
 					int returnVal = fc.showDialog(Analyst.this, "Открыть и присоединить");
 					File file = null;
-					if (returnVal == JFileChooser.APPROVE_OPTION)
+					if (returnVal == JFileChooser.APPROVE_OPTION) {
 						file = fc.getSelectedFile();
+					}
 
 					if (file != null) {
 						FileInputStream fis = new FileInputStream(file);
@@ -489,40 +480,43 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 	}
 
 	//This listens for and reports caret movements.
-	protected class StatusLabel extends JLabel
-		implements CaretListener, ADataChangeListener {
+	protected class StatusLabel extends JLabel implements CaretListener, ADataChangeListener {
 		public StatusLabel(String label) {
 			super(label);
 		}
 
 		//Might not be invoked from the event dispatch thread.
 		public void caretUpdate(CaretEvent e) {
-
 			ASection s;
 			s = aDoc.getASectionThatStartsAt(textPane.getCaretPosition());
-			if (textPane.getText().length() <= 0)
+			if (textPane.getText().length() <= 0) {
 				setText("Откройте сохраненный документ или вставтьте анализируемый текст в центральное окно");
+			}
 			else if (s != null) {
 				setText(aDoc.getAData(s).toString());
-			} else if (e.getDot() == e.getMark())
+			} else if (e.getDot() == e.getMark()) {
 				setText("Выделите область текста чтобы начать анализ...");
-			else setText("Выберите аспект  и параметры обработки, используя панель справа...");
+			}
+			else {
+				setText("Выберите аспект  и параметры обработки, используя панель справа...");
+			}
 		} //caretUpdate()
 
 
 		@Override
 		public void aDataChanged(int start, int end, AData data) {
-
-			if (data != null) setText(data.toString());
-			else
+			if (data != null) {
+				setText(data.toString());
+			}
+			else {
 				setText(" ");
+			}
 			return;
 		} //aDataChanged()
 	} //class StatusLabel
 
 	//This one listens for edits that can be undone.
-	protected class MyUndoableEditListener
-		implements UndoableEditListener {
+	protected class MyUndoableEditListener implements UndoableEditListener {
 		public void undoableEditHappened(UndoableEditEvent e) {
 			//Remember the edit and update the menus.
 
@@ -554,13 +548,11 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 		}
 
 		private void displayEditInfo(DocumentEvent e) {
-
 		}
 	}
 
 	//Add a couple of emacs key bindings for navigation.
 	protected void addBindings() {
-
 		final JTextComponent.KeyBinding[] defaultBindings = {
 			new JTextComponent.KeyBinding(
 				KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK),
@@ -687,7 +679,6 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 		JMenu menu = new JMenu("Информация");
 
 		Action docProperties = new AbstractAction() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 
@@ -757,12 +748,21 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 				panel.add(ppc);
 				//panel.add(new Panel());
 
-				if (title != null) titleField.setText(title);
-				if (expert != null)
+				if (title != null) {
+					titleField.setText(title);
+				}
+				if (expert != null) {
 					expertField.setText(expert);
-				if (client != null) clientField.setText(client);
-				if (date != null) dateField.setText(date);
-				if (comment != null) commentArea.setText(comment);
+				}
+				if (client != null) {
+					clientField.setText(client);
+				}
+				if (date != null) {
+					dateField.setText(date);
+				}
+				if (comment != null) {
+					commentArea.setText(comment);
+				}
 
 				if (JOptionPane.showOptionDialog(frame,
 					panel,
@@ -789,7 +789,6 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 					properties.put(ADocument.CommentProperty, comment);
 					aDoc.fireADocumentChanged();
 				}
-				;
 			}
 		};
 
@@ -825,14 +824,12 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 					"Оригинальный текст GNU GPL на английском языке вы можете прочитать здесь: http://www.gnu.org/copyleft/gpl.html";
 
 				InputStream is = Analyst.class.getClassLoader().getResourceAsStream("license.txt");
-				InputStreamReader isr = null;
 				if (is != null) {
 					BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 					license = "";
 					String next;
 					try {
 						next = br.readLine();
-
 						while (next != null) {
 							license += next + "\n";
 							next = br.readLine();
@@ -876,7 +873,6 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 	}
 
 	protected JMenu createSettingsMenu() {
-
 		JMenu menu = new JMenu("Установки");
 
 		//Settings.
@@ -929,8 +925,7 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 	private HashMap<Object, Action> createActionTable(JTextComponent textComponent) {
 		HashMap<Object, Action> actions = new HashMap<Object, Action>();
 		Action[] actionsArray = textComponent.getActions();
-		for (int i = 0; i < actionsArray.length; i++) {
-			Action a = actionsArray[i];
+		for (Action a : actionsArray) {
 			actions.put(a.getValue(Action.NAME), a);
 			//System.out.println(a.getValue(Action.NAME));
 		}
@@ -970,9 +965,15 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 		}
 
 		private Object getRussianUndoName(String undoPresentationName) {
-			if (undoPresentationName.contains("deletion")) return "Отменить удаление";
-			if (undoPresentationName.contains("style")) return "Отменить";
-			if (undoPresentationName.contains("addition")) return "Отменить ввод";
+			if (undoPresentationName.contains("deletion")) {
+				return "Отменить удаление";
+			}
+			if (undoPresentationName.contains("style")) {
+				return "Отменить";
+			}
+			if (undoPresentationName.contains("addition")) {
+				return "Отменить ввод";
+			}
 			return undoPresentationName;
 		}
 	}
@@ -1018,11 +1019,11 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 	 * this method should be invoked from the
 	 * event dispatch thread.
 	 *
-	 * @param arg0
+	 * @param startupFilename
 	 */
-	private static void createAndShowGUI(String arg0) {
+	private static void createAndShowGUI(String startupFilename) {
 		//Create and set up the window.
-		final Analyst frame = new Analyst(arg0);
+		final Analyst frame = new Analyst(startupFilename);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		//Display the window.
@@ -1034,59 +1035,55 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 	public static void main(String[] args) {
 		//Schedule a job for the event dispatch thread:
 		//creating and showing this application's GUI.
-
 		String s = null;
-		if (args != null && args.length > 0) s = args[0];
-		final String arg0 = s;
+		if (args != null && args.length > 0) {
+			s = args[0];
+		}
+		final String startupFilename = s;
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				//Turn off metal's use of bold fonts
 				UIManager.put("swing.boldMetal", Boolean.FALSE);
-				createAndShowGUI(arg0);
+				createAndShowGUI(startupFilename);
 			}
 		});
 	}
 
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-
 	}
 
 	@Override
 	public void windowClosed(WindowEvent arg0) {
-
 	}
 
 	@Override
 	public void windowClosing(WindowEvent arg0) {
 		programExit = true;
 		int option = saveConfirmation();
-		if (option == JOptionPane.CANCEL_OPTION) programExit = false;
-		else if (option == JOptionPane.YES_OPTION) ;
-		else if (option == JOptionPane.NO_OPTION) System.exit(0);
+		if (option == JOptionPane.CANCEL_OPTION) {
+			programExit = false;
+		}
+		else if (option == JOptionPane.NO_OPTION) {
+			System.exit(0);
+		}
 	}
-
 
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
-
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
-
 	}
 
 	@Override
 	public void windowIconified(WindowEvent arg0) {
-
 	}
 
 	@Override
 	public void windowOpened(WindowEvent arg0) {
-
 	}
-
 
 	private int saveConfirmation() {
 		int choice = JOptionPane.NO_OPTION;
@@ -1102,8 +1099,7 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 				null);
 			if (choice == JOptionPane.YES_OPTION) {
 				File file = null;
-
-				if (fileName == null || (fileName != null && fileName.length() == 0)) {
+				if (fileName == null || fileName.length() == 0) {
 					boolean cancel = false;
 					boolean overwrite = false;
 					int returnVal = 0;
@@ -1114,7 +1110,6 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 						returnVal = fc.showDialog(Analyst.this, "Сохранить");
 						if (returnVal == JFileChooser.APPROVE_OPTION) {
 							file = fc.getSelectedFile();
-
 							fileName = file.getAbsolutePath();
 							if (file.exists()) {
 								Object[] options = {"Да", "Нет"};
@@ -1124,26 +1119,27 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 									JOptionPane.QUESTION_MESSAGE,
 									null,
 									options, null);
-								if (option == JOptionPane.YES_OPTION) overwrite = true;
+								if (option == JOptionPane.YES_OPTION) {
+									overwrite = true;
+								}
 							}	//if file doesn't exist
-							else cancel = true;
-						} else if (returnVal == JFileChooser.CANCEL_OPTION) cancel = true;
+							else {
+								cancel = true;
+							}
+						} else if (returnVal == JFileChooser.CANCEL_OPTION) {
+							cancel = true;
+						}
 					} //end while
 				}
 
 				if (fileName != null & fileName.length() > 0) {
 					try {
-
 						file = new File(fileName);
-
-						if (file != null) {
-							FileOutputStream fos = new FileOutputStream(file);
-							ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
-							IOWorker iow = new IOWorker(pw, aDoc, fos);
-							iow.execute();
-						}
+						FileOutputStream fos = new FileOutputStream(file);
+						ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
+						IOWorker iow = new IOWorker(pw, aDoc, fos);
+						iow.execute();
 					} catch (Exception e) {
-						//
 						System.out.println("Error writing document to file: ");
 						e.printStackTrace();
 						JOptionPane.showOptionDialog(frame,
@@ -1165,7 +1161,7 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 		int choice = JOptionPane.YES_OPTION;
 		int offset = textPane.getCaret().getMark();
 		int dot = textPane.getCaret().getDot();
-		if (aDoc.getASectionThatStartsAt(offset) != null)
+		if (aDoc.getASectionThatStartsAt(offset) != null) {
 			choice = JOptionPane.showOptionDialog(frame,
 				"Вы собираетесь удалить размеченный фрагмент документа\n\nВы действительно хотите удалить фрагмент?",
 				"Подтверждение удаления",
@@ -1174,9 +1170,10 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 				null,
 				new Object[]{"Удалить", "Не удалять"},
 				"Не удалять");
-
-		if (choice == JOptionPane.YES_OPTION) aDoc.removeCleanup(Math.min(offset, dot), Math.max(offset, dot));
-		else {
+		}
+		if (choice == JOptionPane.YES_OPTION) {
+			aDoc.removeCleanup(Math.min(offset, dot), Math.max(offset, dot));
+		} else {
 			choice = JOptionPane.NO_OPTION;
 		}
 		return choice;
@@ -1232,15 +1229,16 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-
-		if (programExit)
+		if (programExit) {
 			if (evt.getPropertyName().equals("state") && (evt.getNewValue()).toString().equals("DONE")) {
 				System.exit(0);
 			}
-		if (makeNewDocument)
+		}
+		if (makeNewDocument) {
 			if (evt.getPropertyName().equals("state") && (evt.getNewValue()).toString().equals("DONE")) {
 				initNewDocument();
 			}
+		}
 	}
 
 	private void initNewDocument() {
@@ -1252,8 +1250,12 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 
 	public static void initUndoManager() {
 		undo.discardAllEdits();
-		if (undoAction != null) undoAction.updateUndoState();
-		if (redoAction != null) redoAction.updateRedoState();
+		if (undoAction != null) {
+			undoAction.updateUndoState();
+		}
+		if (redoAction != null) {
+			redoAction.updateRedoState();
+		}
 	}
 }//end class Analyst
 
