@@ -58,7 +58,7 @@ public class Sociotype {
 	public final static Sociotype SLI = new Sociotype(Types.SLI);
 
 	private Sociotype(Types type) {
-		functions.ensureCapacity(8);
+		functions = new ArrayList<Function>(8);
 		switch (type) {
 		case ILE:
 			abbreviation = "ИЛЭ";
