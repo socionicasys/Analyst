@@ -275,7 +275,7 @@ public class Sociotype {
 	 * @param position номер функции
 	 * @return объект, описывающий функцию, или null, если позиция задана некорректно
 	 */
-	public Function getFuctionByPosition(int position) {
+	public Function getFunctionByPosition(int position) {
 		for (Function function: functions) {
 			if (function.getPosition() == position) {
 				return function;
