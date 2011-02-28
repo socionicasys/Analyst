@@ -16,13 +16,13 @@
 	<target name="compile">
 		<mkdir dir="${analyst.output_dir}" />
 		<javac srcdir="${analyst.source_dir}" destdir="${analyst.output_dir}" debug="false" />
-		<copy file="${analyst.base_dir}/license.txt" todir="${analyst.output_dir}/analyst" />
+		<copy file="${analyst.base_dir}/license.txt" todir="${analyst.output_dir}" />
 	</target>
 
 	<target name="jar" depends="compile">
 		<mkdir dir="${analyst.bin_dir}" />
 		<jar destfile="${analyst.jar_name}" basedir="${analyst.output_dir}">
-			<zipfileset dir="${analyst.source_dir}" prefix="analyst/src">
+			<zipfileset dir="${analyst.source_dir}" prefix="src">
 				<include name="**/*.java" />
 			</zipfileset>
 			<manifest>

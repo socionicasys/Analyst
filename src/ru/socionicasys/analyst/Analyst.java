@@ -824,7 +824,7 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 					"Требуйте получение исходной лицензии от поставщика данного программного продукта.\n\n" +
 					"Оригинальный текст GNU GPL на английском языке вы можете прочитать здесь: http://www.gnu.org/copyleft/gpl.html";
 
-				InputStream is = Analyst.class.getClassLoader().getResourceAsStream("analyst/license.txt");
+				InputStream is = Analyst.class.getClassLoader().getResourceAsStream("license.txt");
 				InputStreamReader isr = null;
 				if (is != null) {
 					BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
