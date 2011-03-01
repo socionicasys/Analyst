@@ -6,26 +6,16 @@ package ru.socionicasys.analyst;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.Panel;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.InvocationTargetException;
-import java.util.EventListener;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 
 /**
  * @author Виктор
@@ -34,7 +24,7 @@ public class ProgressWindow extends JProgressBar implements PropertyChangeListen
 
 	//	JProgressBar bar;
 	private JDialog dialog;
-	private Analyst an;
+	private AnalystWindow an;
 	private JLabel label;
 
 	//	private String message;
@@ -46,7 +36,7 @@ public class ProgressWindow extends JProgressBar implements PropertyChangeListen
 
 	public ProgressWindow(Frame frame, String message) {
 		super(JProgressBar.HORIZONTAL, minValue, maxValue);
-		this.an = (Analyst) frame;
+		this.an = (AnalystWindow) frame;
 		setMaximumSize(new Dimension(300, 30));
 		//setMinimumSize(new Dimension(300,30));
 		setPreferredSize(new Dimension(300, 30));
@@ -84,7 +74,7 @@ public class ProgressWindow extends JProgressBar implements PropertyChangeListen
 		an.aDoc.fireADocumentChanged();
 	}
 
-	public Analyst getAnalyst() {
+	public AnalystWindow getAnalyst() {
 		return an;
 	}
 

@@ -192,7 +192,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 		setCharacterAttributes(0, 1, defaultStyle, true);
 		fireADocumentChanged();
-		Analyst.initUndoManager();
+		AnalystWindow.initUndoManager();
 	}
 
 	public class ASection implements Serializable {
@@ -352,7 +352,7 @@ public void addASection(int st, int en, AData data) {
 		}
 		if (results.isEmpty()) return null;
 
-		int distance = Analyst.MAX_CHARACTERS;
+		int distance = AnalystWindow.MAX_CHARACTERS;
 		for (int i = 0; i < results.size(); i++) {
 			ASection temp = results.get(i);
 			int curdistance = Math.abs(pos - temp.getMiddleOffset());
@@ -467,7 +467,7 @@ public void addASection(int st, int en, AData data) {
 		super.removeUpdate(chng);
 
 		//fireUndoableEditUpdate(new UndoableEditEvent(this, edit));
-		//Analyst.undo.addEdit((UndoableEdit) new UndoableEditEvent(this, edit));
+		//AnalystWindow.undo.addEdit((UndoableEdit) new UndoableEditEvent(this, edit));
 
 		fireADocumentChanged();
 		endCompoundEdit(null);
@@ -658,7 +658,7 @@ if (comm != null){
 		comm = comm.substring(0,ind);
 	}
 		else if (comm.length()>0) comm = comm + "<br/>";
-	comm += "Сохранено версией:"  + Analyst.version;
+	comm += "Сохранено версией:"  + AnalystWindow.version;
 }
 */
 //document header
@@ -755,11 +755,11 @@ if (comm != null){
 		}
 
 		Vector<ASection> temp = new Vector<ASection>();
-		int index = Analyst.MAX_CHARACTERS;
+		int index = AnalystWindow.MAX_CHARACTERS;
 
 		ASection sec = null;
 		while (!sectionStart.isEmpty()) {
-			index = Analyst.MAX_CHARACTERS;
+			index = AnalystWindow.MAX_CHARACTERS;
 			for (int j = 0; j < sectionStart.size(); j++) {
 				if (sectionStart.get(j).getStartOffset() <= index) {
 					sec = sectionStart.get(j);
@@ -775,7 +775,7 @@ if (comm != null){
 		temp = new Vector<ASection>();
 
 		while (!sectionEnd.isEmpty()) {
-			index = Analyst.MAX_CHARACTERS;
+			index = AnalystWindow.MAX_CHARACTERS;
 			for (int j = 0; j < sectionEnd.size(); j++) {
 				if (sectionEnd.get(j).getStartOffset() <= index) {
 					sec = sectionEnd.get(j);
@@ -963,7 +963,7 @@ if (comm != null){
 			"</tr>" + "\n" +
 				"</table>" + "\n";
 //if not generating report
-		Analyst an = iow.getProgressWindow().getAnalyst();
+		AnalystWindow an = iow.getProgressWindow().getAnalyst();
 
 //fos.write(text.getBytes(ENCODING));
 
@@ -985,7 +985,7 @@ if (comm != null){
 
 		text +=
 			"<br/>" +
-				"Протокол определения ТИМа создан программой \"Информационный анализ\", верисия: " + Analyst.version + " <br/>" +
+				"Протокол определения ТИМа создан программой \"Информационный анализ\", верисия: " + AnalystWindow.version + " <br/>" +
 				"© Школа системной соционики, Киев.<br/>" +
 				"http://www.socionicasys.ru\n";
 

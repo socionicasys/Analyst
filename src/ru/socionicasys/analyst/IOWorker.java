@@ -1,6 +1,5 @@
 package ru.socionicasys.analyst;
 
-import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
@@ -11,7 +10,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
-import javax.swing.JViewport;
 import javax.swing.SwingWorker;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -27,7 +25,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 	private boolean firstWrite = true;
 	private ADocument aDoc;
 	HashMap<ADocument.ASection, AData> aData = null;
-	Analyst frame;
+	AnalystWindow frame;
 	private ProgressWindow pw;
 	private Operation op;
 	private Exception exception = null;
@@ -170,7 +168,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 					this.cancel(true);
 				}
 			}
-			Analyst.initUndoManager();
+			AnalystWindow.initUndoManager();
 		}//if load
 
 		// if we are saving file
