@@ -22,7 +22,7 @@ import javax.swing.undo.UndoManager;
 @SuppressWarnings("serial")
 public class Analyst extends JFrame implements PropertyChangeListener {
 	public final static String version = "1.03";
-	public JTextPane textPane;
+	private JTextPane textPane;
 	ADocument aDoc;
 	static final int MAX_CHARACTERS = 10000000;
 	private ControlsPane controlsPane;
@@ -43,7 +43,7 @@ public class Analyst extends JFrame implements PropertyChangeListener {
 
 	private static final String applicationName = "Информационный анализ";
 
-	HashMap<Object, Action> actions;
+	private HashMap<Object, Action> actions;
 
 	//undo helpers
 	protected static UndoAction undoAction = null;

@@ -55,7 +55,7 @@ public class AData implements Serializable {
 	public final static String SUPEREGO = "Супер-Эго";
 
 
-	protected String secondAspect = null;
+	private String secondAspect = null;
 	protected String modifier = null;
 
 
@@ -269,22 +269,20 @@ public class AData implements Serializable {
 
 		if (mod != null && AData.isValidAspect(sa)) {
 			data.setModifier(mod);
-			data.setSecondAspect(sa);
+			data.secondAspect = sa;
 		}
 
 		return data;
 	}
 
 	private void setModifier(String mod) {
-
-		if (mod == null) return;
-		if (!(mod.equals(BLOCK) || mod.equals(JUMP))) return;
+		if (mod == null) {
+			return;
+		}
+		if (!(mod.equals(BLOCK) || mod.equals(JUMP))) {
+			return;
+		}
 		this.modifier = mod;
-	}
-
-	private void setSecondAspect(String sa) {
-		if (!AData.isValidAspect(sa)) return;
-		this.secondAspect = sa;
 	}
 
 	public class ADataException extends Exception implements Serializable {
