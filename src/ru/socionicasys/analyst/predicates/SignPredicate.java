@@ -9,8 +9,15 @@ import ru.socionicasys.analyst.types.Sociotype;
  * Поскольку функция со знаком '-' компетентна и в зоне '+', то отметка '+' работает для всех функций.
  */
 public class SignPredicate implements Predicate {
-	private Aspect aspect;
-	private Sign sign;
+	/**
+	 * Аспект предиката.
+	 */
+	private final Aspect aspect;
+
+	/**
+	 * Знак функции с заданным аспектом.
+	 */
+	private final Sign sign;
 
 	public SignPredicate(Aspect aspect, Sign sign) {
 		this.aspect = aspect;

@@ -14,15 +14,16 @@ public class PositionPredicate implements Predicate {
 	/**
 	 * Аспект, связанный с предикатом.
 	 */
-	private Aspect aspect;
+	private final Aspect aspect;
 
 	/**
 	 * Места в модели (1-8), на которых может стоять аспект.
 	 */
-	private ArrayList<Integer> positions;
+	private final List<Integer> positions;
 
 	public PositionPredicate(Aspect aspect, List<Integer> positions) {
 		this.aspect = aspect;
+		this.positions = new ArrayList<Integer>();
 		this.positions.addAll(positions);
 	}
 

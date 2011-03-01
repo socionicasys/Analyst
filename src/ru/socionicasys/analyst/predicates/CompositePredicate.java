@@ -10,7 +10,7 @@ public abstract class CompositePredicate implements Predicate {
 	/**
 	 * Список дочерних предикатов.
 	 */
-	private List<Predicate> children;
+	private final List<Predicate> children;
 
 	public CompositePredicate(Predicate... predicates) {
 		children = Arrays.asList(predicates);

@@ -10,12 +10,12 @@ public class DimensionPredicate implements Predicate {
 	/**
 	 * Аспект предиката.
 	 */
-	private Aspect aspect;
+	private final Aspect aspect;
 
 	/**
 	 * Минимальная размерность предиката.
 	 */
-	private int dimension;
+	private final int dimension;
 
 	public DimensionPredicate(Aspect aspect, int dimension) {
 		if (dimension >= 1 && dimension <= 4) {

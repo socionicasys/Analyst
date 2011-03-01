@@ -10,12 +10,12 @@ public class BlockPredicate implements Predicate {
 	/**
 	 * Первый аспект блока.
 	 */
-	private Aspect sourceAspect;
+	private final Aspect sourceAspect;
 
 	/**
 	 * Второй аспект блока.
 	 */
-	private Aspect destinationAspect;
+	private final Aspect destinationAspect;
 
 	public BlockPredicate(Aspect sourceAspect, Aspect destinationAspect) {
 		this.sourceAspect = sourceAspect;

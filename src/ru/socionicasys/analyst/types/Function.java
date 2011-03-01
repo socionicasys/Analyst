@@ -7,17 +7,17 @@ public class Function {
 	/**
 	 * Аспект функции.
 	 */
-	private Aspect aspect;
+	private final Aspect aspect;
 
 	/**
 	 * Расположении функции в модели: 1-8.
 	 */
-	private int position;
+	private final int position;
 
 	/**
 	 * Знак функции.
 	 */
-	private Sign sign;
+	private final Sign sign;
 
 	public Function(Aspect aspect, int position, Sign sign)
 	{

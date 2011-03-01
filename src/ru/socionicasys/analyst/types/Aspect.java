@@ -7,7 +7,7 @@ public class Aspect {
 	/**
 	 * Название (аббревиатура) аспекта.
 	 */
-	private String name;
+	private final String name;
 
 	public final static Aspect P = new Aspect("ЧЛ");
 	public final static Aspect L = new Aspect("БЛ");

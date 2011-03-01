@@ -11,17 +11,17 @@ public class Sociotype {
 	/**
 	 * Набор функций модели.
 	 */
-	private ArrayList<Function> functions;
+	private final List<Function> functions;
 
 	/**
 	 * Аббревиатура типа.
 	 */
-	private String abbreviation;
+	private final String abbreviation;
 
 	/**
 	 * Псевдоним типа.
 	 */
-	private String nickname;
+	private final String nickname;
 
 	private enum Types {
 		ILE,
@@ -272,6 +272,9 @@ public class Sociotype {
 			functions.add(new Function(Aspect.F, 7, Sign.PLUS));
 			functions.add(new Function(Aspect.L, 8, Sign.MINUS));
 			break;
+
+		default:
+			throw new IllegalArgumentException("Illegal sociotype");
 		}
 	}
 
