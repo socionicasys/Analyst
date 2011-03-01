@@ -1,6 +1,8 @@
 package ru.socionicasys.analyst.types;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Описывает модель А отдельного ТИМа.
@@ -56,6 +58,9 @@ public class Sociotype {
 	public final static Sociotype EII = new Sociotype(Types.EII);
 	public final static Sociotype IEE = new Sociotype(Types.IEE);
 	public final static Sociotype SLI = new Sociotype(Types.SLI);
+
+	public final static List<Sociotype> socion =
+		Arrays.asList(ILE, SEI, ESE, LII, EIE, LSI, SLE, IEI, SEE, ILI, LIE, ESI, LSE, EII, IEE, SLI);
 
 	private Sociotype(Types type) {
 		functions = new ArrayList<Function>(8);
