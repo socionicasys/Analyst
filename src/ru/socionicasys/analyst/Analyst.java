@@ -25,28 +25,23 @@ public class Analyst extends JFrame implements PropertyChangeListener {
 	public JTextPane textPane;
 	ADocument aDoc;
 	static final int MAX_CHARACTERS = 10000000;
-	private JTextArea commentField;
-	private JTabbedPane navigateTabs;
 	private ControlsPane controlsPane;
 	private StatusLabel status;
 	private ATree navigateTree;
-	private BTree analisysTree;
-	private CTree hystogramTree;
+	private BTree analysisTree;
+	private CTree histogramTree;
 	private JFileChooser fc;
 	private JFrame frame = this;
 	private String fileName = "";
 	private JPopupMenu popupMenu;
 
-	private boolean genetateReport = false;
-	JProgressBar progress;
+	private boolean generateReport = false;
 	private boolean programExit = false;
 	private boolean makeNewDocument = false;
 	private final static String extension = "htm";
 
 
-	static String applicationName = "Информационный анализ";
-
-	String newline = "\n";
+	private static final String applicationName = "Информационный анализ";
 
 	HashMap<Object, Action> actions;
 
@@ -104,7 +99,7 @@ public class Analyst extends JFrame implements PropertyChangeListener {
 		scrollPane.setMinimumSize(new Dimension(400, 250));
 
 		//Create the text area for the status log and configure it.
-		commentField = new JTextArea(5, 30);
+		JTextArea commentField = new JTextArea(5, 30);
 		commentField.setEditable(false);
 		commentField.setLineWrap(true);
 		commentField.setWrapStyleWord(true);
@@ -125,7 +120,7 @@ public class Analyst extends JFrame implements PropertyChangeListener {
 		JPanel statusPane = new JPanel(new BorderLayout()); // GridLayout(1, 2));
 		status =
 			new StatusLabel("Откройте сохраненный документ или вставтьте анализируемый текст в центральное окно");
-		progress = new JProgressBar(0, 100);
+		JProgressBar progress = new JProgressBar(0, 100);
 		progress.setSize(new Dimension(300, 30));
 
 		progress.setVisible(false);
@@ -134,9 +129,9 @@ public class Analyst extends JFrame implements PropertyChangeListener {
 
 		// Create tabbed navigation pane
 		navigateTree = new ATree(aDoc);
-		analisysTree = new BTree(aDoc);
-		hystogramTree = new CTree(aDoc);
-		navigateTabs = createTabPane();
+		analysisTree = new BTree(aDoc);
+		histogramTree = new CTree(aDoc);
+		JTabbedPane navigateTabs = createTabPane();
 
 		JSplitPane splitPaneH = new JSplitPane(
 			JSplitPane.HORIZONTAL_SPLIT,
@@ -151,7 +146,7 @@ public class Analyst extends JFrame implements PropertyChangeListener {
 		controlsPane.addADataListener(controlsPane);
 		controlsPane.addADataListener(status);
 		navigateTree.addTreeSelectionListener(controlsPane);
-		analisysTree.addTreeSelectionListener(controlsPane);
+		analysisTree.addTreeSelectionListener(controlsPane);
 
 		commentField.getCaret().addChangeListener((ChangeListener) controlsPane);
 
@@ -223,8 +218,8 @@ public class Analyst extends JFrame implements PropertyChangeListener {
 		JTabbedPane navigateTabs = new JTabbedPane();
 
 		navigateTabs.addTab("Навигация", navigateTree.getContainer());
-		navigateTabs.addTab("Анализ", analisysTree.getContainer());
-		navigateTabs.addTab("График", hystogramTree.getContainer());
+		navigateTabs.addTab("Анализ", analysisTree.getContainer());
+		navigateTabs.addTab("График", histogramTree.getContainer());
 		//navigateTabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		navigateTabs.setMinimumSize(new Dimension(200, 400));
 		navigateTabs.setPreferredSize(new Dimension(300, 400));
@@ -882,11 +877,11 @@ public class Analyst extends JFrame implements PropertyChangeListener {
 
 		//Settings.
 		JCheckBox reportCheckbox = new JCheckBox("Генерировать отчет при сохранении");
-		reportCheckbox.setSelected(genetateReport);
+		reportCheckbox.setSelected(generateReport);
 
 		reportCheckbox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ae) {
-				genetateReport = ((JCheckBox) ae.getSource()).isSelected();
+				generateReport = ((JCheckBox) ae.getSource()).isSelected();
 			}
 		});
 
@@ -1199,12 +1194,12 @@ public class Analyst extends JFrame implements PropertyChangeListener {
 		return navigateTree;
 	}
 
-	public CTree getAnalisysTree() {
-		return hystogramTree;
+	public CTree getAnalysisTree() {
+		return histogramTree;
 	}
 
 	public boolean getGenerateReport() {
-		return genetateReport;
+		return generateReport;
 	}
 
 	@Override

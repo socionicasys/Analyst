@@ -1,7 +1,5 @@
 package ru.socionicasys.analyst;
 
-import ru.socionicasys.analyst.StyledText;
-
 import java.awt.Color;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -982,7 +980,7 @@ if (comm != null){
 				"<br/>";
 
 			text += an.getNavigeTree().getReport();
-			text += an.getAnalisysTree().getReport();
+			text += an.getAnalysisTree().getReport();
 		}
 
 		text +=
