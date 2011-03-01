@@ -20,7 +20,7 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
 @SuppressWarnings("serial")
-public class Analyst extends JFrame implements WindowListener, PropertyChangeListener {
+public class Analyst extends JFrame implements PropertyChangeListener {
 	public final static String version = "1.03";
 	public JTextPane textPane;
 	ADocument aDoc;
@@ -59,7 +59,12 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 	public Analyst(String startupFilename) {
 		super(applicationName + " - " + ADocument.DEFAULT_TITLE);
 
-		addWindowListener(this);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				onWindowClosing();
+			}
+		});
 		setMinimumSize(new Dimension(600, 400));
 		setPreferredSize(new Dimension(1000, 700));
 		//Create the text pane and configure it.
@@ -1049,16 +1054,7 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 		});
 	}
 
-	@Override
-	public void windowActivated(WindowEvent arg0) {
-	}
-
-	@Override
-	public void windowClosed(WindowEvent arg0) {
-	}
-
-	@Override
-	public void windowClosing(WindowEvent arg0) {
+	private void onWindowClosing() {
 		programExit = true;
 		int option = saveConfirmation();
 		if (option == JOptionPane.CANCEL_OPTION) {
@@ -1067,22 +1063,6 @@ public class Analyst extends JFrame implements WindowListener, PropertyChangeLis
 		else if (option == JOptionPane.NO_OPTION) {
 			System.exit(0);
 		}
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent arg0) {
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent arg0) {
-	}
-
-	@Override
-	public void windowIconified(WindowEvent arg0) {
-	}
-
-	@Override
-	public void windowOpened(WindowEvent arg0) {
 	}
 
 	private int saveConfirmation() {
