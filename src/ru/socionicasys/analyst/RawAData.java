@@ -1,23 +1,14 @@
 package ru.socionicasys.analyst;
 
 public class RawAData {
-	private int handle = -1;
-	private int beg = -1;
+	private int begin = -1;
 	private int end = -1;
 
 	private String aData;
 	private String comment;
 
-	public RawAData(int handle) {
-		this.handle = handle;
-	}
-
-	public void setID(int handle) {
-		this.handle = handle;
-	}
-
-	public void setBegin(int beg) {
-		this.beg = beg;
+	public void setBegin(int begin) {
+		this.begin = begin;
 	}
 
 	public void setEnd(int end) {
@@ -28,16 +19,12 @@ public class RawAData {
 		this.aData = aData;
 	}
 
-	public void setComment(String com) {
-		this.comment = com;
-	}
-
-	public int getID() {
-		return handle;
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public int getBegin() {
-		return beg;
+		return begin;
 	}
 
 	public int getEnd() {
@@ -49,6 +36,6 @@ public class RawAData {
 	}
 
 	public String getComment() {
-		return this.comment;
+		return comment;
 	}
 }

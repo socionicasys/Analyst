@@ -1001,7 +1001,7 @@ if (comm != null){
 				leftColumnParseProgress * posBeg / leftColumn.length()));
 			int handle = -1;
 			int a = 0;
-			RawAData data = null;
+			RawAData data;
 			String handleNo = null;
 			//if we met the opening tag
 			if ((leftColumn.indexOf("[", 0) >= 0) && (leftColumn.indexOf("[", 0) <= leftColumn.indexOf("]", 0))) {
@@ -1009,7 +1009,7 @@ if (comm != null){
 				handleNo = findTagContent(leftColumn, "[", "|", 0);
 				handle = Integer.parseInt(handleNo);
 				leftColumn = leftColumn.replace(findTag(leftColumn, "[", "|", 0), "");
-				data = new RawAData(handle);
+				data = new RawAData();
 				data.setBegin(posBeg);
 				rawData.put(new Integer(handle), data);
 				//if we met the closing tag
