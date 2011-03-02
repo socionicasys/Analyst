@@ -5,15 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -251,31 +243,35 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		}
 	}//class RDStack
 
-	public ASection getASection(int pos) {
-		Set<ASection> set = aDataMap.keySet();
-		Vector<ASection> results = new Vector<ASection>();
-		ASection r = null;
-
-		Iterator<ASection> it = set.iterator();
-		while (it.hasNext()) {
-			ASection as = it.next();
-			if (as.containsOffset(pos)) results.add(as);
-		}
-		if (results.isEmpty()) return null;
-
-		int distance = -1;
-		for (int i = 0; i < results.size(); i++) {
-			ASection temp = results.get(i);
-			int curdistance = Math.abs(pos - temp.getMiddleOffset());
-			if (distance == -1 || curdistance < distance) {
-				r = temp;
-				distance = curdistance;
-			}
-			if (curdistance == distance) {
-				if (temp.getStartOffset() > r.getStartOffset()) r = temp;
+	/**
+	 * Находит блок (ASection), который содержит заданную позицию. Если таких блоков несколько, выбирается тот,
+	 * центральная часть которого лежит ближе всего к этой позиции. Среди блоков, центры которых лежат на одном
+	 * расстоянии, выбирается блок максимальной вложенности.
+	 * @param pos позиция в документе, для которой нужно найти блок
+	 * @return блок, содержащий заданную позицию, или null, если такого нет
+	 */
+	public ASection getASection(final int pos) {
+		ArrayList<ASection> results = new ArrayList<ASection>();
+		for (ASection as : aDataMap.keySet()) {
+			if (as.containsOffset(pos)) {
+				results.add(as);
 			}
 		}
-		return r;
+		if (results.isEmpty()) {
+			return null;
+		}
+
+		return Collections.min(results, new Comparator<ASection>() {
+			@Override
+			public int compare(ASection o1, ASection o2) {
+				int midDistance1 = Math.abs(pos - o1.getMiddleOffset());
+				int midDistance2 = Math.abs(pos - o2.getMiddleOffset());
+				if (midDistance1 != midDistance2) {
+					return midDistance1 - midDistance2;
+				}
+				return -(o1.getStartOffset() - o2.getStartOffset());
+			}
+		});
 	}
 
 	public ASection getASectionThatStartsAt(int pos1) {
