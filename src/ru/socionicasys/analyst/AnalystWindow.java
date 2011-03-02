@@ -22,7 +22,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	public final static String version = "1.03";
 	private JTextPane textPane;
 	ADocument aDoc;
-	static final int MAX_CHARACTERS = 10000000;
 	private ControlsPane controlsPane;
 	private StatusLabel status;
 	private ATree navigateTree;

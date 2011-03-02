@@ -263,11 +263,11 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		}
 		if (results.isEmpty()) return null;
 
-		int distance = AnalystWindow.MAX_CHARACTERS;
+		int distance = -1;
 		for (int i = 0; i < results.size(); i++) {
 			ASection temp = results.get(i);
 			int curdistance = Math.abs(pos - temp.getMiddleOffset());
-			if (curdistance < distance) {
+			if (distance == -1 || curdistance < distance) {
 				r = temp;
 				distance = curdistance;
 			}
@@ -666,13 +666,11 @@ if (comm != null){
 		}
 
 		Vector<ASection> temp = new Vector<ASection>();
-		int index = AnalystWindow.MAX_CHARACTERS;
-
 		ASection sec = null;
 		while (!sectionStart.isEmpty()) {
-			index = AnalystWindow.MAX_CHARACTERS;
+			int index = -1;
 			for (int j = 0; j < sectionStart.size(); j++) {
-				if (sectionStart.get(j).getStartOffset() <= index) {
+				if (index == -1 || sectionStart.get(j).getStartOffset() <= index) {
 					sec = sectionStart.get(j);
 					index = sec.getStartOffset();
 				}
@@ -686,9 +684,9 @@ if (comm != null){
 		temp = new Vector<ASection>();
 
 		while (!sectionEnd.isEmpty()) {
-			index = AnalystWindow.MAX_CHARACTERS;
+			int index = -1;
 			for (int j = 0; j < sectionEnd.size(); j++) {
-				if (sectionEnd.get(j).getStartOffset() <= index) {
+				if (index == -1 || sectionEnd.get(j).getStartOffset() <= index) {
 					sec = sectionEnd.get(j);
 					index = sec.getStartOffset();
 				}
