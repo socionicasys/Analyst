@@ -57,8 +57,12 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 	protected Object doInBackground() throws Exception {
 		addPropertyChangeListener(this);
 		try {
-			if (op.equals(Operation.LOAD)) aDoc.load(fis, append, this);
-			if (op.equals(Operation.SAVE)) aDoc.save(fos, this);
+			LegacyHtmlDocumentFormat documentFormat = new LegacyHtmlDocumentFormat();
+			if (op.equals(Operation.LOAD)) {
+				aDoc.load(fis, append, this);
+			} else if (op.equals(Operation.SAVE)) {
+				documentFormat.writeDocument(aDoc, fos, this);
+			}
 		} catch (Exception e) {
 			pw.close();
 			this.exception = e;
