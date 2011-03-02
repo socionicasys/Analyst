@@ -1,36 +1,47 @@
 package ru.socionicasys.analyst;
 
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.HashMap;
 
-
-public class JumpCounter extends Hashtable<String, Hashtable<String, Integer>> {
+public class JumpCounter {
+	private final HashMap<String, HashMap<String, Integer>> jumpTable;
 
 	public JumpCounter() {
-		super();
+		jumpTable = new HashMap<String, HashMap<String, Integer>>();
 	}
 
 	public void addJump(String to, String from) {
-		Hashtable<String, Integer> t = null;
-
-		if (!this.containsKey(to)) t = new Hashtable<String, Integer>();
-		else t = get(to);
+		HashMap<String, Integer> t;
+		if (!jumpTable.containsKey(to)) {
+			t = new HashMap<String, Integer>();
+		} else {
+			t = jumpTable.get(to);
+		}
 		if (t.containsKey(from)) {
-			Integer count = t.get(from);
-			t.remove(from);
-			count = new Integer(count.intValue() + 1);
-			t.put(from, count);
-		} else t.put(from, new Integer(1));
-		put(to, t);
+			t.put(from, t.remove(from) + 1);
+		} else {
+			t.put(from, 1);
+		}
+		jumpTable.put(to, t);
 	}
 
-
 	public int getJumpCount(String to, String from) {
-		Hashtable<String, Integer> t = null;
+		HashMap<String, Integer> t;
+		if (jumpTable.containsKey(to)) {
+			t = jumpTable.get(to);
+		} else {
+			return 0;
+		}
+		if (!t.containsKey(from)) {
+			return 0;
+		}
+		return t.get(from);
+	}
 
-		if (this.containsKey(to)) t = get(to);
-		else return 0;
-		if (!t.containsKey(from)) return 0;
-		return t.get(from).intValue();
+	public boolean isEmpty() {
+		return jumpTable.isEmpty();
+	}
+
+	public void clear() {
+		jumpTable.clear();
 	}
 }

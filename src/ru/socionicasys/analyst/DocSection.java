@@ -3,18 +3,12 @@ package ru.socionicasys.analyst;
 import java.io.Serializable;
 
 public class DocSection implements Serializable {
-
-	int start;
-	int end;
+	private final int start;
+	private final int end;
 
 	public DocSection(int start, int end) {
-		if (start > end) {
-			int temp = start;
-			start = end;
-			end = temp;
-		}
-		this.start = start;
-		this.end = end;
+		this.start = Math.min(start, end);
+		this.end = Math.max(start, end);
 	}
 
 	public int getStart() {

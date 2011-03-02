@@ -1,15 +1,11 @@
-/**
- *
- */
 package ru.socionicasys.analyst;
 
 /**
  * @author Виктор
  */
-public class EndNodeObject extends Object {
-	protected String string;
-	protected int offset;
-
+public class EndNodeObject {
+	private final String string;
+	private final int offset;
 
 	public EndNodeObject(int offset, String str) {
 		this.string = str;
@@ -24,16 +20,8 @@ public class EndNodeObject extends Object {
 		return string;
 	}
 
-	public void setString(String str) {
-		this.string = str;
-	}
-
-	public void setOffset(int offset) {
-		this.offset = offset;
-	}
-
+	@Override
 	public String toString() {
-		if (string == null) return "";
-		return string.toString();
+		return string == null ? "" : string;
 	}
 }

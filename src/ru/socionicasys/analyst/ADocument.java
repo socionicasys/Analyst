@@ -1608,7 +1608,7 @@ if (comm != null){
 /////////////////////////////////////////////////////////////////////////////////////////
 
 	//===================================================================
-	public class ADocFragmentPasteEdit extends AbstractUndoableEdit {
+	private class ADocFragmentPasteEdit extends AbstractUndoableEdit {
 
 		int position;
 		ADocument aDoc;
