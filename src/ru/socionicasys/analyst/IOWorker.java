@@ -59,7 +59,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 		try {
 			LegacyHtmlDocumentFormat documentFormat = new LegacyHtmlDocumentFormat();
 			if (op.equals(Operation.LOAD)) {
-				aDoc.load(fis, append, this);
+				documentFormat.readDocument(aDoc, fis, append, this);
 			} else if (op.equals(Operation.SAVE)) {
 				documentFormat.writeDocument(aDoc, fos, this);
 			}

@@ -1,7 +1,12 @@
 package ru.socionicasys.analyst;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.text.*;
 
 public class LegacyHtmlDocumentFormat {
@@ -457,5 +462,365 @@ public class LegacyHtmlDocumentFormat {
 		}
 		res += "\"";
 		return res;
+	}
+
+	public void readDocument(ADocument document, FileInputStream fis, boolean append, IOWorker iow) throws Exception {
+		InputStreamReader isr = new InputStreamReader(fis, Charset.forName(encoding));
+		String leftColumn = "";
+		String rightColumn = "";
+		String allText = "";
+
+		int fileLoadProgress = 20;
+		int leftColumnParseProgress = 50;
+		int rightColumnParseProgress = 25;
+		int textAddProgress = 5;
+		int aDataCteationProgress = 0;
+
+		int appendOffset = 0;
+		if (append) appendOffset = document.getLength();
+
+		final class SectorData {
+			int handle;
+			int startPos;
+			int endPos;
+			String dataString;
+
+			public SectorData(int handle, int startPos, int endPos) {
+				this.handle = handle;
+				this.startPos = startPos;
+				this.endPos = endPos;
+			}
+
+			public SectorData(int handle, int startPos, int endPos, String dataString) {
+				this.handle = handle;
+				this.startPos = startPos;
+				this.endPos = endPos;
+				this.dataString = dataString;
+			}
+
+			public void setDataString(String dataString) {
+				this.dataString = dataString;
+			}
+
+			public int getHandle() {
+				return handle;
+			}
+
+			public int getstartPos() {
+				return startPos;
+			}
+
+			public int getendPos() {
+				return endPos;
+			}
+		}// class SectorData
+
+		Vector<SectorData> sectorData = new Vector<SectorData>();
+		boolean finished = false;
+		// reading the file
+
+		int offset = 0;
+		int length = fis.available();
+		char[] buf = new char[length];
+		int bytesRead;
+
+		iow.firePropertyChange("progress", null, new Integer(fileLoadProgress / 2));
+
+		while (!finished) {
+
+			bytesRead = isr.read(buf, 0, length);
+			if (bytesRead > 0) allText += new String(buf, 0, bytesRead);
+				//offset += bytesRead;
+			else {
+				finished = true;
+				isr.close();
+				fis.close();
+			}
+		}
+		iow.firePropertyChange("progress", null, new Integer(fileLoadProgress));
+
+		//  PARSING THE INPUT DATA
+		finished = false;
+		offset = 0;
+
+		// looking for the table "header"
+		int searchIndex = allText.indexOf("title=\"header\"", 0);
+
+		String colStartToken = "<td>";
+		String colEndToken = "</td>";
+		String result = null;
+		String headerResult = null, leftHeaderColumn = null, rightHeaderColumn = null;
+
+		String leftHeaderText = allText.substring(searchIndex, allText.indexOf("</table", searchIndex));
+
+		// looking through columns of table "header" and retreiving text of the left and right columns
+
+		Dictionary<Object, Object> properties = document.getDocumentProperties();
+
+		searchIndex = leftHeaderText.indexOf("<tr>", 0);
+		while (searchIndex > 0) {
+
+			searchIndex = leftHeaderText.indexOf("<tr>", searchIndex);
+			if (searchIndex > 0) headerResult = findTagContent(leftHeaderText, colStartToken, colEndToken, searchIndex);
+			else break;
+			if (headerResult != null) {
+				leftHeaderColumn = headerResult.trim();
+				searchIndex = leftHeaderText.indexOf(colEndToken, searchIndex) + colEndToken.length();
+			}
+
+			if (searchIndex > 0) headerResult = findTagContent(leftHeaderText, colStartToken, colEndToken, searchIndex);
+			else break;
+			if (headerResult != null) {
+				rightHeaderColumn = headerResult.trim();
+				searchIndex = leftHeaderText.indexOf(colEndToken, searchIndex) + colEndToken.length();
+			}
+
+			//обработка заголовка
+			leftHeaderColumn.replaceAll("\t", "");
+			rightHeaderColumn.replaceAll("\t", "");
+			rightHeaderColumn = rightHeaderColumn.replaceAll("<br/>", "\n");
+
+			if (!append) {
+				if (leftHeaderColumn.equals(ADocument.TitleProperty1)) {
+					iow.firePropertyChange("DocumentProperty", ADocument.TitleProperty, new String(rightHeaderColumn));
+				}
+				if (leftHeaderColumn.equals(ADocument.ExpertProperty)) {
+					iow.firePropertyChange("DocumentProperty", ADocument.ExpertProperty, new String(rightHeaderColumn));
+				}
+				if (leftHeaderColumn.equals(ADocument.ClientProperty)) {
+					iow.firePropertyChange("DocumentProperty", ADocument.ClientProperty, new String(rightHeaderColumn));
+				}
+				if (leftHeaderColumn.equals(ADocument.DateProperty)) {
+					iow.firePropertyChange("DocumentProperty", ADocument.DateProperty, new String(rightHeaderColumn));
+				}
+				if (leftHeaderColumn.equals(ADocument.CommentProperty)) {
+					iow.firePropertyChange("DocumentProperty", ADocument.CommentProperty, new String(rightHeaderColumn));
+				}
+			} else {
+				if (leftHeaderColumn.equals(ADocument.ExpertProperty)) {
+					String expert = (String) properties.get(ADocument.ExpertProperty);
+					if (!expert.contains(rightHeaderColumn)) expert += "; " + rightHeaderColumn;
+					iow.firePropertyChange("DocumentProperty", ADocument.ExpertProperty, new String(expert));
+				}
+			}
+		}
+
+		// looking for the table "protocol"
+		searchIndex = allText.indexOf("title=\"protocol\"", 0);
+
+		//limiting ourselves only to the Protocol table
+		int tableProtocolEndIndex = allText.indexOf("</table", searchIndex);
+		allText = allText.substring(0, tableProtocolEndIndex);
+
+		// looking through columns of table "protocol" and retreiving text of the left and right columns
+		while (searchIndex > 0) {
+
+			searchIndex = allText.indexOf("<tr>", searchIndex);
+			if (searchIndex > 0) result = findTagContent(allText, colStartToken, colEndToken, searchIndex);
+			else break;
+			if (result != null) {
+				leftColumn += result;
+				leftColumn += "<br/><br/>";//adding breaks because there are no breaks on row boundaries
+				searchIndex = allText.indexOf(colEndToken, searchIndex) + colEndToken.length();
+			}
+
+			if (searchIndex > 0) result = findTagContent(allText, colStartToken, colEndToken, searchIndex);
+			else break;
+			if (result != null) {
+				rightColumn += result;
+				//rightColumn +="<br/>"; //there are breaks on row boundaries for the right column
+				searchIndex = allText.indexOf(colEndToken, searchIndex) + colEndToken.length();
+			}
+		}
+
+		//remove all tabs
+		//leftColumn = leftColumn.replaceAll("\t", "");
+		leftColumn = leftColumn.replaceAll("\n", "");
+		leftColumn = leftColumn.replace("<br/>", "\n");
+		leftColumn = leftColumn.trim();
+
+		rightColumn = rightColumn.replaceAll("\n", "");
+		//rightColumn= rightColumn.replaceAll("\t", "");
+		rightColumn = rightColumn.replace("<br/>", "\n");
+
+		// Убираем все лишние теги
+
+		leftColumn = removeTag(leftColumn, "<span", ">");
+		leftColumn = removeTag(leftColumn, "</span", ">");
+		leftColumn = removeTag(leftColumn, "<small", ">");
+		leftColumn = removeTag(leftColumn, "</small", ">");
+
+		Hashtable<Integer, RawAData> rawData = new Hashtable<Integer, RawAData>();
+
+		int posBeg = leftColumn.indexOf("[");
+		int posEnd = -1;
+		iow.firePropertyChange("progress", null, new Integer(fileLoadProgress / 2));
+		// processing the left column's content
+		while (leftColumn.indexOf("[", 0) >= 0 || leftColumn.indexOf("]", 0) >= 0) {
+			iow.firePropertyChange("progress", null, new Integer(fileLoadProgress +
+				leftColumnParseProgress * posBeg / leftColumn.length()));
+			int handle = -1;
+			int a = 0;
+			RawAData data;
+			String handleNo = null;
+			//if we met the opening tag
+			if ((leftColumn.indexOf("[", 0) >= 0) && (leftColumn.indexOf("[", 0) <= leftColumn.indexOf("]", 0))) {
+				posBeg = leftColumn.indexOf("[");
+				handleNo = findTagContent(leftColumn, "[", "|", 0);
+				handle = Integer.parseInt(handleNo);
+				leftColumn = leftColumn.replace(findTag(leftColumn, "[", "|", 0), "");
+				data = new RawAData();
+				data.setBegin(posBeg);
+				rawData.put(new Integer(handle), data);
+				//if we met the closing tag
+			} else if (leftColumn.indexOf("]", 0) >= 0) {
+				posEnd = leftColumn.indexOf("|");
+				handleNo = findTagContent(leftColumn, "|", "]", 0);
+				handle = Integer.parseInt(handleNo);
+				leftColumn = leftColumn.replace(findTag(leftColumn, "|", "]", 0), "");
+				data = rawData.get(new Integer(handle));
+				if (data != null) data.setEnd(posEnd);
+			}
+		}
+
+		iow.firePropertyChange("progress", null, new Integer(
+			fileLoadProgress +
+				leftColumnParseProgress));
+
+		posBeg = rightColumn.indexOf("{");
+		posEnd = -1;
+
+		// processing the right column's content
+		while (posBeg >= 0) {
+			iow.firePropertyChange("progress", null, new Integer(
+				fileLoadProgress +
+					leftColumnParseProgress +
+					rightColumnParseProgress * (posBeg / rightColumn.length())));
+
+			String handleNo = findTagContent(rightColumn, "{", ":", posBeg);
+			int handle = Integer.parseInt(handleNo);
+			RawAData data = rawData.get(new Integer(handle));
+			if (data != null) {
+				String aDataString = findTagContent(rightColumn, ":", "}", posBeg);
+				data.setAData(aDataString);
+				posEnd = rightColumn.indexOf("{", posBeg + 1);
+				if (posEnd < 0) posEnd = rightColumn.length() - 1;
+				int posBeg1 = rightColumn.indexOf("}", posBeg) + 1;
+				String com = null;
+				if (posBeg1 > 0) com = new String(rightColumn.substring(posBeg1, posEnd));
+
+				if (com != null) com = com.trim();
+				com = " " + com;
+				//removing last line brake which was added when saving
+				while (com != null && (com.lastIndexOf("\n") == (com.length() - 1)))
+					com = com.substring(0, com.length() - 1);
+/*
+				while (com != null  &&  com.startsWith(" "))
+						 	com  = com.substring(1, com.length()-1);
+*/
+				if (com == null) com = "";
+				data.setComment(com);
+			}
+
+			posBeg = rightColumn.indexOf("{", posBeg + 1);
+		}
+		iow.firePropertyChange("progress", null, new Integer(
+			fileLoadProgress +
+				leftColumnParseProgress +
+				rightColumnParseProgress));
+
+		// Обрабатываем стили в уже прочитанном тексте
+		SimpleAttributeSet currentStyle = new SimpleAttributeSet(document.defaultStyle);
+		Pattern styleTag = Pattern.compile("</?[bi]>");
+		String sourceText = leftColumn;
+		Matcher styleMatcher = styleTag.matcher(sourceText);
+		int sourcePosition = 0;
+		int sourceOffset = 0;
+		int docPosition = appendOffset;
+		Vector<StyledText> styledTextBlocks = new Vector<StyledText>();
+		while (styleMatcher.find()) {
+			String currentTag = styleMatcher.group();
+			int tagLenth = currentTag.length();
+			int tagStart = styleMatcher.start();
+			int tagEnd = styleMatcher.end();
+			String textBlock = sourceText.substring(sourcePosition, tagStart);
+
+			// Добавляем в документ текст перед текущим тегом
+			styledTextBlocks.add(new StyledText(textBlock, currentStyle));
+			docPosition += textBlock.length();
+			sourcePosition = tagEnd;
+
+			// Так как мы удаляем теги из основного текста, необходимо сместить
+			// пометки типировщика, находящиеся после тега
+			for (RawAData rd : rawData.values()) {
+				if (rd.getBegin() >= tagEnd - sourceOffset) {
+					rd.setBegin(rd.getBegin() - tagLenth);
+				}
+				if (rd.getEnd() >= tagEnd - sourceOffset) {
+					rd.setEnd(rd.getEnd() - tagLenth);
+				}
+			}
+			sourceOffset += tagLenth;
+
+			// Стиль следующего текста в зависимости от текущего тега
+			if (currentTag.equals("<b>")) {
+				StyleConstants.setBold(currentStyle, true);
+			} else if (currentTag.equals("</b>")) {
+				StyleConstants.setBold(currentStyle, false);
+			} else if (currentTag.equals("<i>")) {
+				StyleConstants.setItalic(currentStyle, true);
+			} else if (currentTag.equals("</i>")) {
+				StyleConstants.setItalic(currentStyle, false);
+			}
+		}
+		// Добавляем в документ текст за последним тегом
+		styledTextBlocks.add(new StyledText(sourceText.substring(sourcePosition),
+			currentStyle));
+		iow.firePropertyChange("AppendStyledText", null, styledTextBlocks);
+
+		/// adding plain text to the document
+		iow.firePropertyChange("RawData", null, rawData);
+		iow.firePropertyChange("progress", null, new Integer(
+			fileLoadProgress +
+				leftColumnParseProgress +
+				rightColumnParseProgress +
+				textAddProgress));
+
+		//creating and adding the segments AData info
+		//	HashMap <ASection, AData> tempADataMap = new HashMap <ASection, AData>();
+
+		//iow.firePropertyChange("AData", getADataMap(), tempADataMap);
+
+		iow.firePropertyChange("progress", null, new Integer(100));
+	}
+
+	private String removeTag(String source, String startToken, String endToken) {
+		String tag = null;
+		tag = findTag(source, startToken, endToken, 0);
+		while (tag != null) {
+			source = source.replace((CharSequence) tag, (CharSequence) "");
+			tag = findTag(source, startToken, endToken, 0);
+		}
+		return source;
+	}
+
+	private String findTagContent(String text, String startToken, String endToken, int fromIndex) {
+		int startIndex = text.indexOf(startToken, fromIndex);
+		int endIndex = text.indexOf(endToken, startIndex);
+
+		if (startIndex >= 0 && endIndex > 0 && endIndex > startIndex) {
+			return text.substring(startIndex + startToken.length(), endIndex);
+		}
+		return null;
+	}
+
+	private String findTag(String text, String startToken, String endToken, int fromIndex) {
+		int startIndex = text.indexOf(startToken, fromIndex);
+		int endIndex = text.indexOf(endToken, startIndex);
+
+		if (startIndex >= 0 && endIndex > 0 && endIndex > startIndex) {
+			return text.substring(startIndex, endIndex + endToken.length());
+		}
+		return null;
 	}
 }
