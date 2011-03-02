@@ -14,8 +14,6 @@ import javax.swing.SwingWorker;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 
-import ru.socionicasys.analyst.ADocument.RawAData;
-
 public class IOWorker extends SwingWorker implements PropertyChangeListener {
 
 	private FileInputStream fis;
@@ -29,7 +27,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 	private Operation op;
 	private Exception exception = null;
 	private int appendOffset = 0;
-	private Hashtable<Integer, ADocument.RawAData> rawData = null;
+	private Hashtable<Integer, RawAData> rawData = null;
 
 
 	IOWorker(ProgressWindow pw, ADocument aDoc, FileInputStream fis) {
@@ -144,7 +142,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 				rawData = (Hashtable<Integer, RawAData>) newValue;
 
 				try {
-					Iterator<ADocument.RawAData> it = (rawData.values()).iterator();
+					Iterator<RawAData> it = (rawData.values()).iterator();
 					RawAData temp = null;
 					while (it.hasNext()) {
 						temp = it.next();

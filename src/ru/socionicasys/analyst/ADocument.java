@@ -94,56 +94,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		}
 	}//class DocumentFlowEvent
 
-	public class RawAData {
-		protected int handle = -1, beg = -1, end = -1;
-
-		String aData, comment;
-
-		public RawAData(int handle) {
-			this.handle = handle;
-		}
-
-		public void setID(int handle) {
-			this.handle = handle;
-		}
-
-		public void setBegin(int beg) {
-			this.beg = beg;
-		}
-
-		public void setEnd(int end) {
-			this.end = end;
-		}
-
-		public void setAData(String aData) {
-			this.aData = aData;
-		}
-
-		public void setComment(String com) {
-			this.comment = com;
-		}
-
-		public int getID() {
-			return handle;
-		}
-
-		public int getBegin() {
-			return beg;
-		}
-
-		public int getEnd() {
-			return end;
-		}
-
-		public String getAData() {
-			return aData;
-		}
-
-		public String getComment() {
-			return this.comment;
-		}
-	}//class RawAData
-
 	ADocument() {
 		super();
 
@@ -1143,11 +1093,11 @@ if (comm != null){
 			// Так как мы удаляем теги из основного текста, необходимо сместить
 			// пометки типировщика, находящиеся после тега
 			for (RawAData rd : rawData.values()) {
-				if (rd.beg >= tagEnd - sourceOffset) {
-					rd.beg -= tagLenth;
+				if (rd.getBegin() >= tagEnd - sourceOffset) {
+					rd.setBegin(rd.getBegin() - tagLenth);
 				}
-				if (rd.end >= tagEnd - sourceOffset) {
-					rd.end -= tagLenth;
+				if (rd.getEnd() >= tagEnd - sourceOffset) {
+					rd.setEnd(rd.getEnd() - tagLenth);
 				}
 			}
 			sourceOffset += tagLenth;
