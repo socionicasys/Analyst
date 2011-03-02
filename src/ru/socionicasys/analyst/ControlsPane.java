@@ -886,7 +886,7 @@ public class ControlsPane extends JToolBar implements CaretListener,
 	public AData getAData() {
 		AData adata = null;
 		try {
-			adata = AData.parceAData(aspectPanel.getAspectSelection() + AData.SEPARATOR +
+			adata = AData.parseAData(aspectPanel.getAspectSelection() + AData.SEPARATOR +
 				signPanel.getSignSelection() + AData.SEPARATOR +
 				dimensionPanel.getDimensionSelection() + AData.SEPARATOR +
 				mvPanel.getMVSelection() + AData.SEPARATOR

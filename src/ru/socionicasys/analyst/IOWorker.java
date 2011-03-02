@@ -148,7 +148,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 						temp = it.next();
 						AData ad = null;
 
-						ad = AData.parceAData(temp.getAData());
+						ad = AData.parseAData(temp.getAData());
 						ad.setComment(temp.getComment());
 						int beg = temp.getBegin();
 						int end = temp.getEnd();

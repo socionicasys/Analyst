@@ -3,7 +3,6 @@ package ru.socionicasys.analyst;
 import java.io.Serializable;
 
 public class AData implements Serializable {
-
 	public final static String L = "БЛ";
 	public final static String P = "ЧЛ";
 	public final static String R = "БЭ";
@@ -12,23 +11,6 @@ public class AData implements Serializable {
 	public final static String F = "ЧС";
 	public final static String T = "БИ";
 	public final static String I = "ЧИ";
-
-	public final static String LI = "БЛ-ЧИ";
-	public final static String LF = "БЛ-ЧС";
-	public final static String PS = "ЧЛ-БС";
-	public final static String PT = "ЧЛ-БИ";
-	public final static String RI = "БЭ-ЧИ";
-	public final static String RF = "БЭ-ЧС";
-	public final static String ES = "ЧЭ-БС";
-	public final static String ET = "ЧЭ-БИ";
-	public final static String SP = "БС-ЧЛ";
-	public final static String SE = "БС-ЧЭ";
-	public final static String FL = "ЧС-БЛ";
-	public final static String FR = "ЧС-БЭ";
-	public final static String TP = "БИ-ЧЛ";
-	public final static String TE = "БИ-ЧЭ";
-	public final static String IL = "ЧИ-БЛ";
-	public final static String IR = "ЧИ-БЭ";
 
 	public final static String DOUBT = "Фрагмент требует уточнения";
 
@@ -46,28 +28,21 @@ public class AData implements Serializable {
 	public final static String D2 = "Размерность НОРМА";
 	public final static String D3 = "Размерность СИТУАЦИЯ";
 	public final static String D4 = "Размерность ВРЕМЯ";
-	public static final String ODNOMERNOST = "Одномерность";
-	public static final String INDIVIDUALNOST = "Индивидуальность";
+	public final static String ODNOMERNOST = "Одномерность";
+	public final static String INDIVIDUALNOST = "Индивидуальность";
 	public final static String MALOMERNOST = "Маломерность";
 	public final static String MNOGOMERNOST = "Многомерность";
 
 	public final static String SUPERID = "Супер-Ид";
 	public final static String SUPEREGO = "Супер-Эго";
 
-
 	private String secondAspect = null;
-	protected String modifier = null;
-
-
-	protected String aspect;
-	protected String sign;
-	protected String mv;
-	protected String dimension;
-	protected String comment;
-
-	public AData(String aspect) throws ADataException {
-		setAspect(aspect);
-	}
+	private String modifier = null;
+	private String aspect;
+	private String sign;
+	private String mv;
+	private String dimension;
+	private String comment;
 
 	public AData(String aspect, String sign, String dimension, String mv, String comment) throws ADataException {
 		setAspect(aspect);
@@ -78,37 +53,27 @@ public class AData implements Serializable {
 	}
 
 	public void setAspect(String s) throws ADataException {
-		if (s == null) throw new ADataException();
-		if (!(isValidAspect(s) || s.equals(DOUBT))) throw new ADataException();
+		if (s == null) {
+			throw new ADataException();
+		}
+		if (!(isValidAspect(s) || s.equals(DOUBT))) {
+			throw new ADataException();
+		}
 		this.aspect = s;
 	}
 
 	public static boolean isValidAspect(String s) {
-		if (s == null) return false;
-		if (!(s.equals(L)
-			| s.equals(P)
-			| s.equals(R)
-			| s.equals(E)
-			| s.equals(S)
-			| s.equals(F)
-			| s.equals(T)
-			| s.equals(I)
-
-		)) return false;
-
-		return true;
-	}
-
-	public void blockWith(String secondAspect) throws ADataException {
-		if (secondAspect == null || !isValidAspect(secondAspect)) throw new ADataException();
-		this.secondAspect = secondAspect;
-		modifier = BLOCK;
-	}
-
-	public void jumpTo(String secondAspect) throws ADataException {
-		if (secondAspect == null || !isValidAspect(secondAspect)) throw new ADataException();
-		this.secondAspect = secondAspect;
-		modifier = JUMP;
+		if (s == null) {
+			return false;
+		}
+		return s.equals(L)
+			|| s.equals(P)
+			|| s.equals(R)
+			|| s.equals(E)
+			|| s.equals(S)
+			|| s.equals(F)
+			|| s.equals(T)
+			|| s.equals(I);
 	}
 
 	public String getModifier() {
@@ -124,9 +89,9 @@ public class AData implements Serializable {
 			sign = null;
 			return;
 		}
-		if (!(s.equals(PLUS)
-			| s.equals(MINUS)
-		)) throw new ADataException();
+		if (!(s.equals(PLUS) || s.equals(MINUS))) {
+			throw new ADataException();
+		}
 		this.sign = s;
 	}
 
@@ -143,7 +108,9 @@ public class AData implements Serializable {
 			| s.equals(MNOGOMERNOST)
 			| s.equals(ODNOMERNOST)
 			| s.equals(INDIVIDUALNOST)
-		)) throw new ADataException();
+		)) {
+			throw new ADataException();
+		}
 		this.dimension = s;
 	}
 
@@ -156,7 +123,9 @@ public class AData implements Serializable {
 			| s.equals(VITAL)
 			| s.equals(SUPEREGO)
 			| s.equals(SUPERID)
-		)) throw new ADataException();
+		)) {
+			throw new ADataException();
+		}
 		this.mv = s;
 	}
 
@@ -185,22 +154,31 @@ public class AData implements Serializable {
 	}
 
 	public String toString() {
-		//String separator = ";";
-		String res = aspect;				//	=  aspect + separator;
+		String res = aspect;
 		if (modifier != null && modifier.equals(BLOCK)) {
 			res += BLOCK_TOKEN + secondAspect + SEPARATOR;
 		} else if (modifier != null && modifier.equals(JUMP)) {
 			res += JUMP_TOKEN + secondAspect + SEPARATOR;
-		} else res += SEPARATOR;
+		} else {
+			res += SEPARATOR;
+		}
 
-		if (sign != null) res += (sign + SEPARATOR);
-		if (dimension != null) res += (dimension + SEPARATOR);
-		if (mv != null) res += mv;
+		if (sign != null) {
+			res += (sign + SEPARATOR);
+		}
+		if (dimension != null) {
+			res += (dimension + SEPARATOR);
+		}
+		if (mv != null) {
+			res += mv;
+		}
 		return res;
 	}
 
-	public static AData parceAData(String s) throws ADataException {
-		if (s == null) return null;
+	public static AData parseAData(String s) throws ADataException {
+		if (s == null) {
+			return null;
+		}
 
 		String aspect = null;
 		String sign = null;
@@ -231,39 +209,70 @@ public class AData implements Serializable {
 			}
 		}
 
-		if (s.contains(L)) aspect = L;
-		else if (s.contains(P)) aspect = P;
-		else if (s.contains(R)) aspect = R;
-		else if (s.contains(E)) aspect = E;
-		else if (s.contains(S)) aspect = S;
-		else if (s.contains(F)) aspect = F;
-		else if (s.contains(T)) aspect = T;
-		else if (s.contains(I)) aspect = I;
-		else if (s.contains(I)) aspect = I;
+		if (s.contains(L)) {
+			aspect = L;
+		} else if (s.contains(P)) {
+			aspect = P;
+		} else if (s.contains(R)) {
+			aspect = R;
+		} else if (s.contains(E)) {
+			aspect = E;
+		} else if (s.contains(S)) {
+			aspect = S;
+		} else if (s.contains(F)) {
+			aspect = F;
+		} else if (s.contains(T)) {
+			aspect = T;
+		} else if (s.contains(I)) {
+			aspect = I;
+		} else if (s.contains(I)) {
+			aspect = I;
+		}
 
-		if (s.contains(DOUBT)) aspect = DOUBT;
+		if (s.contains(DOUBT)) {
+			aspect = DOUBT;
+		}
 
-		if (aspect == null) return null;
+		if (aspect == null) {
+			return null;
+		}
 
 		//detecting mental\vital
-		if (s.contains(MENTAL)) mv = MENTAL;
-		else if (s.contains(VITAL)) mv = VITAL;
-		else if (s.contains(SUPEREGO)) mv = SUPEREGO;
-		else if (s.contains(SUPERID)) mv = SUPERID;
+		if (s.contains(MENTAL)) {
+			mv = MENTAL;
+		} else if (s.contains(VITAL)) {
+			mv = VITAL;
+		} else if (s.contains(SUPEREGO)) {
+			mv = SUPEREGO;
+		} else if (s.contains(SUPERID)) {
+			mv = SUPERID;
+		}
 
 		//detecting dimension
-		if (s.contains(D1)) dimension = D1;
-		else if (s.contains(D2)) dimension = D2;
-		else if (s.contains(D3)) dimension = D3;
-		else if (s.contains(D4)) dimension = D4;
-		else if (s.contains(MALOMERNOST)) dimension = MALOMERNOST;
-		else if (s.contains(MNOGOMERNOST)) dimension = MNOGOMERNOST;
-		else if (s.contains(ODNOMERNOST)) dimension = ODNOMERNOST;
-		else if (s.contains(INDIVIDUALNOST)) dimension = INDIVIDUALNOST;
+		if (s.contains(D1)) {
+			dimension = D1;
+		} else if (s.contains(D2)) {
+			dimension = D2;
+		} else if (s.contains(D3)) {
+			dimension = D3;
+		} else if (s.contains(D4)) {
+			dimension = D4;
+		} else if (s.contains(MALOMERNOST)) {
+			dimension = MALOMERNOST;
+		} else if (s.contains(MNOGOMERNOST)) {
+			dimension = MNOGOMERNOST;
+		} else if (s.contains(ODNOMERNOST)) {
+			dimension = ODNOMERNOST;
+		} else if (s.contains(INDIVIDUALNOST)) {
+			dimension = INDIVIDUALNOST;
+		}
 
 		//detecting sign
-		if (s.contains(PLUS)) sign = PLUS;
-		else if (s.contains(MINUS)) sign = MINUS;
+		if (s.contains(PLUS)) {
+			sign = PLUS;
+		} else if (s.contains(MINUS)) {
+			sign = MINUS;
+		}
 
 		AData data = new AData(aspect, sign, dimension, mv, comment);
 
