@@ -9,8 +9,6 @@ import java.util.HashMap;
 
 import javax.swing.text.AttributeSet;
 
-import ru.socionicasys.analyst.ADocument.ASection;
-
 public class ADocumentFragment implements Transferable, Serializable {
 
 	public static String MIME_TYPE = "application/x-java-serialized-object; class=ru.socionicasys.analyst.ADocumentFragment";

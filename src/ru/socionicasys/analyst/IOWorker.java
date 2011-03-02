@@ -14,7 +14,6 @@ import javax.swing.SwingWorker;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 
-import ru.socionicasys.analyst.ADocument.ASection;
 import ru.socionicasys.analyst.ADocument.RawAData;
 
 public class IOWorker extends SwingWorker implements PropertyChangeListener {
@@ -24,7 +23,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 	boolean append = false;
 	private boolean firstWrite = true;
 	private ADocument aDoc;
-	HashMap<ADocument.ASection, AData> aData = null;
+	HashMap<ASection, AData> aData = null;
 	AnalystWindow frame;
 	private ProgressWindow pw;
 	private Operation op;

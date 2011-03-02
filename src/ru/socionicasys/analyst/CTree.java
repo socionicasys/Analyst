@@ -7,12 +7,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Label;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -20,13 +17,10 @@ import javax.swing.JTree;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-
-import ru.socionicasys.analyst.ADocument.ASection;
 
 
 /**

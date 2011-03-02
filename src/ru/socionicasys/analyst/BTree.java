@@ -5,7 +5,6 @@ package ru.socionicasys.analyst;
 
 import java.awt.Dimension;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
@@ -18,8 +17,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-
-import ru.socionicasys.analyst.ADocument.ASection;
 
 
 /**

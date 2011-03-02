@@ -13,12 +13,8 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Caret;
-import javax.swing.text.Document;
-import javax.swing.text.Position;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-
-import ru.socionicasys.analyst.ADocument.ASection;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -43,7 +39,7 @@ public class ControlsPane extends JToolBar implements CaretListener,
 	JTextPane textPane;
 	ADocument aDoc = null;
 	Vector<ADataChangeListener> aDataListeners;
-	ADocument.ASection currentASection = null;
+	ASection currentASection = null;
 	JTextArea commentField;
 	private Object oldTreeObject = null;
 
@@ -1031,7 +1027,7 @@ public class ControlsPane extends JToolBar implements CaretListener,
 		} else if ((data != null) && (currentASection == null)) {
 
 			try {
-				currentASection = aDoc.new ASection(aDoc.createPosition(start), aDoc.createPosition(end));
+				currentASection = new ASection(aDoc.createPosition(start), aDoc.createPosition(end));
 				currentASection.setAttributes(aDoc.defaultSectionAttributes);
 				aDoc.startCompoundEdit();
 				aDoc.addASection(currentASection, data);

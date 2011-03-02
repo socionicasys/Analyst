@@ -4,22 +4,15 @@
 package ru.socionicasys.analyst;
 
 import java.awt.Dimension;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.tree.*;
-
-import ru.socionicasys.analyst.ADocument.ASection;
 
 /**
  * @author Виктор

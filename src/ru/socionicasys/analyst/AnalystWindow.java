@@ -1,7 +1,5 @@
 package ru.socionicasys.analyst;
 
-import ru.socionicasys.analyst.ADocument.ASection;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;

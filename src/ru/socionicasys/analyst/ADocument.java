@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Date;
@@ -195,81 +194,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		AnalystWindow.initUndoManager();
 	}
 
-	public class ASection implements Serializable {
-		protected Position start;
-		protected Position end;
-		protected AttributeSet attributes;
-		protected Vector<ADocumentChangeListener> listeners;
-
-		public ASection(Position start, Position end) {
-			this.start = start;
-			this.end = end;
-		}
-
-		public ASection(Position start, Position end, AttributeSet as) {
-			this.start = start;
-			this.end = end;
-			this.attributes = as;
-		}
-
-		public AttributeSet getAttributes() {
-			return attributes;
-		}
-
-		public void setAttributes(AttributeSet as) {
-			this.attributes = as;
-		}
-
-		// @Override
-		public boolean equals(Object o) {
-			if (!(o instanceof ASection)) return false;
-			if ((start.getOffset() == ((ASection) o).getStartOffset())
-				&& (end.getOffset() == ((ASection) o).getEndOffset())
-				) return true;
-			return false;
-		}
-
-		public int getStartOffset() {
-			return start.getOffset();
-		}
-
-		public int getEndOffset() {
-			return end.getOffset();
-		}
-
-		public int getMiddleOffset() {
-			return ((end.getOffset() + start.getOffset()) / 2);
-		}
-
-		public boolean isCollapsed() {
-			if (end.getOffset() - start.getOffset() <= 1) return true;
-			return false;
-		}
-
-		public boolean containsOffset(int offset) {
-			int b = start.getOffset();
-			int e = end.getOffset();
-			if (b < e && offset >= b && offset < e) return true;
-			return false;
-		}
-
-		public void setEndOffset(int arg) {
-			try {
-				this.end = createPosition(arg);
-			} catch (BadLocationException e) {
-				e.printStackTrace();
-			}
-		}
-
-		public void setStartOffset(int arg) {
-			try {
-				this.start = createPosition(arg);
-			} catch (BadLocationException e) {
-				e.printStackTrace();
-			}
-		}
-	}//class ASection
-
 	private class RDStack extends Vector<String> {
 
 		private Hashtable<Integer, Integer> positionMap;
@@ -326,19 +250,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			return get(size() - 1);
 		}
 	}//class RDStack
-
-/*	
-public void addASection(int st, int en, AData data) {
-	if (en<=st) return;
-	try {
-		ASection as = new ASection( createPosition(st), createPosition(en));
-		as.setAttributes(getASectionAttributes(as));
-		aDataMap.put(as, data);
-		setCharacterAttributes(st, en-st, as.getAttributes(), false);
-	} catch (BadLocationException e) {return;}	
-
-}	
-*/
 
 	public ASection getASection(int pos) {
 		Set<ASection> set = aDataMap.keySet();
@@ -2002,7 +1913,7 @@ if (comm != null){
 
 				while (it.hasNext()) {
 					section = it.next();
-					aDataMap.put(aDoc.new ASection(aDoc.createPosition(position + section.getStart()), aDoc.createPosition(position + section.getEnd())),
+					aDataMap.put(new ASection(aDoc.createPosition(position + section.getStart()), aDoc.createPosition(position + section.getEnd())),
 						fragMap.get(section));
 				}
 			}
