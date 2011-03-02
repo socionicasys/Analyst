@@ -4,7 +4,7 @@ import java.io.Serializable;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.Position;
 
-public class ASection implements Serializable {
+public class ASection implements Serializable, Comparable<ASection> {
 	private Position start;
 	private Position end;
 	private AttributeSet attributes;
@@ -48,5 +48,10 @@ public class ASection implements Serializable {
 		int b = start.getOffset();
 		int e = end.getOffset();
 		return b < e && offset >= b && offset < e;
+	}
+
+	@Override
+	public int compareTo(ASection o) {
+		return getStartOffset() - o.getStartOffset();
 	}
 }

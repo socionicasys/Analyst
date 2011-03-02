@@ -637,87 +637,32 @@ if (comm != null){
 		text = "";
 // PREPARING  
 		Vector<DocumentFlowEvent> flowEvents = new Vector<DocumentFlowEvent>();
-		Vector<Integer> openSections = new Vector<Integer>();
-		Vector<Position> lineBreaks = new Vector<Position>();
+		ArrayList<Position> lineBreaks = new ArrayList<Position>();
 
-		String qwerty = null;
 		for (int i = 0; i < this.getLength(); i++) {
-			qwerty = getText(i, 1);
-			if (qwerty.equals("\n")) {
+			if (getText(i, 1).equals("\n")) {
 				lineBreaks.add(createPosition(i));
 			}
 		}
 
-		Set<ASection> keySet = aDataMap.keySet();
-		Vector<ASection> sectionStart = new Vector<ASection>();
-		Vector<ASection> sectionEnd = new Vector<ASection>();
-		if (keySet != null) {
-			Iterator<ASection> it = keySet.iterator();
-			ASection sss = null;
-			while (it.hasNext()) {
-				sss = it.next();
-				sectionStart.add(sss);
-				sectionEnd.add(sss);
-			}
-		}
-
-		Vector<ASection> temp = new Vector<ASection>();
-		ASection sec = null;
-		while (!sectionStart.isEmpty()) {
-			int index = -1;
-			for (int j = 0; j < sectionStart.size(); j++) {
-				if (index == -1 || sectionStart.get(j).getStartOffset() <= index) {
-					sec = sectionStart.get(j);
-					index = sec.getStartOffset();
-				}
-			}
-			temp.add(sec);
-			sectionStart.removeElement(sec);
-		}
-
-		sectionStart = temp;
-
-		temp = new Vector<ASection>();
-
-		while (!sectionEnd.isEmpty()) {
-			int index = -1;
-			for (int j = 0; j < sectionEnd.size(); j++) {
-				if (index == -1 || sectionEnd.get(j).getStartOffset() <= index) {
-					sec = sectionEnd.get(j);
-					index = sec.getStartOffset();
-				}
-			}
-			temp.add(sec);
-			sectionEnd.removeElement(sec);
-		}
-
-		sectionEnd = temp;
-
-/*  int lbIndex = 0;
-  int ssIndex = 0;
-  int seIndex = 0;
-  int mark = 0;
-*/
-		for (int ssNo = 1; ssNo <= sectionStart.size(); ssNo++) {
-			ASection ss = sectionStart.get(ssNo - 1);
-			int ssOffset = ss.getStartOffset();
+		ArrayList<ASection> sections = new ArrayList<ASection>(aDataMap.keySet());
+		Collections.sort(sections);
+		for (int i = 0; i < sections.size(); i++) {
+			ASection section = sections.get(i);
+			AData data = aDataMap.get(section);
 			flowEvents.add(new DocumentFlowEvent(
 				DocumentFlowEvent.SECTION_START,
-				ssOffset,
-				getHTMLStyleForAData(aDataMap.get(ss)),
-				"{" + ssNo + ": " + aDataMap.get(ss).toString() + "} " + aDataMap.get(ss).getComment() + "\n",
-				ssNo)
+				section.getStartOffset(),
+				getHTMLStyleForAData(data),
+				String.format("{%d: %s} %s\n", i + 1, data.toString(), data.getComment()),
+				i + 1)
 			);
-		}
-		for (int seNo = 1; seNo <= sectionEnd.size(); seNo++) {
-			ASection se = sectionEnd.get(seNo - 1);
-			int seOffset = se.getEndOffset();
 			flowEvents.add(new DocumentFlowEvent(
 				DocumentFlowEvent.SECTION_END,
-				seOffset,
-				getHTMLStyleForAData(aDataMap.get(se)),
-				aDataMap.get(se).getComment(),
-				seNo)
+				section.getEndOffset(),
+				getHTMLStyleForAData(data),
+				data.getComment(),
+				i + 1)
 			);
 		}
 		Element rootElem = this.getDefaultRootElement();
