@@ -86,12 +86,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		textPane.setEditorKit(new AEditorKit());
 		textPane.setDocument(aDoc);
 
-		if (aDoc != null) {
-			aDoc.setDocumentFilter(new DocumentSizeFilter(MAX_CHARACTERS));
-		} else {
-			System.err.println("Text pane's document isn't an AbstractDocument!");
-			System.exit(-1);
-		}
 		JScrollPane scrollPane = new JScrollPane(textPane);
 		scrollPane.setPreferredSize(new Dimension(600, 500));
 		scrollPane.setMinimumSize(new Dimension(400, 250));
