@@ -4,11 +4,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 
 import javax.swing.SwingWorker;
 import javax.swing.text.AttributeSet;
@@ -27,7 +23,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 	private Operation op;
 	private Exception exception = null;
 	private int appendOffset = 0;
-	private Hashtable<Integer, RawAData> rawData = null;
+	private HashMap<Integer, RawAData> rawData = null;
 
 
 	IOWorker(ProgressWindow pw, ADocument aDoc, FileInputStream fis) {
@@ -115,7 +111,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 			}
 			if (name.equals("AppendStyledText")) {
 				@SuppressWarnings("unchecked")
-				Vector<StyledText> styledTextBlocks = (Vector<StyledText>) newValue;
+				ArrayList<StyledText> styledTextBlocks = (ArrayList<StyledText>) newValue;
 				for (StyledText styledText : styledTextBlocks) {
 					String textBlock = styledText.getText();
 					AttributeSet textStyle = styledText.getStyle();
@@ -143,7 +139,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 			}
 			if (name.equals("RawData")) {
 				//getting AData
-				rawData = (Hashtable<Integer, RawAData>) newValue;
+				rawData = (HashMap<Integer, RawAData>) newValue;
 
 				try {
 					Iterator<RawAData> it = (rawData.values()).iterator();
