@@ -15,7 +15,7 @@
 
 	<target name="compile">
 		<mkdir dir="${analyst.output_dir}" />
-		<javac srcdir="${analyst.source_dir}" destdir="${analyst.output_dir}" debug="false" />
+		<javac srcdir="${analyst.source_dir}" destdir="${analyst.output_dir}" debug="false" encoding="utf-8" />
 		<copy file="${analyst.base_dir}/license.txt" todir="${analyst.output_dir}" />
 	</target>
 
