@@ -1,5 +1,8 @@
 package ru.socionicasys.analyst.types;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Описывает информацию об отдельном аспекте.
  */
@@ -17,6 +20,8 @@ public class Aspect {
 	public final static Aspect R = new Aspect("БЭ");
 	public final static Aspect I = new Aspect("ЧИ");
 	public final static Aspect T = new Aspect("БИ");
+
+	public final static List<Aspect> aspects = Arrays.asList(P, L, F, S, E, R, I, T);
 
 	private Aspect(String name)
 	{
