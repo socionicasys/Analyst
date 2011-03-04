@@ -65,42 +65,42 @@ public class LegacyHtmlDocumentFormat {
 		}
 	}
 
-	private class RDStack extends Vector<String> {
-		private Hashtable<Integer, Integer> positionMap;
+	private class RDStack {
+		private final ArrayList<String> styleStack;
+		private final HashMap<Integer, Integer> positionMap;
 
 		public RDStack() {
-			super();
-			positionMap = new Hashtable<Integer, Integer>();
+			styleStack = new ArrayList<String>();
+			positionMap = new HashMap<Integer, Integer>();
 		}
 
-		public void push(int handle, String element) {
-			add(element);
-			int position = size() - 1;
-			positionMap.put(new Integer(handle), new Integer(position));
+		public void push(final int handle, final String element) {
+			styleStack.add(element);
+			positionMap.put(handle, styleStack.size() - 1);
 		}
 
-		public void delete(int handle) {
-			Integer h = new Integer(handle);
-			int position = positionMap.get(h).intValue();
-			this.removeElementAt(position);
-			positionMap.remove(h);
-			Enumeration en = positionMap.keys();
-			Integer nextKey = null;
-			Integer nextValue = null;
-			while (en.hasMoreElements()) {
-				nextKey = (Integer) en.nextElement();
-				nextValue = positionMap.get(nextKey);
-				int v = nextValue.intValue();
-				if (v > position) {
-					positionMap.remove(nextKey);
-					positionMap.put(nextKey, new Integer(v - 1));
+		public void delete(final int handle) {
+			int position = positionMap.get(handle);
+			styleStack.remove(position);
+			positionMap.remove(handle);
+			for (Map.Entry<Integer, Integer> entry : positionMap.entrySet()) {
+				int key = entry.getKey();
+				int value = entry.getValue();
+				if (value > position) {
+					positionMap.put(key, value - 1);
 				}
 			}
 		}
 
 		public String getCurrentStyle() {
-			if (isEmpty()) return null;
-			return get(size() - 1);
+			if (isEmpty()) {
+				return null;
+			}
+			return styleStack.get(styleStack.size() - 1);
+		}
+
+		public boolean isEmpty() {
+			return styleStack.isEmpty();
 		}
 	}
 
