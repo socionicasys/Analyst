@@ -1,6 +1,3 @@
-/**
- *
- */
 package ru.socionicasys.analyst;
 
 import java.awt.Dimension;
@@ -17,282 +14,275 @@ import javax.swing.tree.*;
 /**
  * @author Виктор
  */
-public class ATree extends JTree implements
-	ADocumentChangeListener
+public class ATree extends JTree {
+	public static final int MAX_PRESENTATION_CHARS = 100;
+	private ADocument aDoc;
+	private DefaultMutableTreeNode rootNode;
+	private DefaultTreeModel treeModel;
+	private TreePath path;
+	private JumpCounter jc;
 
-{
+	private DefaultMutableTreeNode aspectNode = new DefaultMutableTreeNode("Функции");
+	private DefaultMutableTreeNode aspectLNode = new DefaultMutableTreeNode("БЛ");
+	private DefaultMutableTreeNode aspectLSignNode = new DefaultMutableTreeNode("Знаки");
+	private DefaultMutableTreeNode aspectLSignPlusNode = new EndTreeNode(" + ");
+	private DefaultMutableTreeNode aspectLSignMinusNode = new EndTreeNode(" - ");
+	private DefaultMutableTreeNode aspectLDimensionNode = new DefaultMutableTreeNode("Размерности");
+	private DefaultMutableTreeNode aspectLDimensionD1Node = new EndTreeNode("Ex");
+	private DefaultMutableTreeNode aspectLDimensionD2Node = new EndTreeNode("Nm");
+	private DefaultMutableTreeNode aspectLDimensionD3Node = new EndTreeNode("St");
+	private DefaultMutableTreeNode aspectLDimensionD4Node = new EndTreeNode("Tm");
+	private DefaultMutableTreeNode aspectLDimensionOdnomernostNode = new EndTreeNode("Одномерность");
+	private DefaultMutableTreeNode aspectLDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
+	private DefaultMutableTreeNode aspectLDimensionMalomernostNode = new EndTreeNode("Маломерность");
+	private DefaultMutableTreeNode aspectLDimensionMnogomernostNode = new EndTreeNode("Многомерность");
+	private DefaultMutableTreeNode aspectLVMNode = new DefaultMutableTreeNode("Ментал/Витал");
+	private DefaultMutableTreeNode aspectLVMMentalNode = new EndTreeNode("Ментал");
+	private DefaultMutableTreeNode aspectLVMVitalNode = new EndTreeNode("Витал");
 
-	static final int MAX_PRESENTATION_CHARS = 100;
-	ADocument aDoc;
-	DefaultMutableTreeNode rootNode;
-	DefaultTreeModel treeModel;
-	TreePath path;
-	JumpCounter jc;
+	private DefaultMutableTreeNode aspectPNode = new DefaultMutableTreeNode("ЧЛ");
+	private DefaultMutableTreeNode aspectPSignNode = new DefaultMutableTreeNode("Знаки");
+	private DefaultMutableTreeNode aspectPSignPlusNode = new EndTreeNode(" + ");
+	private DefaultMutableTreeNode aspectPSignMinusNode = new EndTreeNode(" - ");
+	private DefaultMutableTreeNode aspectPDimensionNode = new DefaultMutableTreeNode("Размерности");
+	private DefaultMutableTreeNode aspectPDimensionD1Node = new EndTreeNode("Ex");
+	private DefaultMutableTreeNode aspectPDimensionD2Node = new EndTreeNode("Nm");
+	private DefaultMutableTreeNode aspectPDimensionD3Node = new EndTreeNode("St");
+	private DefaultMutableTreeNode aspectPDimensionD4Node = new EndTreeNode("Tm");
+	private DefaultMutableTreeNode aspectPDimensionOdnomernostNode = new EndTreeNode("Одномерность");
+	private DefaultMutableTreeNode aspectPDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
+	private DefaultMutableTreeNode aspectPDimensionMalomernostNode = new EndTreeNode("Маломерность");
+	private DefaultMutableTreeNode aspectPDimensionMnogomernostNode = new EndTreeNode("Многомерность");
+	private DefaultMutableTreeNode aspectPVMNode = new DefaultMutableTreeNode("Ментал/Витал");
+	private DefaultMutableTreeNode aspectPVMMentalNode = new EndTreeNode("Ментал");
+	private DefaultMutableTreeNode aspectPVMVitalNode = new EndTreeNode("Витал");
 
+	private DefaultMutableTreeNode aspectRNode = new DefaultMutableTreeNode("БЭ");
+	private DefaultMutableTreeNode aspectRSignNode = new DefaultMutableTreeNode("Знаки");
+	private DefaultMutableTreeNode aspectRSignPlusNode = new EndTreeNode(" + ");
+	private DefaultMutableTreeNode aspectRSignMinusNode = new EndTreeNode(" - ");
+	private DefaultMutableTreeNode aspectRDimensionNode = new DefaultMutableTreeNode("Размерности");
+	private DefaultMutableTreeNode aspectRDimensionD1Node = new EndTreeNode("Ex");
+	private DefaultMutableTreeNode aspectRDimensionD2Node = new EndTreeNode("Nm");
+	private DefaultMutableTreeNode aspectRDimensionD3Node = new EndTreeNode("St");
+	private DefaultMutableTreeNode aspectRDimensionD4Node = new EndTreeNode("Tm");
+	private DefaultMutableTreeNode aspectRDimensionOdnomernostNode = new EndTreeNode("Одномерность");
+	private DefaultMutableTreeNode aspectRDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
+	private DefaultMutableTreeNode aspectRDimensionMalomernostNode = new EndTreeNode("Маломерность");
+	private DefaultMutableTreeNode aspectRDimensionMnogomernostNode = new EndTreeNode("Многомерность");
+	private DefaultMutableTreeNode aspectRVMNode = new DefaultMutableTreeNode("Ментал/Витал");
+	private DefaultMutableTreeNode aspectRVMMentalNode = new EndTreeNode("Ментал");
+	private DefaultMutableTreeNode aspectRVMVitalNode = new EndTreeNode("Витал");
 
-	DefaultMutableTreeNode aspectNode = new DefaultMutableTreeNode("Функции");
-	DefaultMutableTreeNode aspectLNode = new DefaultMutableTreeNode("БЛ");
-	DefaultMutableTreeNode aspectLSignNode = new DefaultMutableTreeNode("Знаки");
-	DefaultMutableTreeNode aspectLSignPlusNode = new EndTreeNode(" + ");
-	DefaultMutableTreeNode aspectLSignMinusNode = new EndTreeNode(" - ");
-	DefaultMutableTreeNode aspectLDimensionNode = new DefaultMutableTreeNode("Размерности");
-	DefaultMutableTreeNode aspectLDimensionD1Node = new EndTreeNode("Ex");
-	DefaultMutableTreeNode aspectLDimensionD2Node = new EndTreeNode("Nm");
-	DefaultMutableTreeNode aspectLDimensionD3Node = new EndTreeNode("St");
-	DefaultMutableTreeNode aspectLDimensionD4Node = new EndTreeNode("Tm");
-	DefaultMutableTreeNode aspectLDimensionOdnomernostNode = new EndTreeNode("Одномерность");
-	DefaultMutableTreeNode aspectLDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
-	DefaultMutableTreeNode aspectLDimensionMalomernostNode = new EndTreeNode("Маломерность");
-	DefaultMutableTreeNode aspectLDimensionMnogomernostNode = new EndTreeNode("Многомерность");
-	DefaultMutableTreeNode aspectLVMNode = new DefaultMutableTreeNode("Ментал/Витал");
-	DefaultMutableTreeNode aspectLVMMentalNode = new EndTreeNode("Ментал");
-	DefaultMutableTreeNode aspectLVMVitalNode = new EndTreeNode("Витал");
+	private DefaultMutableTreeNode aspectENode = new DefaultMutableTreeNode("ЧЭ");
+	private DefaultMutableTreeNode aspectESignNode = new DefaultMutableTreeNode("Знаки");
+	private DefaultMutableTreeNode aspectESignPlusNode = new EndTreeNode(" + ");
+	private DefaultMutableTreeNode aspectESignMinusNode = new EndTreeNode(" - ");
+	private DefaultMutableTreeNode aspectEDimensionNode = new DefaultMutableTreeNode("Размерности");
+	private DefaultMutableTreeNode aspectEDimensionD1Node = new EndTreeNode("Ex");
+	private DefaultMutableTreeNode aspectEDimensionD2Node = new EndTreeNode("Nm");
+	private DefaultMutableTreeNode aspectEDimensionD3Node = new EndTreeNode("St");
+	private DefaultMutableTreeNode aspectEDimensionD4Node = new EndTreeNode("Tm");
+	private DefaultMutableTreeNode aspectEDimensionOdnomernostNode = new EndTreeNode("Одномерность");
+	private DefaultMutableTreeNode aspectEDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
+	private DefaultMutableTreeNode aspectEDimensionMalomernostNode = new EndTreeNode("Маломерность");
+	private DefaultMutableTreeNode aspectEDimensionMnogomernostNode = new EndTreeNode("Многомерность");
+	private DefaultMutableTreeNode aspectEVMNode = new DefaultMutableTreeNode("Ментал/Витал");
+	private DefaultMutableTreeNode aspectEVMMentalNode = new EndTreeNode("Ментал");
+	private DefaultMutableTreeNode aspectEVMVitalNode = new EndTreeNode("Витал");
 
-	DefaultMutableTreeNode aspectPNode = new DefaultMutableTreeNode("ЧЛ");
-	DefaultMutableTreeNode aspectPSignNode = new DefaultMutableTreeNode("Знаки");
-	DefaultMutableTreeNode aspectPSignPlusNode = new EndTreeNode(" + ");
-	DefaultMutableTreeNode aspectPSignMinusNode = new EndTreeNode(" - ");
-	DefaultMutableTreeNode aspectPDimensionNode = new DefaultMutableTreeNode("Размерности");
-	DefaultMutableTreeNode aspectPDimensionD1Node = new EndTreeNode("Ex");
-	DefaultMutableTreeNode aspectPDimensionD2Node = new EndTreeNode("Nm");
-	DefaultMutableTreeNode aspectPDimensionD3Node = new EndTreeNode("St");
-	DefaultMutableTreeNode aspectPDimensionD4Node = new EndTreeNode("Tm");
-	DefaultMutableTreeNode aspectPDimensionOdnomernostNode = new EndTreeNode("Одномерность");
-	DefaultMutableTreeNode aspectPDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
-	DefaultMutableTreeNode aspectPDimensionMalomernostNode = new EndTreeNode("Маломерность");
-	DefaultMutableTreeNode aspectPDimensionMnogomernostNode = new EndTreeNode("Многомерность");
-	DefaultMutableTreeNode aspectPVMNode = new DefaultMutableTreeNode("Ментал/Витал");
-	DefaultMutableTreeNode aspectPVMMentalNode = new EndTreeNode("Ментал");
-	DefaultMutableTreeNode aspectPVMVitalNode = new EndTreeNode("Витал");
+	private DefaultMutableTreeNode aspectSNode = new DefaultMutableTreeNode("БС");
+	private DefaultMutableTreeNode aspectSSignNode = new DefaultMutableTreeNode("Знаки");
+	private DefaultMutableTreeNode aspectSSignPlusNode = new EndTreeNode(" + ");
+	private DefaultMutableTreeNode aspectSSignMinusNode = new EndTreeNode(" - ");
+	private DefaultMutableTreeNode aspectSDimensionNode = new DefaultMutableTreeNode("Размерности");
+	private DefaultMutableTreeNode aspectSDimensionD1Node = new EndTreeNode("Ex");
+	private DefaultMutableTreeNode aspectSDimensionD2Node = new EndTreeNode("Nm");
+	private DefaultMutableTreeNode aspectSDimensionD3Node = new EndTreeNode("St");
+	private DefaultMutableTreeNode aspectSDimensionD4Node = new EndTreeNode("Tm");
+	private DefaultMutableTreeNode aspectSDimensionOdnomernostNode = new EndTreeNode("Одномерность");
+	private DefaultMutableTreeNode aspectSDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
+	private DefaultMutableTreeNode aspectSDimensionMalomernostNode = new EndTreeNode("Маломерность");
+	private DefaultMutableTreeNode aspectSDimensionMnogomernostNode = new EndTreeNode("Многомерность");
+	private DefaultMutableTreeNode aspectSVMNode = new DefaultMutableTreeNode("Ментал/Витал");
+	private DefaultMutableTreeNode aspectSVMMentalNode = new EndTreeNode("Ментал");
+	private DefaultMutableTreeNode aspectSVMVitalNode = new EndTreeNode("Витал");
 
-	DefaultMutableTreeNode aspectRNode = new DefaultMutableTreeNode("БЭ");
-	DefaultMutableTreeNode aspectRSignNode = new DefaultMutableTreeNode("Знаки");
-	DefaultMutableTreeNode aspectRSignPlusNode = new EndTreeNode(" + ");
-	DefaultMutableTreeNode aspectRSignMinusNode = new EndTreeNode(" - ");
-	DefaultMutableTreeNode aspectRDimensionNode = new DefaultMutableTreeNode("Размерности");
-	DefaultMutableTreeNode aspectRDimensionD1Node = new EndTreeNode("Ex");
-	DefaultMutableTreeNode aspectRDimensionD2Node = new EndTreeNode("Nm");
-	DefaultMutableTreeNode aspectRDimensionD3Node = new EndTreeNode("St");
-	DefaultMutableTreeNode aspectRDimensionD4Node = new EndTreeNode("Tm");
-	DefaultMutableTreeNode aspectRDimensionOdnomernostNode = new EndTreeNode("Одномерность");
-	DefaultMutableTreeNode aspectRDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
-	DefaultMutableTreeNode aspectRDimensionMalomernostNode = new EndTreeNode("Маломерность");
-	DefaultMutableTreeNode aspectRDimensionMnogomernostNode = new EndTreeNode("Многомерность");
-	DefaultMutableTreeNode aspectRVMNode = new DefaultMutableTreeNode("Ментал/Витал");
-	DefaultMutableTreeNode aspectRVMMentalNode = new EndTreeNode("Ментал");
-	DefaultMutableTreeNode aspectRVMVitalNode = new EndTreeNode("Витал");
+	private DefaultMutableTreeNode aspectFNode = new DefaultMutableTreeNode("ЧС");
+	private DefaultMutableTreeNode aspectFSignNode = new DefaultMutableTreeNode("Знаки");
+	private DefaultMutableTreeNode aspectFSignPlusNode = new EndTreeNode(" + ");
+	private DefaultMutableTreeNode aspectFSignMinusNode = new EndTreeNode(" - ");
+	private DefaultMutableTreeNode aspectFDimensionNode = new DefaultMutableTreeNode("Размерности");
+	private DefaultMutableTreeNode aspectFDimensionD1Node = new EndTreeNode("Ex");
+	private DefaultMutableTreeNode aspectFDimensionD2Node = new EndTreeNode("Nm");
+	private DefaultMutableTreeNode aspectFDimensionD3Node = new EndTreeNode("St");
+	private DefaultMutableTreeNode aspectFDimensionD4Node = new EndTreeNode("Tm");
+	private DefaultMutableTreeNode aspectFDimensionOdnomernostNode = new EndTreeNode("Одномерность");
+	private DefaultMutableTreeNode aspectFDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
+	private DefaultMutableTreeNode aspectFDimensionMalomernostNode = new EndTreeNode("Маломерность");
+	private DefaultMutableTreeNode aspectFDimensionMnogomernostNode = new EndTreeNode("Многомерность");
+	private DefaultMutableTreeNode aspectFVMNode = new DefaultMutableTreeNode("Ментал/Витал");
+	private DefaultMutableTreeNode aspectFVMMentalNode = new EndTreeNode("Ментал");
+	private DefaultMutableTreeNode aspectFVMVitalNode = new EndTreeNode("Витал");
 
-	DefaultMutableTreeNode aspectENode = new DefaultMutableTreeNode("ЧЭ");
-	DefaultMutableTreeNode aspectESignNode = new DefaultMutableTreeNode("Знаки");
-	DefaultMutableTreeNode aspectESignPlusNode = new EndTreeNode(" + ");
-	DefaultMutableTreeNode aspectESignMinusNode = new EndTreeNode(" - ");
-	DefaultMutableTreeNode aspectEDimensionNode = new DefaultMutableTreeNode("Размерности");
-	DefaultMutableTreeNode aspectEDimensionD1Node = new EndTreeNode("Ex");
-	DefaultMutableTreeNode aspectEDimensionD2Node = new EndTreeNode("Nm");
-	DefaultMutableTreeNode aspectEDimensionD3Node = new EndTreeNode("St");
-	DefaultMutableTreeNode aspectEDimensionD4Node = new EndTreeNode("Tm");
-	DefaultMutableTreeNode aspectEDimensionOdnomernostNode = new EndTreeNode("Одномерность");
-	DefaultMutableTreeNode aspectEDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
-	DefaultMutableTreeNode aspectEDimensionMalomernostNode = new EndTreeNode("Маломерность");
-	DefaultMutableTreeNode aspectEDimensionMnogomernostNode = new EndTreeNode("Многомерность");
-	DefaultMutableTreeNode aspectEVMNode = new DefaultMutableTreeNode("Ментал/Витал");
-	DefaultMutableTreeNode aspectEVMMentalNode = new EndTreeNode("Ментал");
-	DefaultMutableTreeNode aspectEVMVitalNode = new EndTreeNode("Витал");
+	private DefaultMutableTreeNode aspectTNode = new DefaultMutableTreeNode("БИ");
+	private DefaultMutableTreeNode aspectTSignNode = new DefaultMutableTreeNode("Знаки");
+	private DefaultMutableTreeNode aspectTSignPlusNode = new EndTreeNode(" + ");
+	private DefaultMutableTreeNode aspectTSignMinusNode = new EndTreeNode(" - ");
+	private DefaultMutableTreeNode aspectTDimensionNode = new DefaultMutableTreeNode("Размерности");
+	private DefaultMutableTreeNode aspectTDimensionD1Node = new EndTreeNode("Ex");
+	private DefaultMutableTreeNode aspectTDimensionD2Node = new EndTreeNode("Nm");
+	private DefaultMutableTreeNode aspectTDimensionD3Node = new EndTreeNode("St");
+	private DefaultMutableTreeNode aspectTDimensionD4Node = new EndTreeNode("Tm");
+	private DefaultMutableTreeNode aspectTDimensionOdnomernostNode = new EndTreeNode("Одномерность");
+	private DefaultMutableTreeNode aspectTDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
+	private DefaultMutableTreeNode aspectTDimensionMalomernostNode = new EndTreeNode("Маломерность");
+	private DefaultMutableTreeNode aspectTDimensionMnogomernostNode = new EndTreeNode("Многомерность");
+	private DefaultMutableTreeNode aspectTVMNode = new DefaultMutableTreeNode("Ментал/Витал");
+	private DefaultMutableTreeNode aspectTVMMentalNode = new EndTreeNode("Ментал");
+	private DefaultMutableTreeNode aspectTVMVitalNode = new EndTreeNode("Витал");
 
-	DefaultMutableTreeNode aspectSNode = new DefaultMutableTreeNode("БС");
-	DefaultMutableTreeNode aspectSSignNode = new DefaultMutableTreeNode("Знаки");
-	DefaultMutableTreeNode aspectSSignPlusNode = new EndTreeNode(" + ");
-	DefaultMutableTreeNode aspectSSignMinusNode = new EndTreeNode(" - ");
-	DefaultMutableTreeNode aspectSDimensionNode = new DefaultMutableTreeNode("Размерности");
-	DefaultMutableTreeNode aspectSDimensionD1Node = new EndTreeNode("Ex");
-	DefaultMutableTreeNode aspectSDimensionD2Node = new EndTreeNode("Nm");
-	DefaultMutableTreeNode aspectSDimensionD3Node = new EndTreeNode("St");
-	DefaultMutableTreeNode aspectSDimensionD4Node = new EndTreeNode("Tm");
-	DefaultMutableTreeNode aspectSDimensionOdnomernostNode = new EndTreeNode("Одномерность");
-	DefaultMutableTreeNode aspectSDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
-	DefaultMutableTreeNode aspectSDimensionMalomernostNode = new EndTreeNode("Маломерность");
-	DefaultMutableTreeNode aspectSDimensionMnogomernostNode = new EndTreeNode("Многомерность");
-	DefaultMutableTreeNode aspectSVMNode = new DefaultMutableTreeNode("Ментал/Витал");
-	DefaultMutableTreeNode aspectSVMMentalNode = new EndTreeNode("Ментал");
-	DefaultMutableTreeNode aspectSVMVitalNode = new EndTreeNode("Витал");
+	private DefaultMutableTreeNode aspectINode = new DefaultMutableTreeNode("ЧИ");
+	private DefaultMutableTreeNode aspectISignNode = new DefaultMutableTreeNode("Знаки");
+	private DefaultMutableTreeNode aspectISignPlusNode = new EndTreeNode(" + ");
+	private DefaultMutableTreeNode aspectISignMinusNode = new EndTreeNode(" - ");
+	private DefaultMutableTreeNode aspectIDimensionNode = new DefaultMutableTreeNode("Размерности");
+	private DefaultMutableTreeNode aspectIDimensionD1Node = new EndTreeNode("Ex");
+	private DefaultMutableTreeNode aspectIDimensionD2Node = new EndTreeNode("Nm");
+	private DefaultMutableTreeNode aspectIDimensionD3Node = new EndTreeNode("St");
+	private DefaultMutableTreeNode aspectIDimensionD4Node = new EndTreeNode("Tm");
+	private DefaultMutableTreeNode aspectIDimensionOdnomernostNode = new EndTreeNode("Одномерность");
+	private DefaultMutableTreeNode aspectIDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
+	private DefaultMutableTreeNode aspectIDimensionMalomernostNode = new EndTreeNode("Маломерность");
+	private DefaultMutableTreeNode aspectIDimensionMnogomernostNode = new EndTreeNode("Многомерность");
+	private DefaultMutableTreeNode aspectIVMNode = new DefaultMutableTreeNode("Ментал/Витал");
+	private DefaultMutableTreeNode aspectIVMMentalNode = new EndTreeNode("Ментал");
+	private DefaultMutableTreeNode aspectIVMVitalNode = new EndTreeNode("Витал");
 
-	DefaultMutableTreeNode aspectFNode = new DefaultMutableTreeNode("ЧС");
-	DefaultMutableTreeNode aspectFSignNode = new DefaultMutableTreeNode("Знаки");
-	DefaultMutableTreeNode aspectFSignPlusNode = new EndTreeNode(" + ");
-	DefaultMutableTreeNode aspectFSignMinusNode = new EndTreeNode(" - ");
-	DefaultMutableTreeNode aspectFDimensionNode = new DefaultMutableTreeNode("Размерности");
-	DefaultMutableTreeNode aspectFDimensionD1Node = new EndTreeNode("Ex");
-	DefaultMutableTreeNode aspectFDimensionD2Node = new EndTreeNode("Nm");
-	DefaultMutableTreeNode aspectFDimensionD3Node = new EndTreeNode("St");
-	DefaultMutableTreeNode aspectFDimensionD4Node = new EndTreeNode("Tm");
-	DefaultMutableTreeNode aspectFDimensionOdnomernostNode = new EndTreeNode("Одномерность");
-	DefaultMutableTreeNode aspectFDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
-	DefaultMutableTreeNode aspectFDimensionMalomernostNode = new EndTreeNode("Маломерность");
-	DefaultMutableTreeNode aspectFDimensionMnogomernostNode = new EndTreeNode("Многомерность");
-	DefaultMutableTreeNode aspectFVMNode = new DefaultMutableTreeNode("Ментал/Витал");
-	DefaultMutableTreeNode aspectFVMMentalNode = new EndTreeNode("Ментал");
-	DefaultMutableTreeNode aspectFVMVitalNode = new EndTreeNode("Витал");
+	private DefaultMutableTreeNode dimensionNode = new DefaultMutableTreeNode("Размерности");
+	private DefaultMutableTreeNode dimensionD1Node = new DefaultMutableTreeNode("Опыт");
+	private DefaultMutableTreeNode dimensionD1LNode = new EndTreeNode("БЛ");
+	private DefaultMutableTreeNode dimensionD1PNode = new EndTreeNode("ЧЛ");
+	private DefaultMutableTreeNode dimensionD1RNode = new EndTreeNode("БЭ");
+	private DefaultMutableTreeNode dimensionD1ENode = new EndTreeNode("ЧЭ");
+	private DefaultMutableTreeNode dimensionD1SNode = new EndTreeNode("БС");
+	private DefaultMutableTreeNode dimensionD1FNode = new EndTreeNode("ЧС");
+	private DefaultMutableTreeNode dimensionD1TNode = new EndTreeNode("БИ");
+	private DefaultMutableTreeNode dimensionD1INode = new EndTreeNode("ЧИ");
+	private DefaultMutableTreeNode dimensionD2Node = new DefaultMutableTreeNode("Норма");
+	private DefaultMutableTreeNode dimensionD2LNode = new EndTreeNode("БЛ");
+	private DefaultMutableTreeNode dimensionD2PNode = new EndTreeNode("ЧЛ");
+	private DefaultMutableTreeNode dimensionD2RNode = new EndTreeNode("БЭ");
+	private DefaultMutableTreeNode dimensionD2ENode = new EndTreeNode("ЧЭ");
+	private DefaultMutableTreeNode dimensionD2SNode = new EndTreeNode("БС");
+	private DefaultMutableTreeNode dimensionD2FNode = new EndTreeNode("ЧС");
+	private DefaultMutableTreeNode dimensionD2TNode = new EndTreeNode("БИ");
+	private DefaultMutableTreeNode dimensionD2INode = new EndTreeNode("ЧИ");
 
-	DefaultMutableTreeNode aspectTNode = new DefaultMutableTreeNode("БИ");
-	DefaultMutableTreeNode aspectTSignNode = new DefaultMutableTreeNode("Знаки");
-	DefaultMutableTreeNode aspectTSignPlusNode = new EndTreeNode(" + ");
-	DefaultMutableTreeNode aspectTSignMinusNode = new EndTreeNode(" - ");
-	DefaultMutableTreeNode aspectTDimensionNode = new DefaultMutableTreeNode("Размерности");
-	DefaultMutableTreeNode aspectTDimensionD1Node = new EndTreeNode("Ex");
-	DefaultMutableTreeNode aspectTDimensionD2Node = new EndTreeNode("Nm");
-	DefaultMutableTreeNode aspectTDimensionD3Node = new EndTreeNode("St");
-	DefaultMutableTreeNode aspectTDimensionD4Node = new EndTreeNode("Tm");
-	DefaultMutableTreeNode aspectTDimensionOdnomernostNode = new EndTreeNode("Одномерность");
-	DefaultMutableTreeNode aspectTDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
-	DefaultMutableTreeNode aspectTDimensionMalomernostNode = new EndTreeNode("Маломерность");
-	DefaultMutableTreeNode aspectTDimensionMnogomernostNode = new EndTreeNode("Многомерность");
-	DefaultMutableTreeNode aspectTVMNode = new DefaultMutableTreeNode("Ментал/Витал");
-	DefaultMutableTreeNode aspectTVMMentalNode = new EndTreeNode("Ментал");
-	DefaultMutableTreeNode aspectTVMVitalNode = new EndTreeNode("Витал");
+	private DefaultMutableTreeNode dimensionD3Node = new DefaultMutableTreeNode("Ситуация");
+	private DefaultMutableTreeNode dimensionD3LNode = new EndTreeNode("БЛ");
+	private DefaultMutableTreeNode dimensionD3PNode = new EndTreeNode("ЧЛ");
+	private DefaultMutableTreeNode dimensionD3RNode = new EndTreeNode("БЭ");
+	private DefaultMutableTreeNode dimensionD3ENode = new EndTreeNode("ЧЭ");
+	private DefaultMutableTreeNode dimensionD3SNode = new EndTreeNode("БС");
+	private DefaultMutableTreeNode dimensionD3FNode = new EndTreeNode("ЧС");
+	private DefaultMutableTreeNode dimensionD3TNode = new EndTreeNode("БИ");
+	private DefaultMutableTreeNode dimensionD3INode = new EndTreeNode("ЧИ");
 
-	DefaultMutableTreeNode aspectINode = new DefaultMutableTreeNode("ЧИ");
-	DefaultMutableTreeNode aspectISignNode = new DefaultMutableTreeNode("Знаки");
-	DefaultMutableTreeNode aspectISignPlusNode = new EndTreeNode(" + ");
-	DefaultMutableTreeNode aspectISignMinusNode = new EndTreeNode(" - ");
-	DefaultMutableTreeNode aspectIDimensionNode = new DefaultMutableTreeNode("Размерности");
-	DefaultMutableTreeNode aspectIDimensionD1Node = new EndTreeNode("Ex");
-	DefaultMutableTreeNode aspectIDimensionD2Node = new EndTreeNode("Nm");
-	DefaultMutableTreeNode aspectIDimensionD3Node = new EndTreeNode("St");
-	DefaultMutableTreeNode aspectIDimensionD4Node = new EndTreeNode("Tm");
-	DefaultMutableTreeNode aspectIDimensionOdnomernostNode = new EndTreeNode("Одномерность");
-	DefaultMutableTreeNode aspectIDimensionIndividualnostNode = new EndTreeNode("Индивидуальность");
-	DefaultMutableTreeNode aspectIDimensionMalomernostNode = new EndTreeNode("Маломерность");
-	DefaultMutableTreeNode aspectIDimensionMnogomernostNode = new EndTreeNode("Многомерность");
-	DefaultMutableTreeNode aspectIVMNode = new DefaultMutableTreeNode("Ментал/Витал");
-	DefaultMutableTreeNode aspectIVMMentalNode = new EndTreeNode("Ментал");
-	DefaultMutableTreeNode aspectIVMVitalNode = new EndTreeNode("Витал");
+	private DefaultMutableTreeNode dimensionD4Node = new DefaultMutableTreeNode("Время");
+	private DefaultMutableTreeNode dimensionD4LNode = new EndTreeNode("БЛ");
+	private DefaultMutableTreeNode dimensionD4PNode = new EndTreeNode("ЧЛ");
+	private DefaultMutableTreeNode dimensionD4RNode = new EndTreeNode("БЭ");
+	private DefaultMutableTreeNode dimensionD4ENode = new EndTreeNode("ЧЭ");
+	private DefaultMutableTreeNode dimensionD4SNode = new EndTreeNode("БС");
+	private DefaultMutableTreeNode dimensionD4FNode = new EndTreeNode("ЧС");
+	private DefaultMutableTreeNode dimensionD4TNode = new EndTreeNode("БИ");
+	private DefaultMutableTreeNode dimensionD4INode = new EndTreeNode("ЧИ");
 
-	DefaultMutableTreeNode dimensionNode = new DefaultMutableTreeNode("Размерности");
-	DefaultMutableTreeNode dimensionD1Node = new DefaultMutableTreeNode("Опыт");
-	DefaultMutableTreeNode dimensionD1LNode = new EndTreeNode("БЛ");
-	DefaultMutableTreeNode dimensionD1PNode = new EndTreeNode("ЧЛ");
-	DefaultMutableTreeNode dimensionD1RNode = new EndTreeNode("БЭ");
-	DefaultMutableTreeNode dimensionD1ENode = new EndTreeNode("ЧЭ");
-	DefaultMutableTreeNode dimensionD1SNode = new EndTreeNode("БС");
-	DefaultMutableTreeNode dimensionD1FNode = new EndTreeNode("ЧС");
-	DefaultMutableTreeNode dimensionD1TNode = new EndTreeNode("БИ");
-	DefaultMutableTreeNode dimensionD1INode = new EndTreeNode("ЧИ");
-	DefaultMutableTreeNode dimensionD2Node = new DefaultMutableTreeNode("Норма");
-	DefaultMutableTreeNode dimensionD2LNode = new EndTreeNode("БЛ");
-	DefaultMutableTreeNode dimensionD2PNode = new EndTreeNode("ЧЛ");
-	DefaultMutableTreeNode dimensionD2RNode = new EndTreeNode("БЭ");
-	DefaultMutableTreeNode dimensionD2ENode = new EndTreeNode("ЧЭ");
-	DefaultMutableTreeNode dimensionD2SNode = new EndTreeNode("БС");
-	DefaultMutableTreeNode dimensionD2FNode = new EndTreeNode("ЧС");
-	DefaultMutableTreeNode dimensionD2TNode = new EndTreeNode("БИ");
-	DefaultMutableTreeNode dimensionD2INode = new EndTreeNode("ЧИ");
+	private DefaultMutableTreeNode dimensionMaloNode = new DefaultMutableTreeNode("Маломерность");
+	private DefaultMutableTreeNode dimensionMaloLNode = new EndTreeNode("БЛ");
+	private DefaultMutableTreeNode dimensionMaloPNode = new EndTreeNode("ЧЛ");
+	private DefaultMutableTreeNode dimensionMaloRNode = new EndTreeNode("БЭ");
+	private DefaultMutableTreeNode dimensionMaloENode = new EndTreeNode("ЧЭ");
+	private DefaultMutableTreeNode dimensionMaloSNode = new EndTreeNode("БС");
+	private DefaultMutableTreeNode dimensionMaloFNode = new EndTreeNode("ЧС");
+	private DefaultMutableTreeNode dimensionMaloTNode = new EndTreeNode("БИ");
+	private DefaultMutableTreeNode dimensionMaloINode = new EndTreeNode("ЧИ");
 
-	DefaultMutableTreeNode dimensionD3Node = new DefaultMutableTreeNode("Ситуация");
-	DefaultMutableTreeNode dimensionD3LNode = new EndTreeNode("БЛ");
-	DefaultMutableTreeNode dimensionD3PNode = new EndTreeNode("ЧЛ");
-	DefaultMutableTreeNode dimensionD3RNode = new EndTreeNode("БЭ");
-	DefaultMutableTreeNode dimensionD3ENode = new EndTreeNode("ЧЭ");
-	DefaultMutableTreeNode dimensionD3SNode = new EndTreeNode("БС");
-	DefaultMutableTreeNode dimensionD3FNode = new EndTreeNode("ЧС");
-	DefaultMutableTreeNode dimensionD3TNode = new EndTreeNode("БИ");
-	DefaultMutableTreeNode dimensionD3INode = new EndTreeNode("ЧИ");
+	private DefaultMutableTreeNode dimensionMnogoNode = new DefaultMutableTreeNode("Многомерность");
+	private DefaultMutableTreeNode dimensionMnogoLNode = new EndTreeNode("БЛ");
+	private DefaultMutableTreeNode dimensionMnogoPNode = new EndTreeNode("ЧЛ");
+	private DefaultMutableTreeNode dimensionMnogoRNode = new EndTreeNode("БЭ");
+	private DefaultMutableTreeNode dimensionMnogoENode = new EndTreeNode("ЧЭ");
+	private DefaultMutableTreeNode dimensionMnogoSNode = new EndTreeNode("БС");
+	private DefaultMutableTreeNode dimensionMnogoFNode = new EndTreeNode("ЧС");
+	private DefaultMutableTreeNode dimensionMnogoTNode = new EndTreeNode("БИ");
+	private DefaultMutableTreeNode dimensionMnogoINode = new EndTreeNode("ЧИ");
 
-	DefaultMutableTreeNode dimensionD4Node = new DefaultMutableTreeNode("Время");
-	DefaultMutableTreeNode dimensionD4LNode = new EndTreeNode("БЛ");
-	DefaultMutableTreeNode dimensionD4PNode = new EndTreeNode("ЧЛ");
-	DefaultMutableTreeNode dimensionD4RNode = new EndTreeNode("БЭ");
-	DefaultMutableTreeNode dimensionD4ENode = new EndTreeNode("ЧЭ");
-	DefaultMutableTreeNode dimensionD4SNode = new EndTreeNode("БС");
-	DefaultMutableTreeNode dimensionD4FNode = new EndTreeNode("ЧС");
-	DefaultMutableTreeNode dimensionD4TNode = new EndTreeNode("БИ");
-	DefaultMutableTreeNode dimensionD4INode = new EndTreeNode("ЧИ");
+	private DefaultMutableTreeNode dimensionOdnoNode = new DefaultMutableTreeNode("Одномерность");
+	private DefaultMutableTreeNode dimensionOdnoLNode = new EndTreeNode("БЛ");
+	private DefaultMutableTreeNode dimensionOdnoPNode = new EndTreeNode("ЧЛ");
+	private DefaultMutableTreeNode dimensionOdnoRNode = new EndTreeNode("БЭ");
+	private DefaultMutableTreeNode dimensionOdnoENode = new EndTreeNode("ЧЭ");
+	private DefaultMutableTreeNode dimensionOdnoSNode = new EndTreeNode("БС");
+	private DefaultMutableTreeNode dimensionOdnoFNode = new EndTreeNode("ЧС");
+	private DefaultMutableTreeNode dimensionOdnoTNode = new EndTreeNode("БИ");
+	private DefaultMutableTreeNode dimensionOdnoINode = new EndTreeNode("ЧИ");
 
-	DefaultMutableTreeNode dimensionMaloNode = new DefaultMutableTreeNode("Маломерность");
-	DefaultMutableTreeNode dimensionMaloLNode = new EndTreeNode("БЛ");
-	DefaultMutableTreeNode dimensionMaloPNode = new EndTreeNode("ЧЛ");
-	DefaultMutableTreeNode dimensionMaloRNode = new EndTreeNode("БЭ");
-	DefaultMutableTreeNode dimensionMaloENode = new EndTreeNode("ЧЭ");
-	DefaultMutableTreeNode dimensionMaloSNode = new EndTreeNode("БС");
-	DefaultMutableTreeNode dimensionMaloFNode = new EndTreeNode("ЧС");
-	DefaultMutableTreeNode dimensionMaloTNode = new EndTreeNode("БИ");
-	DefaultMutableTreeNode dimensionMaloINode = new EndTreeNode("ЧИ");
+	private DefaultMutableTreeNode dimensionIndiNode = new DefaultMutableTreeNode("Индивидуальность");
+	private DefaultMutableTreeNode dimensionIndiLNode = new EndTreeNode("БЛ");
+	private DefaultMutableTreeNode dimensionIndiPNode = new EndTreeNode("ЧЛ");
+	private DefaultMutableTreeNode dimensionIndiRNode = new EndTreeNode("БЭ");
+	private DefaultMutableTreeNode dimensionIndiENode = new EndTreeNode("ЧЭ");
+	private DefaultMutableTreeNode dimensionIndiSNode = new EndTreeNode("БС");
+	private DefaultMutableTreeNode dimensionIndiFNode = new EndTreeNode("ЧС");
+	private DefaultMutableTreeNode dimensionIndiTNode = new EndTreeNode("БИ");
+	private DefaultMutableTreeNode dimensionIndiINode = new EndTreeNode("ЧИ");
 
-	DefaultMutableTreeNode dimensionMnogoNode = new DefaultMutableTreeNode("Многомерность");
-	DefaultMutableTreeNode dimensionMnogoLNode = new EndTreeNode("БЛ");
-	DefaultMutableTreeNode dimensionMnogoPNode = new EndTreeNode("ЧЛ");
-	DefaultMutableTreeNode dimensionMnogoRNode = new EndTreeNode("БЭ");
-	DefaultMutableTreeNode dimensionMnogoENode = new EndTreeNode("ЧЭ");
-	DefaultMutableTreeNode dimensionMnogoSNode = new EndTreeNode("БС");
-	DefaultMutableTreeNode dimensionMnogoFNode = new EndTreeNode("ЧС");
-	DefaultMutableTreeNode dimensionMnogoTNode = new EndTreeNode("БИ");
-	DefaultMutableTreeNode dimensionMnogoINode = new EndTreeNode("ЧИ");
+	private DefaultMutableTreeNode blockNode = new DefaultMutableTreeNode("Блоки");
+	private DefaultMutableTreeNode blockSuperegoNode = new EndTreeNode("Супер-ЭГО");
+	private DefaultMutableTreeNode blockSuperidNode = new EndTreeNode("Супер-ИД");
+	private DefaultMutableTreeNode blockLINode = new EndTreeNode("БЛ-ЧИ");
+	private DefaultMutableTreeNode blockLFNode = new EndTreeNode("БЛ-ЧС");
+	private DefaultMutableTreeNode blockPTNode = new EndTreeNode("ЧЛ-БИ");
+	private DefaultMutableTreeNode blockPSNode = new EndTreeNode("ЧЛ-БС");
+	private DefaultMutableTreeNode blockRINode = new EndTreeNode("БЭ-ЧИ");
+	private DefaultMutableTreeNode blockRFNode = new EndTreeNode("БЭ-ЧС");
+	private DefaultMutableTreeNode blockETNode = new EndTreeNode("ЧЭ-БИ");
+	private DefaultMutableTreeNode blockESNode = new EndTreeNode("ЧЭ-БС");
+	private DefaultMutableTreeNode blockSPNode = new EndTreeNode("БС-ЧЛ");
+	private DefaultMutableTreeNode blockSENode = new EndTreeNode("БС-ЧЭ");
+	private DefaultMutableTreeNode blockFLNode = new EndTreeNode("ЧС-БЛ");
+	private DefaultMutableTreeNode blockFRNode = new EndTreeNode("ЧС-БЭ");
+	private DefaultMutableTreeNode blockTPNode = new EndTreeNode("БИ-ЧЛ");
+	private DefaultMutableTreeNode blockTENode = new EndTreeNode("БИ-ЧЭ");
+	private DefaultMutableTreeNode blockILNode = new EndTreeNode("ЧИ-БЛ");
+	private DefaultMutableTreeNode blockIRNode = new EndTreeNode("ЧИ-БЭ");
 
-	DefaultMutableTreeNode dimensionOdnoNode = new DefaultMutableTreeNode("Одномерность");
-	DefaultMutableTreeNode dimensionOdnoLNode = new EndTreeNode("БЛ");
-	DefaultMutableTreeNode dimensionOdnoPNode = new EndTreeNode("ЧЛ");
-	DefaultMutableTreeNode dimensionOdnoRNode = new EndTreeNode("БЭ");
-	DefaultMutableTreeNode dimensionOdnoENode = new EndTreeNode("ЧЭ");
-	DefaultMutableTreeNode dimensionOdnoSNode = new EndTreeNode("БС");
-	DefaultMutableTreeNode dimensionOdnoFNode = new EndTreeNode("ЧС");
-	DefaultMutableTreeNode dimensionOdnoTNode = new EndTreeNode("БИ");
-	DefaultMutableTreeNode dimensionOdnoINode = new EndTreeNode("ЧИ");
+	private DefaultMutableTreeNode signNode = new DefaultMutableTreeNode("Знаки");
+	private DefaultMutableTreeNode signPlusNode = new DefaultMutableTreeNode(" + ");
+	private DefaultMutableTreeNode signPlusLNode = new EndTreeNode("БЛ");
+	private DefaultMutableTreeNode signPlusPNode = new EndTreeNode("ЧЛ");
+	private DefaultMutableTreeNode signPlusRNode = new EndTreeNode("БЭ");
+	private DefaultMutableTreeNode signPlusENode = new EndTreeNode("ЧЭ");
+	private DefaultMutableTreeNode signPlusSNode = new EndTreeNode("БС");
+	private DefaultMutableTreeNode signPlusFNode = new EndTreeNode("ЧС");
+	private DefaultMutableTreeNode signPlusTNode = new EndTreeNode("БИ");
+	private DefaultMutableTreeNode signPlusINode = new EndTreeNode("ЧИ");
+	private DefaultMutableTreeNode signMinusNode = new DefaultMutableTreeNode(" - ");
+	private DefaultMutableTreeNode signMinusLNode = new EndTreeNode("БЛ");
+	private DefaultMutableTreeNode signMinusPNode = new EndTreeNode("ЧЛ");
+	private DefaultMutableTreeNode signMinusRNode = new EndTreeNode("БЭ");
+	private DefaultMutableTreeNode signMinusENode = new EndTreeNode("ЧЭ");
+	private DefaultMutableTreeNode signMinusSNode = new EndTreeNode("БС");
+	private DefaultMutableTreeNode signMinusFNode = new EndTreeNode("ЧС");
+	private DefaultMutableTreeNode signMinusTNode = new EndTreeNode("БИ");
+	private DefaultMutableTreeNode signMinusINode = new EndTreeNode("ЧИ");
 
-	DefaultMutableTreeNode dimensionIndiNode = new DefaultMutableTreeNode("Индивидуальность");
-	DefaultMutableTreeNode dimensionIndiLNode = new EndTreeNode("БЛ");
-	DefaultMutableTreeNode dimensionIndiPNode = new EndTreeNode("ЧЛ");
-	DefaultMutableTreeNode dimensionIndiRNode = new EndTreeNode("БЭ");
-	DefaultMutableTreeNode dimensionIndiENode = new EndTreeNode("ЧЭ");
-	DefaultMutableTreeNode dimensionIndiSNode = new EndTreeNode("БС");
-	DefaultMutableTreeNode dimensionIndiFNode = new EndTreeNode("ЧС");
-	DefaultMutableTreeNode dimensionIndiTNode = new EndTreeNode("БИ");
-	DefaultMutableTreeNode dimensionIndiINode = new EndTreeNode("ЧИ");
-
-	DefaultMutableTreeNode blockNode = new DefaultMutableTreeNode("Блоки");
-	DefaultMutableTreeNode blockSuperegoNode = new EndTreeNode("Супер-ЭГО");
-	DefaultMutableTreeNode blockSuperidNode = new EndTreeNode("Супер-ИД");
-	DefaultMutableTreeNode blockLINode = new EndTreeNode("БЛ-ЧИ");
-	DefaultMutableTreeNode blockLFNode = new EndTreeNode("БЛ-ЧС");
-	DefaultMutableTreeNode blockPTNode = new EndTreeNode("ЧЛ-БИ");
-	DefaultMutableTreeNode blockPSNode = new EndTreeNode("ЧЛ-БС");
-	DefaultMutableTreeNode blockRINode = new EndTreeNode("БЭ-ЧИ");
-	DefaultMutableTreeNode blockRFNode = new EndTreeNode("БЭ-ЧС");
-	DefaultMutableTreeNode blockETNode = new EndTreeNode("ЧЭ-БИ");
-	DefaultMutableTreeNode blockESNode = new EndTreeNode("ЧЭ-БС");
-	DefaultMutableTreeNode blockSPNode = new EndTreeNode("БС-ЧЛ");
-	DefaultMutableTreeNode blockSENode = new EndTreeNode("БС-ЧЭ");
-	DefaultMutableTreeNode blockFLNode = new EndTreeNode("ЧС-БЛ");
-	DefaultMutableTreeNode blockFRNode = new EndTreeNode("ЧС-БЭ");
-	DefaultMutableTreeNode blockTPNode = new EndTreeNode("БИ-ЧЛ");
-	DefaultMutableTreeNode blockTENode = new EndTreeNode("БИ-ЧЭ");
-	DefaultMutableTreeNode blockILNode = new EndTreeNode("ЧИ-БЛ");
-	DefaultMutableTreeNode blockIRNode = new EndTreeNode("ЧИ-БЭ");
-
-	DefaultMutableTreeNode signNode = new DefaultMutableTreeNode("Знаки");
-	DefaultMutableTreeNode signPlusNode = new DefaultMutableTreeNode(" + ");
-	DefaultMutableTreeNode signPlusLNode = new EndTreeNode("БЛ");
-	DefaultMutableTreeNode signPlusPNode = new EndTreeNode("ЧЛ");
-	DefaultMutableTreeNode signPlusRNode = new EndTreeNode("БЭ");
-	DefaultMutableTreeNode signPlusENode = new EndTreeNode("ЧЭ");
-	DefaultMutableTreeNode signPlusSNode = new EndTreeNode("БС");
-	DefaultMutableTreeNode signPlusFNode = new EndTreeNode("ЧС");
-	DefaultMutableTreeNode signPlusTNode = new EndTreeNode("БИ");
-	DefaultMutableTreeNode signPlusINode = new EndTreeNode("ЧИ");
-	DefaultMutableTreeNode signMinusNode = new DefaultMutableTreeNode(" - ");
-	DefaultMutableTreeNode signMinusLNode = new EndTreeNode("БЛ");
-	DefaultMutableTreeNode signMinusPNode = new EndTreeNode("ЧЛ");
-	DefaultMutableTreeNode signMinusRNode = new EndTreeNode("БЭ");
-	DefaultMutableTreeNode signMinusENode = new EndTreeNode("ЧЭ");
-	DefaultMutableTreeNode signMinusSNode = new EndTreeNode("БС");
-	DefaultMutableTreeNode signMinusFNode = new EndTreeNode("ЧС");
-	DefaultMutableTreeNode signMinusTNode = new EndTreeNode("БИ");
-	DefaultMutableTreeNode signMinusINode = new EndTreeNode("ЧИ");
-
-	DefaultMutableTreeNode doubtNode = new EndTreeNode("Непонятные места");
-	DefaultMutableTreeNode jumpNode = new EndTreeNode("Переводы");
-
+	private DefaultMutableTreeNode doubtNode = new EndTreeNode("Непонятные места");
+	private DefaultMutableTreeNode jumpNode = new EndTreeNode("Переводы");
 
 	private class EndTreeNode extends DefaultMutableTreeNode {
-
 		public EndTreeNode(Object o) {
 			super(o);
 		}
@@ -302,41 +292,40 @@ public class ATree extends JTree implements
 		}
 	}
 
-
-	/**
-	 *
-	 */
 	public ATree(ADocument doc) {
 		super();
 		rootNode = new DefaultMutableTreeNode(doc.getProperty(Document.TitleProperty));
 		treeModel = new DefaultTreeModel(rootNode);
 		this.setModel(treeModel);
 		this.aDoc = doc;
-		doc.addADocumentChangeListener(this);
+		doc.addADocumentChangeListener(new ADocumentChangeListener() {
+			@Override
+			public void aDocumentChanged(ADocument doc) {
+				updateTree();
+			}
+		});
 		jc = new JumpCounter();
 		init();
 	}
 
-
-	protected void init() {
-
+	private void init() {
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-//	   addTreeSelectionListener(this);
 		setEditable(false);
 		toggleClickCount = 1;
-//     treeModel = new DefaultTreeModel(rootNode);
 		makeTreeStructure();
 		updateTree();
-//	   addTreeSelectionListener(this);
-
 	}
 
 	private void updateTree() {
-		if (aDoc == null) return;
+		if (aDoc == null) {
+			return;
+		}
 
 		rootNode.setUserObject(aDoc.getProperty(ADocument.TitleProperty));
 		TreePath newPath = getSelectionPath();
-		if (newPath != null) path = newPath;
+		if (newPath != null) {
+			path = newPath;
+		}
 
 		//Analyze document structure and update tree nodes
 		try {
@@ -815,14 +804,16 @@ public class ATree extends JTree implements
 		treeModel.reload();
 		if (path != null) {
 			if (path.getLastPathComponent() instanceof DefaultMutableTreeNode
-				&& ((DefaultMutableTreeNode) path.getLastPathComponent()).isLeaf()) expandPath(path.getParentPath());
-			else expandPath(path);
+					&& ((DefaultMutableTreeNode) path.getLastPathComponent()).isLeaf()) {
+				expandPath(path.getParentPath());
+			}
+			else {
+				expandPath(path);
+			}
 		}
 	}
 
-
 	private void removeAllChildren() {
-
 		aspectLSignPlusNode.removeAllChildren();
 		aspectLSignMinusNode.removeAllChildren();
 		aspectLDimensionD1Node.removeAllChildren();
@@ -1042,7 +1033,6 @@ public class ATree extends JTree implements
 	}
 
 	private void makeTreeStructure() {
-
 		rootNode.add(aspectNode);
 
 		aspectNode.add(aspectLNode);
@@ -1298,24 +1288,14 @@ public class ATree extends JTree implements
 
 		rootNode.add(doubtNode);
 		rootNode.add(jumpNode);
-	} // generateTree();
-
-
-	@Override
-	public void aDocumentChanged(ADocument doc) {
-		updateTree();
 	}
 
-
 	public String getReport() {
-		String report = "";
-
+		String report;
 		if (!aDoc.getADataMap().isEmpty()) {
-
 			report =
 				"<br/>" +
 					"<h2> Выявленные параметры функций ИМ: </h2>" +
-//		"<br/>" +
 					"Каждый из отмеченных экспертом фрагментов текста представляет собой анализ аспектного содержания фрагмента и <br/>" +
 					"параметров обработки этой информации. <br/>" +
 					"Приведенная ниже таблица иллюстрирует распределение ответов типируемого по параметрам модели А.<br/><br/>" +
@@ -1468,9 +1448,8 @@ public class ATree extends JTree implements
 					"</tr>" + "\n" +
 					"</table>";
 
-//Переводы
+			//Переводы
 			if (!jc.isEmpty()) {
-
 				report +=
 					"<br/>" +
 						"<h2> Переводы управления </h2>" +
@@ -1581,14 +1560,12 @@ public class ATree extends JTree implements
 						"</tr>" + "\n" +
 						"</table>";
 			}
-		} // end if !ADataMap.isEmpty()
-		else {
+		} else {
 			report =
 				"<br/>" +
 					"<h2> В документе отсутствует анализ </h2>" +
 					"<br/>";
 		}
-
 		return report;
 	}
 }
