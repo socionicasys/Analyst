@@ -11,9 +11,12 @@ public class LegacyHtmlDocumentFormat {
 	private static final String encoding = "UTF-8";
 
 	private class DocumentFlowEvent implements Comparable<DocumentFlowEvent> {
-		protected int type, offset, sectionNo;
-		protected String style;
-		protected String comment;
+		private int type;
+		private int offset;
+		private int sectionNo;
+		private String style;
+		private String comment;
+
 		public static final int LINE_BREAK = 1;
 		public static final int SECTION_START = 2;
 		public static final int SECTION_END = 3;
@@ -27,8 +30,9 @@ public class LegacyHtmlDocumentFormat {
 			this.offset = offset;
 			this.type = type;
 			this.style = style;
-			if (comment != null) comment = comment.replaceAll("\n", "<br/>");
-			this.comment = comment;
+			if (comment != null) {
+				this.comment = comment.replaceAll("\n", "<br/>");
+			}
 			this.sectionNo = sectionNo;
 		}
 
@@ -49,7 +53,6 @@ public class LegacyHtmlDocumentFormat {
 		}
 
 		public int getSectionNo() {
-
 			return sectionNo;
 		}
 
@@ -58,7 +61,7 @@ public class LegacyHtmlDocumentFormat {
 			// Реализация интерфейса java.lang.Comparable<T>
 			// Делает возможной сортировку массива из DocumentFlowEvent-ов
 			// Сравнение происходит только по позиции (offset)
-			return this.offset - o.offset;
+			return offset - o.getOffset();
 		}
 	}
 
@@ -74,23 +77,6 @@ public class LegacyHtmlDocumentFormat {
 			add(element);
 			int position = size() - 1;
 			positionMap.put(new Integer(handle), new Integer(position));
-		}
-
-		public int getCurrentSectionNo() {
-			if (isEmpty()) return -1;
-			int position = size() - 1;
-			Enumeration en = positionMap.keys();
-			Integer nextKey = null;
-			Integer nextValue = null;
-			while (en.hasMoreElements()) {
-				nextKey = (Integer) en.nextElement();
-				nextValue = positionMap.get(nextKey);
-				int v = nextValue.intValue();
-				if (v == position) {
-					return nextKey.intValue();
-				}
-			}
-			return 0;
 		}
 
 		public void delete(int handle) {
@@ -284,8 +270,8 @@ public class LegacyHtmlDocumentFormat {
 			boolean replaceBreak = false;
 			if (!flowEvents.isEmpty()) {
 				DocumentFlowEvent prevEvent = flowEvents.lastElement();
-				if (prevEvent.type == DocumentFlowEvent.LINE_BREAK &&
-					prevEvent.offset == lb - 1) {
+				if (prevEvent.getType() == DocumentFlowEvent.LINE_BREAK &&
+					prevEvent.getOffset() == lb - 1) {
 					// Заменяем два идущих подряд LINE_BREAK на NEW_ROW
 					replaceBreak = true;
 				}
