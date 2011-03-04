@@ -724,7 +724,7 @@ public class LegacyHtmlDocumentFormat {
 			buffer = buffer.replace(tag, "");
 			tag = findTag(buffer, startToken, endToken, 0);
 		}
-		return source;
+		return buffer;
 	}
 
 	private String findTagContent(final String text, final String startToken, final String endToken,
