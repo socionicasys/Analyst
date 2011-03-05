@@ -1,13 +1,29 @@
 package ru.socionicasys.analyst.types;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * Описывает модель А отдельного ТИМа.
  */
-public class Sociotype {
+public enum Sociotype {
+	ILE,
+	SEI,
+	ESE,
+	LII,
+	EIE,
+	LSI,
+	SLE,
+	IEI,
+	SEE,
+	ILI,
+	LIE,
+	ESI,
+	LSE,
+	EII,
+	IEE,
+	SLI;
+
 	/**
 	 * Набор функций модели.
 	 */
@@ -23,48 +39,9 @@ public class Sociotype {
 	 */
 	private final String nickname;
 
-	private enum Types {
-		ILE,
-		SEI,
-		ESE,
-		LII,
-		EIE,
-		LSI,
-		SLE,
-		IEI,
-		SEE,
-		ILI,
-		LIE,
-		ESI,
-		LSE,
-		EII,
-		IEE,
-		SLI
-	}
-
-	public final static Sociotype ILE = new Sociotype(Types.ILE);
-	public final static Sociotype SEI = new Sociotype(Types.SEI);
-	public final static Sociotype ESE = new Sociotype(Types.ESE);
-	public final static Sociotype LII = new Sociotype(Types.LII);
-	public final static Sociotype EIE = new Sociotype(Types.EIE);
-	public final static Sociotype LSI = new Sociotype(Types.LSI);
-	public final static Sociotype SLE = new Sociotype(Types.SLE);
-	public final static Sociotype IEI = new Sociotype(Types.IEI);
-	public final static Sociotype SEE = new Sociotype(Types.SEE);
-	public final static Sociotype ILI = new Sociotype(Types.ILI);
-	public final static Sociotype LIE = new Sociotype(Types.LIE);
-	public final static Sociotype ESI = new Sociotype(Types.ESI);
-	public final static Sociotype LSE = new Sociotype(Types.LSE);
-	public final static Sociotype EII = new Sociotype(Types.EII);
-	public final static Sociotype IEE = new Sociotype(Types.IEE);
-	public final static Sociotype SLI = new Sociotype(Types.SLI);
-
-	public final static List<Sociotype> socion =
-		Arrays.asList(ILE, SEI, ESE, LII, EIE, LSI, SLE, IEI, SEE, ILI, LIE, ESI, LSE, EII, IEE, SLI);
-
-	private Sociotype(Types type) {
+	private Sociotype() {
 		functions = new ArrayList<Function>(8);
-		switch (type) {
+		switch (this) {
 		case ILE:
 			abbreviation = "ИЛЭ";
 			nickname = "дон кихот";
@@ -284,7 +261,7 @@ public class Sociotype {
 	 * @return объект, описывающий функцию, или null, если позиция задана некорректно
 	 */
 	public Function getFunctionByPosition(int position) {
-		for (Function function: functions) {
+		for (Function function : functions) {
 			if (function.getPosition() == position) {
 				return function;
 			}
@@ -298,7 +275,7 @@ public class Sociotype {
 	 * @return объект, описывающий функцию
 	 */
 	public Function getFunctionByAspect(Aspect aspect) {
-		for (Function function: functions) {
+		for (Function function : functions) {
 			if (function.getAspect() == aspect) {
 				return function;
 			}
