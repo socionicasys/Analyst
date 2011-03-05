@@ -1,11 +1,15 @@
 package ru.socionicasys.analyst;
 
+import ru.socionicasys.analyst.types.Aspect;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
@@ -263,7 +267,8 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 	}
 
 	private class AspectPanel extends JPanel implements ActionListener, ItemListener {
-		private JRadioButton l, p, i, t, s, f, r, e, d;
+		private HashMap<Aspect, JRadioButton> primaryAspectButtons;
+		private JRadioButton d;
 		private JRadioButton l2, p2, i2, t2, s2, f2, r2, e2;
 		private JRadioButton aspect, block, jump;
 		private ButtonGroup aspectGroup, secondAspectGroup, controlGroup;
@@ -272,30 +277,33 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 
 		public AspectPanel() {
 			super();
-			l = new JRadioButton("БЛ");
-			l.addItemListener(this);
-			l.setActionCommand(AData.L);
-			p = new JRadioButton("ЧЛ");
-			p.addItemListener(this);
-			p.setActionCommand(AData.P);
-			i = new JRadioButton("ЧИ");
-			i.addItemListener(this);
-			i.setActionCommand(AData.I);
-			t = new JRadioButton("БИ");
-			t.addItemListener(this);
-			t.setActionCommand(AData.T);
-			s = new JRadioButton("БС");
-			s.addItemListener(this);
-			s.setActionCommand(AData.S);
-			f = new JRadioButton("ЧС");
-			f.addItemListener(this);
-			f.setActionCommand(AData.F);
-			r = new JRadioButton("БЭ");
-			r.addItemListener(this);
-			r.setActionCommand(AData.R);
-			e = new JRadioButton("ЧЭ");
-			e.addItemListener(this);
-			e.setActionCommand(AData.E);
+			setMinimumSize(new Dimension(200, 270));
+			setMaximumSize(new Dimension(200, 270));
+
+			Panel pAspect = new Panel();
+			pAspect.setLayout(new BoxLayout(pAspect, BoxLayout.Y_AXIS));
+			pAspect.setPreferredSize(new Dimension(50, 200));
+			pAspect.setMinimumSize(new Dimension(50, 200));
+
+			aspectGroup = new ButtonGroup();
+
+			primaryAspectButtons = new HashMap<Aspect, JRadioButton>(8);
+			for (Aspect aspect : Aspect.values()) {
+				JRadioButton button = new JRadioButton(aspect.getAbbreviation());
+				button.setActionCommand(aspect.getAbbreviation());
+				button.addItemListener(this);
+				button.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						secondAspectGroup.clearSelection();
+						clearAspectSelection.setEnabled(true);
+						updateSelections();
+					}
+				});
+				aspectGroup.add(button);
+				pAspect.add(button);
+				primaryAspectButtons.put(aspect, button);
+			}
 
 			l2 = new JRadioButton("БЛ");
 			l2.addItemListener(this);
@@ -335,24 +343,6 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			d = new JRadioButton("???");
 			d.getModel().addItemListener(this);
 			d.setActionCommand(AData.DOUBT);
-
-			aspectGroup = new ButtonGroup();
-			aspectGroup.add(l);
-			l.addActionListener(this);
-			aspectGroup.add(p);
-			p.addActionListener(this);
-			aspectGroup.add(r);
-			r.addActionListener(this);
-			aspectGroup.add(e);
-			e.addActionListener(this);
-			aspectGroup.add(s);
-			s.addActionListener(this);
-			aspectGroup.add(f);
-			f.addActionListener(this);
-			aspectGroup.add(t);
-			t.addActionListener(this);
-			aspectGroup.add(i);
-			i.addActionListener(this);
 			aspectGroup.add(d);
 			d.addActionListener(this);
 
@@ -383,22 +373,6 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			jump.addActionListener(this);
 
 			clearAspectSelection = new JButton("Очистить");
-
-			setMinimumSize(new Dimension(200, 270));
-			setMaximumSize(new Dimension(200, 270));
-			Panel pAspect = new Panel();
-			pAspect.setLayout(new BoxLayout(pAspect, BoxLayout.Y_AXIS));
-			pAspect.setPreferredSize(new Dimension(50, 200));
-			pAspect.setMinimumSize(new Dimension(50, 200));
-
-			pAspect.add(l);
-			pAspect.add(p);
-			pAspect.add(r);
-			pAspect.add(e);
-			pAspect.add(s);
-			pAspect.add(f);
-			pAspect.add(t);
-			pAspect.add(i);
 
 			Panel pAspect2 = new Panel();
 			pAspect2.setLayout(new BoxLayout(pAspect2, BoxLayout.Y_AXIS));
@@ -469,18 +443,10 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			}
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent ev) {
 			Object source = ev.getSource();
-			if (source.equals(d) ||
-				source.equals(l) ||
-				source.equals(p) ||
-				source.equals(r) ||
-				source.equals(e) ||
-				source.equals(s) ||
-				source.equals(f) ||
-				source.equals(t) ||
-				source.equals(i)
-				) {
+			if (source.equals(d)) {
 				secondAspectGroup.clearSelection();
 			}
 
@@ -504,6 +470,11 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			} else {
 				clearAspectSelection.setEnabled(true);
 			}
+
+			updateSelections();
+		}
+
+		private void updateSelections() {
 			if (block.isSelected() && block.isEnabled()) {
 				ButtonModel bm = aspectGroup.getSelection();
 				if (bm != null) {
@@ -608,14 +579,9 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		}
 
 		private void setAspectGroupEnabled(boolean enabled) {
-			l.setEnabled(enabled);
-			p.setEnabled(enabled);
-			s.setEnabled(enabled);
-			f.setEnabled(enabled);
-			i.setEnabled(enabled);
-			t.setEnabled(enabled);
-			e.setEnabled(enabled);
-			r.setEnabled(enabled);
+			for (JRadioButton button : primaryAspectButtons.values()) {
+				button.setEnabled(enabled);
+			}
 			d.setEnabled(enabled);
 		}
 
@@ -654,31 +620,23 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		}
 
 		public void setAspect(AData data) {
-			if (data == null) return;
+			if (data == null) {
+				return;
+			}
 			String aspect = data.getAspect();
 
-			if (aspect == null) {//setAspectGroupEnabled(true);
+			if (aspect == null) {
 				aspectGroup.clearSelection();
 				secondAspectGroup.clearSelection();
 				this.aspect.getModel().setSelected(true);
-			} else if (aspect.equals(AData.L)) {
-				l.getModel().setSelected(true);
-			} else if (aspect.equals(AData.P)) {
-				p.getModel().setSelected(true);
-			} else if (aspect.equals(AData.R)) {
-				r.getModel().setSelected(true);
-			} else if (aspect.equals(AData.E)) {
-				e.getModel().setSelected(true);
-			} else if (aspect.equals(AData.S)) {
-				s.getModel().setSelected(true);
-			} else if (aspect.equals(AData.F)) {
-				f.getModel().setSelected(true);
-			} else if (aspect.equals(AData.T)) {
-				t.getModel().setSelected(true);
-			} else if (aspect.equals(AData.I)) {
-				i.getModel().setSelected(true);
 			} else if (aspect.equals(AData.DOUBT)) {
 				d.getModel().setSelected(true);
+			} else {
+				for (Map.Entry<Aspect, JRadioButton> entry : primaryAspectButtons.entrySet()) {
+					if (entry.getKey().getAbbreviation().equals(aspect)) {
+						entry.getValue().getModel().setSelected(true);
+					}
+				}
 			}
 
 			String modifier = data.getModifier();
