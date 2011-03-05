@@ -43,24 +43,20 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 
 		JPanel container = new JPanel();
 		container.setMinimumSize(new Dimension(200, 500));
-		GridBagConstraints gbc = new GridBagConstraints();
 		JScrollPane scrl = new JScrollPane(container);
 
 		scrl.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 
-		gbc.gridwidth = GridBagConstraints.REMAINDER;
-		gbc.insets = new Insets(2, 2, 2, 2);
-		container.add(aspectPanel); //,gbc);
-		container.add(signPanel); //,gbc);
-		container.add(dimensionPanel); //,gbc);
-		container.add(mvPanel); //,gbc);
+		container.add(aspectPanel);
+		container.add(signPanel);
+		container.add(dimensionPanel);
+		container.add(mvPanel);
 		add(container);
 
 		mvPanel.setPanelEnabled(false);
 		dimensionPanel.setPanelEnabled(false);
 		signPanel.setPanelEnabled(false);
-
 		aspectPanel.setPanelEnabled(false);
 	}
 
