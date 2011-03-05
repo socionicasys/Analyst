@@ -1,55 +1,37 @@
-/**
- *
- */
 package ru.socionicasys.analyst;
-
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Caret;
-import javax.swing.tree.DefaultMutableTreeNode;
-
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.Vector;
-
+import java.util.ArrayList;
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Caret;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  * @author Виктор
  */
-public class ControlsPane extends JToolBar implements CaretListener,
-	ADataChangeListener,
-	ChangeListener,
-	TreeSelectionListener {
-
-	AspectPanel aspectPanel;
-	SignPanel signPanel;
-	MVPanel mvPanel;
-	DimensionPanel dimensionPanel;
-	JTextPane textPane;
-	ADocument aDoc = null;
-	Vector<ADataChangeListener> aDataListeners;
-	ASection currentASection = null;
-	JTextArea commentField;
+public class ControlsPane extends JToolBar implements CaretListener, ADataChangeListener, ChangeListener, TreeSelectionListener {
+	private AspectPanel aspectPanel;
+	private SignPanel signPanel;
+	private MVPanel mvPanel;
+	private DimensionPanel dimensionPanel;
+	private JTextPane textPane;
+	private ADocument aDoc = null;
+	private ArrayList<ADataChangeListener> aDataListeners;
+	private ASection currentASection = null;
+	private JTextArea commentField;
 	private Object oldTreeObject = null;
 
-
-	//constructor
 	public ControlsPane() {
 		super("Панель разметки", JToolBar.VERTICAL);
 
-		//setOrientation(JToolBar.VERTICAL);
-		aDataListeners = new Vector<ADataChangeListener>();
+		aDataListeners = new ArrayList<ADataChangeListener>();
 		signPanel = new SignPanel();
 		mvPanel = new MVPanel();
 		dimensionPanel = new DimensionPanel();
@@ -59,16 +41,10 @@ public class ControlsPane extends JToolBar implements CaretListener,
 		aspectPanel.addAspectSelectionListener(mvPanel);
 		aspectPanel.addAspectSelectionListener(dimensionPanel);
 
-		//       JPanel controlsPane = new JPanel();
-		//     setMinimumSize(new Dimension (150,600));
-		Panel dummy = new Panel();
 		JPanel container = new JPanel();
 		container.setMinimumSize(new Dimension(200, 500));
-		GridBagLayout gbLayout = new GridBagLayout();
 		GridBagConstraints gbc = new GridBagConstraints();
 		JScrollPane scrl = new JScrollPane(container);
-		//scrl.setMinimumSize(new Dimension((int)container.getMinimumSize().getWidth()+ 20,
-		//									(int)container.getMinimumSize().getHeight()+20));
 
 		scrl.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
@@ -79,11 +55,6 @@ public class ControlsPane extends JToolBar implements CaretListener,
 		container.add(signPanel); //,gbc);
 		container.add(dimensionPanel); //,gbc);
 		container.add(mvPanel); //,gbc);
-		//gbc.weighty = 1.0;
-		//container.add(dummy); //,gbc);
-
-		//add(scrl);
-
 		add(container);
 
 		mvPanel.setPanelEnabled(false);
@@ -91,22 +62,19 @@ public class ControlsPane extends JToolBar implements CaretListener,
 		signPanel.setPanelEnabled(false);
 
 		aspectPanel.setPanelEnabled(false);
-	}// constructor ControlsPane()
+	}
 
-	public interface AspectSelectionListener {
-
+	private interface AspectSelectionListener {
 		public void setPanelEnabled(boolean enabled);
-	}//interface
+	}
 
 	private class MVPanel extends JPanel implements ActionListener, AspectSelectionListener {
-
 		private JRadioButton vitalButton;
 		private JRadioButton mentalButton;
 		private JRadioButton superidButton;
 		private JRadioButton superegoButton;
 		private ButtonGroup mvButtonGroup;
 		private JButton clearMVSelection;
-
 
 		public MVPanel() {
 			super();
@@ -139,9 +107,7 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			Panel pp1 = new Panel();
 			Panel pp2 = new Panel();
 			Panel pp = new Panel();
-			//setMinimumSize(new Dimension(100,110));
 			pp.setMinimumSize(new Dimension(200, 120));
-			//pp.setPreferredSize(new Dimension(100,100));
 			setMinimumSize(new Dimension(200, 120));
 			setMaximumSize(new Dimension(200, 120));
 
@@ -151,7 +117,6 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			pp1.add(mentalButton);
 			pp2.add(superidButton);
 			pp2.add(superegoButton);
-			//pp.add(new JPanel());
 			pp.setLayout(new BoxLayout(pp, BoxLayout.X_AXIS));
 
 			pp.add(pp1);
@@ -162,7 +127,7 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			add(pp);
 			add(clearMVSelection);
 			setBorder(new TitledBorder("Ментал/Витал"));
-		} //constructor MVPanel
+		}
 
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(clearMVSelection)) {
@@ -171,7 +136,6 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			} else {
 				clearMVSelection.setEnabled(true);
 			}
-
 			fireADataChanged();
 		}
 
@@ -188,29 +152,38 @@ public class ControlsPane extends JToolBar implements CaretListener,
 
 		public String getMVSelection() {
 			ButtonModel bm = mvButtonGroup.getSelection();
-			if (bm == null) return null;
+			if (bm == null) {
+				return null;
+			}
 			return bm.getActionCommand();
 		}
 
 		public void setMV(String mv) {
-			if (mv == null) mvButtonGroup.clearSelection();
-			else if (mv.equals(AData.MENTAL)) mvButtonGroup.setSelected(mentalButton.getModel(), true);
-			else if (mv.equals(AData.VITAL)) mvButtonGroup.setSelected(vitalButton.getModel(), true);
-			else if (mv.equals(AData.SUPEREGO)) mvButtonGroup.setSelected(superegoButton.getModel(), true);
-			else if (mv.equals(AData.SUPERID)) mvButtonGroup.setSelected(superidButton.getModel(), true);
+			if (mv == null) {
+				mvButtonGroup.clearSelection();
+			} else if (mv.equals(AData.MENTAL)) {
+				mvButtonGroup.setSelected(mentalButton.getModel(), true);
+			} else if (mv.equals(AData.VITAL)) {
+				mvButtonGroup.setSelected(vitalButton.getModel(), true);
+			} else if (mv.equals(AData.SUPEREGO)) {
+				mvButtonGroup.setSelected(superegoButton.getModel(), true);
+			} else if (mv.equals(AData.SUPERID)) {
+				mvButtonGroup.setSelected(superidButton.getModel(), true);
+			}
 
-			if (mvButtonGroup.getSelection() != null) clearMVSelection.setEnabled(true);
-			else clearMVSelection.setEnabled(false);
+			if (mvButtonGroup.getSelection() != null) {
+				clearMVSelection.setEnabled(true);
+			} else {
+				clearMVSelection.setEnabled(false);
+			}
 		}
-	} //class MVPanel
+	}
 
 	private class SignPanel extends JPanel implements ActionListener, AspectSelectionListener {
-
 		private JRadioButton plusButton;
 		private JRadioButton minusButton;
 		private ButtonGroup signButtonGroup;
 		private JButton clearSignSelection;
-
 
 		public SignPanel() {
 			super();
@@ -231,7 +204,6 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			clearSignSelection.addActionListener(this);
 
 			Panel pp = new Panel();
-			//pp.setMinimumSize(new Dimension(100,50));
 			pp.setMaximumSize(new Dimension(100, 50));
 			pp.setPreferredSize(new Dimension(100, 50));
 
@@ -248,7 +220,7 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			add(pp);
 			add(clearSignSelection);
 			setBorder(new TitledBorder("Знак"));
-		} //constructor MVPanel
+		}
 
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(clearSignSelection)) {
@@ -271,29 +243,36 @@ public class ControlsPane extends JToolBar implements CaretListener,
 
 		public String getSignSelection() {
 			ButtonModel bm = signButtonGroup.getSelection();
-			if (bm == null) return null;
+			if (bm == null) {
+				return null;
+			}
 			return bm.getActionCommand();
 		}
 
 		public void setSign(String sign) {
-			if (sign == null) signButtonGroup.clearSelection();
-			else if (sign.equals(AData.PLUS)) signButtonGroup.setSelected(plusButton.getModel(), true);
-			else if (sign.equals(AData.MINUS)) signButtonGroup.setSelected(minusButton.getModel(), true);
+			if (sign == null) {
+				signButtonGroup.clearSelection();
+			} else if (sign.equals(AData.PLUS)) {
+				signButtonGroup.setSelected(plusButton.getModel(), true);
+			} else if (sign.equals(AData.MINUS)) {
+				signButtonGroup.setSelected(minusButton.getModel(), true);
+			}
 
-			if (signButtonGroup.getSelection() != null) clearSignSelection.setEnabled(true);
-			else clearSignSelection.setEnabled(false);
+			if (signButtonGroup.getSelection() != null) {
+				clearSignSelection.setEnabled(true);
+			} else {
+				clearSignSelection.setEnabled(false);
+			}
 		}
-	} //class SignPanel
+	}
 
 	private class AspectPanel extends JPanel implements ActionListener, ItemListener {
-
 		private JRadioButton l, p, i, t, s, f, r, e, d;
-		private JRadioButton l2, p2, i2, t2, s2, f2, r2, e2, d2;
+		private JRadioButton l2, p2, i2, t2, s2, f2, r2, e2;
 		private JRadioButton aspect, block, jump;
 		private ButtonGroup aspectGroup, secondAspectGroup, controlGroup;
 		private JButton clearAspectSelection;
-		private Vector<AspectSelectionListener> actionListeners = new Vector<AspectSelectionListener>();
-		boolean aspectPanelEnabled = false;
+		private ArrayList<AspectSelectionListener> actionListeners = new ArrayList<AspectSelectionListener>();
 
 		public AspectPanel() {
 			super();
@@ -424,7 +403,6 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			pAspect.add(f);
 			pAspect.add(t);
 			pAspect.add(i);
-			//pAspect.add(d);
 
 			Panel pAspect2 = new Panel();
 			pAspect2.setLayout(new BoxLayout(pAspect2, BoxLayout.Y_AXIS));
@@ -475,20 +453,20 @@ public class ControlsPane extends JToolBar implements CaretListener,
 
 			clearAspectSelection.addActionListener(this);
 			clearAspectSelection.setEnabled(false);
-		}	//constructor
+		}
 
 		public void addAspectSelectionListener(AspectSelectionListener asl) {
 			actionListeners.add(asl);
 			informListeners(isAspectSelected());
 		}
 
-		protected void informListeners(boolean selected) {
-			for (int i = 0; i < actionListeners.size(); i++) {
-				actionListeners.get(i).setPanelEnabled(selected);
+		private void informListeners(boolean selected) {
+			for (AspectSelectionListener actionListener : actionListeners) {
+				actionListener.setPanelEnabled(selected);
 			}
 
-			if (selected) {
-				if (!commentField.isEditable()) commentField.setEditable(true);
+			if (selected && !commentField.isEditable()) {
+				commentField.setEditable(true);
 			} else if (commentField != null) {
 				commentField.setText("");
 				commentField.setEditable(false);
@@ -506,7 +484,9 @@ public class ControlsPane extends JToolBar implements CaretListener,
 				source.equals(f) ||
 				source.equals(t) ||
 				source.equals(i)
-				) secondAspectGroup.clearSelection();
+				) {
+				secondAspectGroup.clearSelection();
+			}
 
 			if (source.equals(clearAspectSelection)) {
 				aspectGroup.clearSelection();
@@ -521,32 +501,30 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			} else if (source.equals(aspect)) {
 				secondAspectGroup.clearSelection();
 				setSecondAspectGroupEnabled(false);
-				//aspectGroup.clearSelection();
 				setAspectGroupEnabled(true);
 			} else if (source.equals(block)) {
 				secondAspectGroup.clearSelection();
 				setSecondAspectGroupEnabled(false);
-
-				// setPanelEnabled(true);
 			} else {
 				clearAspectSelection.setEnabled(true);
 			}
 			if (block.isSelected() && block.isEnabled()) {
 				ButtonModel bm = aspectGroup.getSelection();
-				if (bm != null) setSecondAspectForBlock(bm.getActionCommand());
+				if (bm != null) {
+					setSecondAspectForBlock(bm.getActionCommand());
+				}
 			}
 
 			if (jump.isSelected() && jump.isEnabled()) {
 				ButtonModel bm = aspectGroup.getSelection();
-				if (bm != null) setSecondAspectForJump(bm.getActionCommand());
+				if (bm != null) {
+					setSecondAspectForJump(bm.getActionCommand());
+				}
 			}
-
 			fireADataChanged();
 		}
 
-
 		private void setSecondAspectGroupEnabled(boolean enabled) {
-
 			l2.setEnabled(enabled);
 			p2.setEnabled(enabled);
 			s2.setEnabled(enabled);
@@ -558,10 +536,8 @@ public class ControlsPane extends JToolBar implements CaretListener,
 		}
 
 		private void setSecondAspectForBlock(String firstAspect) {
-
 			if (firstAspect != null) {
 				setSecondAspectGroupEnabled(false);
-
 				if (firstAspect.equals(AData.L)) {
 					f2.setEnabled(true);
 					i2.setEnabled(true);
@@ -588,14 +564,11 @@ public class ControlsPane extends JToolBar implements CaretListener,
 					r2.setEnabled(true);
 				}
 			}
-		}	//
+		}
 
 		private void setSecondAspectForJump(String firstAspect) {
-
 			if (firstAspect != null) {
-				//setSecondAspectGroupEnabled(false);
 				setSecondAspectGroupEnabled(true);
-
 				if (firstAspect.equals(AData.L)) {
 					l2.setEnabled(false);
 				} else if (firstAspect.equals(AData.P)) {
@@ -614,18 +587,13 @@ public class ControlsPane extends JToolBar implements CaretListener,
 					i2.setEnabled(false);
 				}
 			}
-		}	//
-
-		public boolean isAspectSelected() {
-			if (aspectGroup.getSelection() != null)
-				//&& !aspectGroup.getSelection().getActionCommand().equals(AData.DOUBT))
-				return true;
-			return false;
 		}
 
+		public boolean isAspectSelected() {
+			return aspectGroup.getSelection() != null;
+		}
 
 		public void setPanelEnabled(boolean enabled) {
-			aspectPanelEnabled = enabled;
 			if (!enabled) {
 				aspectGroup.clearSelection();
 				secondAspectGroup.clearSelection();
@@ -666,13 +634,19 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			ButtonModel bma = aspectGroup.getSelection();
 			ButtonModel bma2 = secondAspectGroup.getSelection();
 
-			if (bma == null) return null;
+			if (bma == null) {
+				return null;
+			}
 
 			res += bma.getActionCommand();
 
 			if (bma2 != null) {
-				if (block.isSelected()) res += AData.BLOCK_TOKEN + bma2.getActionCommand();
-				else if (jump.isSelected()) res += AData.JUMP_TOKEN + bma2.getActionCommand();
+				if (block.isSelected()) {
+					res += AData.BLOCK_TOKEN + bma2.getActionCommand();
+				}
+				else if (jump.isSelected()) {
+					res += AData.JUMP_TOKEN + bma2.getActionCommand();
+				}
 			}
 			return res;
 		}
@@ -747,10 +721,9 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			informListeners(isAspectSelected());
 			clearAspectSelection.setEnabled(isAspectSelected());
 		}
-	} //class AspectPanel
+	}
 
 	private class DimensionPanel extends JPanel implements ActionListener, AspectSelectionListener {
-
 		private JRadioButton d1, d2, d3, d4, malo, mnogo, odno, indi;
 		private ButtonGroup dimensionGroup;
 		private JButton clearDimensionSelection;
@@ -787,7 +760,6 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			clearDimensionSelection = new JButton("Очистить");
 			clearDimensionSelection.addActionListener(this);
 
-			//       setLayout(new GridLayout(8,2));
 			Panel p = new Panel();
 			Panel p1 = new Panel();
 			Panel p2 = new Panel();
@@ -796,8 +768,6 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			p1.setLayout(new BoxLayout(p1, BoxLayout.Y_AXIS));
 			p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
 
-			//p.setPreferredSize(new Dimension(100,170));
-			//p.setMaximumSize(new Dimension(100,170));
 			setMinimumSize(new Dimension(200, 170));
 			setMaximumSize(new Dimension(200, 170));
 
@@ -825,11 +795,10 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			add(p);
 			add(clearDimensionSelection);
 			setBorder(new TitledBorder("Размерность"));
-		}	//constructor
+		}
 
 		public void actionPerformed(ActionEvent e) {
-			Object source = e.getSource();
-			if (source.equals(clearDimensionSelection)) {
+			if (e.getSource().equals(clearDimensionSelection)) {
 				dimensionGroup.clearSelection();
 				clearDimensionSelection.setEnabled(false);
 			} else {
@@ -837,7 +806,6 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			}
 			fireADataChanged();
 		}
-
 
 		public void setPanelEnabled(boolean enabled) {
 			if (!enabled) {
@@ -857,25 +825,40 @@ public class ControlsPane extends JToolBar implements CaretListener,
 
 		public String getDimensionSelection() {
 			ButtonModel bm = dimensionGroup.getSelection();
-			if (bm == null) return null;
+			if (bm == null) {
+				return null;
+			}
 			return bm.getActionCommand();
 		}
 
 		public void setDimension(String dimension) {
-			if (dimension == null) dimensionGroup.clearSelection();
-			else if (dimension.equals(AData.D1)) d1.setSelected(true);
-			else if (dimension.equals(AData.D2)) d2.setSelected(true);
-			else if (dimension.equals(AData.D3)) d3.setSelected(true);
-			else if (dimension.equals(AData.D4)) d4.setSelected(true);
-			else if (dimension.equals(AData.ODNOMERNOST)) odno.setSelected(true);
-			else if (dimension.equals(AData.MALOMERNOST)) malo.setSelected(true);
-			else if (dimension.equals(AData.MNOGOMERNOST)) mnogo.setSelected(true);
-			else if (dimension.equals(AData.INDIVIDUALNOST)) indi.setSelected(true);
+			if (dimension == null) {
+				dimensionGroup.clearSelection();
+			} else if (dimension.equals(AData.D1)) {
+				d1.setSelected(true);
+			} else if (dimension.equals(AData.D2)) {
+				d2.setSelected(true);
+			} else if (dimension.equals(AData.D3)) {
+				d3.setSelected(true);
+			} else if (dimension.equals(AData.D4)) {
+				d4.setSelected(true);
+			} else if (dimension.equals(AData.ODNOMERNOST)) {
+				odno.setSelected(true);
+			} else if (dimension.equals(AData.MALOMERNOST)) {
+				malo.setSelected(true);
+			} else if (dimension.equals(AData.MNOGOMERNOST)) {
+				mnogo.setSelected(true);
+			} else if (dimension.equals(AData.INDIVIDUALNOST)) {
+				indi.setSelected(true);
+			}
 
-			if (dimensionGroup.getSelection() != null) clearDimensionSelection.setEnabled(true);
-			else clearDimensionSelection.setEnabled(false);
+			if (dimensionGroup.getSelection() != null) {
+				clearDimensionSelection.setEnabled(true);
+			} else {
+				clearDimensionSelection.setEnabled(false);
+			}
 		}
-	}//class DimensionPanel
+	}
 
 	public void bindToTextPane(JTextPane textComponent, ADocument adoc, JTextArea commentField) {
 		this.textPane = textComponent;
@@ -891,7 +874,9 @@ public class ControlsPane extends JToolBar implements CaretListener,
 				dimensionPanel.getDimensionSelection() + AData.SEPARATOR +
 				mvPanel.getMVSelection() + AData.SEPARATOR
 			);
-			if (adata != null) adata.setComment(commentField.getText());
+			if (adata != null) {
+				adata.setComment(commentField.getText());
+			}
 		} catch (AData.ADataException e) {
 			//System.out.println("Exception in ControlsPane.gerData():");	
 			//e.printStackTrace();		
@@ -902,14 +887,11 @@ public class ControlsPane extends JToolBar implements CaretListener,
 
 	@Override
 	public void caretUpdate(CaretEvent e) {
-
 		int dot = e.getDot();
 		int mark = e.getMark();
 		int begin = Math.min(dot, mark);
-//	int length = Math.abs(dot-mark); 
 
 		//try to find current ASection to edit
-
 		currentASection = null;
 
 		// if found mark the section with caret
@@ -949,7 +931,9 @@ public class ControlsPane extends JToolBar implements CaretListener,
 
 				textPane.addCaretListener(this);
 				setContols(data);
-			} else aspectPanel.setPanelEnabled(false);
+			} else {
+				aspectPanel.setPanelEnabled(false);
+			}
 
 			aspectPanel.setPanelEnabled(true);
 		} else {
@@ -958,11 +942,9 @@ public class ControlsPane extends JToolBar implements CaretListener,
 	}
 
 	protected void setContols(AData data) {
-
 		removeADataListener(this);
 
 		if (data != null) {
-
 			aspectPanel.setAspect(data);
 			dimensionPanel.setDimension(data.getDimension());
 			mvPanel.setMV(data.getMV());
@@ -983,7 +965,7 @@ public class ControlsPane extends JToolBar implements CaretListener,
 		}
 
 		addADataListener(this);
-	} //setContols()
+	}
 
 	protected void addADataListener(ADataChangeListener l) {
 		aDataListeners.add(l);
@@ -994,10 +976,11 @@ public class ControlsPane extends JToolBar implements CaretListener,
 	}
 
 	private void fireADataChanged() {
-		if (aDataListeners.isEmpty()) return;
+		if (aDataListeners.isEmpty()) {
+			return;
+		}
 
 		Caret caret = textPane.getCaret();
-		//Document doc = textPane.getDocument();
 
 		int dot = caret.getDot();
 		int mark = caret.getMark();
@@ -1006,15 +989,13 @@ public class ControlsPane extends JToolBar implements CaretListener,
 
 		AData d = getAData();
 
-		for (int i = 0; i < aDataListeners.size(); i++) {
-			aDataListeners.get(i).aDataChanged(begin, end, d);
+		for (ADataChangeListener aDataListener : aDataListeners) {
+			aDataListener.aDataChanged(begin, end, d);
 		}
 	}
 
 	@Override
 	public void aDataChanged(int start, int end, AData data) {
-
-		//currentASection = aDoc.getASectionThatStartsAt(start);
 		if ((data == null) && (currentASection != null)) {
 			aDoc.startCompoundEdit();
 			aDoc.removeASection(currentASection);
@@ -1024,8 +1005,8 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			aDoc.startCompoundEdit();
 			aDoc.updateASection(currentASection, data);
 			aDoc.endCompoundEdit(null);
-		} else if ((data != null) && (currentASection == null)) {
-
+		} else if (data != null) {
+			// currentASection == null
 			try {
 				currentASection = new ASection(aDoc.createPosition(start), aDoc.createPosition(end));
 				currentASection.setAttributes(aDoc.defaultSectionAttributes);
@@ -1037,34 +1018,31 @@ public class ControlsPane extends JToolBar implements CaretListener,
 				e.printStackTrace();
 			}
 		}
-	} // aDataChanged()
+	}
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		// Event from the comment field - just update changes to the document
-		if (aspectPanel.isAspectSelected())
+		if (aspectPanel.isAspectSelected()) {
 			fireADataChanged();
+		}
 	}
 
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-
 		Object obj = ((DefaultMutableTreeNode) (e.getPath().getLastPathComponent())).getUserObject();
-
 		if (obj.equals(oldTreeObject)) {
-			//oldTreeObject=null;
 			return;
-		} else oldTreeObject = obj;
+		} else {
+			oldTreeObject = obj;
+		}
 
-		String quote = null;
+		String quote;
 		int index = 0;
 
 		if (obj instanceof EndNodeObject) {
-			quote = ((EndNodeObject) obj).getString();
 			index = ((EndNodeObject) obj).getOffset();
-		}
-		//String quote = e.getPath().getLastPathComponent().toString();
-		else {
+		} else {
 			quote = obj.toString();
 			if (quote != null && quote.startsWith("#")) {
 				String indexStr = quote.substring(1, quote.indexOf("::"));
@@ -1096,20 +1074,14 @@ public class ControlsPane extends JToolBar implements CaretListener,
 
 			commentField.getCaret().addChangeListener(this);
 
-//			textPane.getCaret().setDot(offset);			
-
 			try {
 				rect = textPane.modelToView(offset);
-				//System.out.println("offset = "+offset+" rectangle = "+rect);
 				viewport.scrollRectToVisible(rect);
 				textPane.grabFocus();
 			} catch (BadLocationException e1) {
-				//
 				System.out.println(" error setting model to view :: bad location");
 			}
-		} else ; //System.out.println(" Не найдена секция");
-		////////////////////////////////////////////
-
+		}
 	}
 
 	public void update() {
@@ -1118,4 +1090,4 @@ public class ControlsPane extends JToolBar implements CaretListener,
 			setContols(data);
 		}
 	}
-}//class ControlsPane
+}
