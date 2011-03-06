@@ -22,7 +22,7 @@ public class ASection implements Serializable, Comparable<ASection> {
 		this.attributes = as;
 	}
 
-	// @Override
+	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof ASection)) {
 			return false;

@@ -117,6 +117,7 @@ public class CTree extends JTree implements
 			super(o);
 		}
 
+		@Override
 		public String toString() {
 			return "[" + getChildCount() + "] " + super.toString();
 		}

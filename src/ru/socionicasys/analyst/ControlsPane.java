@@ -129,6 +129,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			setBorder(new TitledBorder("Ментал/Витал"));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(clearMVSelection)) {
 				mvButtonGroup.clearSelection();
@@ -139,6 +140,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			fireADataChanged();
 		}
 
+		@Override
 		public void setPanelEnabled(boolean enabled) {
 			if (!enabled) {
 				mvButtonGroup.clearSelection();
@@ -222,6 +224,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			setBorder(new TitledBorder("Знак"));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(clearSignSelection)) {
 				signButtonGroup.clearSelection();
@@ -232,6 +235,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			fireADataChanged();
 		}
 
+		@Override
 		public void setPanelEnabled(boolean enabled) {
 			if (!enabled) {
 				signButtonGroup.clearSelection();
@@ -680,6 +684,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			setBorder(new TitledBorder("Размерность"));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource().equals(clearDimensionSelection)) {
 				dimensionGroup.clearSelection();
@@ -690,6 +695,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			fireADataChanged();
 		}
 
+		@Override
 		public void setPanelEnabled(boolean enabled) {
 			if (!enabled) {
 				dimensionGroup.clearSelection();

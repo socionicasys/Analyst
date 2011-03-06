@@ -65,6 +65,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		// becomes invisible when focus moves to another component
 		textPane.setCaret(
 			new DefaultCaret() {
+				@Override
 				public void focusLost(FocusEvent e) {
 				}
 			}
@@ -477,6 +478,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		}
 
 		//Might not be invoked from the event dispatch thread.
+		@Override
 		public void caretUpdate(CaretEvent e) {
 			ASection s;
 			s = aDoc.getASectionThatStartsAt(textPane.getCaretPosition());
@@ -508,6 +510,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 	//This one listens for edits that can be undone.
 	protected class MyUndoableEditListener implements UndoableEditListener {
+		@Override
 		public void undoableEditHappened(UndoableEditEvent e) {
 			//Remember the edit and update the menus.
 
@@ -526,14 +529,17 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	//And this one listens for any changes to the document.
 	protected class MyDocumentListener
 		implements DocumentListener {
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			displayEditInfo(e);
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			displayEditInfo(e);
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 			displayEditInfo(e);
 		}
@@ -871,6 +877,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		reportCheckbox.setSelected(generateReport);
 
 		reportCheckbox.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent ae) {
 				generateReport = ((JCheckBox) ae.getSource()).isSelected();
 			}
@@ -933,6 +940,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			setEnabled(false);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
 				undo.undo();
@@ -975,6 +983,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			setEnabled(false);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
 				undo.redo();
@@ -1111,6 +1120,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	}
 
 	public class MyEventQueue extends EventQueue {
+		@Override
 		protected void dispatchEvent(AWTEvent event) {
 			super.dispatchEvent(event);
 

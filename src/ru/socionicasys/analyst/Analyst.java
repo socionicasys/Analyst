@@ -11,6 +11,7 @@ public class Analyst {
 			startupFilename = null;
 		}
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				UIManager.put("swing.boldMetal", Boolean.FALSE);
 				createAndShowGUI(startupFilename);

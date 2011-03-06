@@ -153,6 +153,7 @@ public class AData implements Serializable {
 		return comment;
 	}
 
+	@Override
 	public String toString() {
 		String res = aspect;
 		if (modifier != null && modifier.equals(BLOCK)) {
@@ -300,7 +301,7 @@ public class AData implements Serializable {
 		}
 	}
 
-	//@override
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof AData)) return false;
 		AData d = (AData) obj;

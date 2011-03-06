@@ -47,6 +47,7 @@ public class SocionicsType {
 		theType = type;
 	}
 
+	@Override
 	public String toString() {
 		return typeName(theType);
 	}

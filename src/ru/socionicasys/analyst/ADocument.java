@@ -133,7 +133,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		return set;
 	}
 
-	// @Override
+	@Override
 	public void changedUpdate(DocumentEvent e) {
 
 	}//changedUpdate(); 	
@@ -180,7 +180,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 	}
 
-
+	@Override
 	protected void removeUpdate(AbstractDocument.DefaultDocumentEvent chng) {
 
 		if (blockRemoveUpdate) {
@@ -455,7 +455,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 
-	//@override
+	@Override
 	protected void fireUndoableEditUpdate(UndoableEditEvent e) {
 		String s = e.getEdit().getPresentationName();
 		if (keyword != null && s.contains(keyword)) {
@@ -485,14 +485,17 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			canRedo = false;
 		}
 
+		@Override
 		public boolean canUndo() {
 			return canUndo;
 		}
 
+		@Override
 		public boolean canRedo() {
 			return canRedo;
 		}
 
+		@Override
 		public void undo() throws CannotUndoException {
 			if (!canUndo) throw new CannotUndoException();
 
@@ -508,6 +511,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			fireADocumentChanged();
 		}
 
+		@Override
 		public void redo() throws CannotRedoException {
 			if (!canRedo) throw new CannotRedoException();
 			//blockUndoEvents(true);
@@ -522,26 +526,32 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			fireADocumentChanged();
 		}
 
+		@Override
 		public String getUndoPresentationName() {
 			return "Отменить вставку сегмента анализа";
 		}
 
+		@Override
 		public String getPresentationName() {
 			return "Вставка сегмента анализа";
 		}
 
+		@Override
 		public String getRedoPresentationName() {
 			return "Вернуть вставку сегмента анализа";
 		}
 
+		@Override
 		public boolean isSignificant() {
 			return true;
 		}
 
+		@Override
 		public boolean addEdit(UndoableEdit e) {
 			return false;
 		}
 
+		@Override
 		public boolean replaceEdit(UndoableEdit e) {
 			return false;
 		}
@@ -564,14 +574,17 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			canRedo = false;
 		}
 
+		@Override
 		public boolean canUndo() {
 			return canUndo;
 		}
 
+		@Override
 		public boolean canRedo() {
 			return canRedo;
 		}
 
+		@Override
 		public void undo() throws CannotUndoException {
 			if (!canUndo) throw new CannotUndoException();
 			//blockUndoEvents(true);
@@ -588,6 +601,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			fireADocumentChanged();
 		}
 
+		@Override
 		public void redo() throws CannotRedoException {
 			if (!canRedo) throw new CannotRedoException();
 			//blockUndoEvents(true);
@@ -604,26 +618,32 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			fireADocumentChanged();
 		}
 
+		@Override
 		public String getUndoPresentationName() {
 			return "Отменить очистку сегмента анализа";
 		}
 
+		@Override
 		public String getPresentationName() {
 			return "Очистка сегмента анализа";
 		}
 
+		@Override
 		public String getRedoPresentationName() {
 			return "Вернуть очитску сегмента анализа";
 		}
 
+		@Override
 		public boolean isSignificant() {
 			return true;
 		}
 
+		@Override
 		public boolean addEdit(UndoableEdit e) {
 			return false;
 		}
 
+		@Override
 		public boolean replaceEdit(UndoableEdit e) {
 			return false;
 		}
@@ -647,14 +667,17 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			canRedo = false;
 		}
 
+		@Override
 		public boolean canUndo() {
 			return canUndo;
 		}
 
+		@Override
 		public boolean canRedo() {
 			return canRedo;
 		}
 
+		@Override
 		public void undo() throws CannotUndoException {
 			if (!canUndo) throw new CannotUndoException();
 
@@ -666,6 +689,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			fireADocumentChanged();
 		}
 
+		@Override
 		public void redo() throws CannotRedoException {
 			if (!canRedo) throw new CannotRedoException();
 
@@ -677,22 +701,27 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			fireADocumentChanged();
 		}
 
+		@Override
 		public String getUndoPresentationName() {
 			return "Отменить редактирование сегмента анализа";
 		}
 
+		@Override
 		public String getPresentationName() {
 			return "Редактирование сегмента анализа";
 		}
 
+		@Override
 		public String getRedoPresentationName() {
 			return "Вернуть редактирование сегмента анализа";
 		}
 
+		@Override
 		public boolean isSignificant() {
 			return true;
 		}
 
+		@Override
 		public boolean addEdit(UndoableEdit e) {
 			if ((e instanceof ASectionChangeEdit) && ((ASectionChangeEdit) e).getSection().equals(section)) {
 				newData = ((ASectionChangeEdit) e).getNewData();
@@ -701,6 +730,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 				return false;
 		}
 
+		@Override
 		public boolean replaceEdit(UndoableEdit e) {
 			if ((e instanceof ASectionChangeEdit) && ((ASectionChangeEdit) e).getSection().equals(section)) {
 				newData = ((ASectionChangeEdit) e).getNewData();
@@ -734,14 +764,17 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			canRedo = false;
 		}
 
+		@Override
 		public boolean canUndo() {
 			return canUndo;
 		}
 
+		@Override
 		public boolean canRedo() {
 			return canRedo;
 		}
 
+		@Override
 		public void undo() throws CannotUndoException {
 			if (!canUndo) throw new CannotUndoException();
 			blockUndoEvents(true);
@@ -753,6 +786,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			blockUndoEvents(false);
 		}
 
+		@Override
 		public void redo() throws CannotRedoException {
 			if (!canRedo) throw new CannotRedoException();
 			blockUndoEvents(true);
@@ -771,26 +805,32 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			blockUndoEvents(false);
 		}
 
+		@Override
 		public String getUndoPresentationName() {
 			return "Отменить удаление";
 		}
 
+		@Override
 		public String getPresentationName() {
 			return "Удаление";
 		}
 
+		@Override
 		public String getRedoPresentationName() {
 			return "Вернуть удаление";
 		}
 
+		@Override
 		public boolean isSignificant() {
 			return true;
 		}
 
+		@Override
 		public boolean addEdit(UndoableEdit e) {
 			return false;
 		}
 
+		@Override
 		public boolean replaceEdit(UndoableEdit e) {
 			return false;
 		}
@@ -816,14 +856,17 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			canRedo = false;
 		}
 
+		@Override
 		public boolean canUndo() {
 			return canUndo;
 		}
 
+		@Override
 		public boolean canRedo() {
 			return canRedo;
 		}
 
+		@Override
 		public void undo() throws CannotUndoException {
 			if (!canUndo) throw new CannotUndoException();
 			blockUndoEvents(true);
@@ -843,6 +886,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			blockUndoEvents(false);
 		}
 
+		@Override
 		public void redo() throws CannotRedoException {
 			if (!canRedo) throw new CannotRedoException();
 			blockUndoEvents(true);
@@ -854,26 +898,32 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			blockUndoEvents(false);
 		}
 
+		@Override
 		public String getUndoPresentationName() {
 			return "Отменить вставку";
 		}
 
+		@Override
 		public String getPresentationName() {
 			return "Вставка";
 		}
 
+		@Override
 		public String getRedoPresentationName() {
 			return "Вернуть вставку";
 		}
 
+		@Override
 		public boolean isSignificant() {
 			return true;
 		}
 
+		@Override
 		public boolean addEdit(UndoableEdit e) {
 			return false;
 		}
 
+		@Override
 		public boolean replaceEdit(UndoableEdit e) {
 			return false;
 		}

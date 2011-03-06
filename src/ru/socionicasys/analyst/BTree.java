@@ -76,6 +76,7 @@ public class BTree extends JTree implements
 			super(o);
 		}
 
+		@Override
 		public String toString() {
 			return "[" + getChildCount() + "] " + super.toString();
 		}

@@ -287,6 +287,7 @@ public class ATree extends JTree {
 			super(o);
 		}
 
+		@Override
 		public String toString() {
 			return "[" + getChildCount() + "] " + super.toString();
 		}

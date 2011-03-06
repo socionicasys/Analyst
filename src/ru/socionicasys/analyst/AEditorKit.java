@@ -20,7 +20,6 @@ public class AEditorKit extends StyledEditorKit {
 		super();
 	}
 
-	//@override
 	public static class CutAction extends TextAction {
 
 		private JTextPane textPane;
@@ -30,6 +29,7 @@ public class AEditorKit extends StyledEditorKit {
 			this.textPane = textPane;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent ae) {
 			ADocument aDoc = (ADocument) textPane.getDocument();
 			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -64,7 +64,7 @@ public class AEditorKit extends StyledEditorKit {
 			this.textPane = textPane;
 		}
 
-
+		@Override
 		public void actionPerformed(ActionEvent ae) {
 			copyToClipboard(textPane);
 		}
@@ -81,7 +81,7 @@ public class AEditorKit extends StyledEditorKit {
 			this.textPane = textPane;
 		}
 
-
+		@Override
 		public void actionPerformed(ActionEvent ae) {
 			ADocument aDoc = (ADocument) textPane.getDocument();
 			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();

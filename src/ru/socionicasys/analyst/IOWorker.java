@@ -72,6 +72,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 		setProgress(p);
 	}
 
+	@Override
 	protected void done() {
 		super.done();
 		pw.close();
