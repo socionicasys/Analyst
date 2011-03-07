@@ -1072,7 +1072,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 					} //end while
 				}
 
-				if (fileName != null & fileName.length() > 0) {
+				if (fileName != null && fileName.length() > 0) {
 					try {
 						file = new File(fileName);
 						FileOutputStream fos = new FileOutputStream(file);

@@ -101,13 +101,13 @@ public class AData implements Serializable {
 			return;
 		}
 		if (!(s.equals(D1)
-			| s.equals(D2)
-			| s.equals(D3)
-			| s.equals(D4)
-			| s.equals(MALOMERNOST)
-			| s.equals(MNOGOMERNOST)
-			| s.equals(ODNOMERNOST)
-			| s.equals(INDIVIDUALNOST)
+			|| s.equals(D2)
+			|| s.equals(D3)
+			|| s.equals(D4)
+			|| s.equals(MALOMERNOST)
+			|| s.equals(MNOGOMERNOST)
+			|| s.equals(ODNOMERNOST)
+			|| s.equals(INDIVIDUALNOST)
 		)) {
 			throw new ADataException();
 		}
@@ -120,9 +120,9 @@ public class AData implements Serializable {
 			return;
 		}
 		if (!(s.equals(MENTAL)
-			| s.equals(VITAL)
-			| s.equals(SUPEREGO)
-			| s.equals(SUPERID)
+			|| s.equals(VITAL)
+			|| s.equals(SUPEREGO)
+			|| s.equals(SUPERID)
 		)) {
 			throw new ADataException();
 		}
@@ -224,8 +224,6 @@ public class AData implements Serializable {
 			aspect = F;
 		} else if (s.contains(T)) {
 			aspect = T;
-		} else if (s.contains(I)) {
-			aspect = I;
 		} else if (s.contains(I)) {
 			aspect = I;
 		}
