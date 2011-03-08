@@ -4,10 +4,7 @@
 package ru.socionicasys.analyst;
 
 import java.awt.Dimension;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -173,7 +170,7 @@ public class BTree extends JTree implements
 
 		//Analyze document structure and update tree nodes
 		try {
-			HashMap<ASection, AData> aDataMap = aDoc.getADataMap();
+			Map<ASection, AData> aDataMap = aDoc.getADataMap();
 
 			removeAllChildren();
 

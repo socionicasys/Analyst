@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JLabel;
@@ -158,7 +159,7 @@ public class CTree extends JTree implements
 
 		//Analyze document structure and update tree nodes
 		try {
-			HashMap<ASection, AData> aDataMap = aDoc.getADataMap();
+			Map<ASection, AData> aDataMap = aDoc.getADataMap();
 
 			Set<ASection> set = aDataMap.keySet();
 			Iterator<ASection> it = set.iterator();

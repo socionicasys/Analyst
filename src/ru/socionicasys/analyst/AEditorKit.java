@@ -123,7 +123,7 @@ public class AEditorKit extends StyledEditorKit {
 			if (fragment == null) return;
 
 			aDoc.startCompoundEdit();
-			ADocument.pasteADocFragment(aDoc, dot, fragment);
+			aDoc.pasteADocFragment(dot, fragment);
 			aDoc.endCompoundEdit(null);
 			//aDoc.fireUndoableEditUpdate(new UndoableEditEvent(this, aDoc.new ADocFragmentPasteEdit(dot, aDoc, fragment)));
 			//AnalystWindow.undo.addEdit((UndoableEdit)  aDoc.new ADocFragmentPasteEdit(dot, aDoc, fragment));
@@ -146,6 +146,6 @@ public class AEditorKit extends StyledEditorKit {
 
 		// putting data to clipboard
 
-		clipboard.setContents(ADocument.getADocFragment(aDoc, selectionStart, selectionEnd - selectionStart), null);
+		clipboard.setContents(aDoc.getADocFragment(selectionStart, selectionEnd - selectionStart), null);
 	}
 }
