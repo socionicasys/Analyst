@@ -7,6 +7,7 @@
 	<property name="analyst.bin_dir" value="${analyst.base_dir}/bin" />
 	<property name="analyst.main_class" value="ru.socionicasys.analyst.Analyst" />
 	<property name="analyst.jar_name" value="${analyst.bin_dir}/Analyst-${analyst.version}.jar" />
+	<fileset id="dependencies" dir="${analyst.base_dir}/lib" includes="**/*.jar" />
 
 	<target name="clean">
 		<delete dir="${analyst.output_dir}" />
@@ -15,13 +16,19 @@
 
 	<target name="compile">
 		<mkdir dir="${analyst.output_dir}" />
-		<javac srcdir="${analyst.source_dir}" destdir="${analyst.output_dir}" debug="false" encoding="utf-8" />
+		<javac srcdir="${analyst.source_dir}" destdir="${analyst.output_dir}" debug="false" encoding="utf-8" >
+			<classpath>
+				<fileset refid="dependencies" />
+			</classpath>
+		</javac>
 		<copy file="${analyst.base_dir}/license.txt" todir="${analyst.output_dir}" />
+		<copy file="${analyst.base_dir}/logback.xml" todir="${analyst.output_dir}" />
 	</target>
 
 	<target name="jar" depends="compile">
 		<mkdir dir="${analyst.bin_dir}" />
 		<jar destfile="${analyst.jar_name}" basedir="${analyst.output_dir}">
+			<zipgroupfileset refid="dependencies" />
 			<zipfileset dir="${analyst.source_dir}" prefix="src">
 				<include name="**/*.java" />
 			</zipfileset>
