@@ -1,5 +1,7 @@
 package ru.socionicasys.analyst;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.socionicasys.analyst.types.Aspect;
 
 import java.awt.*;
@@ -31,6 +33,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 	private ASection currentASection = null;
 	private JTextArea commentField;
 	private Object oldTreeObject = null;
+	private static final Logger logger = LoggerFactory.getLogger(ControlsPane.class);
 
 	public ControlsPane() {
 		super("Панель разметки", JToolBar.VERTICAL);
@@ -767,8 +770,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 				adata.setComment(commentField.getText());
 			}
 		} catch (AData.ADataException e) {
-			//System.out.println("Exception in ControlsPane.gerData():");	
-			//e.printStackTrace();		
+			logger.error("Error in getAData()", e);
 		}
 		return adata;
 	}
@@ -903,8 +905,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 				aDoc.addASection(currentASection, data);
 				aDoc.endCompoundEdit(null);
 			} catch (BadLocationException e) {
-				System.out.println("Exception in ControlsPane.aDataChanged():2");
-				e.printStackTrace();
+				logger.error("Exception in ControlsPane.aDataChanged()", e);
 			}
 		}
 	}
@@ -968,7 +969,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 				viewport.scrollRectToVisible(rect);
 				textPane.grabFocus();
 			} catch (BadLocationException e1) {
-				System.out.println(" error setting model to view :: bad location");
+				logger.error("Error setting model to view :: bad location", e1);
 			}
 		}
 	}

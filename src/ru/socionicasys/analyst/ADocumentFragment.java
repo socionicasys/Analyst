@@ -1,5 +1,8 @@
 package ru.socionicasys.analyst;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -16,6 +19,8 @@ public class ADocumentFragment implements Transferable, Serializable {
 	private String text;
 	private HashMap<DocSection, AttributeSet> styleMap;
 	private HashMap<DocSection, AData> aDataMap;
+
+	private static final Logger logger = LoggerFactory.getLogger(ADocumentFragment.class);
 
 	public ADocumentFragment() {
 	}
@@ -57,8 +62,7 @@ public class ADocumentFragment implements Transferable, Serializable {
 			df = new DataFlavor(MIME_TYPE);
 			dfString = DataFlavor.stringFlavor;
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Unable to load class in getTransferDataFlavors()", e);
 		}
 		if (df != null) return new DataFlavor[]{df, dfString};
 		else return null;

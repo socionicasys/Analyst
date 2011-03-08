@@ -1,5 +1,8 @@
 package ru.socionicasys.analyst;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.Color;
 import java.io.FileInputStream;
 import java.util.*;
@@ -31,6 +34,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	private CompoundEdit currentCompoundEdit;
 	private String keyword;
 
+	private static final Logger logger = LoggerFactory.getLogger(ADocument.class);
+
 	ADocument() {
 		super();
 
@@ -59,8 +64,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		try {
 			this.replace(0, getLength(), "", defaultStyle);
 		} catch (BadLocationException e) {
-			System.out.println("Error in ADocument.initNew() :\n");
-			e.printStackTrace();
+			logger.error("Invalid document replace() in initNew()", e);
 		}
 
 		putProperty(TitleProperty, DEFAULT_TITLE);
@@ -139,7 +143,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 				try {
 					sect = new ASection(createPosition(start), createPosition(offset));
 				} catch (BadLocationException e) {
-					e.printStackTrace();
+					logger.error("Invalid document position in insertUpdate()", e);
 				}
 				tempMap.put(sect, aData);
 			}
@@ -522,7 +526,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 				}
 			}
 		} catch (BadLocationException e) {
-			e.printStackTrace();
+			logger.error("Error in getADocFragment()", e);
 			return null;
 		}
 
@@ -559,7 +563,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 				}
 			}
 		} catch (BadLocationException e) {
-			e.printStackTrace();
+			logger.error("Error in pasteADocFragment()", e);
 		}
 	}
 }

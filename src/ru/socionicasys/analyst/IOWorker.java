@@ -1,5 +1,8 @@
 package ru.socionicasys.analyst;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.FileInputStream;
@@ -24,7 +27,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 	private Exception exception = null;
 	private int appendOffset = 0;
 	private HashMap<Integer, RawAData> rawData = null;
-
+	private static final Logger logger = LoggerFactory.getLogger(IOWorker.class);
 
 	IOWorker(ProgressWindow pw, ADocument aDoc, FileInputStream fis) {
 		this.fis = fis;
@@ -62,7 +65,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 		} catch (Exception e) {
 			pw.close();
 			this.exception = e;
-			e.printStackTrace();
+			logger.error("IO error in doInBackground()", e);
 		}
 
 		return null;
@@ -135,6 +138,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 						aDoc.setCharacterAttributes(docPosition, textBlock.length(),
 							textStyle, true);
 					} catch (BadLocationException e) {
+						logger.error("Illegal document location while working on AppendStyleText in propertyChange()", e);
 					}
 				}
 			}
@@ -161,6 +165,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 					}
 					aDoc.fireADocumentChanged();
 				} catch (Exception e) {
+					logger.error("Error while working on RawData in propertyChange()", e);
 					pw.close();
 					this.exception = e;
 					this.cancel(true);

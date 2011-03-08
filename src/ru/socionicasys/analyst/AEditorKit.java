@@ -1,5 +1,8 @@
 package ru.socionicasys.analyst;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -21,8 +24,8 @@ public class AEditorKit extends StyledEditorKit {
 	}
 
 	public static class CutAction extends TextAction {
-
 		private JTextPane textPane;
+		private static final Logger logger = LoggerFactory.getLogger(CutAction.class);
 
 		public CutAction(JTextPane textPane) {
 			super("cut-to-clipboard");
@@ -47,7 +50,7 @@ public class AEditorKit extends StyledEditorKit {
 				aDoc.remove(selectionStart, selectionEnd - selectionStart);
 				aDoc.removeCleanup(selectionStart, selectionEnd);
 			} catch (BadLocationException e) {
-				e.printStackTrace();
+				logger.error("Error in actionPerformed()", e);
 			}
 
 			aDoc.fireADocumentChanged();
@@ -56,7 +59,6 @@ public class AEditorKit extends StyledEditorKit {
 
 	//
 	public static class CopyAction extends TextAction {
-
 		private JTextPane textPane;
 
 		public CopyAction(JTextPane textPane) {
@@ -73,8 +75,8 @@ public class AEditorKit extends StyledEditorKit {
 
 	//
 	public static class PasteAction extends TextAction {
-
 		private JTextPane textPane;
+		private static final Logger logger = LoggerFactory.getLogger(PasteAction.class);
 
 		public PasteAction(JTextPane textPane) {
 			super("paste-from-clipboard");
@@ -113,11 +115,11 @@ public class AEditorKit extends StyledEditorKit {
 					}
 				}
 			} catch (UnsupportedFlavorException e) {
-				e.printStackTrace();
+				logger.error("Error in actionPerformed()", e);
 			} catch (IOException e) {
-				e.printStackTrace();
+				logger.error("Error in actionPerformed()", e);
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				logger.error("Error in actionPerformed()", e);
 			}
 
 			if (fragment == null) return;

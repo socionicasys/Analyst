@@ -1,5 +1,8 @@
 package ru.socionicasys.analyst;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.Dimension;
 import java.util.Iterator;
 import java.util.Map;
@@ -21,6 +24,8 @@ public class ATree extends JTree {
 	private DefaultTreeModel treeModel;
 	private TreePath path;
 	private JumpCounter jc;
+
+	private static final Logger logger = LoggerFactory.getLogger(ATree.class);
 
 	private DefaultMutableTreeNode aspectNode = new DefaultMutableTreeNode("Функции");
 	private DefaultMutableTreeNode aspectLNode = new DefaultMutableTreeNode("БЛ");
@@ -799,8 +804,7 @@ public class ATree extends JTree {
 				}
 			}
 		} catch (BadLocationException e) {
-			System.out.println("Exception in ATree.updateTree() :");
-			e.printStackTrace();
+			logger.error("Illegal document location in updateTree()", e);
 		}
 		treeModel.reload();
 		if (path != null) {

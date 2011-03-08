@@ -3,6 +3,9 @@
  */
 package ru.socionicasys.analyst;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -39,6 +42,7 @@ public class CTree extends JTree implements
 
 	private Color color = new Color(30, 120, 255);
 
+	private static final Logger logger = LoggerFactory.getLogger(CTree.class);
 
 	private DefaultMutableTreeNode ileNode = new DefaultMutableTreeNode();
 	private DefaultMutableTreeNode seiNode = new DefaultMutableTreeNode();
@@ -284,8 +288,7 @@ public class CTree extends JTree implements
 				}// if (aspect != null)
 			} //end While()
 		} catch (BadLocationException e) {
-			System.out.println("Exception in BTree.updateTree() :");
-			e.printStackTrace();
+			logger.error("Illegal document location in updateTree()", e);
 		}
 
 		if (ileNoMatchCount != 0) ileMatch = ileMatchCount / ileNoMatchCount;

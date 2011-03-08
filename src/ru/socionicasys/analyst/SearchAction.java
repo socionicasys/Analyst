@@ -1,5 +1,8 @@
 package ru.socionicasys.analyst;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
@@ -15,6 +18,7 @@ public class SearchAction extends AbstractAction {
 	private JCheckBox caseCheckbox;
 	private JLabel status;
 	private ButtonGroup bg;
+	private static final Logger logger = LoggerFactory.getLogger(SearchAction.class);
 
 	public SearchAction(JTextComponent component, ADocument aDoc) {
 		super();
@@ -100,7 +104,7 @@ public class SearchAction extends AbstractAction {
 			try {
 				text = aDoc.getText(0, aDoc.getLength());
 			} catch (BadLocationException e) {
-				e.printStackTrace();
+				logger.error("Illegal document position in actionPerformed()", e);
 			}
 
 			if (forward) {
@@ -145,7 +149,7 @@ public class SearchAction extends AbstractAction {
 					component.requestFocus();
 					status.setText("");
 				} catch (BadLocationException e1) {
-					System.out.println("SearchPane: error setting model to view :: bad location");
+					logger.error("SearchPane: error setting model to view :: bad location", e1);
 				}
 			} else {
 				status.setText("       ...cтрока не найдена...");

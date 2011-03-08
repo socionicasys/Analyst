@@ -1,5 +1,8 @@
 package ru.socionicasys.analyst;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -9,6 +12,7 @@ import javax.swing.text.*;
 
 public class LegacyHtmlDocumentFormat {
 	private static final String encoding = "UTF-8";
+	private static final Logger logger = LoggerFactory.getLogger(LegacyHtmlDocumentFormat.class);
 
 	private class DocumentFlowEvent implements Comparable<DocumentFlowEvent> {
 		private int type;
@@ -114,7 +118,7 @@ public class LegacyHtmlDocumentFormat {
 		iow.firePropertyChange("progress", null, 0);
 
 		if (outputStream == null) {
-			System.out.println("Error attempting to save file: FileOutputStream is null");
+			logger.error("Error attempting to save file: FileOutputStream is null");
 			return;
 		}
 

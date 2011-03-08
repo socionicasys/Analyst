@@ -1,5 +1,8 @@
 package ru.socionicasys.analyst;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
@@ -47,6 +50,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	protected static RedoAction redoAction = null;
 	protected static UndoManager undo = new UndoManager();
 
+	private static final Logger logger = LoggerFactory.getLogger(AnalystWindow.class);
 
 	public AnalystWindow(String startupFilename) {
 		super(applicationName + " - " + ADocument.DEFAULT_TITLE);
@@ -200,8 +204,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 				status.setText("");
 				frame.setTitle(applicationName + " - " + file.getName());
 			} catch (Exception e) {
-				System.out.println("Ошибка при загрузке файла: " + startupFilename);
-				e.printStackTrace();
+				logger.error("Error loading file " + startupFilename, e);
 			}
 		}
 	}
@@ -293,8 +296,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 						frame.setTitle(applicationName + " - " + file.getName());
 					}
 				} catch (Exception e) {
-					System.out.println("Error writing document to file: ");
-					e.printStackTrace();
+					logger.error("Error writing document to file " + fileName, e);
 					JOptionPane.showOptionDialog(frame,
 						"Ошибка сохранения файла: " + fileName + "\n\n" + e.getMessage(),
 						"Ошибка сохранения файла",
@@ -343,8 +345,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 					frame.setTitle(applicationName + " - " + file.getName());
 				} catch (Exception e) {
-					System.out.println("Error writing document to file: ");
-					e.printStackTrace();
+					logger.error("Error writing document to file " + fileName, e);
 					JOptionPane.showOptionDialog(frame,
 						"Ошибка сохранения файла: " + fileName + "\n\n" + e.getMessage(),
 						"Ошибка сохранения файла",
@@ -387,9 +388,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 					status.setText("");
 					frame.setTitle(applicationName + " - " + file.getName());
 				} catch (FileNotFoundException e) {
-					//
-					System.out.println("Error opening  file");
-					e.printStackTrace();
+					logger.error("Error opening file " + fileName, e);
 					JOptionPane.showOptionDialog(frame,
 						"Ошибка открытия файла: " + fileName + "\n\n" + e.getMessage(),
 						"Ошибка открытия файла",
@@ -399,9 +398,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 						new Object[]{"Закрыть"},
 						null);
 				} catch (Exception e) {
-					//
-					System.out.println(" Error setting model to view :: bad location");
-					e.printStackTrace();
+					logger.error("Error setting model to view :: bad location", e);
 				}
 			}
 		});
@@ -435,11 +432,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 					//textPane.requestFocus();
 
 				} catch (FileNotFoundException e) {
-					//
-					System.out.println("Error opening  file");
-					e.printStackTrace();
-					System.out.println("Error opening  file");
-					e.printStackTrace();
+					logger.error("Error opening file", fileName);
 					JOptionPane.showOptionDialog(frame,
 						"Ошибка открытия файла: " + fileName + "\n\n" + e.getMessage(),
 						"Ошибка открытия файла",
@@ -449,9 +442,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 						new Object[]{"Закрыть"},
 						null);
 				} catch (Exception e) {
-					//
-					System.out.println(" Error setting model to view :: bad location");
-					e.printStackTrace();
+					logger.error("Error setting model to view :: bad location");
 				}
 			}
 		});
@@ -832,8 +823,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 							next = br.readLine();
 						}
 					} catch (IOException e) {
-						System.out.println("Ошибка при открытии файла лицензии");
-						e.printStackTrace();
+						logger.error("Error opening license file", e);
 					}
 				}
 
@@ -935,6 +925,8 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	}
 
 	class UndoAction extends AbstractAction {
+		private final Logger logger = LoggerFactory.getLogger(UndoAction.class);
+
 		public UndoAction() {
 			super("Undo");
 			setEnabled(false);
@@ -945,8 +937,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			try {
 				undo.undo();
 			} catch (CannotUndoException ex) {
-				System.out.println("Unable to undo: " + ex.getMessage());
-				ex.printStackTrace();
+				logger.error("Unable to undo", ex);
 			}
 			controlsPane.update();
 			updateUndoState();
@@ -978,6 +969,8 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	}
 
 	class RedoAction extends AbstractAction {
+		private final Logger logger = LoggerFactory.getLogger(RedoAction.class);
+
 		public RedoAction() {
 			super("Redo");
 			setEnabled(false);
@@ -988,8 +981,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			try {
 				undo.redo();
 			} catch (CannotRedoException ex) {
-				System.out.println("Unable to redo: " + ex);
-				ex.printStackTrace();
+				logger.error("Unable to redo", ex);
 			}
 			controlsPane.update();
 			updateRedoState();
@@ -1080,8 +1072,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 						IOWorker iow = new IOWorker(pw, aDoc, fos);
 						iow.execute();
 					} catch (Exception e) {
-						System.out.println("Error writing document to file: ");
-						e.printStackTrace();
+						logger.error("Error writing document to file" + fileName, e);
 						JOptionPane.showOptionDialog(frame,
 							"Ошибка сохранения файла: " + fileName + "\n\n" + e.getMessage(),
 							"Ошибка сохранения файла",

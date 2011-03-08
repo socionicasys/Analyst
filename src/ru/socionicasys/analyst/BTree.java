@@ -3,6 +3,9 @@
  */
 package ru.socionicasys.analyst;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.Dimension;
 import java.util.*;
 
@@ -29,6 +32,7 @@ public class BTree extends JTree implements
 	DefaultTreeModel treeModel;
 	TreePath path;
 
+	private static final Logger logger = LoggerFactory.getLogger(BTree.class);
 
 	private DefaultMutableTreeNode matchNode = new DefaultMutableTreeNode("Соответствие");
 	private DefaultMutableTreeNode ileMatchNode = new EndTreeNode(SocionicsType.ILE);
@@ -317,8 +321,7 @@ public class BTree extends JTree implements
 					sliNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 			} //end While()
 		} catch (BadLocationException e) {
-			System.out.println("Exception in BTree.updateTree() :");
-			e.printStackTrace();
+			logger.error("Illegal document location in updateTree()", e);
 		}
 
 		treeModel.reload();
