@@ -19,7 +19,7 @@ import javax.swing.undo.UndoManager;
 
 @SuppressWarnings("serial")
 public class AnalystWindow extends JFrame implements PropertyChangeListener {
-	public final static String version = "1.03";
+	public final static String version = "1.1-dev";
 	private JTextPane textPane;
 	ADocument aDoc;
 	private ControlsPane controlsPane;
