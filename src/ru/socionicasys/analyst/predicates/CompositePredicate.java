@@ -12,7 +12,7 @@ public abstract class CompositePredicate implements Predicate {
 	 */
 	private final List<Predicate> children;
 
-	public CompositePredicate(Predicate... predicates) {
+	protected CompositePredicate(Predicate... predicates) {
 		children = Arrays.asList(predicates);
 	}
 
