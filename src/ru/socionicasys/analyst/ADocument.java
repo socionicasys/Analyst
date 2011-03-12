@@ -140,12 +140,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 				int start = sect.getStartOffset();
 				AData aData = aDataMap.get(sect);
 				sectionIterator.remove();
-				try {
-					sect = new ASection(createPosition(start), createPosition(offset));
-				} catch (BadLocationException e) {
-					logger.error("Invalid document position in insertUpdate()", e);
-				}
-				tempMap.put(sect, aData);
+				tempMap.put(new ASection(start, offset), aData);
 			}
 		}
 
@@ -283,10 +278,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 	public Map<ASection, AData> getADataMap() {
 		return Collections.unmodifiableMap(aDataMap);
-	}
-
-	public ASection createASection(int beg, int end) throws BadLocationException {
-		return new ASection(createPosition(beg), createPosition(end));
 	}
 
 	public void startCompoundEdit() {
@@ -556,8 +547,9 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			//  inserting AData
 			if (fragMap != null) {
 				for (Entry<DocSection, AData> entry : fragMap.entrySet()) {
-					aDataMap.put(new ASection(createPosition(position + entry.getKey().getStart()),
-						createPosition(position + entry.getKey().getEnd())),
+					DocSection docSection = entry.getKey();
+					aDataMap.put(
+						new ASection(position + docSection.getStart(), position + docSection.getEnd()),
 						entry.getValue());
 				}
 			}

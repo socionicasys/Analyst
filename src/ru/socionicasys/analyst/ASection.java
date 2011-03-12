@@ -1,57 +1,64 @@
 package ru.socionicasys.analyst;
 
-import java.io.Serializable;
+import ru.socionicasys.analyst.util.HashUtil;
+
 import javax.swing.text.AttributeSet;
-import javax.swing.text.Position;
 
-public class ASection implements Serializable, Comparable<ASection> {
-	private Position start;
-	private Position end;
-	private AttributeSet attributes;
+public class ASection implements Comparable<ASection> {
+	private final int startOffset;
+	private final int endOffset;
+	private final AttributeSet attributes;
 
-	public ASection(Position start, Position end) {
-		this.start = start;
-		this.end = end;
+	public ASection(int startOffset, int endOffset) {
+		this(startOffset, endOffset, null);
+	}
+
+	public ASection(int startOffset, int endOffset, AttributeSet attributes) {
+		this.startOffset = startOffset;
+		this.endOffset = endOffset;
+		this.attributes = attributes;
 	}
 
 	public AttributeSet getAttributes() {
 		return attributes;
 	}
 
-	public void setAttributes(AttributeSet as) {
-		this.attributes = as;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (!(o instanceof ASection)) {
-			return false;
-		}
-		ASection otherSection = (ASection) o;
-		return (start.getOffset() == otherSection.getStartOffset()) &&
-			(end.getOffset() == otherSection.getEndOffset());
-	}
-
 	public int getStartOffset() {
-		return start.getOffset();
+		return startOffset;
 	}
 
 	public int getEndOffset() {
-		return end.getOffset();
+		return endOffset;
 	}
 
 	public int getMiddleOffset() {
-		return ((end.getOffset() + start.getOffset()) / 2);
+		return (endOffset + startOffset) / 2;
 	}
 
 	public boolean containsOffset(int offset) {
-		int b = start.getOffset();
-		int e = end.getOffset();
-		return b < e && offset >= b && offset < e;
+		return startOffset < endOffset && offset >= startOffset && offset < endOffset;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof ASection)) {
+			return false;
+		}
+		ASection otherSection = (ASection) obj;
+		return startOffset == otherSection.startOffset &&
+			endOffset == otherSection.endOffset;
+	}
+
+	@Override
+	public int hashCode() {
+		HashUtil hashUtil = new HashUtil();
+		hashUtil.hash(startOffset);
+		hashUtil.hash(endOffset);
+		return hashUtil.getComputedHash();
 	}
 
 	@Override
 	public int compareTo(ASection o) {
-		return getStartOffset() - o.getStartOffset();
+		return startOffset - o.startOffset;
 	}
 }

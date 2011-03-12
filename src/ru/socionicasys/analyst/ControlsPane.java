@@ -897,16 +897,10 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			aDoc.updateASection(currentASection, data);
 			aDoc.endCompoundEdit(null);
 		} else if (data != null) {
-			// currentASection == null
-			try {
-				currentASection = new ASection(aDoc.createPosition(start), aDoc.createPosition(end));
-				currentASection.setAttributes(aDoc.defaultSectionAttributes);
-				aDoc.startCompoundEdit();
-				aDoc.addASection(currentASection, data);
-				aDoc.endCompoundEdit(null);
-			} catch (BadLocationException e) {
-				logger.error("Exception in ControlsPane.aDataChanged()", e);
-			}
+			currentASection = new ASection(start, end, aDoc.defaultSectionAttributes);
+			aDoc.startCompoundEdit();
+			aDoc.addASection(currentASection, data);
+			aDoc.endCompoundEdit(null);
 		}
 	}
 

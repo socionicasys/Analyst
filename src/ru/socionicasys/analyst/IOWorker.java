@@ -156,8 +156,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 						int beg = temp.getBegin();
 						int end = temp.getEnd();
 
-						ASection section = aDoc.createASection(beg + appendOffset, end + appendOffset);
-						section.setAttributes(aDoc.defaultSectionAttributes);
+						ASection section = new ASection(beg + appendOffset, end + appendOffset, aDoc.defaultSectionAttributes);
 						aDoc.getADataMap().put(section, ad);
 						aDoc.setCharacterAttributes(beg + appendOffset, end - beg, aDoc.defaultSectionAttributes, false);
 					}
