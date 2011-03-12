@@ -1,6 +1,7 @@
 package ru.socionicasys.analyst;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class AData implements Serializable {
 	public final static String L = "БЛ";
@@ -44,25 +45,40 @@ public class AData implements Serializable {
 	private String dimension;
 	private String comment;
 
-	public AData(String aspect, String sign, String dimension, String mv, String comment) throws ADataException {
-		setAspect(aspect);
-		setSign(sign);
-		setDimension(dimension);
-		setMV(mv);
+	public AData(String aspect, String sign, String dimension, String mv, String comment) {
+		if (aspect == null) {
+			throw new IllegalArgumentException();
+		}
+		if (!(isValidAspect(aspect) || aspect.equals(DOUBT))) {
+			throw new IllegalArgumentException();
+		}
+		this.aspect = aspect;
+
+		if (sign == null) {
+			this.sign = null;
+		} else if (!(sign.equals(PLUS) || sign.equals(MINUS))) {
+			throw new IllegalArgumentException();
+		}
+		this.sign = sign;
+
+		if (dimension == null) {
+			this.dimension = null;
+		} else if (!Arrays.asList(D1, D2, D3, D4, MALOMERNOST, MNOGOMERNOST, ODNOMERNOST, INDIVIDUALNOST).contains(dimension)) {
+			throw new IllegalArgumentException();
+		}
+		this.dimension = dimension;
+
+		if (mv == null) {
+			this.mv = null;
+		} else if (!Arrays.asList(MENTAL, VITAL, SUPERID, SUPEREGO).contains(mv)) {
+			throw new IllegalArgumentException();
+		}
+		this.mv = mv;
+
 		this.comment = comment;
 	}
 
-	public void setAspect(String s) throws ADataException {
-		if (s == null) {
-			throw new ADataException();
-		}
-		if (!(isValidAspect(s) || s.equals(DOUBT))) {
-			throw new ADataException();
-		}
-		this.aspect = s;
-	}
-
-	public static boolean isValidAspect(String s) {
+	private static boolean isValidAspect(String s) {
 		if (s == null) {
 			return false;
 		}
@@ -76,6 +92,10 @@ public class AData implements Serializable {
 			|| s.equals(I);
 	}
 
+	public String getAspect() {
+		return aspect;
+	}
+
 	public String getModifier() {
 		return modifier;
 	}
@@ -84,69 +104,20 @@ public class AData implements Serializable {
 		return secondAspect;
 	}
 
-	public void setSign(String s) throws ADataException {
-		if (s == null) {
-			sign = null;
-			return;
-		}
-		if (!(s.equals(PLUS) || s.equals(MINUS))) {
-			throw new ADataException();
-		}
-		this.sign = s;
-	}
-
-	public void setDimension(String s) throws ADataException {
-		if (s == null) {
-			dimension = null;
-			return;
-		}
-		if (!(s.equals(D1)
-			|| s.equals(D2)
-			|| s.equals(D3)
-			|| s.equals(D4)
-			|| s.equals(MALOMERNOST)
-			|| s.equals(MNOGOMERNOST)
-			|| s.equals(ODNOMERNOST)
-			|| s.equals(INDIVIDUALNOST)
-		)) {
-			throw new ADataException();
-		}
-		this.dimension = s;
-	}
-
-	public void setMV(String s) throws ADataException {
-		if (s == null) {
-			mv = null;
-			return;
-		}
-		if (!(s.equals(MENTAL)
-			|| s.equals(VITAL)
-			|| s.equals(SUPEREGO)
-			|| s.equals(SUPERID)
-		)) {
-			throw new ADataException();
-		}
-		this.mv = s;
-	}
-
-	public void setComment(String s) {
-		this.comment = s;
-	}
-
-	public String getAspect() {
-		return aspect;
-	}
-
 	public String getSign() {
 		return sign;
+	}
+
+	public String getDimension() {
+		return dimension;
 	}
 
 	public String getMV() {
 		return mv;
 	}
 
-	public String getDimension() {
-		return dimension;
+	public void setComment(String s) {
+		this.comment = s;
 	}
 
 	public String getComment() {
@@ -176,16 +147,11 @@ public class AData implements Serializable {
 		return res;
 	}
 
-	public static AData parseAData(String s) throws ADataException {
+	public static AData parseAData(String s) {
 		if (s == null) {
 			return null;
 		}
 
-		String aspect = null;
-		String sign = null;
-		String mv = null;
-		String dimension = null;
-		String comment = null;
 		String sa = null;
 		String mod = null;
 
@@ -210,6 +176,7 @@ public class AData implements Serializable {
 			}
 		}
 
+		String aspect = null;
 		if (s.contains(L)) {
 			aspect = L;
 		} else if (s.contains(P)) {
@@ -237,6 +204,7 @@ public class AData implements Serializable {
 		}
 
 		//detecting mental\vital
+		String mv = null;
 		if (s.contains(MENTAL)) {
 			mv = MENTAL;
 		} else if (s.contains(VITAL)) {
@@ -248,6 +216,7 @@ public class AData implements Serializable {
 		}
 
 		//detecting dimension
+		String dimension = null;
 		if (s.contains(D1)) {
 			dimension = D1;
 		} else if (s.contains(D2)) {
@@ -267,50 +236,39 @@ public class AData implements Serializable {
 		}
 
 		//detecting sign
+		String sign = null;
 		if (s.contains(PLUS)) {
 			sign = PLUS;
 		} else if (s.contains(MINUS)) {
 			sign = MINUS;
 		}
 
-		AData data = new AData(aspect, sign, dimension, mv, comment);
+		AData data = new AData(aspect, sign, dimension, mv, null);
 
-		if (mod != null && AData.isValidAspect(sa)) {
-			data.setModifier(mod);
+		if (Arrays.asList(BLOCK, JUMP).contains(mod) && AData.isValidAspect(sa)) {
+			data.modifier = mod;
 			data.secondAspect = sa;
 		}
 
 		return data;
 	}
 
-	private void setModifier(String mod) {
-		if (mod == null) {
-			return;
-		}
-		if (!(mod.equals(BLOCK) || mod.equals(JUMP))) {
-			return;
-		}
-		this.modifier = mod;
-	}
-
-	public class ADataException extends Exception implements Serializable {
-		ADataException() {
-			super("Invalid argument");
-		}
-	}
-
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof AData)) return false;
-		AData d = (AData) obj;
-		if ((aspect != null && aspect.equals(d.getAspect()) || (aspect == null && d.getAspect() == null)) &&
-			(secondAspect != null && secondAspect.equals(d.getSecondAspect()) || (secondAspect == null && d.getSecondAspect() == null)) &&
-			(modifier != null && modifier.equals(d.getModifier()) || (modifier == null && d.getModifier() == null)) &&
-			(dimension != null && dimension.equals(d.getDimension()) || (dimension == null && d.getDimension() == null)) &&
-			(sign != null && sign.equals(d.getSign()) || (sign == null && d.getSign() == null)) &&
-			(mv != null && mv.equals(d.getMV()) || (mv == null && d.getMV() == null)) &&
-			(comment != null && comment.equals(d.getComment()) || (comment == null && d.getComment() == null))
-			) return true;
-		return false;
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof AData)) {
+			return false;
+		}
+
+		AData data = (AData) obj;
+		return EqualsUtil.areEqual(aspect, data.aspect) &&
+			EqualsUtil.areEqual(secondAspect, data.secondAspect) &&
+			EqualsUtil.areEqual(modifier, data.modifier) &&
+			EqualsUtil.areEqual(dimension, data.dimension) &&
+			EqualsUtil.areEqual(sign, data.sign) &&
+			EqualsUtil.areEqual(mv, data.mv) &&
+			EqualsUtil.areEqual(comment, data.comment);
 	}
-} //class AData
+}

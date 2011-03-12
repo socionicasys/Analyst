@@ -769,7 +769,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			if (adata != null) {
 				adata.setComment(commentField.getText());
 			}
-		} catch (AData.ADataException e) {
+		} catch (IllegalArgumentException e) {
 			logger.error("Error in getAData()", e);
 		}
 		return adata;
