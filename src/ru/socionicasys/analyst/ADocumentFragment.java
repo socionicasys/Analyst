@@ -8,71 +8,67 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.text.AttributeSet;
 
 public class ADocumentFragment implements Transferable, Serializable {
+	public static final String MIME_TYPE =
+		"application/x-java-serialized-object; class=ru.socionicasys.analyst.ADocumentFragment";
 
-	public static String MIME_TYPE = "application/x-java-serialized-object; class=ru.socionicasys.analyst.ADocumentFragment";
-
-	private String text;
-	private HashMap<DocSection, AttributeSet> styleMap;
-	private HashMap<DocSection, AData> aDataMap;
+	private final String text;
+	private final Map<DocSection, AttributeSet> styleMap;
+	private final Map<DocSection, AData> aDataMap;
 
 	private static final Logger logger = LoggerFactory.getLogger(ADocumentFragment.class);
 
-	public ADocumentFragment() {
-	}
-
-	public ADocumentFragment(String text,
-							 HashMap<DocSection, AttributeSet> styleMap,
-							 HashMap<DocSection, AData> aDataMap) {
-
+	public ADocumentFragment(String text, Map<DocSection, AttributeSet> styleMap, Map<DocSection, AData> aDataMap) {
 		this.text = text;
-		this.styleMap = styleMap;
-		this.aDataMap = aDataMap;
+		this.styleMap = new HashMap<DocSection, AttributeSet>();
+		this.styleMap.putAll(styleMap);
+		this.aDataMap = new HashMap<DocSection, AData>();
+		this.aDataMap.putAll(aDataMap);
 	}
 
 	public String getText() {
 		return text;
 	}
 
-	public HashMap<DocSection, AttributeSet> getStyleMap() {
-		return styleMap;
+	public Map<DocSection, AttributeSet> getStyleMap() {
+		return Collections.unmodifiableMap(styleMap);
 	}
 
-	public HashMap<DocSection, AData> getaDataMap() {
-		return aDataMap;
+	public Map<DocSection, AData> getADataMap() {
+		return Collections.unmodifiableMap(aDataMap);
 	}
 
 	@Override
-	public Object getTransferData(DataFlavor arg0)
-		throws UnsupportedFlavorException, IOException {
-		if (arg0.getMimeType().equals(MIME_TYPE)) return this;
-		if (arg0.getMimeType().equals(DataFlavor.stringFlavor.getMimeType())) return text;
+	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+		if (flavor.getMimeType().equals(MIME_TYPE)) {
+			return this;
+		}
+		if (flavor.getMimeType().equals(DataFlavor.stringFlavor.getMimeType())) {
+			return text;
+		}
 		return null;
 	}
 
 	@Override
 	public DataFlavor[] getTransferDataFlavors() {
-		DataFlavor df = null;
-		DataFlavor dfString = null;
 		try {
-			df = new DataFlavor(MIME_TYPE);
-			dfString = DataFlavor.stringFlavor;
+			DataFlavor nativeFlavor = new DataFlavor(MIME_TYPE);
+			return new DataFlavor[]{nativeFlavor, DataFlavor.stringFlavor};
 		} catch (ClassNotFoundException e) {
 			logger.error("Unable to load class in getTransferDataFlavors()", e);
 		}
-		if (df != null) return new DataFlavor[]{df, dfString};
-		else return null;
+		return null;
 	}
 
-
 	@Override
-	public boolean isDataFlavorSupported(DataFlavor arg0) {
-		if (arg0.getMimeType().equals(MIME_TYPE) ||
-			arg0.getMimeType().equals(DataFlavor.stringFlavor.getMimeType())) return true;
-		else return false;
+	public boolean isDataFlavorSupported(DataFlavor flavor) {
+		String flavorMimeType = flavor.getMimeType();
+		return flavorMimeType.equals(MIME_TYPE) || flavorMimeType.equals(DataFlavor.stringFlavor.getMimeType());
 	}
 }

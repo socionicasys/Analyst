@@ -535,8 +535,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 	public void pasteADocFragment(int position, ADocumentFragment fragment) {
 		String text = fragment.getText();
-		HashMap<DocSection, AttributeSet> styleMap = fragment.getStyleMap();
-		HashMap<DocSection, AData> fragMap = fragment.getaDataMap();
+		Map<DocSection, AttributeSet> styleMap = fragment.getStyleMap();
+		Map<DocSection, AData> fragMap = fragment.getADataMap();
 
 		try {
 			// inserting plain text
