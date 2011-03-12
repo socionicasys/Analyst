@@ -4,10 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.Dimension;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
+import java.util.Map.Entry;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.text.BadLocationException;
@@ -327,7 +324,7 @@ public class ATree extends JTree {
 			return;
 		}
 
-		rootNode.setUserObject(aDoc.getProperty(ADocument.TitleProperty));
+		rootNode.setUserObject(aDoc.getProperty(Document.TitleProperty));
 		TreePath newPath = getSelectionPath();
 		if (newPath != null) {
 			path = newPath;
@@ -335,42 +332,22 @@ public class ATree extends JTree {
 
 		//Analyze document structure and update tree nodes
 		try {
-			Map<ASection, AData> aDataMap = aDoc.getADataMap();
-
 			removeAllChildren();
+			for (Entry<ASection, AData> entry : aDoc.getADataMap().entrySet()) {
+				int sectionOffset = entry.getKey().getStartOffset();
+				int sectionLength = Math.abs(entry.getKey().getEndOffset() - sectionOffset);
+				int quoteLength = Math.min(sectionLength, MAX_PRESENTATION_CHARS);
 
-			Set<ASection> set = aDataMap.keySet();
-			Iterator<ASection> it = set.iterator();
-			ASection section = null;
-			int sectionOffset = 0;
-			int sectionLength = 0;
-			int quoteLength = 0;
-			AData data = null;
-			String aspect, secondAspect;
-			String modifier;
-			String dimension;
-			String sign;
-			String comment;
-			String mv;
-			String quote;
+				AData data = entry.getValue();
+				String aspect = data.getAspect();
+				String secondAspect = data.getSecondAspect();
+				String modifier = data.getModifier();
 
-			while (it.hasNext()) {
-				section = it.next();
-
-				sectionOffset = section.getStartOffset();
-				sectionLength = Math.abs(section.getEndOffset() - sectionOffset);
-				quoteLength = Math.min(sectionLength, MAX_PRESENTATION_CHARS);
-
-				data = aDataMap.get(section);
-				aspect = data.getAspect();
-				secondAspect = data.getSecondAspect();
-				modifier = data.getModifier();
-
-				dimension = data.getDimension();
-				sign = data.getSign();
-				comment = data.getComment();
-				mv = data.getMV();
-				quote = aDoc.getText(sectionOffset, quoteLength);
+				String dimension = data.getDimension();
+				String sign = data.getSign();
+				String comment = data.getComment();
+				String mv = data.getMV();
+				String quote = aDoc.getText(sectionOffset, quoteLength);
 
 				if (aspect != null && aspect.equals(AData.L)) {
 					if (sign != null && sign.equals(AData.PLUS)) {
