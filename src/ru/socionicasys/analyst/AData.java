@@ -1,9 +1,11 @@
 package ru.socionicasys.analyst;
 
-import java.io.Serializable;
+import ru.socionicasys.analyst.util.EqualsUtil;
+import ru.socionicasys.analyst.util.HashUtil;
+
 import java.util.Arrays;
 
-public class AData implements Serializable {
+public class AData {
 	public final static String L = "БЛ";
 	public final static String P = "ЧЛ";
 	public final static String R = "БЭ";
@@ -270,5 +272,18 @@ public class AData implements Serializable {
 			EqualsUtil.areEqual(sign, data.sign) &&
 			EqualsUtil.areEqual(mv, data.mv) &&
 			EqualsUtil.areEqual(comment, data.comment);
+	}
+
+	@Override
+	public int hashCode() {
+		HashUtil hashUtil = new HashUtil();
+		hashUtil.hash(aspect);
+		hashUtil.hash(secondAspect);
+		hashUtil.hash(modifier);
+		hashUtil.hash(dimension);
+		hashUtil.hash(sign);
+		hashUtil.hash(mv);
+		hashUtil.hash(comment);
+		return hashUtil.getComputedHash();
 	}
 }
