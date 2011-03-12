@@ -259,8 +259,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	public void load(InputStream stream, ProgressWindow pw) throws Exception {
-		IOWorker iow = new IOWorker(pw, this, stream);
-		iow.setAppend(false);
+		IOWorker iow = new IOWorker(pw, this, stream, false);
 		iow.execute();
 		if (iow.getException() != null) {
 			throw iow.getException();
@@ -268,8 +267,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	public void append(InputStream stream, ProgressWindow pw) throws Exception {
-		IOWorker iow = new IOWorker(pw, this, stream);
-		iow.setAppend(true);
+		IOWorker iow = new IOWorker(pw, this, stream, true);
 		iow.execute();
 		if (iow.getException() != null) {
 			throw iow.getException();
