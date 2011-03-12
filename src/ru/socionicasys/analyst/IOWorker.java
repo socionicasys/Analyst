@@ -5,18 +5,16 @@ import org.slf4j.LoggerFactory;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.*;
-
 import javax.swing.SwingWorker;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 
 public class IOWorker extends SwingWorker implements PropertyChangeListener {
-
-	private FileInputStream fis;
-	private FileOutputStream fos;
+	private InputStream fis;
+	private OutputStream fos;
 	boolean append = false;
 	private boolean firstWrite = true;
 	private ADocument aDoc;
@@ -29,7 +27,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 	private HashMap<Integer, RawAData> rawData = null;
 	private static final Logger logger = LoggerFactory.getLogger(IOWorker.class);
 
-	IOWorker(ProgressWindow pw, ADocument aDoc, FileInputStream fis) {
+	IOWorker(ProgressWindow pw, ADocument aDoc, InputStream fis) {
 		this.fis = fis;
 		this.aDoc = aDoc;
 		this.frame = pw.getAnalyst();
@@ -39,7 +37,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 		this.addPropertyChangeListener(pw);
 	}
 
-	IOWorker(ProgressWindow pw, ADocument aDoc, FileOutputStream fos) {
+	IOWorker(ProgressWindow pw, ADocument aDoc, OutputStream fos) {
 		this.fos = fos;
 		this.aDoc = aDoc;
 		this.frame = pw.getAnalyst();

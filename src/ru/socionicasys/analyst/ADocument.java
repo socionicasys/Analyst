@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.Color;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.*;
 import java.util.Map.Entry;
 import javax.swing.event.*;
@@ -263,8 +263,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	public void insertUpdate(DocumentEvent e) {
 	}
 
-	public void load(FileInputStream fis, ProgressWindow pw) throws Exception {
-		IOWorker iow = new IOWorker(pw, this, fis);
+	public void load(InputStream stream, ProgressWindow pw) throws Exception {
+		IOWorker iow = new IOWorker(pw, this, stream);
 		iow.setAppend(false);
 		iow.execute();
 		if (iow.getException() != null) {
@@ -272,8 +272,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		}
 	}
 
-	public void append(FileInputStream fis, ProgressWindow pw) throws Exception {
-		IOWorker iow = new IOWorker(pw, this, fis);
+	public void append(InputStream stream, ProgressWindow pw) throws Exception {
+		IOWorker iow = new IOWorker(pw, this, stream);
 		iow.setAppend(true);
 		iow.execute();
 		if (iow.getException() != null) {
@@ -282,7 +282,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	public Map<ASection, AData> getADataMap() {
-		return aDataMap;
+		return Collections.unmodifiableMap(aDataMap);
 	}
 
 	public ASection createASection(int beg, int end) throws BadLocationException {
@@ -479,9 +479,9 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 	public ADocumentFragment getADocFragment(int offset, int length) {
 		int selectionEnd = offset + length;
-		String text = null;
-		HashMap<DocSection, AttributeSet> styleMap = new HashMap<DocSection, AttributeSet>();
-		HashMap<DocSection, AData> docMap = null;
+		String text;
+		Map<DocSection, AttributeSet> styleMap = new HashMap<DocSection, AttributeSet>();
+		Map<DocSection, AData> docMap = null;
 
 		try {
 			text = getText(offset, length);
@@ -513,7 +513,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 					if (secSt >= offset && secEnd <= selectionEnd) {
 						docMap.put(new DocSection(secSt - offset, secEnd - offset), dataEntry.getValue());
 					}
-
 					if (secSt < offset && secEnd > selectionEnd) {
 						docMap.put(new DocSection(0, length), dataEntry.getValue());
 					}
@@ -546,20 +545,20 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 			//  inserting styles
 			if (styleMap != null) {
-				for (DocSection section : styleMap.keySet()) {
-					setCharacterAttributes(position + section.getStart(),
-						section.getLength(),
-						styleMap.get(section),
+				for (Entry<DocSection, AttributeSet> entry : styleMap.entrySet()) {
+					setCharacterAttributes(position + entry.getKey().getStart(),
+						entry.getKey().getLength(),
+						entry.getValue(),
 						true);
 				}
 			}
 
 			//  inserting AData
 			if (fragMap != null) {
-				for (DocSection section : fragMap.keySet()) {
-					aDataMap.put(new ASection(createPosition(position + section.getStart()),
-						createPosition(position + section.getEnd())),
-						fragMap.get(section));
+				for (Entry<DocSection, AData> entry : fragMap.entrySet()) {
+					aDataMap.put(new ASection(createPosition(position + entry.getKey().getStart()),
+						createPosition(position + entry.getKey().getEnd())),
+						entry.getValue());
 				}
 			}
 		} catch (BadLocationException e) {
