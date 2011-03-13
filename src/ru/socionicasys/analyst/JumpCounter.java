@@ -3,7 +3,7 @@ package ru.socionicasys.analyst;
 import java.util.HashMap;
 
 public class JumpCounter {
-	private class JumpPair {
+	private static class JumpPair {
 		private final String from;
 		private final String to;
 

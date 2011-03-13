@@ -95,9 +95,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 			if (name.equals("DocumentProperty")) {
 				String docPropName = (String) oldValue;
 				if (docPropName != null) {
-					Dictionary<Object, Object> props = document.getDocumentProperties();
-					props.remove(docPropName);
-					props.put(docPropName, newValue);
+					document.putProperty(docPropName, newValue);
 				}
 			}
 			if (name.equals("AppendStyledText")) {
