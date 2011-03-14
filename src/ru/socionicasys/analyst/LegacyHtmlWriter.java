@@ -157,7 +157,7 @@ public class LegacyHtmlWriter extends SwingWorker {
 		final int textWriteProgress = 40;
 		final int reportWriteProgress = 20;
 
-		firePropertyChange("progress", null, 0);
+		setProgress(0);
 
 		//writing the header
 		writer.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"> \n");
@@ -229,7 +229,7 @@ public class LegacyHtmlWriter extends SwingWorker {
 		writer.write("</tr>\n");
 		writer.write("</table >\n");
 
-		firePropertyChange("progress", null, headerSaveProgress);
+		setProgress(headerSaveProgress);
 
 		//document content
 		writer.write("<br/>\n");
@@ -326,7 +326,7 @@ public class LegacyHtmlWriter extends SwingWorker {
 				null, null, 0));
 		}
 
-		firePropertyChange("progress", null, headerSaveProgress + writePreparationProgress);
+		setProgress(headerSaveProgress + writePreparationProgress);
 
 		// write contents
 		RDStack stack = new RDStack();
@@ -339,8 +339,7 @@ public class LegacyHtmlWriter extends SwingWorker {
 				int pos0 = pos1;
 				pos1 = event.getOffset();
 
-				firePropertyChange("progress", null, headerSaveProgress + writePreparationProgress +
-					textWriteProgress * z / flowEvents.size());
+				setProgress(headerSaveProgress + writePreparationProgress + textWriteProgress * z / flowEvents.size());
 
 				//writing text
 				writer.write(document.getText(pos0, pos1 - pos0));
@@ -422,8 +421,7 @@ public class LegacyHtmlWriter extends SwingWorker {
 
 		writer.write("</tr>\n</table>\n");
 		//if not generating report
-		firePropertyChange("progress", null, headerSaveProgress + writePreparationProgress +
-			textWriteProgress + reportWriteProgress);
+		setProgress(headerSaveProgress + writePreparationProgress + textWriteProgress + reportWriteProgress);
 
 		// if generating report
 		if (analystWindow.getGenerateReport()) {
@@ -444,7 +442,7 @@ public class LegacyHtmlWriter extends SwingWorker {
 		writer.flush();
 		writer.close();
 
-		firePropertyChange("progress", null, 100);
+		setProgress(100);
 	}
 
 	private static String getHTMLStyleForAData(AData data) {

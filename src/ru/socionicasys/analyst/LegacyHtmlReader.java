@@ -134,27 +134,27 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 		final int rightColumnParseProgress = 25;
 
 		String allText;
-		Reader isr = new BufferedReader(new InputStreamReader(inputStream, encoding));
+		Reader reader = new BufferedReader(new InputStreamReader(inputStream, encoding));
 		try {
 			// reading the file
-			firePropertyChange("progress", null, 0);
+			setProgress(0);
 			int length = inputStream.available();
 			char[] buf = new char[length];
 			boolean finished = false;
 			StringBuilder textBuilder = new StringBuilder();
 			while (!finished) {
-				int bytesRead = isr.read(buf, 0, length);
+				int bytesRead = reader.read(buf, 0, length);
 				if (bytesRead > 0) {
 					textBuilder.append(buf, 0, bytesRead);
 				} else {
 					finished = true;
 				}
 			}
-			firePropertyChange("progress", null, fileLoadProgress);
+			setProgress(fileLoadProgress);
 			allText = textBuilder.toString();
 		} finally {
 			inputStream.close();
-			isr.close();
+			reader.close();
 		}
 
 		// looking for the table "header"
@@ -271,11 +271,10 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 		HashMap<Integer, RawAData> rawData = new HashMap<Integer, RawAData>();
 
 		int posBeg = leftColumn.indexOf('[');
-		firePropertyChange("progress", null, fileLoadProgress / 2);
+		setProgress(fileLoadProgress / 2);
 		// processing the left column's content
 		while (leftColumn.indexOf('[', 0) >= 0 || leftColumn.indexOf(']', 0) >= 0) {
-			firePropertyChange("progress", null, fileLoadProgress +
-				leftColumnParseProgress * posBeg / leftColumn.length());
+			setProgress(fileLoadProgress + leftColumnParseProgress * posBeg / leftColumn.length());
 			int handle;
 			RawAData data;
 			String handleNo;
@@ -301,13 +300,13 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 			}
 		}
 
-		firePropertyChange("progress", null, fileLoadProgress + leftColumnParseProgress);
+		setProgress(fileLoadProgress + leftColumnParseProgress);
 
 		posBeg = rightColumn.indexOf('{');
 
 		// processing the right column's content
 		while (posBeg >= 0) {
-			firePropertyChange("progress", null, fileLoadProgress + leftColumnParseProgress +
+			setProgress(fileLoadProgress + leftColumnParseProgress +
 				rightColumnParseProgress * (posBeg / rightColumn.length()));
 			String handleNo = findTagContent(rightColumn, "{", ":", posBeg);
 			int handle = Integer.parseInt(handleNo);
@@ -336,8 +335,7 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 			}
 			posBeg = rightColumn.indexOf('{', posBeg + 1);
 		}
-		firePropertyChange("progress", null, fileLoadProgress + leftColumnParseProgress +
-			rightColumnParseProgress);
+		setProgress(fileLoadProgress + leftColumnParseProgress + rightColumnParseProgress);
 
 		// Обрабатываем стили в уже прочитанном тексте
 		SimpleAttributeSet currentStyle = new SimpleAttributeSet(document.defaultStyle);
@@ -387,7 +385,7 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 
 		/// adding plain text to the document
 		firePropertyChange("RawData", null, rawData);
-		firePropertyChange("progress", null, 100);
+		setProgress(100);
 	}
 
 	private static String removeTag(final String source, final String startToken, final String endToken) {
