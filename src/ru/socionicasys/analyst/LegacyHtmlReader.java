@@ -19,6 +19,10 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 	private static final String encoding = "UTF-8";
 	private static final Logger logger = LoggerFactory.getLogger(LegacyHtmlReader.class);
 
+	private static final int FILE_LOAD_PROGRESS = 20;
+	private static final int LEFT_COLUMN_PROGRESS = 50;
+	private static final int RIGHT_COLUMN_PROGRESS = 25;
+
 	private final InputStream inputStream;
 	private final boolean append;
 	private boolean firstWrite = true;
@@ -129,33 +133,10 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 	}
 
 	private void readDocument() throws IOException {
-		final int fileLoadProgress = 20;
-		final int leftColumnParseProgress = 50;
-		final int rightColumnParseProgress = 25;
+		setProgress(0);
 
-		String allText;
-		Reader reader = new BufferedReader(new InputStreamReader(inputStream, encoding));
-		try {
-			// reading the file
-			setProgress(0);
-			int length = inputStream.available();
-			char[] buf = new char[length];
-			boolean finished = false;
-			StringBuilder textBuilder = new StringBuilder();
-			while (!finished) {
-				int bytesRead = reader.read(buf, 0, length);
-				if (bytesRead > 0) {
-					textBuilder.append(buf, 0, bytesRead);
-				} else {
-					finished = true;
-				}
-			}
-			setProgress(fileLoadProgress);
-			allText = textBuilder.toString();
-		} finally {
-			inputStream.close();
-			reader.close();
-		}
+		String allText = readFromStream();
+		setProgress(FILE_LOAD_PROGRESS);
 
 		// looking for the table "header"
 		int searchIndex = allText.indexOf("title=\"header\"", 0);
@@ -271,10 +252,9 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 		HashMap<Integer, RawAData> rawData = new HashMap<Integer, RawAData>();
 
 		int posBeg = leftColumn.indexOf('[');
-		setProgress(fileLoadProgress / 2);
 		// processing the left column's content
 		while (leftColumn.indexOf('[', 0) >= 0 || leftColumn.indexOf(']', 0) >= 0) {
-			setProgress(fileLoadProgress + leftColumnParseProgress * posBeg / leftColumn.length());
+			setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS * posBeg / leftColumn.length());
 			int handle;
 			RawAData data;
 			String handleNo;
@@ -300,14 +280,14 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 			}
 		}
 
-		setProgress(fileLoadProgress + leftColumnParseProgress);
+		setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS);
 
 		posBeg = rightColumn.indexOf('{');
 
 		// processing the right column's content
 		while (posBeg >= 0) {
-			setProgress(fileLoadProgress + leftColumnParseProgress +
-				rightColumnParseProgress * (posBeg / rightColumn.length()));
+			setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS +
+				RIGHT_COLUMN_PROGRESS * (posBeg / rightColumn.length()));
 			String handleNo = findTagContent(rightColumn, "{", ":", posBeg);
 			int handle = Integer.parseInt(handleNo);
 			RawAData data = rawData.get(handle);
@@ -335,7 +315,7 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 			}
 			posBeg = rightColumn.indexOf('{', posBeg + 1);
 		}
-		setProgress(fileLoadProgress + leftColumnParseProgress + rightColumnParseProgress);
+		setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS + RIGHT_COLUMN_PROGRESS);
 
 		// Обрабатываем стили в уже прочитанном тексте
 		SimpleAttributeSet currentStyle = new SimpleAttributeSet(document.defaultStyle);
@@ -386,6 +366,28 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 		/// adding plain text to the document
 		firePropertyChange("RawData", null, rawData);
 		setProgress(100);
+	}
+
+	private String readFromStream() throws IOException {
+		Reader reader = new BufferedReader(new InputStreamReader(inputStream, encoding));
+		try {
+			int length = inputStream.available();
+			char[] buf = new char[length];
+			boolean finished = false;
+			StringBuilder textBuilder = new StringBuilder();
+			while (!finished) {
+				int bytesRead = reader.read(buf, 0, length);
+				if (bytesRead > 0) {
+					textBuilder.append(buf, 0, bytesRead);
+				} else {
+					finished = true;
+				}
+			}
+			return textBuilder.toString();
+		} finally {
+			inputStream.close();
+			reader.close();
+		}
 	}
 
 	private static String removeTag(final String source, final String startToken, final String endToken) {
