@@ -970,7 +970,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 
 	public void update() {
 		if (currentASection != null) {
-			AData data = aDoc.getADataMap().get(currentASection);
+			AData data = aDoc.getAData(currentASection);
 			setContols(data);
 		}
 	}

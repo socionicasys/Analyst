@@ -275,7 +275,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	public Map<ASection, AData> getADataMap() {
-		return Collections.unmodifiableMap(aDataMap);
+		return aDataMap;
 	}
 
 	public void startCompoundEdit() {
