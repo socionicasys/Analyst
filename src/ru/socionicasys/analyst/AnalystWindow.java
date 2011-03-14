@@ -291,7 +291,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 					if (file != null) {
 						FileOutputStream fos = new FileOutputStream(file);
 						ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
-						IOWorker iow = new IOWorker(pw, aDoc, fos);
+						LegacyHtmlWriter iow = new LegacyHtmlWriter(pw, aDoc, fos);
 						iow.execute();
 						frame.setTitle(applicationName + " - " + file.getName());
 					}
@@ -340,7 +340,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 					FileOutputStream fos = new FileOutputStream(file);
 					ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
-					IOWorker iow = new IOWorker(pw, aDoc, fos);
+					LegacyHtmlWriter iow = new LegacyHtmlWriter(pw, aDoc, fos);
 					iow.execute();
 
 					frame.setTitle(applicationName + " - " + file.getName());
@@ -1069,7 +1069,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 						file = new File(fileName);
 						FileOutputStream fos = new FileOutputStream(file);
 						ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
-						IOWorker iow = new IOWorker(pw, aDoc, fos);
+						LegacyHtmlWriter iow = new LegacyHtmlWriter(pw, aDoc, fos);
 						iow.execute();
 					} catch (Exception e) {
 						logger.error("Error writing document to file" + fileName, e);

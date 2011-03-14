@@ -20,38 +20,18 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 	private final ADocument document;
 	private final AnalystWindow frame;
 	private final ProgressWindow progressWindow;
-	private final Operation operation;
 	private Exception exception = null;
 	private int appendOffset = 0;
 	private static final Logger logger = LoggerFactory.getLogger(IOWorker.class);
-
-	private enum Operation {
-		LOAD,
-		SAVE
-	}
 
 	IOWorker(ProgressWindow progressWindow, ADocument document, InputStream inputStream, boolean append) {
 		this.inputStream = inputStream;
 		this.document = document;
 		this.frame = progressWindow.getAnalyst();
 		this.progressWindow = progressWindow;
-		this.operation = Operation.LOAD;
 		this.append = append;
 
 		addPropertyChangeListener(progressWindow);
-	}
-
-	IOWorker(ProgressWindow progressWindow, ADocument document, OutputStream outputStream) {
-		this.outputStream = outputStream;
-		this.document = document;
-		this.frame = progressWindow.getAnalyst();
-		this.progressWindow = progressWindow;
-		this.operation = Operation.SAVE;
-		this.append = false;
-
-		addPropertyChangeListener(progressWindow);
-		addPropertyChangeListener(frame);
-		addPropertyChangeListener(this);
 	}
 
 	@Override
@@ -59,14 +39,7 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 		addPropertyChangeListener(this);
 		try {
 			LegacyHtmlDocumentFormat documentFormat = new LegacyHtmlDocumentFormat();
-			switch (operation) {
-			case LOAD:
-				documentFormat.readDocument(document, inputStream, append, this);
-				break;
-			case SAVE:
-				documentFormat.writeDocument(document, outputStream, this);
-				break;
-			}
+			documentFormat.readDocument(document, inputStream, append, this);
 		} catch (Exception e) {
 			progressWindow.close();
 			this.exception = e;
@@ -89,8 +62,6 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 		Object oldValue = evt.getOldValue();
 
 		// if we are loading file
-		switch (operation) {
-		case LOAD:
 			//updating Document Properties
 			if (name.equals("DocumentProperty")) {
 				String docPropName = (String) oldValue;
@@ -151,16 +122,6 @@ public class IOWorker extends SwingWorker implements PropertyChangeListener {
 				}
 			}
 			AnalystWindow.initUndoManager();
-			break;
-
-		case SAVE:
-			// so far nothing to do on the dispatch thread
-			break;
-		}
-	}
-
-	public ProgressWindow getProgressWindow() {
-		return progressWindow;
 	}
 
 	public Exception getException() {
