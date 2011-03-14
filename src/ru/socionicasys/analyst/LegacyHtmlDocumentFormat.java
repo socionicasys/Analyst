@@ -412,8 +412,8 @@ public class LegacyHtmlDocumentFormat {
 
 		writer.write(text);
 
-		outputStream.flush();
-		outputStream.close();
+		writer.flush();
+		writer.close();
 
 		iow.firePropertyChange("progress", null, 100);
 	}
