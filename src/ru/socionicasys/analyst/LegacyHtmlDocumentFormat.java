@@ -444,53 +444,47 @@ public class LegacyHtmlDocumentFormat {
 	}
 
 	public void readDocument(ADocument document, InputStream inputStream, boolean append, IOWorker iow) throws Exception {
-		InputStreamReader isr = new InputStreamReader(inputStream, Charset.forName(encoding));
-		String leftColumn = "";
-		String rightColumn = "";
-		String allText = "";
+		final int fileLoadProgress = 20;
+		final int leftColumnParseProgress = 50;
+		final int rightColumnParseProgress = 25;
 
-		int fileLoadProgress = 20;
-		int leftColumnParseProgress = 50;
-		int rightColumnParseProgress = 25;
-		int textAddProgress = 5;
-
-		// reading the file
-		int length = inputStream.available();
-		char[] buf = new char[length];
-		int bytesRead;
-
-		iow.firePropertyChange("progress", null, fileLoadProgress / 2);
-
-		boolean finished = false;
-		while (!finished) {
-			bytesRead = isr.read(buf, 0, length);
-			if (bytesRead > 0) {
-				allText += new String(buf, 0, bytesRead);
-			} else {
-				finished = true;
-				isr.close();
-				inputStream.close();
+		String allText;
+		Reader isr = new BufferedReader(new InputStreamReader(inputStream, encoding));
+		try {
+			// reading the file
+			iow.firePropertyChange("progress", null, 0);
+			int length = inputStream.available();
+			char[] buf = new char[length];
+			boolean finished = false;
+			StringBuilder textBuilder = new StringBuilder();
+			while (!finished) {
+				int bytesRead = isr.read(buf, 0, length);
+				if (bytesRead > 0) {
+					textBuilder.append(buf, 0, bytesRead);
+				} else {
+					finished = true;
+				}
 			}
+			iow.firePropertyChange("progress", null, fileLoadProgress);
+			allText = textBuilder.toString();
+		} finally {
+			inputStream.close();
+			isr.close();
 		}
-		iow.firePropertyChange("progress", null, fileLoadProgress);
 
 		// looking for the table "header"
 		int searchIndex = allText.indexOf("title=\"header\"", 0);
-
-		String colStartToken = "<td>";
-		String colEndToken = "</td>";
-		String result;
-		String headerResult;
-		String leftHeaderColumn = null;
-		String rightHeaderColumn = null;
 		String leftHeaderText = allText.substring(searchIndex, allText.indexOf("</table", searchIndex));
 
 		// looking through columns of table "header" and retreiving text of the left and right columns
-		Dictionary properties = document.getDocumentProperties();
-
 		searchIndex = leftHeaderText.indexOf("<tr>", 0);
+		String colStartToken = "<td>";
+		String colEndToken = "</td>";
+		String leftHeaderColumn = null;
+		String rightHeaderColumn = null;
 		while (searchIndex > 0) {
 			searchIndex = leftHeaderText.indexOf("<tr>", searchIndex);
+			String headerResult;
 			if (searchIndex > 0) {
 				headerResult = findTagContent(leftHeaderText, colStartToken, colEndToken, searchIndex);
 			} else {
@@ -516,7 +510,7 @@ public class LegacyHtmlDocumentFormat {
 
 			if (!append) {
 				if (leftHeaderColumn.equals(ADocument.TitleProperty1)) {
-					iow.firePropertyChange("DocumentProperty", ADocument.TitleProperty, rightHeaderColumn);
+					iow.firePropertyChange("DocumentProperty", Document.TitleProperty, rightHeaderColumn);
 				}
 				if (leftHeaderColumn.equals(ADocument.ExpertProperty)) {
 					iow.firePropertyChange("DocumentProperty", ADocument.ExpertProperty, rightHeaderColumn);
@@ -532,7 +526,7 @@ public class LegacyHtmlDocumentFormat {
 				}
 			} else {
 				if (leftHeaderColumn.equals(ADocument.ExpertProperty)) {
-					String expert = (String) properties.get(ADocument.ExpertProperty);
+					String expert = (String) document.getDocumentProperties().get(ADocument.ExpertProperty);
 					if (!expert.contains(rightHeaderColumn)) {
 						expert += "; " + rightHeaderColumn;
 					}
@@ -549,16 +543,19 @@ public class LegacyHtmlDocumentFormat {
 		allText = allText.substring(0, tableProtocolEndIndex);
 
 		// looking through columns of table "protocol" and retreiving text of the left and right columns
+		StringBuilder leftColumnBuilder = new StringBuilder();
+		StringBuilder rightColumnBuilder = new StringBuilder();
 		while (searchIndex > 0) {
 			searchIndex = allText.indexOf("<tr>", searchIndex);
+			String result;
 			if (searchIndex > 0) {
 				result = findTagContent(allText, colStartToken, colEndToken, searchIndex);
 			} else {
 				break;
 			}
 			if (result != null) {
-				leftColumn += result;
-				leftColumn += "<br/><br/>";//adding breaks because there are no breaks on row boundaries
+				leftColumnBuilder.append(result);
+				leftColumnBuilder.append("<br/><br/>"); //adding breaks because there are no breaks on row boundaries
 				searchIndex = allText.indexOf(colEndToken, searchIndex) + colEndToken.length();
 			}
 
@@ -568,16 +565,16 @@ public class LegacyHtmlDocumentFormat {
 				break;
 			}
 			if (result != null) {
-				rightColumn += result;
+				rightColumnBuilder.append(result);
 				searchIndex = allText.indexOf(colEndToken, searchIndex) + colEndToken.length();
 			}
 		}
 
-		leftColumn = leftColumn.replaceAll("\n", "");
+		String leftColumn = leftColumnBuilder.toString().replaceAll("\n", "");
 		leftColumn = leftColumn.replace("<br/>", "\n");
 		leftColumn = leftColumn.trim();
 
-		rightColumn = rightColumn.replaceAll("\n", "");
+		String rightColumn = rightColumnBuilder.toString().replaceAll("\n", "");
 		rightColumn = rightColumn.replace("<br/>", "\n");
 
 		// Убираем все лишние теги
@@ -588,18 +585,18 @@ public class LegacyHtmlDocumentFormat {
 
 		HashMap<Integer, RawAData> rawData = new HashMap<Integer, RawAData>();
 
-		int posBeg = leftColumn.indexOf("[");
+		int posBeg = leftColumn.indexOf('[');
 		iow.firePropertyChange("progress", null, fileLoadProgress / 2);
 		// processing the left column's content
-		while (leftColumn.indexOf("[", 0) >= 0 || leftColumn.indexOf("]", 0) >= 0) {
+		while (leftColumn.indexOf('[', 0) >= 0 || leftColumn.indexOf(']', 0) >= 0) {
 			iow.firePropertyChange("progress", null, fileLoadProgress +
 				leftColumnParseProgress * posBeg / leftColumn.length());
 			int handle;
 			RawAData data;
 			String handleNo;
 			//if we met the opening tag
-			if ((leftColumn.indexOf("[", 0) >= 0) && (leftColumn.indexOf("[", 0) <= leftColumn.indexOf("]", 0))) {
-				posBeg = leftColumn.indexOf("[");
+			if ((leftColumn.indexOf('[', 0) >= 0) && (leftColumn.indexOf('[', 0) <= leftColumn.indexOf(']', 0))) {
+				posBeg = leftColumn.indexOf('[');
 				handleNo = findTagContent(leftColumn, "[", "|", 0);
 				handle = Integer.parseInt(handleNo);
 				leftColumn = leftColumn.replace(findTag(leftColumn, "[", "|", 0), "");
@@ -607,8 +604,8 @@ public class LegacyHtmlDocumentFormat {
 				data.setBegin(posBeg);
 				rawData.put(handle, data);
 				//if we met the closing tag
-			} else if (leftColumn.indexOf("]", 0) >= 0) {
-				int posEnd = leftColumn.indexOf("|");
+			} else if (leftColumn.indexOf(']', 0) >= 0) {
+				int posEnd = leftColumn.indexOf('|');
 				handleNo = findTagContent(leftColumn, "|", "]", 0);
 				handle = Integer.parseInt(handleNo);
 				leftColumn = leftColumn.replace(findTag(leftColumn, "|", "]", 0), "");
@@ -621,7 +618,7 @@ public class LegacyHtmlDocumentFormat {
 
 		iow.firePropertyChange("progress", null, fileLoadProgress + leftColumnParseProgress);
 
-		posBeg = rightColumn.indexOf("{");
+		posBeg = rightColumn.indexOf('{');
 
 		// processing the right column's content
 		while (posBeg >= 0) {
@@ -633,21 +630,18 @@ public class LegacyHtmlDocumentFormat {
 			if (data != null) {
 				String aDataString = findTagContent(rightColumn, ":", "}", posBeg);
 				data.setAData(aDataString);
-				int posEnd = rightColumn.indexOf("{", posBeg + 1);
+				int posEnd = rightColumn.indexOf('{', posBeg + 1);
 				if (posEnd < 0) {
 					posEnd = rightColumn.length() - 1;
 				}
-				int posBeg1 = rightColumn.indexOf("}", posBeg) + 1;
+				int posBeg1 = rightColumn.indexOf('}', posBeg) + 1;
 				String comment = null;
 				if (posBeg1 > 0) {
-					comment = rightColumn.substring(posBeg1, posEnd);
+					comment = rightColumn.substring(posBeg1, posEnd).trim();
 				}
-				if (comment != null) {
-					comment = comment.trim();
-				}
-				comment = " " + comment;
+				comment = ' ' + comment;
 				//removing last line brake which was added when saving
-				while (comment != null && (comment.lastIndexOf("\n") == (comment.length() - 1))) {
+				while (comment != null && (comment.lastIndexOf('\n') == (comment.length() - 1))) {
 					comment = comment.substring(0, comment.length() - 1);
 				}
 				if (comment == null) {
@@ -655,7 +649,7 @@ public class LegacyHtmlDocumentFormat {
 				}
 				data.setComment(comment);
 			}
-			posBeg = rightColumn.indexOf("{", posBeg + 1);
+			posBeg = rightColumn.indexOf('{', posBeg + 1);
 		}
 		iow.firePropertyChange("progress", null, fileLoadProgress + leftColumnParseProgress +
 			rightColumnParseProgress);
@@ -667,7 +661,7 @@ public class LegacyHtmlDocumentFormat {
 		Matcher styleMatcher = styleTag.matcher(sourceText);
 		int sourcePosition = 0;
 		int sourceOffset = 0;
-		ArrayList<StyledText> styledTextBlocks = new ArrayList<StyledText>();
+		Collection<StyledText> styledTextBlocks = new ArrayList<StyledText>();
 		while (styleMatcher.find()) {
 			String currentTag = styleMatcher.group();
 			int tagLength = currentTag.length();
@@ -711,7 +705,7 @@ public class LegacyHtmlDocumentFormat {
 		iow.firePropertyChange("progress", null, 100);
 	}
 
-	private String removeTag(final String source, final String startToken, final String endToken) {
+	private static String removeTag(final String source, final String startToken, final String endToken) {
 		String buffer = source;
 		String tag = findTag(buffer, startToken, endToken, 0);
 		while (tag != null) {
@@ -721,7 +715,7 @@ public class LegacyHtmlDocumentFormat {
 		return buffer;
 	}
 
-	private String findTagContent(final String text, final String startToken, final String endToken,
+	private static String findTagContent(final String text, final String startToken, final String endToken,
 			final int fromIndex) {
 		int startIndex = text.indexOf(startToken, fromIndex);
 		int endIndex = text.indexOf(endToken, startIndex);
@@ -732,7 +726,8 @@ public class LegacyHtmlDocumentFormat {
 		return null;
 	}
 
-	private String findTag(final String text, final String startToken, final String endToken, final int fromIndex) {
+	private static String findTag(final String text, final String startToken, final String endToken,
+			final int fromIndex) {
 		int startIndex = text.indexOf(startToken, fromIndex);
 		int endIndex = text.indexOf(endToken, startIndex);
 
