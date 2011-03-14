@@ -1,6 +1,10 @@
 package ru.socionicasys.analyst;
 
+import ru.socionicasys.analyst.util.EqualsUtil;
+import ru.socionicasys.analyst.util.HashUtil;
+
 import java.util.HashMap;
+import java.util.Map;
 
 public class JumpCounter {
 	private static class JumpPair {
@@ -11,9 +15,31 @@ public class JumpCounter {
 			this.from = from;
 			this.to = to;
 		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (!(obj instanceof JumpPair)) {
+				return false;
+			}
+
+			JumpPair jumpPair = (JumpPair) obj;
+			return EqualsUtil.areEqual(from, jumpPair.from) &&
+				EqualsUtil.areEqual(to, jumpPair.to);
+		}
+
+		@Override
+		public int hashCode() {
+			HashUtil hashUtil = new HashUtil();
+			hashUtil.hash(from);
+			hashUtil.hash(to);
+			return hashUtil.getComputedHash();
+		}
 	}
 
-	private final HashMap<JumpPair, Integer> jumpTable;
+	private final Map<JumpPair, Integer> jumpTable;
 
 	public JumpCounter() {
 		jumpTable = new HashMap<JumpPair, Integer>();
