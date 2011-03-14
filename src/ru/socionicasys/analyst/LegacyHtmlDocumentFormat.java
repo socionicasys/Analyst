@@ -14,29 +14,29 @@ public class LegacyHtmlDocumentFormat {
 	private static final String encoding = "UTF-8";
 	private static final Logger logger = LoggerFactory.getLogger(LegacyHtmlDocumentFormat.class);
 
-	private class DocumentFlowEvent implements Comparable<DocumentFlowEvent> {
-		private int type;
-		private int offset;
-		private int sectionNo;
-		private String style;
-		private String comment;
+	private static enum EventType {
+		LINE_BREAK,
+		SECTION_START,
+		SECTION_END,
+		NEW_ROW,
+		BOLD_START,
+		BOLD_END,
+		ITALIC_START,
+		ITALIC_END
+	}
 
-		public static final int LINE_BREAK = 1;
-		public static final int SECTION_START = 2;
-		public static final int SECTION_END = 3;
-		public static final int NEW_ROW = 4;
-		public static final int BOLD_START = 5;
-		public static final int BOLD_END = 6;
-		public static final int ITALIC_START = 7;
-		public static final int ITALIC_END = 8;
+	private static class DocumentFlowEvent implements Comparable<DocumentFlowEvent> {
+		private final EventType type;
+		private final int offset;
+		private final int sectionNo;
+		private final String style;
+		private final String comment;
 
-		public DocumentFlowEvent(int type, int offset, String style, String comment, int sectionNo) {
+		public DocumentFlowEvent(EventType type, int offset, String style, String comment, int sectionNo) {
 			this.offset = offset;
 			this.type = type;
 			this.style = style;
-			if (comment != null) {
-				this.comment = comment.replaceAll("\n", "<br/>");
-			}
+			this.comment = comment == null ? null : comment.replaceAll("\n", "<br/>");
 			this.sectionNo = sectionNo;
 		}
 
@@ -44,7 +44,7 @@ public class LegacyHtmlDocumentFormat {
 			return offset;
 		}
 
-		public int getType() {
+		public EventType getType() {
 			return type;
 		}
 
@@ -69,9 +69,9 @@ public class LegacyHtmlDocumentFormat {
 		}
 	}
 
-	private class RDStack {
-		private final ArrayList<String> styleStack;
-		private final HashMap<Integer, Integer> positionMap;
+	private static class RDStack {
+		private final List<String> styleStack;
+		private final Map<Integer, Integer> positionMap;
 
 		public RDStack() {
 			styleStack = new ArrayList<String>();
@@ -109,109 +109,101 @@ public class LegacyHtmlDocumentFormat {
 	}
 
 	public void writeDocument(ADocument document, OutputStream outputStream, IOWorker iow) throws Exception {
-		OutputStreamWriter writer = new OutputStreamWriter(outputStream, Charset.forName(encoding));
-		int headerSaveProgress = 20;
-		int writePreparationProgress = 20;
-		int textWriteProgress = 40;
-		int reportWriteProgress = 20;
-
-		iow.firePropertyChange("progress", null, 0);
-
 		if (outputStream == null) {
 			logger.error("Error attempting to save file: FileOutputStream is null");
 			return;
 		}
 
-		//writing the header
-		String text = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"> \n";
-		text += "<meta http-equiv=\"Content-Type\" content=\"text/html charset=" + encoding + "\"/>";
-		text += "<html> \n<head> \n<title> \n" + document.getProperty(ADocument.TitleProperty) + " \n</title> \n" +
-			"	<style>" +
-			"			body 	{font-size:14px;color:black}\n" +
-			"			h1		{}\n" +
-			"			h2		{}\n" +
-			"			th		{font-size:18px;font-weight:bold}\n" +
-			"			small	{font-size:9px;color:darkgray}\n" +
-			"" +
-			"	</style>\n" +
-			"</head> \n" +
-			"<body> \n";
+		Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, encoding));
+		final int headerSaveProgress = 20;
+		final int writePreparationProgress = 20;
+		final int textWriteProgress = 40;
+		final int reportWriteProgress = 20;
 
-		writer.write(text);
+		iow.firePropertyChange("progress", null, 0);
+
+		//writing the header
+		writer.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"> \n");
+		writer.write(String.format("<meta http-equiv=\"Content-Type\" content=\"text/html charset=%s\"/>", encoding));
+		writer.write("<html>\n<head>\n");
+		writer.write(String.format("<title>%s</title>\n", document.getProperty(Document.TitleProperty)));
+		writer.write("	<style>");
+		writer.write("			body 	{font-size:14px;color:black}\n");
+		writer.write("			h1		{}\n");
+		writer.write("			h2		{}\n");
+		writer.write("			th		{font-size:18px;font-weight:bold}\n");
+		writer.write("			small	{font-size:9px;color:darkgray}\n");
+		writer.write("	</style>\n");
+		writer.write("</head> \n");
+		writer.write("<body> \n");
 
 		//document title
-		text = "\n<h1>" + document.getProperty(ADocument.TitleProperty) + "</h1>\n";
+		writer.write(String.format("\n<h1>%s</h1>\n", document.getProperty(Document.TitleProperty)));
 
 		//saved with version
 		String comm = (String) document.getProperty(ADocument.CommentProperty);
 
 		//document header
-		text += "<br/>\n<br/>";
-		text += "\n <table title=\"header\" border=1 width=\"40%\"> 	" + "\n" +
-			"<tr>" + "\n" +
-			"	<td>      " + ADocument.TitleProperty1 + "     </td>" + "\n" +
-			"	<td>" + document.getProperty(ADocument.TitleProperty) + "	</td>" + "\n" +
-			"</tr>" + "\n" +
-			"<tr>" + "\n" +
-			"	<td>      " + ADocument.ClientProperty + "     </td>" + "\n" +
-			"	<td>" + document.getProperty(ADocument.ClientProperty) + " 	</td>" + "\n" +
-			"</tr>" + "\n" +
-			"<tr>" + "\n" +
-			"	<td>      " + ADocument.ExpertProperty + "     </td>" + "\n" +
-			"	<td>" + document.getProperty(ADocument.ExpertProperty) + "	</td>" + "\n" +
-			"</tr>" + "\n" +
-			"<tr>" + "\n" +
-			"	<td>      " + ADocument.DateProperty + "     </td>" + "\n" +
-			"	<td>" + document.getProperty(ADocument.DateProperty) + " </td>" + "\n" +
-			"</tr>" + "\n" +
-			"<tr>" + "\n" +
-			"	<td>      " + ADocument.CommentProperty + "     </td>" + "\n" +
-			"	<td>" + comm + " </td>" + "\n" +
-			"</tr>" + "\n" +
-			"</table >" + "\n";
+		writer.write("<br/>\n<br/>");
+		writer.write("\n <table title=\"header\" border=1 width=\"40%\"> 	\n");
+		writer.write("<tr>\n");
+		writer.write(String.format("	<td>      %s     </td>\n", ADocument.TitleProperty1));
+		writer.write(String.format("	<td>%s	</td>\n", document.getProperty(Document.TitleProperty)));
+		writer.write("</tr>\n");
+		writer.write("<tr>\n");
+		writer.write(String.format("	<td>      %s     </td>\n", ADocument.ClientProperty));
+		writer.write(String.format("	<td>%s 	</td>\n", document.getProperty(ADocument.ClientProperty)));
+		writer.write("</tr>\n");
+		writer.write("<tr>\n");
+		writer.write(String.format("	<td>      %s     </td>\n", ADocument.ExpertProperty));
+		writer.write(String.format("	<td>%s	</td>\n", document.getProperty(ADocument.ExpertProperty)));
+		writer.write("</tr>\n");
+		writer.write("<tr>\n");
+		writer.write(String.format("	<td>      %s     </td>\n", ADocument.DateProperty));
+		writer.write(String.format("	<td>%s </td>\n", document.getProperty(ADocument.DateProperty)));
+		writer.write("</tr>\n");
+		writer.write("<tr>\n");
+		writer.write(String.format("	<td>      %s     </td>\n", ADocument.CommentProperty));
+		writer.write(String.format("	<td>%s </td>\n", comm));
+		writer.write("</tr>\n");
+		writer.write("</table >\n");
 
 		//  writing the color legend
-		text += "<br/>\n<br/>";
-		text += "<h3> Расшифровка цветовых обозначений: </h3>";
+		writer.write("<br/>\n<br/>");
+		writer.write("<h3> Расшифровка цветовых обозначений: </h3>");
+		writer.write("\n <table title=\"legend\" border=0 width=\"40%\"> 	\n");
+		writer.write("<tr>\n");
+		writer.write("	<td style=\"background-color:#EAEAEA\">Непонятное место</td>\n");
+		writer.write("</tr>\n");
+		writer.write("<tr>\n");
+		writer.write("	<td style=\"background-color:#AAEEEE;\">      Маломерность     </td>\n");
+		writer.write("</tr>\n");
+		writer.write("<tr>\n");
+		writer.write("	<td style=\"background-color:#AAEEAA;\">      Многомерность     </td>\n");
+		writer.write("</tr>\n");
+		writer.write("<tr>\n");
+		writer.write("	<td  style=\"color:#FF0000;\">      		  Фрагмент содержит информацию о знаке     </td>\n");
+		writer.write("</tr>\n");
+		writer.write("<tr>\n");
+		writer.write("	<td style=\"background-color:#FFFFCC;\">      Фрагмент содержит информацию о ментале или витале     </td>\n");
+		writer.write("</tr>\n");
+		writer.write("<tr>\n");
+		writer.write("	<td style=\"text-decoration:underline\">      Прочий выделенный фрагмент анализа     </td>\n");
+		writer.write("</tr>\n");
+		writer.write("</table >\n");
 
-		text += "\n <table title=\"legend\" border=0 width=\"40%\"> 	" + "\n" +
-			"<tr>" + "\n" +
-			"	<td style=\"background-color:#EAEAEA\">" + "Непонятное место" + "</td>" + "\n" +
-			"</tr>" + "\n" +
-			"<tr>" + "\n" +
-			"	<td style=\"background-color:#AAEEEE;\">      " + "Маломерность" + "     </td>" + "\n" +
-			"</tr>" + "\n" +
-			"<tr>" + "\n" +
-			"	<td style=\"background-color:#AAEEAA;\">      " + "Многомерность" + "     </td>" + "\n" +
-			"</tr>" + "\n" +
-			"<tr>" + "\n" +
-			"	<td  style=\"color:#FF0000;\">      		  " + "Фрагмент содержит информацию о знаке" + "     </td>" + "\n" +
-			"</tr>" + "\n" +
-			"<tr>" + "\n" +
-			"	<td style=\"background-color:#FFFFCC;\">      " + "Фрагмент содержит информацию о ментале или витале" + "     </td>" + "\n" +
-			"</tr>" + "\n" +
-			"<tr>" + "\n" +
-			"	<td style=\"text-decoration:underline\">      " + "Прочий выделенный фрагмент анализа" + "     </td>" + "\n" +
-			"</tr>" + "\n" +
-			"</table >" + "\n";
-
-		writer.write(text);
 		iow.firePropertyChange("progress", null, headerSaveProgress);
 
 		//document content
-		text = "<br/>\n";
-		text += "\n<h2>  АНАЛИЗ </h2>\n";
-		text += "\n <table title=\"protocol\" border=2 width=\"100%\"> 	" + "\n" +
-			"<tr>" + "\n" +
-			"	<th width=\"60%\"> ВОПРОСЫ И ОТВЕТЫ </th>" + "\n" +
-			"	<th width=\"40%\"> АНАЛИЗ ЭКСПЕРТА</th>" + "\n" +
-			"</tr>" + "\n" +
-			"<tr>" + "\n" +
-			"	<td>"
-		;
-
-		writer.write(text);
-		text = "";
+		writer.write("<br/>\n");
+		writer.write("\n<h2>  АНАЛИЗ </h2>\n");
+		writer.write("\n <table title=\"protocol\" border=2 width=\"100%\"> 	\n");
+		writer.write("<tr>\n");
+		writer.write("	<th width=\"60%\"> ВОПРОСЫ И ОТВЕТЫ </th>\n");
+		writer.write("	<th width=\"40%\"> АНАЛИЗ ЭКСПЕРТА</th>\n");
+		writer.write("</tr>\n");
+		writer.write("<tr>\n");
+		writer.write("	<td>");
 
 		// PREPARING
 		Vector<DocumentFlowEvent> flowEvents = new Vector<DocumentFlowEvent>();
@@ -229,14 +221,14 @@ public class LegacyHtmlDocumentFormat {
 			ASection section = sections.get(i);
 			AData data = document.getADataMap().get(section);
 			flowEvents.add(new DocumentFlowEvent(
-				DocumentFlowEvent.SECTION_START,
+				EventType.SECTION_START,
 				section.getStartOffset(),
 				getHTMLStyleForAData(data),
 				String.format("{%d: %s} %s\n", i + 1, data.toString(), data.getComment()),
 				i + 1)
 			);
 			flowEvents.add(new DocumentFlowEvent(
-				DocumentFlowEvent.SECTION_END,
+				EventType.SECTION_END,
 				section.getEndOffset(),
 				getHTMLStyleForAData(data),
 				data.getComment(),
@@ -256,15 +248,15 @@ public class LegacyHtmlDocumentFormat {
 				int elemEnd = e.getEndOffset();
 				AttributeSet attrs = e.getAttributes();
 				if (attrs.containsAttributes(boldAttribute)) {
-					flowEvents.add(new DocumentFlowEvent(DocumentFlowEvent.BOLD_START,
+					flowEvents.add(new DocumentFlowEvent(EventType.BOLD_START,
 						elemStart, null, null, 0));
-					flowEvents.add(new DocumentFlowEvent(DocumentFlowEvent.BOLD_END,
+					flowEvents.add(new DocumentFlowEvent(EventType.BOLD_END,
 						elemEnd, null, null, 0));
 				}
 				if (attrs.containsAttributes(italicAttribute)) {
-					flowEvents.add(new DocumentFlowEvent(DocumentFlowEvent.ITALIC_START,
+					flowEvents.add(new DocumentFlowEvent(EventType.ITALIC_START,
 						elemStart, null, null, 0));
-					flowEvents.add(new DocumentFlowEvent(DocumentFlowEvent.ITALIC_END,
+					flowEvents.add(new DocumentFlowEvent(EventType.ITALIC_END,
 						elemEnd, null, null, 0));
 				}
 			}
@@ -274,7 +266,7 @@ public class LegacyHtmlDocumentFormat {
 			boolean replaceBreak = false;
 			if (!flowEvents.isEmpty()) {
 				DocumentFlowEvent prevEvent = flowEvents.lastElement();
-				if (prevEvent.getType() == DocumentFlowEvent.LINE_BREAK &&
+				if (prevEvent.getType() == EventType.LINE_BREAK &&
 					prevEvent.getOffset() == lb - 1) {
 					// Заменяем два идущих подряд LINE_BREAK на NEW_ROW
 					replaceBreak = true;
@@ -282,108 +274,116 @@ public class LegacyHtmlDocumentFormat {
 			}
 			if (replaceBreak) {
 				flowEvents.set(flowEvents.size() - 1,
-					new DocumentFlowEvent(DocumentFlowEvent.NEW_ROW,
+					new DocumentFlowEvent(EventType.NEW_ROW,
 						lb - 1, null, null, 0));
 			} else {
 				flowEvents.add(new DocumentFlowEvent(
-					DocumentFlowEvent.LINE_BREAK, lb, null, null, 0));
+					EventType.LINE_BREAK, lb, null, null, 0));
 			}
 		}
 		Collections.sort(flowEvents);
 
-		if (!flowEvents.isEmpty() && (flowEvents.lastElement().getType() != DocumentFlowEvent.NEW_ROW)) {
+		if (!flowEvents.isEmpty() && (flowEvents.lastElement().getType() != EventType.NEW_ROW)) {
 			flowEvents.add(new DocumentFlowEvent(
-				DocumentFlowEvent.NEW_ROW, document.getEndPosition().getOffset() - 1,
+				EventType.NEW_ROW, document.getEndPosition().getOffset() - 1,
 				null, null, 0));
 		}
 
 		iow.firePropertyChange("progress", null, headerSaveProgress + writePreparationProgress);
 
 		// write contents
-		int pos0 = 0;
-		int pos1 = 0;
-		int k = 0;
-		String analisys = "";
-		DocumentFlowEvent event = null;
-		int eventType = -1;
 		RDStack stack = new RDStack();
-
 		if (flowEvents != null && !flowEvents.isEmpty()) {
+			int pos1 = 0;
+			StringBuilder analysis = new StringBuilder();
 			for (int z = 0; z < flowEvents.size(); z++) {
-				event = flowEvents.get(z);
-				pos0 = pos1;
+				DocumentFlowEvent event = flowEvents.get(z);
+				EventType eventType = event.getType();
+				int pos0 = pos1;
 				pos1 = event.getOffset();
-				eventType = event.getType();
 
 				iow.firePropertyChange("progress", null, headerSaveProgress + writePreparationProgress +
 					textWriteProgress * z / flowEvents.size());
 
 				//writing text
-				String t = document.getText(pos0, pos1 - pos0);
-				text += t;
+				writer.write(document.getText(pos0, pos1 - pos0));
 
 				// writing text remainder from last event to the end of the document
 				if (z == flowEvents.size() - 1) {
 					int finish = document.getLength();
 					if (finish > pos1) {
-						text += document.getText(pos1, finish - pos1);
+						writer.write(document.getText(pos1, finish - pos1));
 					}
+					eventType = EventType.NEW_ROW;
 				}
 
 				//analyzing event and generating  mark-up
-				if (eventType == DocumentFlowEvent.SECTION_START) {
-					k = event.getSectionNo();
+				int sectionNo;
+				switch (eventType) {
+				case SECTION_START:
+					sectionNo = event.getSectionNo();
 					if (!stack.isEmpty()) {
-						text += " </span>";
+						writer.write(" </span>");
 					}
-					text += "<small>[" + k + "|</small>";
-					text += "<span style=" + event.getStyle() + ">";
-					stack.push(k, event.getStyle());
-					analisys += event.getComment();
-				} else if (eventType == DocumentFlowEvent.SECTION_END) {
-					k = event.getSectionNo();
+					writer.write(String.format("<small>[%d|</small><span style=%s>", sectionNo, event.getStyle()));
+					stack.push(sectionNo, event.getStyle());
+					analysis.append(event.getComment());
+					break;
+
+				case SECTION_END:
 					if (!stack.isEmpty()) {
-						text += "</span>";
-						text += "<small>|" + k + "]</small>";
-						stack.delete(k);
+						sectionNo = event.getSectionNo();
+						writer.write(String.format("</span><small>|%d]</small>", sectionNo));
+						stack.delete(sectionNo);
 						if (!stack.isEmpty()) {
-							text += "<span style=" + stack.getCurrentStyle() + ">";
+							writer.write(String.format("<span style=%s>", stack.getCurrentStyle()));
 						}
 					}
-				} else if (eventType == DocumentFlowEvent.BOLD_START) {
-					text += "<b>";
-				} else if (eventType == DocumentFlowEvent.BOLD_END) {
-					text += "</b>";
-				} else if (eventType == DocumentFlowEvent.ITALIC_START) {
-					text += "<i>";
-				} else if (eventType == DocumentFlowEvent.ITALIC_END) {
-					text += "</i>";
-				} else if (eventType == DocumentFlowEvent.NEW_ROW || z == flowEvents.size() - 1) {
+					break;
+				
+				case BOLD_START:
+					writer.write("<b>");
+					break;
+
+				case BOLD_END:
+					writer.write("</b>");
+					break;
+
+				case ITALIC_START:
+					writer.write("<i>");
+					break;
+
+				case ITALIC_END:
+					writer.write("</i>");
+					break;
+
+				case NEW_ROW:
 					if (!stack.isEmpty()) {
-						text += "</span>";
+						writer.write("</span>");
 					}
-					text += "</td>\n";
-					text += "<td>" + analisys;
-					text += "</td>";
-					analisys = "";
+					writer.write(String.format("</td>\n<td>%s</td>", analysis));
+					analysis = new StringBuilder();
 					if (z != flowEvents.size() - 1) {
-						text += "\n</tr>\n<tr>\n<td>";
+						writer.write("\n</tr>\n<tr>\n<td>");
 					}
 					if (!stack.isEmpty()) {
-						text += "<span style=" + stack.getCurrentStyle() + ">";
+						writer.write(String.format("<span style=%s>", stack.getCurrentStyle()));
 					}
-				} else if (eventType == DocumentFlowEvent.LINE_BREAK) {
-					text += "<br/>";
+					break;
+
+				case LINE_BREAK:
+					writer.write("<br/>");
+					break;
 				}
 			}
 		}
 		// если в документе нет разметки - просто пишем текст в левый столбец таблицы
 		else {
-			text += document.getText(0, document.getLength());
-			text += "</td><td></td>";
+			writer.write(document.getText(0, document.getLength()));
+			writer.write("</td><td></td>");
 		}
 
-		text +=	"</tr>" + "\n" + "</table>" + "\n";
+		writer.write("</tr>\n</table>\n");
 		//if not generating report
 		AnalystWindow an = iow.getProgressWindow().getAnalyst();
 
@@ -392,25 +392,19 @@ public class LegacyHtmlDocumentFormat {
 
 		// if generating report
 		if (an.getGenerateReport()) {
-			text += "<br/>" +
-				"<h1> Определение ТИМа </h1>" +
-				"<br/>";
-
-			text += an.getNavigeTree().getReport();
-			text += an.getAnalysisTree().getReport();
+			writer.write("<br/>");
+			writer.write("<h1> Определение ТИМа </h1>");
+			writer.write("<br/>");
+			writer.write(an.getNavigeTree().getReport());
+			writer.write(an.getAnalysisTree().getReport());
 		}
 
-		text +=
-			"<br/>" +
-				"Протокол определения ТИМа создан программой \"Информационный анализ\", верисия: " + AnalystWindow.version + " <br/>" +
-				"© Школа системной соционики, Киев.<br/>" +
-				"http://www.socionicasys.ru\n";
-
-		text +=
-			"</body >" + "\n" +
-				"</html >" + "\n";
-
-		writer.write(text);
+		writer.write("<br/>");
+		writer.write(String.format("Протокол определения ТИМа создан программой \"Информационный анализ\", верисия: %s <br/>",
+			AnalystWindow.version));
+		writer.write("© Школа системной соционики, Киев.<br/>");
+		writer.write("http://www.socionicasys.ru\n");
+		writer.write("</body>\n</html>\n");
 
 		writer.flush();
 		writer.close();
@@ -418,39 +412,35 @@ public class LegacyHtmlDocumentFormat {
 		iow.firePropertyChange("progress", null, 100);
 	}
 
-	private String getHTMLStyleForAData(AData data) {
+	private static String getHTMLStyleForAData(AData data) {
 		if (data.getAspect().equals(AData.DOUBT)) {
 			return "background-color:#EAEAEA";
 		}
-		String res = "\"";
-		String dim = data.getDimension();
-		String mv = data.getMV();
-		String sign = data.getSign();
-		if (dim != null &&
-			(dim.equals(AData.D1) ||
-				dim.equals(AData.D2) ||
-				dim.equals(AData.ODNOMERNOST) ||
-				dim.equals(AData.MALOMERNOST))) {
-			res += "background-color:#AAEEEE;";
-		} else if (dim != null &&
-			(dim.equals(AData.D3) ||
-				dim.equals(AData.D4) ||
-				dim.equals(AData.MNOGOMERNOST))) {
+		StringBuilder res = new StringBuilder("\"");
+		boolean unstyled = true;
+		String dimension = data.getDimension();
+		if (Arrays.asList(AData.D1, AData.D2, AData.ODNOMERNOST, AData.MALOMERNOST).contains(dimension)) {
+			res.append("background-color:#AAEEEE;");
+			unstyled = false;
+		} else if (Arrays.asList(AData.D3, AData.D4, AData.MNOGOMERNOST).contains(dimension)) {
 			// противный зеленый
-			res += "background-color:#AAEEAA;";
+			res.append("background-color:#AAEEAA;");
+			unstyled = false;
 		}
-		if (sign != null) {
-			res += "color:#FF0000;";
+		if (data.getSign() != null) {
+			res.append("color:#FF0000;");
+			unstyled = false;
 		}
-		if (mv != null) {
-			res += "background-color:#FFFFCC;";
+		if (data.getMV() != null) {
+			res.append("background-color:#FFFFCC;");
+			unstyled = false;
 		}
 		//Если не задан другой стиль, то будет этот стиль
-		if (res.equals("\"")) {
-			res += "text-decoration:underline";
+		if (unstyled) {
+			res.append("text-decoration:underline");
 		}
-		res += "\"";
-		return res;
+		res.append('\"');
+		return res.toString();
 	}
 
 	public void readDocument(ADocument document, InputStream inputStream, boolean append, IOWorker iow) throws Exception {
