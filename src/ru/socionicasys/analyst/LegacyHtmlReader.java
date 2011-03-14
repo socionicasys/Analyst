@@ -3,18 +3,132 @@ package ru.socionicasys.analyst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.*;
-import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.*;
 import javax.swing.text.*;
 
-public class LegacyHtmlDocumentFormat {
+public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListener {
 	private static final String encoding = "UTF-8";
-	private static final Logger logger = LoggerFactory.getLogger(LegacyHtmlDocumentFormat.class);
+	private static final Logger logger = LoggerFactory.getLogger(LegacyHtmlReader.class);
 
-	public void readDocument(ADocument document, InputStream inputStream, boolean append, IOWorker iow) throws Exception {
+	private final InputStream inputStream;
+	private final boolean append;
+	private boolean firstWrite = true;
+	private final ADocument document;
+	private final ProgressWindow progressWindow;
+	private Exception exception = null;
+	private int appendOffset = 0;
+
+	LegacyHtmlReader(ProgressWindow progressWindow, ADocument document, InputStream inputStream, boolean append) {
+		this.inputStream = inputStream;
+		this.document = document;
+		this.progressWindow = progressWindow;
+		this.append = append;
+
+		addPropertyChangeListener(progressWindow);
+	}
+
+	@Override
+	protected Object doInBackground() throws Exception {
+		addPropertyChangeListener(this);
+		try {
+			readDocument();
+		} catch (Exception e) {
+			progressWindow.close();
+			this.exception = e;
+			logger.error("IO error in doInBackground()", e);
+		}
+
+		return null;
+	}
+
+	@Override
+	protected void done() {
+		super.done();
+		progressWindow.close();
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		String name = evt.getPropertyName();
+		Object newValue = evt.getNewValue();
+		Object oldValue = evt.getOldValue();
+
+		//updating Document Properties
+		if (name.equals("DocumentProperty")) {
+			String docPropName = (String) oldValue;
+			if (docPropName != null) {
+				document.putProperty(docPropName, newValue);
+			}
+		}
+		if (name.equals("AppendStyledText")) {
+			@SuppressWarnings("unchecked")
+			Iterable<StyledText> styledTextBlocks = (Iterable<StyledText>) newValue;
+			for (StyledText styledText : styledTextBlocks) {
+				String textBlock = styledText.getText();
+				AttributeSet textStyle = styledText.getStyle();
+				try {
+					if (firstWrite) {
+						firstWrite = false;
+						if (append) {
+							appendOffset = document.getLength();
+						} else {
+							// Если мы не добавляем в старый документ, то перед
+							// первой записью его нужно очистить
+							appendOffset = 0;
+							document.getADataMap().clear();
+							document.remove(0, document.getEndPosition().getOffset() - 1);
+						}
+					}
+					int docPosition = document.getEndPosition().getOffset() - 1;
+					document.insertString(docPosition, textBlock, textStyle);
+					// Исправляем ошибку insertString: текст вставляется без стилей
+					document.setCharacterAttributes(docPosition, textBlock.length(),
+						textStyle, true);
+				} catch (BadLocationException e) {
+					logger.error("Illegal document location while working on AppendStyleText in propertyChange()", e);
+				}
+			}
+		}
+		if (name.equals("RawData")) {
+			//getting AData
+			Map<Integer, RawAData> rawData = (Map<Integer, RawAData>) newValue;
+			try {
+				for (RawAData rawAData : rawData.values()) {
+					AData data = AData.parseAData(rawAData.getAData());
+					data.setComment(rawAData.getComment());
+					int begin = rawAData.getBegin();
+					int end = rawAData.getEnd();
+					ASection section = new ASection(begin + appendOffset, end + appendOffset,
+						document.defaultSectionAttributes);
+					document.getADataMap().put(section, data);
+					document.setCharacterAttributes(begin + appendOffset, end - begin,
+						document.defaultSectionAttributes, false);
+				}
+				document.fireADocumentChanged();
+			} catch (Exception e) {
+				logger.error("Error while working on RawData in propertyChange()", e);
+				progressWindow.close();
+				this.exception = e;
+				this.cancel(true);
+			}
+		}
+		AnalystWindow.initUndoManager();
+	}
+
+	public Exception getException() {
+		return exception;
+	}
+
+	private void readDocument() throws IOException {
 		final int fileLoadProgress = 20;
 		final int leftColumnParseProgress = 50;
 		final int rightColumnParseProgress = 25;
@@ -23,7 +137,7 @@ public class LegacyHtmlDocumentFormat {
 		Reader isr = new BufferedReader(new InputStreamReader(inputStream, encoding));
 		try {
 			// reading the file
-			iow.firePropertyChange("progress", null, 0);
+			firePropertyChange("progress", null, 0);
 			int length = inputStream.available();
 			char[] buf = new char[length];
 			boolean finished = false;
@@ -36,7 +150,7 @@ public class LegacyHtmlDocumentFormat {
 					finished = true;
 				}
 			}
-			iow.firePropertyChange("progress", null, fileLoadProgress);
+			firePropertyChange("progress", null, fileLoadProgress);
 			allText = textBuilder.toString();
 		} finally {
 			inputStream.close();
@@ -81,19 +195,19 @@ public class LegacyHtmlDocumentFormat {
 
 			if (!append) {
 				if (leftHeaderColumn.equals(ADocument.TitleProperty1)) {
-					iow.firePropertyChange("DocumentProperty", Document.TitleProperty, rightHeaderColumn);
+					firePropertyChange("DocumentProperty", Document.TitleProperty, rightHeaderColumn);
 				}
 				if (leftHeaderColumn.equals(ADocument.ExpertProperty)) {
-					iow.firePropertyChange("DocumentProperty", ADocument.ExpertProperty, rightHeaderColumn);
+					firePropertyChange("DocumentProperty", ADocument.ExpertProperty, rightHeaderColumn);
 				}
 				if (leftHeaderColumn.equals(ADocument.ClientProperty)) {
-					iow.firePropertyChange("DocumentProperty", ADocument.ClientProperty, rightHeaderColumn);
+					firePropertyChange("DocumentProperty", ADocument.ClientProperty, rightHeaderColumn);
 				}
 				if (leftHeaderColumn.equals(ADocument.DateProperty)) {
-					iow.firePropertyChange("DocumentProperty", ADocument.DateProperty, rightHeaderColumn);
+					firePropertyChange("DocumentProperty", ADocument.DateProperty, rightHeaderColumn);
 				}
 				if (leftHeaderColumn.equals(ADocument.CommentProperty)) {
-					iow.firePropertyChange("DocumentProperty", ADocument.CommentProperty, rightHeaderColumn);
+					firePropertyChange("DocumentProperty", ADocument.CommentProperty, rightHeaderColumn);
 				}
 			} else {
 				if (leftHeaderColumn.equals(ADocument.ExpertProperty)) {
@@ -101,7 +215,7 @@ public class LegacyHtmlDocumentFormat {
 					if (!expert.contains(rightHeaderColumn)) {
 						expert += "; " + rightHeaderColumn;
 					}
-					iow.firePropertyChange("DocumentProperty", ADocument.ExpertProperty, expert);
+					firePropertyChange("DocumentProperty", ADocument.ExpertProperty, expert);
 				}
 			}
 		}
@@ -157,10 +271,10 @@ public class LegacyHtmlDocumentFormat {
 		HashMap<Integer, RawAData> rawData = new HashMap<Integer, RawAData>();
 
 		int posBeg = leftColumn.indexOf('[');
-		iow.firePropertyChange("progress", null, fileLoadProgress / 2);
+		firePropertyChange("progress", null, fileLoadProgress / 2);
 		// processing the left column's content
 		while (leftColumn.indexOf('[', 0) >= 0 || leftColumn.indexOf(']', 0) >= 0) {
-			iow.firePropertyChange("progress", null, fileLoadProgress +
+			firePropertyChange("progress", null, fileLoadProgress +
 				leftColumnParseProgress * posBeg / leftColumn.length());
 			int handle;
 			RawAData data;
@@ -187,13 +301,13 @@ public class LegacyHtmlDocumentFormat {
 			}
 		}
 
-		iow.firePropertyChange("progress", null, fileLoadProgress + leftColumnParseProgress);
+		firePropertyChange("progress", null, fileLoadProgress + leftColumnParseProgress);
 
 		posBeg = rightColumn.indexOf('{');
 
 		// processing the right column's content
 		while (posBeg >= 0) {
-			iow.firePropertyChange("progress", null, fileLoadProgress + leftColumnParseProgress +
+			firePropertyChange("progress", null, fileLoadProgress + leftColumnParseProgress +
 				rightColumnParseProgress * (posBeg / rightColumn.length()));
 			String handleNo = findTagContent(rightColumn, "{", ":", posBeg);
 			int handle = Integer.parseInt(handleNo);
@@ -222,7 +336,7 @@ public class LegacyHtmlDocumentFormat {
 			}
 			posBeg = rightColumn.indexOf('{', posBeg + 1);
 		}
-		iow.firePropertyChange("progress", null, fileLoadProgress + leftColumnParseProgress +
+		firePropertyChange("progress", null, fileLoadProgress + leftColumnParseProgress +
 			rightColumnParseProgress);
 
 		// Обрабатываем стили в уже прочитанном тексте
@@ -269,11 +383,11 @@ public class LegacyHtmlDocumentFormat {
 		}
 		// Добавляем в документ текст за последним тегом
 		styledTextBlocks.add(new StyledText(sourceText.substring(sourcePosition), currentStyle));
-		iow.firePropertyChange("AppendStyledText", null, styledTextBlocks);
+		firePropertyChange("AppendStyledText", null, styledTextBlocks);
 
 		/// adding plain text to the document
-		iow.firePropertyChange("RawData", null, rawData);
-		iow.firePropertyChange("progress", null, 100);
+		firePropertyChange("RawData", null, rawData);
+		firePropertyChange("progress", null, 100);
 	}
 
 	private static String removeTag(final String source, final String startToken, final String endToken) {
