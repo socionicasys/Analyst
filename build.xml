@@ -42,14 +42,23 @@
 		</jar>
 	</target>
 
-	<target name="sonar">
+	<target name="sonar" depends="compile">
 		<sonar:sonar xmlns:sonar="antlib:org.sonar.ant"
 				workDir="${analyst.base_dir}/out/sonar"
 				key="ru.socionicasys:analyst"
 				version="${analyst.version}">
+			<property key="sonar.java.source" value="1.6" />
+			<property key="sonar.java.target" value="1.6" />
+			<property key="project.build.sourceEncoding" value="UTF-8" />
 			<sources>
 				<path location="${analyst.source_dir}" />
 			</sources>
+			<binaries>
+				<path location="${analyst.output_dir}" />
+			</binaries>
+			<libraries>
+				<path location="${analyst.base_dir}/lib" />
+			</libraries>
 		</sonar:sonar>
 	</target>
 
