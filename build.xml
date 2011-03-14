@@ -9,6 +9,10 @@
 	<property name="analyst.jar_name" value="${analyst.bin_dir}/Analyst-${analyst.version}.jar" />
 	<fileset id="dependencies" dir="${analyst.base_dir}/lib" includes="**/*.jar" />
 
+	<taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+		<classpath path="${ant.core.lib}/sonar-ant-task.jar" />
+	</taskdef>
+
 	<target name="clean">
 		<delete dir="${analyst.output_dir}" />
 		<delete dir="${analyst.bin_dir}" />
@@ -36,6 +40,17 @@
 				<attribute name="Main-Class" value="${analyst.main_class}" />
 			</manifest>
 		</jar>
+	</target>
+
+	<target name="sonar">
+		<sonar:sonar xmlns:sonar="antlib:org.sonar.ant"
+				workDir="${analyst.base_dir}/out/sonar"
+				key="ru.socionicasys:analyst"
+				version="${analyst.version}">
+			<sources>
+				<path location="${analyst.source_dir}" />
+			</sources>
+		</sonar:sonar>
 	</target>
 
 	<target name="all" depends="jar">
