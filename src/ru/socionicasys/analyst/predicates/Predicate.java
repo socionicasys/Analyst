@@ -11,5 +11,5 @@ public interface Predicate {
 	 * @param sociotype ТИМ
 	 * @return true если ТИМ удовлетворяет предикату
 	 */
-	public boolean check(Sociotype sociotype);
+	boolean check(Sociotype sociotype);
 }

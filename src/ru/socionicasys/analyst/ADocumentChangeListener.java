@@ -1,6 +1,5 @@
 package ru.socionicasys.analyst;
 
 public interface ADocumentChangeListener {
-
-	public void aDocumentChanged(ADocument doc);
+	void aDocumentChanged(ADocument doc);
 }
