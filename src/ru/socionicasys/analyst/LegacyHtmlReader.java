@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.*;
@@ -66,13 +63,6 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 		Object newValue = evt.getNewValue();
 		Object oldValue = evt.getOldValue();
 
-		//updating Document Properties
-		if (name.equals("DocumentProperty")) {
-			String docPropName = (String) oldValue;
-			if (docPropName != null) {
-				document.putProperty(docPropName, newValue);
-			}
-		}
 		if (name.equals("AppendStyledText")) {
 			@SuppressWarnings("unchecked")
 			Iterable<StyledText> styledTextBlocks = (Iterable<StyledText>) newValue;
@@ -148,6 +138,7 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 		String colEndToken = "</td>";
 		String leftHeaderColumn = null;
 		String rightHeaderColumn = null;
+		Dictionary<Object, Object> documentProperties = document.getDocumentProperties();
 		while (searchIndex > 0) {
 			searchIndex = leftHeaderText.indexOf("<tr>", searchIndex);
 			String headerResult;
@@ -176,27 +167,27 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 
 			if (!append) {
 				if (leftHeaderColumn.equals(ADocument.TitleProperty1)) {
-					firePropertyChange("DocumentProperty", Document.TitleProperty, rightHeaderColumn);
+					documentProperties.put(Document.TitleProperty, rightHeaderColumn);
 				}
 				if (leftHeaderColumn.equals(ADocument.ExpertProperty)) {
-					firePropertyChange("DocumentProperty", ADocument.ExpertProperty, rightHeaderColumn);
+					documentProperties.put(ADocument.ExpertProperty, rightHeaderColumn);
 				}
 				if (leftHeaderColumn.equals(ADocument.ClientProperty)) {
-					firePropertyChange("DocumentProperty", ADocument.ClientProperty, rightHeaderColumn);
+					documentProperties.put(ADocument.ClientProperty, rightHeaderColumn);
 				}
 				if (leftHeaderColumn.equals(ADocument.DateProperty)) {
-					firePropertyChange("DocumentProperty", ADocument.DateProperty, rightHeaderColumn);
+					documentProperties.put(ADocument.DateProperty, rightHeaderColumn);
 				}
 				if (leftHeaderColumn.equals(ADocument.CommentProperty)) {
-					firePropertyChange("DocumentProperty", ADocument.CommentProperty, rightHeaderColumn);
+					documentProperties.put(ADocument.CommentProperty, rightHeaderColumn);
 				}
 			} else {
 				if (leftHeaderColumn.equals(ADocument.ExpertProperty)) {
-					String expert = (String) document.getDocumentProperties().get(ADocument.ExpertProperty);
+					String expert = (String) documentProperties.get(ADocument.ExpertProperty);
 					if (!expert.contains(rightHeaderColumn)) {
 						expert += "; " + rightHeaderColumn;
 					}
-					firePropertyChange("DocumentProperty", ADocument.ExpertProperty, expert);
+					documentProperties.put(ADocument.ExpertProperty, expert);
 				}
 			}
 		}
