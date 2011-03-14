@@ -15,6 +15,13 @@ public class Analyst {
 		} else {
 			startupFilename = null;
 		}
+		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				Logger logger = LoggerFactory.getLogger("UncaughtExceptionHandler");
+				logger.error("Uncaught exception in thread " + t.toString(), e);
+			}
+		});
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
