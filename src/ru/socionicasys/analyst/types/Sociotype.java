@@ -3,6 +3,15 @@ package ru.socionicasys.analyst.types;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.socionicasys.analyst.types.Aspect.P;
+import static ru.socionicasys.analyst.types.Aspect.L;
+import static ru.socionicasys.analyst.types.Aspect.F;
+import static ru.socionicasys.analyst.types.Aspect.S;
+import static ru.socionicasys.analyst.types.Aspect.E;
+import static ru.socionicasys.analyst.types.Aspect.R;
+import static ru.socionicasys.analyst.types.Aspect.I;
+import static ru.socionicasys.analyst.types.Aspect.T;
+
 /**
  * Описывает модель А отдельного ТИМа.
  */
@@ -40,214 +49,102 @@ public enum Sociotype {
 	private final String nickname;
 
 	private Sociotype() {
-		functions = new ArrayList<Function>(8);
+		functions = new ArrayList<Function>();
 		switch (this) {
 		case ILE:
 			abbreviation = "ИЛЭ";
 			nickname = "дон кихот";
-			functions.add(new Function(Aspect.I, 1, Sign.PLUS));
-			functions.add(new Function(Aspect.L, 2, Sign.MINUS));
-			functions.add(new Function(Aspect.F, 3, Sign.PLUS));
-			functions.add(new Function(Aspect.R, 4, Sign.MINUS));
-			functions.add(new Function(Aspect.S, 5, Sign.MINUS));
-			functions.add(new Function(Aspect.E, 6, Sign.PLUS));
-			functions.add(new Function(Aspect.T, 7, Sign.MINUS));
-			functions.add(new Function(Aspect.P, 8, Sign.PLUS));
+			initializeFunctions(Sign.PLUS, I, L, F, R, S, E, T, P);
 			break;
 
 		case SEI:
 			abbreviation = "СЭИ";
 			nickname = "дюма";
-			functions.add(new Function(Aspect.S, 1, Sign.PLUS));
-			functions.add(new Function(Aspect.E, 2, Sign.MINUS));
-			functions.add(new Function(Aspect.T, 3, Sign.PLUS));
-			functions.add(new Function(Aspect.P, 4, Sign.MINUS));
-			functions.add(new Function(Aspect.I, 5, Sign.MINUS));
-			functions.add(new Function(Aspect.L, 6, Sign.PLUS));
-			functions.add(new Function(Aspect.F, 7, Sign.MINUS));
-			functions.add(new Function(Aspect.R, 8, Sign.PLUS));
+			initializeFunctions(Sign.PLUS, S, E, T, P, I, L, F, R);
 			break;
 
 		case ESE:
 			abbreviation = "ЭСЭ";
 			nickname = "гюго";
-			functions.add(new Function(Aspect.E, 1, Sign.MINUS));
-			functions.add(new Function(Aspect.S, 2, Sign.PLUS));
-			functions.add(new Function(Aspect.P, 3, Sign.MINUS));
-			functions.add(new Function(Aspect.T, 4, Sign.PLUS));
-			functions.add(new Function(Aspect.L, 5, Sign.PLUS));
-			functions.add(new Function(Aspect.I, 6, Sign.MINUS));
-			functions.add(new Function(Aspect.R, 7, Sign.PLUS));
-			functions.add(new Function(Aspect.F, 8, Sign.MINUS));
+			initializeFunctions(Sign.MINUS, E, S, P, T, L, I, R, F);
 			break;
 
 		case LII:
 			abbreviation = "ЛИИ";
 			nickname = "робеспьер";
-			functions.add(new Function(Aspect.L, 1, Sign.MINUS));
-			functions.add(new Function(Aspect.I, 2, Sign.PLUS));
-			functions.add(new Function(Aspect.R, 3, Sign.MINUS));
-			functions.add(new Function(Aspect.F, 4, Sign.PLUS));
-			functions.add(new Function(Aspect.E, 5, Sign.PLUS));
-			functions.add(new Function(Aspect.S, 6, Sign.MINUS));
-			functions.add(new Function(Aspect.P, 7, Sign.PLUS));
-			functions.add(new Function(Aspect.T, 8, Sign.MINUS));
+			initializeFunctions(Sign.MINUS, L, I, R, F, E, S, P, T);
 			break;
 
 		case EIE:
 			abbreviation = "ЭИЭ";
 			nickname = "гамлет";
-			functions.add(new Function(Aspect.E, 1, Sign.PLUS));
-			functions.add(new Function(Aspect.T, 2, Sign.MINUS));
-			functions.add(new Function(Aspect.P, 3, Sign.PLUS));
-			functions.add(new Function(Aspect.S, 4, Sign.MINUS));
-			functions.add(new Function(Aspect.L, 5, Sign.MINUS));
-			functions.add(new Function(Aspect.F, 6, Sign.PLUS));
-			functions.add(new Function(Aspect.R, 7, Sign.MINUS));
-			functions.add(new Function(Aspect.I, 8, Sign.PLUS));
+			initializeFunctions(Sign.PLUS, E, T, P, S, L, F, R, I);
 			break;
 
 		case LSI:
 			abbreviation = "ЛСИ";
 			nickname = "максим горький";
-			functions.add(new Function(Aspect.L, 1, Sign.PLUS));
-			functions.add(new Function(Aspect.F, 2, Sign.MINUS));
-			functions.add(new Function(Aspect.R, 3, Sign.PLUS));
-			functions.add(new Function(Aspect.I, 4, Sign.MINUS));
-			functions.add(new Function(Aspect.E, 5, Sign.MINUS));
-			functions.add(new Function(Aspect.T, 6, Sign.PLUS));
-			functions.add(new Function(Aspect.P, 7, Sign.MINUS));
-			functions.add(new Function(Aspect.S, 8, Sign.PLUS));
+			initializeFunctions(Sign.PLUS, L, F, R, I, E, T, P, S);
 			break;
 
 		case SLE:
 			abbreviation = "СЛЭ";
 			nickname = "жуков";
-			functions.add(new Function(Aspect.F, 1, Sign.MINUS));
-			functions.add(new Function(Aspect.L, 2, Sign.PLUS));
-			functions.add(new Function(Aspect.I, 3, Sign.MINUS));
-			functions.add(new Function(Aspect.R, 4, Sign.PLUS));
-			functions.add(new Function(Aspect.T, 5, Sign.PLUS));
-			functions.add(new Function(Aspect.E, 6, Sign.MINUS));
-			functions.add(new Function(Aspect.S, 7, Sign.PLUS));
-			functions.add(new Function(Aspect.P, 8, Sign.MINUS));
+			initializeFunctions(Sign.MINUS, F, L, I, R, T, E, S, P);
 			break;
 
 		case IEI:
 			abbreviation = "ИЭИ";
 			nickname = "есенин";
-			functions.add(new Function(Aspect.T, 1, Sign.MINUS));
-			functions.add(new Function(Aspect.E, 2, Sign.PLUS));
-			functions.add(new Function(Aspect.S, 3, Sign.MINUS));
-			functions.add(new Function(Aspect.P, 4, Sign.PLUS));
-			functions.add(new Function(Aspect.F, 5, Sign.PLUS));
-			functions.add(new Function(Aspect.L, 6, Sign.MINUS));
-			functions.add(new Function(Aspect.I, 7, Sign.PLUS));
-			functions.add(new Function(Aspect.R, 8, Sign.MINUS));
+			initializeFunctions(Sign.MINUS, T, E, S, P, F, L, I, R);
 			break;
 
 		case SEE:
 			abbreviation = "СЭЭ";
 			nickname = "наполеон";
-			functions.add(new Function(Aspect.F, 1, Sign.PLUS));
-			functions.add(new Function(Aspect.R, 2, Sign.MINUS));
-			functions.add(new Function(Aspect.I, 3, Sign.PLUS));
-			functions.add(new Function(Aspect.L, 4, Sign.MINUS));
-			functions.add(new Function(Aspect.T, 5, Sign.MINUS));
-			functions.add(new Function(Aspect.P, 6, Sign.PLUS));
-			functions.add(new Function(Aspect.S, 7, Sign.MINUS));
-			functions.add(new Function(Aspect.E, 8, Sign.PLUS));
+			initializeFunctions(Sign.PLUS, F, R, I, L, T, P, S, E);
 			break;
 
 		case ILI:
 			abbreviation = "ИЛИ";
 			nickname = "бальзак";
-			functions.add(new Function(Aspect.T, 1, Sign.PLUS));
-			functions.add(new Function(Aspect.P, 2, Sign.MINUS));
-			functions.add(new Function(Aspect.S, 3, Sign.PLUS));
-			functions.add(new Function(Aspect.E, 4, Sign.MINUS));
-			functions.add(new Function(Aspect.F, 5, Sign.MINUS));
-			functions.add(new Function(Aspect.R, 6, Sign.PLUS));
-			functions.add(new Function(Aspect.I, 7, Sign.MINUS));
-			functions.add(new Function(Aspect.L, 8, Sign.PLUS));
+			initializeFunctions(Sign.PLUS, T, P, S, E, F, R, I, L);
 			break;
 
 		case LIE:
 			abbreviation = "ЛИЭ";
 			nickname = "джек лондон";
-			functions.add(new Function(Aspect.P, 1, Sign.MINUS));
-			functions.add(new Function(Aspect.T, 2, Sign.PLUS));
-			functions.add(new Function(Aspect.E, 3, Sign.MINUS));
-			functions.add(new Function(Aspect.S, 4, Sign.PLUS));
-			functions.add(new Function(Aspect.R, 5, Sign.PLUS));
-			functions.add(new Function(Aspect.F, 6, Sign.MINUS));
-			functions.add(new Function(Aspect.L, 7, Sign.PLUS));
-			functions.add(new Function(Aspect.I, 8, Sign.MINUS));
+			initializeFunctions(Sign.MINUS, P, T, E, S, R, F, L, I);
 			break;
 
 		case ESI:
 			abbreviation = "ЭСИ";
 			nickname = "драйзер";
-			functions.add(new Function(Aspect.R, 1, Sign.MINUS));
-			functions.add(new Function(Aspect.F, 2, Sign.PLUS));
-			functions.add(new Function(Aspect.L, 3, Sign.MINUS));
-			functions.add(new Function(Aspect.I, 4, Sign.PLUS));
-			functions.add(new Function(Aspect.P, 5, Sign.PLUS));
-			functions.add(new Function(Aspect.T, 6, Sign.MINUS));
-			functions.add(new Function(Aspect.E, 7, Sign.PLUS));
-			functions.add(new Function(Aspect.S, 8, Sign.MINUS));
+			initializeFunctions(Sign.MINUS, R, F, L, I, P, T, E, S);
 			break;
 
 		case LSE:
 			abbreviation = "ЛСЭ";
 			nickname = "штирлиц";
-			functions.add(new Function(Aspect.P, 1, Sign.PLUS));
-			functions.add(new Function(Aspect.S, 2, Sign.MINUS));
-			functions.add(new Function(Aspect.E, 3, Sign.PLUS));
-			functions.add(new Function(Aspect.T, 4, Sign.MINUS));
-			functions.add(new Function(Aspect.R, 5, Sign.MINUS));
-			functions.add(new Function(Aspect.I, 6, Sign.PLUS));
-			functions.add(new Function(Aspect.L, 7, Sign.MINUS));
-			functions.add(new Function(Aspect.F, 8, Sign.PLUS));
+			initializeFunctions(Sign.PLUS, P, S, E, T, R, I, L, F);
 			break;
 
 		case EII:
 			abbreviation = "ЭИИ";
 			nickname = "достоевский";
-			functions.add(new Function(Aspect.R, 1, Sign.PLUS));
-			functions.add(new Function(Aspect.I, 2, Sign.MINUS));
-			functions.add(new Function(Aspect.L, 3, Sign.PLUS));
-			functions.add(new Function(Aspect.F, 4, Sign.MINUS));
-			functions.add(new Function(Aspect.P, 5, Sign.MINUS));
-			functions.add(new Function(Aspect.S, 6, Sign.PLUS));
-			functions.add(new Function(Aspect.E, 7, Sign.MINUS));
-			functions.add(new Function(Aspect.T, 8, Sign.PLUS));
+			initializeFunctions(Sign.PLUS, R, I, L, F, P, S, E, T);
 			break;
 
 		case IEE:
 			abbreviation = "ИЭЭ";
 			nickname = "гексли";
-			functions.add(new Function(Aspect.I, 1, Sign.MINUS));
-			functions.add(new Function(Aspect.R, 2, Sign.PLUS));
-			functions.add(new Function(Aspect.F, 3, Sign.MINUS));
-			functions.add(new Function(Aspect.L, 4, Sign.PLUS));
-			functions.add(new Function(Aspect.S, 5, Sign.PLUS));
-			functions.add(new Function(Aspect.P, 6, Sign.MINUS));
-			functions.add(new Function(Aspect.T, 7, Sign.PLUS));
-			functions.add(new Function(Aspect.E, 8, Sign.MINUS));
+			initializeFunctions(Sign.MINUS, I, R, F, L, S, P, T, E);
 			break;
 
 		case SLI:
 			abbreviation = "СЛИ";
 			nickname = "габен";
-			functions.add(new Function(Aspect.S, 1, Sign.MINUS));
-			functions.add(new Function(Aspect.P, 2, Sign.PLUS));
-			functions.add(new Function(Aspect.T, 3, Sign.MINUS));
-			functions.add(new Function(Aspect.E, 4, Sign.PLUS));
-			functions.add(new Function(Aspect.I, 5, Sign.PLUS));
-			functions.add(new Function(Aspect.R, 6, Sign.MINUS));
-			functions.add(new Function(Aspect.F, 7, Sign.PLUS));
-			functions.add(new Function(Aspect.L, 8, Sign.MINUS));
+			initializeFunctions(Sign.MINUS, S, P, T, E, I, R, F, L);
 			break;
 
 		default:
@@ -295,5 +192,18 @@ public enum Sociotype {
 	 */
 	public String getNickname() {
 		return nickname;
+	}
+
+	private void initializeFunctions(Sign firstSign, Aspect... aspects) {
+		Sign currentSign = firstSign;
+		for (int i = 0; i < aspects.length; ++i) {
+			Aspect aspect = aspects[i];
+			functions.add(new Function(aspect, i + 1, currentSign));
+			// Знаки в модели чередуются по номеру функции,
+			// за исключением знаков функций 4 и 5, которые равны
+			if (i != 3) {
+				currentSign = currentSign.inverse();
+			}
+		}
 	}
 }
