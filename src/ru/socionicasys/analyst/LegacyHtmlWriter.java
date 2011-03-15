@@ -113,6 +113,10 @@ public class LegacyHtmlWriter extends SwingWorker {
 	}
 
 	LegacyHtmlWriter(ProgressWindow progressWindow, ADocument document, OutputStream outputStream) {
+		if (outputStream == null) {
+			logger.error("Error attempting to save file: FileOutputStream is null");
+			throw new NullPointerException();
+		}
 		this.outputStream = outputStream;
 		this.document = document;
 		this.analystWindow = progressWindow.getAnalyst();
@@ -124,12 +128,15 @@ public class LegacyHtmlWriter extends SwingWorker {
 
 	@Override
 	protected Object doInBackground() throws Exception {
+		Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, encoding));
 		try {
-			writeDocument();
+			writeDocument(writer);
 		} catch (Exception e) {
 			progressWindow.close();
 			this.exception = e;
 			logger.error("IO error in doInBackground()", e);
+		} finally {
+			writer.close();
 		}
 
 		return null;
@@ -145,13 +152,7 @@ public class LegacyHtmlWriter extends SwingWorker {
 		return exception;
 	}
 
-	private void writeDocument() throws IOException, BadLocationException {
-		if (outputStream == null) {
-			logger.error("Error attempting to save file: FileOutputStream is null");
-			return;
-		}
-
-		Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, encoding));
+	private void writeDocument(Writer writer) throws IOException, BadLocationException {
 		final int headerSaveProgress = 20;
 		final int writePreparationProgress = 20;
 		final int textWriteProgress = 40;
@@ -438,9 +439,6 @@ public class LegacyHtmlWriter extends SwingWorker {
 		writer.write("© Школа системной соционики, Киев.<br/>");
 		writer.write("http://www.socionicasys.ru\n");
 		writer.write("</body>\n</html>\n");
-
-		writer.flush();
-		writer.close();
 
 		setProgress(100);
 	}
