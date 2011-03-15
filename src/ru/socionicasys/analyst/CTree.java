@@ -5,6 +5,7 @@ package ru.socionicasys.analyst;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.socionicasys.analyst.types.Sociotype;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -237,52 +238,52 @@ public class CTree extends JTree implements
 
 				if (aspect != null) {
 
-					if (SocionicsType.matches(SocionicsType.ILE, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.ILE, aspect, secondAspect, sign, dimension, mv))
 						ileMatchCount++;
 					else ileNoMatchCount++;
-					if (SocionicsType.matches(SocionicsType.SEI, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.SEI, aspect, secondAspect, sign, dimension, mv))
 						seiMatchCount++;
 					else seiNoMatchCount++;
-					if (SocionicsType.matches(SocionicsType.ESE, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.ESE, aspect, secondAspect, sign, dimension, mv))
 						eseMatchCount++;
 					else eseNoMatchCount++;
-					if (SocionicsType.matches(SocionicsType.LII, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.LII, aspect, secondAspect, sign, dimension, mv))
 						liiMatchCount++;
 					else liiNoMatchCount++;
-					if (SocionicsType.matches(SocionicsType.EIE, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.EIE, aspect, secondAspect, sign, dimension, mv))
 						eieMatchCount++;
 					else eieNoMatchCount++;
-					if (SocionicsType.matches(SocionicsType.LSI, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.LSI, aspect, secondAspect, sign, dimension, mv))
 						lsiMatchCount++;
 					else lsiNoMatchCount++;
-					if (SocionicsType.matches(SocionicsType.SLE, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.SLE, aspect, secondAspect, sign, dimension, mv))
 						sleMatchCount++;
 					else sleNoMatchCount++;
-					if (SocionicsType.matches(SocionicsType.IEI, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.IEI, aspect, secondAspect, sign, dimension, mv))
 						ieiMatchCount++;
 					else ieiNoMatchCount++;
-					if (SocionicsType.matches(SocionicsType.SEE, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.SEE, aspect, secondAspect, sign, dimension, mv))
 						seeMatchCount++;
 					else seeNoMatchCount++;
-					if (SocionicsType.matches(SocionicsType.ILI, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.ILI, aspect, secondAspect, sign, dimension, mv))
 						iliMatchCount++;
 					else iliNoMatchCount++;
-					if (SocionicsType.matches(SocionicsType.LIE, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.LIE, aspect, secondAspect, sign, dimension, mv))
 						lieMatchCount++;
 					else lieNoMatchCount++;
-					if (SocionicsType.matches(SocionicsType.ESI, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.ESI, aspect, secondAspect, sign, dimension, mv))
 						esiMatchCount++;
 					else esiNoMatchCount++;
-					if (SocionicsType.matches(SocionicsType.LSE, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.LSE, aspect, secondAspect, sign, dimension, mv))
 						lseMatchCount++;
 					else lseNoMatchCount++;
-					if (SocionicsType.matches(SocionicsType.EII, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.EII, aspect, secondAspect, sign, dimension, mv))
 						eiiMatchCount++;
 					else eiiNoMatchCount++;
-					if (SocionicsType.matches(SocionicsType.IEE, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.IEE, aspect, secondAspect, sign, dimension, mv))
 						ieeMatchCount++;
 					else ieeNoMatchCount++;
-					if (SocionicsType.matches(SocionicsType.SLI, aspect, secondAspect, sign, dimension, mv))
+					if (SocionicsType.matches(Sociotype.SLI, aspect, secondAspect, sign, dimension, mv))
 						sliMatchCount++;
 					else sliNoMatchCount++;
 				}// if (aspect != null)
@@ -467,111 +468,111 @@ public class CTree extends JTree implements
 					"	<th width=\"20%\"> Коэффициент соответствия </th>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.ILE.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.ILE.toString() + "</td>" + "\n" +
 					"		<td align=\"center\">" + ileMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\">" + ileNoMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\">" + " " + String.format("%1$2.0f", ileMatch * 100 / scale) + " </td>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.SEI.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.SEI.toString() + "</td>" + "\n" +
 					"		<td align=\"center\" >" + seiMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\" >" + seiNoMatchCount + " </td>" + "\n" +
 					//				"		<td align=\"center\" >" + seiMatch+ " </td>"  + "\n" +
 					"		<td align=\"center\" >" + " " + String.format("%1$2.0f", seiMatch * 100 / scale) + " </td>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.ESE.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.ESE.toString() + "</td>" + "\n" +
 					"		<td align=\"center\" >" + eseMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\" >" + eseNoMatchCount + " </td>" + "\n" +
 					//				"		<td align=\"center\" >" + eseMatch+ " </td>"  + "\n" +
 					"		<td align=\"center\" >" + " " + String.format("%1$2.0f", eseMatch * 100 / scale) + " </td>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.LII.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.LII.toString() + "</td>" + "\n" +
 					"		<td align=\"center\" >" + liiMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\" >" + liiNoMatchCount + " </td>" + "\n" +
 // 				"		<td align=\"center\" >" + liiMatch+ " </td>"  + "\n" +		
 					"		<td align=\"center\" >" + " " + String.format("%1$2.0f", liiMatch * 100 / scale) + " </td>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.EIE.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.EIE.toString() + "</td>" + "\n" +
 					"		<td align=\"center\" >" + eieMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\" >" + eieNoMatchCount + " </td>" + "\n" +
 // 				"		<td align=\"center\" >" + eieMatch+ " </td>"  + "\n" +		
 					"		<td align=\"center\" >" + " " + String.format("%1$2.0f", eieMatch * 100 / scale) + " </td>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.LSI.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.LSI.toString() + "</td>" + "\n" +
 					"		<td align=\"center\" >" + lsiMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\" >" + lsiNoMatchCount + " </td>" + "\n" +
 					//				"		<td align=\"center\" >" + lsiMatch+ " </td>"  + "\n" +
 					"		<td align=\"center\" >" + " " + String.format("%1$2.0f", lsiMatch * 100 / scale) + " </td>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.SLE.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.SLE.toString() + "</td>" + "\n" +
 					"		<td align=\"center\" >" + sleMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\" >" + sleNoMatchCount + " </td>" + "\n" +
 					//				"		<td align=\"center\" >" + sleMatch+ " </td>"  + "\n" +
 					"		<td align=\"center\" >" + " " + String.format("%1$2.0f", sleMatch * 100 / scale) + " </td>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.IEI.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.IEI.toString() + "</td>" + "\n" +
 					"		<td align=\"center\" >" + ieiMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\" >" + ieiNoMatchCount + " </td>" + "\n" +
 					//				"		<td align=\"center\">" + ieiMatch+ " </td>"  + "\n" +
 					"		<td align=\"center\" >" + " " + String.format("%1$2.0f", ieiMatch * 100 / scale) + " </td>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.SEE.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.SEE.toString() + "</td>" + "\n" +
 					"		<td align=\"center\" >" + seeMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\" >" + seeNoMatchCount + " </td>" + "\n" +
 					//				"		<td align=\"center\" >" + seeMatch+ " </td>"  + "\n" +
 					"		<td align=\"center\" >" + " " + String.format("%1$2.0f", seeMatch * 100 / scale) + " </td>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.ILI.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.ILI.toString() + "</td>" + "\n" +
 					"		<td align=\"center\" >" + iliMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\" >" + iliNoMatchCount + " </td>" + "\n" +
 // 				"		<td align=\"center\" >" + iliMatch+ " </td>"  + "\n" +		
 					"		<td align=\"center\" >" + " " + String.format("%1$2.0f", iliMatch * 100 / scale) + " </td>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.LIE.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.LIE.toString() + "</td>" + "\n" +
 					"		<td align=\"center\" >" + lieMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\" >" + lieNoMatchCount + " </td>" + "\n" +
 					//				"		<td align=\"center\" >" + lieMatch+ " </td>"  + "\n" +
 					"		<td align=\"center\" >" + " " + String.format("%1$2.0f", lieMatch * 100 / scale) + " </td>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.ESI.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.ESI.toString() + "</td>" + "\n" +
 					"		<td align=\"center\" >" + esiMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\" >" + esiNoMatchCount + " </td>" + "\n" +
 					//				"		<td align=\"center\" >" + esiMatch+ " </td>"  + "\n" +
 					"		<td align=\"center\" >" + " " + String.format("%1$2.0f", esiMatch * 100 / scale) + " </td>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.LSE.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.LSE.toString() + "</td>" + "\n" +
 					"		<td align=\"center\" >" + lseMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\" >" + lseNoMatchCount + " </td>" + "\n" +
 					//				"		<td align=\"center\" >" + lseMatch+ " </td>"  + "\n" +
 					"		<td align=\"center\" >" + " " + String.format("%1$2.0f", lseMatch * 100 / scale) + " </td>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.EII.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.EII.toString() + "</td>" + "\n" +
 					"		<td align=\"center\" >" + eiiMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\" >" + eiiNoMatchCount + " </td>" + "\n" +
 					//				"		<td align=\"center\" >" + eiiMatch+ " </td>"  + "\n" +
 					"		<td align=\"center\" >" + " " + String.format("%1$2.0f", eiiMatch * 100 / scale) + " </td>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.IEE.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.IEE.toString() + "</td>" + "\n" +
 					"		<td align=\"center\" >" + ieeMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\" >" + ieeNoMatchCount + " </td>" + "\n" +
 					//				"		<td align=\"center\" >" + ieeMatch+ " </td>"  + "\n" +
 					"		<td align=\"center\" >" + " " + String.format("%1$2.0f", ieeMatch * 100 / scale) + " </td>" + "\n" +
 					"</tr>" + "\n" +
 					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\">" + SocionicsType.SLI.toString() + "</td>" + "\n" +
+					"	<td style=\"font-weight:bold\">" + Sociotype.SLI.toString() + "</td>" + "\n" +
 					"		<td align=\"center\" >" + sliMatchCount + " </td>" + "\n" +
 					"		<td align=\"center\" >" + sliNoMatchCount + " </td>" + "\n" +
 					//				"		<td align=\"center\" >" + sliMatch+ " </td>"  + "\n" +

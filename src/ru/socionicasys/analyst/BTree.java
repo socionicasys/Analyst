@@ -5,6 +5,7 @@ package ru.socionicasys.analyst;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.socionicasys.analyst.types.Sociotype;
 
 import java.awt.Dimension;
 import java.util.*;
@@ -35,40 +36,40 @@ public class BTree extends JTree implements
 	private static final Logger logger = LoggerFactory.getLogger(BTree.class);
 
 	private DefaultMutableTreeNode matchNode = new DefaultMutableTreeNode("Соответствие");
-	private DefaultMutableTreeNode ileMatchNode = new EndTreeNode(SocionicsType.ILE);
-	private DefaultMutableTreeNode seiMatchNode = new EndTreeNode(SocionicsType.SEI);
-	private DefaultMutableTreeNode eseMatchNode = new EndTreeNode(SocionicsType.ESE);
-	private DefaultMutableTreeNode liiMatchNode = new EndTreeNode(SocionicsType.LII);
-	private DefaultMutableTreeNode eieMatchNode = new EndTreeNode(SocionicsType.EIE);
-	private DefaultMutableTreeNode lsiMatchNode = new EndTreeNode(SocionicsType.LSI);
-	private DefaultMutableTreeNode sleMatchNode = new EndTreeNode(SocionicsType.SLE);
-	private DefaultMutableTreeNode ieiMatchNode = new EndTreeNode(SocionicsType.IEI);
-	private DefaultMutableTreeNode seeMatchNode = new EndTreeNode(SocionicsType.SEE);
-	private DefaultMutableTreeNode iliMatchNode = new EndTreeNode(SocionicsType.ILI);
-	private DefaultMutableTreeNode lieMatchNode = new EndTreeNode(SocionicsType.LIE);
-	private DefaultMutableTreeNode esiMatchNode = new EndTreeNode(SocionicsType.ESI);
-	private DefaultMutableTreeNode lseMatchNode = new EndTreeNode(SocionicsType.LSE);
-	private DefaultMutableTreeNode eiiMatchNode = new EndTreeNode(SocionicsType.EII);
-	private DefaultMutableTreeNode ieeMatchNode = new EndTreeNode(SocionicsType.IEE);
-	private DefaultMutableTreeNode sliMatchNode = new EndTreeNode(SocionicsType.SLI);
+	private DefaultMutableTreeNode ileMatchNode = new EndTreeNode(Sociotype.ILE);
+	private DefaultMutableTreeNode seiMatchNode = new EndTreeNode(Sociotype.SEI);
+	private DefaultMutableTreeNode eseMatchNode = new EndTreeNode(Sociotype.ESE);
+	private DefaultMutableTreeNode liiMatchNode = new EndTreeNode(Sociotype.LII);
+	private DefaultMutableTreeNode eieMatchNode = new EndTreeNode(Sociotype.EIE);
+	private DefaultMutableTreeNode lsiMatchNode = new EndTreeNode(Sociotype.LSI);
+	private DefaultMutableTreeNode sleMatchNode = new EndTreeNode(Sociotype.SLE);
+	private DefaultMutableTreeNode ieiMatchNode = new EndTreeNode(Sociotype.IEI);
+	private DefaultMutableTreeNode seeMatchNode = new EndTreeNode(Sociotype.SEE);
+	private DefaultMutableTreeNode iliMatchNode = new EndTreeNode(Sociotype.ILI);
+	private DefaultMutableTreeNode lieMatchNode = new EndTreeNode(Sociotype.LIE);
+	private DefaultMutableTreeNode esiMatchNode = new EndTreeNode(Sociotype.ESI);
+	private DefaultMutableTreeNode lseMatchNode = new EndTreeNode(Sociotype.LSE);
+	private DefaultMutableTreeNode eiiMatchNode = new EndTreeNode(Sociotype.EII);
+	private DefaultMutableTreeNode ieeMatchNode = new EndTreeNode(Sociotype.IEE);
+	private DefaultMutableTreeNode sliMatchNode = new EndTreeNode(Sociotype.SLI);
 
 	private DefaultMutableTreeNode noMatchNode = new DefaultMutableTreeNode("Несоответствие");
-	private DefaultMutableTreeNode ileNoMatchNode = new EndTreeNode(SocionicsType.ILE);
-	private DefaultMutableTreeNode seiNoMatchNode = new EndTreeNode(SocionicsType.SEI);
-	private DefaultMutableTreeNode eseNoMatchNode = new EndTreeNode(SocionicsType.ESE);
-	private DefaultMutableTreeNode liiNoMatchNode = new EndTreeNode(SocionicsType.LII);
-	private DefaultMutableTreeNode eieNoMatchNode = new EndTreeNode(SocionicsType.EIE);
-	private DefaultMutableTreeNode lsiNoMatchNode = new EndTreeNode(SocionicsType.LSI);
-	private DefaultMutableTreeNode sleNoMatchNode = new EndTreeNode(SocionicsType.SLE);
-	private DefaultMutableTreeNode ieiNoMatchNode = new EndTreeNode(SocionicsType.IEI);
-	private DefaultMutableTreeNode seeNoMatchNode = new EndTreeNode(SocionicsType.SEE);
-	private DefaultMutableTreeNode iliNoMatchNode = new EndTreeNode(SocionicsType.ILI);
-	private DefaultMutableTreeNode lieNoMatchNode = new EndTreeNode(SocionicsType.LIE);
-	private DefaultMutableTreeNode esiNoMatchNode = new EndTreeNode(SocionicsType.ESI);
-	private DefaultMutableTreeNode lseNoMatchNode = new EndTreeNode(SocionicsType.LSE);
-	private DefaultMutableTreeNode eiiNoMatchNode = new EndTreeNode(SocionicsType.EII);
-	private DefaultMutableTreeNode ieeNoMatchNode = new EndTreeNode(SocionicsType.IEE);
-	private DefaultMutableTreeNode sliNoMatchNode = new EndTreeNode(SocionicsType.SLI);
+	private DefaultMutableTreeNode ileNoMatchNode = new EndTreeNode(Sociotype.ILE);
+	private DefaultMutableTreeNode seiNoMatchNode = new EndTreeNode(Sociotype.SEI);
+	private DefaultMutableTreeNode eseNoMatchNode = new EndTreeNode(Sociotype.ESE);
+	private DefaultMutableTreeNode liiNoMatchNode = new EndTreeNode(Sociotype.LII);
+	private DefaultMutableTreeNode eieNoMatchNode = new EndTreeNode(Sociotype.EIE);
+	private DefaultMutableTreeNode lsiNoMatchNode = new EndTreeNode(Sociotype.LSI);
+	private DefaultMutableTreeNode sleNoMatchNode = new EndTreeNode(Sociotype.SLE);
+	private DefaultMutableTreeNode ieiNoMatchNode = new EndTreeNode(Sociotype.IEI);
+	private DefaultMutableTreeNode seeNoMatchNode = new EndTreeNode(Sociotype.SEE);
+	private DefaultMutableTreeNode iliNoMatchNode = new EndTreeNode(Sociotype.ILI);
+	private DefaultMutableTreeNode lieNoMatchNode = new EndTreeNode(Sociotype.LIE);
+	private DefaultMutableTreeNode esiNoMatchNode = new EndTreeNode(Sociotype.ESI);
+	private DefaultMutableTreeNode lseNoMatchNode = new EndTreeNode(Sociotype.LSE);
+	private DefaultMutableTreeNode eiiNoMatchNode = new EndTreeNode(Sociotype.EII);
+	private DefaultMutableTreeNode ieeNoMatchNode = new EndTreeNode(Sociotype.IEE);
+	private DefaultMutableTreeNode sliNoMatchNode = new EndTreeNode(Sociotype.SLI);
 
 
 	private class EndTreeNode extends DefaultMutableTreeNode {
@@ -85,57 +86,57 @@ public class BTree extends JTree implements
 
 	private class Counter {
 
-		private Vector<SocionicsType> counter;
+		private Vector<Sociotype> counter;
 
 		public Counter() {
-			counter = new Vector<SocionicsType>();
-			counter.add(SocionicsType.ILE);
-			counter.add(SocionicsType.SEI);
-			counter.add(SocionicsType.ESE);
-			counter.add(SocionicsType.LII);
-			counter.add(SocionicsType.EIE);
-			counter.add(SocionicsType.LSI);
-			counter.add(SocionicsType.SLE);
-			counter.add(SocionicsType.IEI);
-			counter.add(SocionicsType.SEE);
-			counter.add(SocionicsType.ILI);
-			counter.add(SocionicsType.LIE);
-			counter.add(SocionicsType.ESI);
-			counter.add(SocionicsType.LSE);
-			counter.add(SocionicsType.EII);
-			counter.add(SocionicsType.IEE);
-			counter.add(SocionicsType.SLI);
+			counter = new Vector<Sociotype>();
+			counter.add(Sociotype.ILE);
+			counter.add(Sociotype.SEI);
+			counter.add(Sociotype.ESE);
+			counter.add(Sociotype.LII);
+			counter.add(Sociotype.EIE);
+			counter.add(Sociotype.LSI);
+			counter.add(Sociotype.SLE);
+			counter.add(Sociotype.IEI);
+			counter.add(Sociotype.SEE);
+			counter.add(Sociotype.ILI);
+			counter.add(Sociotype.LIE);
+			counter.add(Sociotype.ESI);
+			counter.add(Sociotype.LSE);
+			counter.add(Sociotype.EII);
+			counter.add(Sociotype.IEE);
+			counter.add(Sociotype.SLI);
 		}
 
-		public void exclude(SocionicsType type) {
+		public void exclude(Sociotype type) {
 			counter.remove(type);
 		}
 
-		public Vector<SocionicsType> getExcludedTypes() {
-			Vector<SocionicsType> vec = new Vector<SocionicsType>();
+		public Vector<Sociotype> getExcludedTypes() {
+			Vector<Sociotype> vec = new Vector<Sociotype>();
 
-			if (!counter.contains(SocionicsType.ILE)) vec.add(SocionicsType.ILE);
-			if (!counter.contains(SocionicsType.SEI)) vec.add(SocionicsType.SEI);
-			if (!counter.contains(SocionicsType.ESE)) vec.add(SocionicsType.ESE);
-			if (!counter.contains(SocionicsType.LII)) vec.add(SocionicsType.LII);
-			if (!counter.contains(SocionicsType.EIE)) vec.add(SocionicsType.EIE);
-			if (!counter.contains(SocionicsType.LSI)) vec.add(SocionicsType.LSI);
-			if (!counter.contains(SocionicsType.SLE)) vec.add(SocionicsType.SLE);
-			if (!counter.contains(SocionicsType.IEI)) vec.add(SocionicsType.IEI);
-			if (!counter.contains(SocionicsType.SEE)) vec.add(SocionicsType.SEE);
-			if (!counter.contains(SocionicsType.ILI)) vec.add(SocionicsType.ILI);
-			if (!counter.contains(SocionicsType.LIE)) vec.add(SocionicsType.LIE);
-			if (!counter.contains(SocionicsType.ESI)) vec.add(SocionicsType.ESI);
-			if (!counter.contains(SocionicsType.LSE)) vec.add(SocionicsType.LSE);
-			if (!counter.contains(SocionicsType.EII)) vec.add(SocionicsType.EII);
-			if (!counter.contains(SocionicsType.IEE)) vec.add(SocionicsType.IEE);
-			if (!counter.contains(SocionicsType.SLI)) vec.add(SocionicsType.SLI);
+			if (!counter.contains(Sociotype.ILE)) vec.add(Sociotype.ILE);
+			if (!counter.contains(Sociotype.SEI)) vec.add(Sociotype.SEI);
+			if (!counter.contains(Sociotype.ESE)) vec.add(Sociotype.ESE);
+			if (!counter.contains(Sociotype.LII)) vec.add(Sociotype.LII);
+			if (!counter.contains(Sociotype.EIE)) vec.add(Sociotype.EIE);
+			if (!counter.contains(Sociotype.LSI)) vec.add(Sociotype.LSI);
+			if (!counter.contains(Sociotype.SLE)) vec.add(Sociotype.SLE);
+			if (!counter.contains(Sociotype.IEI)) vec.add(Sociotype.IEI);
+			if (!counter.contains(Sociotype.SEE)) vec.add(Sociotype.SEE);
+			if (!counter.contains(Sociotype.ILI)) vec.add(Sociotype.ILI);
+			if (!counter.contains(Sociotype.LIE)) vec.add(Sociotype.LIE);
+			if (!counter.contains(Sociotype.ESI)) vec.add(Sociotype.ESI);
+			if (!counter.contains(Sociotype.LSE)) vec.add(Sociotype.LSE);
+			if (!counter.contains(Sociotype.EII)) vec.add(Sociotype.EII);
+			if (!counter.contains(Sociotype.IEE)) vec.add(Sociotype.IEE);
+			if (!counter.contains(Sociotype.SLI)) vec.add(Sociotype.SLI);
 
 			return vec;
 		}
 
 
-		public Vector<SocionicsType> getMatchTypes() {
+		public Vector<Sociotype> getMatchTypes() {
 
 			return counter;
 		}
@@ -220,102 +221,102 @@ public class BTree extends JTree implements
 
 				if (aspect != null) {
 
-					if (!SocionicsType.matches(SocionicsType.ILE, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.ILE);
-					if (!SocionicsType.matches(SocionicsType.SEI, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.SEI);
-					if (!SocionicsType.matches(SocionicsType.ESE, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.ESE);
-					if (!SocionicsType.matches(SocionicsType.LII, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.LII);
-					if (!SocionicsType.matches(SocionicsType.EIE, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.EIE);
-					if (!SocionicsType.matches(SocionicsType.LSI, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.LSI);
-					if (!SocionicsType.matches(SocionicsType.SLE, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.SLE);
-					if (!SocionicsType.matches(SocionicsType.IEI, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.IEI);
-					if (!SocionicsType.matches(SocionicsType.SEE, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.SEE);
-					if (!SocionicsType.matches(SocionicsType.ILI, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.ILI);
-					if (!SocionicsType.matches(SocionicsType.LIE, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.LIE);
-					if (!SocionicsType.matches(SocionicsType.ESI, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.ESI);
-					if (!SocionicsType.matches(SocionicsType.LSE, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.LSE);
-					if (!SocionicsType.matches(SocionicsType.EII, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.EII);
-					if (!SocionicsType.matches(SocionicsType.IEE, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.IEE);
-					if (!SocionicsType.matches(SocionicsType.SLI, aspect, secondAspect, sign, dimension, mv))
-						counter.exclude(SocionicsType.SLI);
+					if (!SocionicsType.matches(Sociotype.ILE, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.ILE);
+					if (!SocionicsType.matches(Sociotype.SEI, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.SEI);
+					if (!SocionicsType.matches(Sociotype.ESE, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.ESE);
+					if (!SocionicsType.matches(Sociotype.LII, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.LII);
+					if (!SocionicsType.matches(Sociotype.EIE, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.EIE);
+					if (!SocionicsType.matches(Sociotype.LSI, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.LSI);
+					if (!SocionicsType.matches(Sociotype.SLE, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.SLE);
+					if (!SocionicsType.matches(Sociotype.IEI, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.IEI);
+					if (!SocionicsType.matches(Sociotype.SEE, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.SEE);
+					if (!SocionicsType.matches(Sociotype.ILI, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.ILI);
+					if (!SocionicsType.matches(Sociotype.LIE, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.LIE);
+					if (!SocionicsType.matches(Sociotype.ESI, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.ESI);
+					if (!SocionicsType.matches(Sociotype.LSE, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.LSE);
+					if (!SocionicsType.matches(Sociotype.EII, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.EII);
+					if (!SocionicsType.matches(Sociotype.IEE, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.IEE);
+					if (!SocionicsType.matches(Sociotype.SLI, aspect, secondAspect, sign, dimension, mv))
+						counter.exclude(Sociotype.SLI);
 				}// if (aspect != null)
 
-				Vector<SocionicsType> c = counter.getMatchTypes();
-				if (c.contains(SocionicsType.ILE))
+				Vector<Sociotype> c = counter.getMatchTypes();
+				if (c.contains(Sociotype.ILE))
 					ileMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					ileNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
-				if (c.contains(SocionicsType.SEI))
+				if (c.contains(Sociotype.SEI))
 					seiMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					seiNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
-				if (c.contains(SocionicsType.ESE))
+				if (c.contains(Sociotype.ESE))
 					eseMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					eseNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
-				if (c.contains(SocionicsType.LII))
+				if (c.contains(Sociotype.LII))
 					liiMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					liiNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
-				if (c.contains(SocionicsType.EIE))
+				if (c.contains(Sociotype.EIE))
 					eieMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					eieNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
-				if (c.contains(SocionicsType.LSI))
+				if (c.contains(Sociotype.LSI))
 					lsiMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					lsiNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
-				if (c.contains(SocionicsType.SLE))
+				if (c.contains(Sociotype.SLE))
 					sleMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					sleNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
-				if (c.contains(SocionicsType.IEI))
+				if (c.contains(Sociotype.IEI))
 					ieiMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					ieiNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
-				if (c.contains(SocionicsType.SEE))
+				if (c.contains(Sociotype.SEE))
 					seeMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					seeNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
-				if (c.contains(SocionicsType.ILI))
+				if (c.contains(Sociotype.ILI))
 					iliMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					iliNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
-				if (c.contains(SocionicsType.LIE))
+				if (c.contains(Sociotype.LIE))
 					lieMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					lieNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
-				if (c.contains(SocionicsType.ESI))
+				if (c.contains(Sociotype.ESI))
 					esiMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					esiNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
-				if (c.contains(SocionicsType.LSE))
+				if (c.contains(Sociotype.LSE))
 					lseMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					lseNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
-				if (c.contains(SocionicsType.EII))
+				if (c.contains(Sociotype.EII))
 					eiiMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					eiiNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
-				if (c.contains(SocionicsType.IEE))
+				if (c.contains(Sociotype.IEE))
 					ieeMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					ieeNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
-				if (c.contains(SocionicsType.SLI))
+				if (c.contains(Sociotype.SLI))
 					sliMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
 				else
 					sliNoMatchNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset, "..." + quote + "..."), false));
