@@ -127,6 +127,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		// Create tabbed navigation pane
 		navigateTree = new ATree(aDoc);
 		analysisTree = new BTree(aDoc);
+		aDoc.addADocumentChangeListener(analysisTree);
 		histogramTree = new CTree(aDoc);
 		JTabbedPane navigateTabs = createTabPane();
 

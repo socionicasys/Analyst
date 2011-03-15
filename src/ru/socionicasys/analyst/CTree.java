@@ -117,19 +117,6 @@ public class CTree extends JTree implements
 
 	private float scale = 10;
 
-	private class EndTreeNode extends DefaultMutableTreeNode {
-
-		public EndTreeNode(Object o) {
-			super(o);
-		}
-
-		@Override
-		public String toString() {
-			return "[" + getChildCount() + "] " + super.toString();
-		}
-	}
-
-
 	public CTree(ADocument doc) {
 		super();
 		rootNode = new DefaultMutableTreeNode(doc.getProperty(Document.TitleProperty));

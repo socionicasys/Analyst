@@ -284,17 +284,6 @@ public class ATree extends JTree {
 	private DefaultMutableTreeNode doubtNode = new EndTreeNode("Непонятные места");
 	private DefaultMutableTreeNode jumpNode = new EndTreeNode("Переводы");
 
-	private class EndTreeNode extends DefaultMutableTreeNode {
-		public EndTreeNode(Object o) {
-			super(o);
-		}
-
-		@Override
-		public String toString() {
-			return "[" + getChildCount() + "] " + super.toString();
-		}
-	}
-
 	public ATree(ADocument doc) {
 		super();
 		rootNode = new DefaultMutableTreeNode(doc.getProperty(Document.TitleProperty));
