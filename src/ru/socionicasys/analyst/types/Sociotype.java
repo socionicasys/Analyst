@@ -16,22 +16,22 @@ import static ru.socionicasys.analyst.types.Aspect.T;
  * Описывает модель А отдельного ТИМа.
  */
 public enum Sociotype {
-	ILE,
-	SEI,
-	ESE,
-	LII,
-	EIE,
-	LSI,
-	SLE,
-	IEI,
-	SEE,
-	ILI,
-	LIE,
-	ESI,
-	LSE,
-	EII,
-	IEE,
-	SLI;
+	ILE ("ИЛЭ", "дон кихот",      Sign.PLUS,  I, L, F, R, S, E, T, P),
+	SEI ("СЭИ", "дюма",           Sign.PLUS,  S, E, T, P, I, L, F, R),
+	ESE ("ЭСЭ", "гюго",           Sign.MINUS, E, S, P, T, L, I, R, F),
+	LII ("ЛИИ", "робеспьер",      Sign.MINUS, L, I, R, F, E, S, P, T),
+	EIE ("ЭИЭ", "гамлет",         Sign.PLUS,  E, T, P, S, L, F, R, I),
+	LSI ("ЛСИ", "максим горький", Sign.PLUS,  L, F, R, I, E, T, P, S),
+	SLE ("СЛЭ", "жуков",          Sign.MINUS, F, L, I, R, T, E, S, P),
+	IEI ("ИЭИ", "есенин",         Sign.MINUS, T, E, S, P, F, L, I, R),
+	SEE ("СЭЭ", "наполеон",       Sign.PLUS,  F, R, I, L, T, P, S, E),
+	ILI ("ИЛИ", "бальзак",        Sign.PLUS,  T, P, S, E, F, R, I, L),
+	LIE ("ЛИЭ", "джек лондон",    Sign.MINUS, P, T, E, S, R, F, L, I),
+	ESI ("ЭСИ", "драйзер",        Sign.MINUS, R, F, L, I, P, T, E, S),
+	LSE ("ЛСЭ", "штирлиц",        Sign.PLUS,  P, S, E, T, R, I, L, F),
+	EII ("ЭИИ", "достоевский",    Sign.PLUS,  R, I, L, F, P, S, E, T),
+	IEE ("ИЭЭ", "гексли",         Sign.MINUS, I, R, F, L, S, P, T, E),
+	SLI ("СЛИ", "габен",          Sign.MINUS, S, P, T, E, I, R, F, L);
 
 	/**
 	 * Набор функций модели.
@@ -48,108 +48,11 @@ public enum Sociotype {
 	 */
 	private final String nickname;
 
-	private Sociotype() {
-		functions = new ArrayList<Function>();
-		switch (this) {
-		case ILE:
-			abbreviation = "ИЛЭ";
-			nickname = "дон кихот";
-			initializeFunctions(Sign.PLUS, I, L, F, R, S, E, T, P);
-			break;
-
-		case SEI:
-			abbreviation = "СЭИ";
-			nickname = "дюма";
-			initializeFunctions(Sign.PLUS, S, E, T, P, I, L, F, R);
-			break;
-
-		case ESE:
-			abbreviation = "ЭСЭ";
-			nickname = "гюго";
-			initializeFunctions(Sign.MINUS, E, S, P, T, L, I, R, F);
-			break;
-
-		case LII:
-			abbreviation = "ЛИИ";
-			nickname = "робеспьер";
-			initializeFunctions(Sign.MINUS, L, I, R, F, E, S, P, T);
-			break;
-
-		case EIE:
-			abbreviation = "ЭИЭ";
-			nickname = "гамлет";
-			initializeFunctions(Sign.PLUS, E, T, P, S, L, F, R, I);
-			break;
-
-		case LSI:
-			abbreviation = "ЛСИ";
-			nickname = "максим горький";
-			initializeFunctions(Sign.PLUS, L, F, R, I, E, T, P, S);
-			break;
-
-		case SLE:
-			abbreviation = "СЛЭ";
-			nickname = "жуков";
-			initializeFunctions(Sign.MINUS, F, L, I, R, T, E, S, P);
-			break;
-
-		case IEI:
-			abbreviation = "ИЭИ";
-			nickname = "есенин";
-			initializeFunctions(Sign.MINUS, T, E, S, P, F, L, I, R);
-			break;
-
-		case SEE:
-			abbreviation = "СЭЭ";
-			nickname = "наполеон";
-			initializeFunctions(Sign.PLUS, F, R, I, L, T, P, S, E);
-			break;
-
-		case ILI:
-			abbreviation = "ИЛИ";
-			nickname = "бальзак";
-			initializeFunctions(Sign.PLUS, T, P, S, E, F, R, I, L);
-			break;
-
-		case LIE:
-			abbreviation = "ЛИЭ";
-			nickname = "джек лондон";
-			initializeFunctions(Sign.MINUS, P, T, E, S, R, F, L, I);
-			break;
-
-		case ESI:
-			abbreviation = "ЭСИ";
-			nickname = "драйзер";
-			initializeFunctions(Sign.MINUS, R, F, L, I, P, T, E, S);
-			break;
-
-		case LSE:
-			abbreviation = "ЛСЭ";
-			nickname = "штирлиц";
-			initializeFunctions(Sign.PLUS, P, S, E, T, R, I, L, F);
-			break;
-
-		case EII:
-			abbreviation = "ЭИИ";
-			nickname = "достоевский";
-			initializeFunctions(Sign.PLUS, R, I, L, F, P, S, E, T);
-			break;
-
-		case IEE:
-			abbreviation = "ИЭЭ";
-			nickname = "гексли";
-			initializeFunctions(Sign.MINUS, I, R, F, L, S, P, T, E);
-			break;
-
-		case SLI:
-			abbreviation = "СЛИ";
-			nickname = "габен";
-			initializeFunctions(Sign.MINUS, S, P, T, E, I, R, F, L);
-			break;
-
-		default:
-			throw new IllegalArgumentException("Illegal sociotype");
-		}
+	private Sociotype(String abbreviation, String nickname, Sign firstSign, Aspect... aspects) {
+		this.abbreviation = abbreviation;
+		this.nickname = nickname;
+		this.functions = new ArrayList<Function>();
+		initializeFunctions(firstSign, aspects);
 	}
 
 	/**
@@ -205,5 +108,10 @@ public enum Sociotype {
 				currentSign = currentSign.inverse();
 			}
 		}
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%s (%s)", abbreviation, nickname);
 	}
 }
