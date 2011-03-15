@@ -12,6 +12,11 @@ public class LegacyHtmlWriter extends SwingWorker {
 	private static final String encoding = "UTF-8";
 	private static final Logger logger = LoggerFactory.getLogger(LegacyHtmlWriter.class);
 
+	private static final int HEADER_PROGRESS = 20;
+	private static final int PREPARATION_PROGRESS = 20;
+	private static final int TEXT_PROGRESS = 40;
+	private static final int REPORT_PROGRESS = 20;
+
 	private final OutputStream outputStream;
 	private final ADocument document;
 	private final AnalystWindow analystWindow;
@@ -153,11 +158,6 @@ public class LegacyHtmlWriter extends SwingWorker {
 	}
 
 	private void writeDocument(Writer writer) throws IOException, BadLocationException {
-		final int headerSaveProgress = 20;
-		final int writePreparationProgress = 20;
-		final int textWriteProgress = 40;
-		final int reportWriteProgress = 20;
-
 		setProgress(0);
 
 		//writing the header
@@ -177,9 +177,6 @@ public class LegacyHtmlWriter extends SwingWorker {
 
 		//document title
 		writer.write(String.format("\n<h1>%s</h1>\n", document.getProperty(Document.TitleProperty)));
-
-		//saved with version
-		String comm = (String) document.getProperty(ADocument.CommentProperty);
 
 		//document header
 		writer.write("<br/>\n<br/>");
@@ -202,7 +199,7 @@ public class LegacyHtmlWriter extends SwingWorker {
 		writer.write("</tr>\n");
 		writer.write("<tr>\n");
 		writer.write(String.format("	<td>      %s     </td>\n", ADocument.CommentProperty));
-		writer.write(String.format("	<td>%s </td>\n", comm));
+		writer.write(String.format("	<td>%s </td>\n", document.getProperty(ADocument.CommentProperty)));
 		writer.write("</tr>\n");
 		writer.write("</table >\n");
 
@@ -230,7 +227,7 @@ public class LegacyHtmlWriter extends SwingWorker {
 		writer.write("</tr>\n");
 		writer.write("</table >\n");
 
-		setProgress(headerSaveProgress);
+		setProgress(HEADER_PROGRESS);
 
 		//document content
 		writer.write("<br/>\n");
@@ -244,16 +241,15 @@ public class LegacyHtmlWriter extends SwingWorker {
 		writer.write("	<td>");
 
 		// PREPARING
-		Vector<DocumentFlowEvent> flowEvents = new Vector<DocumentFlowEvent>();
-		ArrayList<Position> lineBreaks = new ArrayList<Position>();
-
+		List<DocumentFlowEvent> flowEvents = new ArrayList<DocumentFlowEvent>();
+		Collection<Position> lineBreaks = new ArrayList<Position>();
 		for (int i = 0; i < document.getLength(); i++) {
 			if (document.getText(i, 1).equals("\n")) {
 				lineBreaks.add(document.createPosition(i));
 			}
 		}
 
-		ArrayList<ASection> sections = new ArrayList<ASection>(document.getADataMap().keySet());
+		List<ASection> sections = new ArrayList<ASection>(document.getADataMap().keySet());
 		Collections.sort(sections);
 		for (int i = 0; i < sections.size(); i++) {
 			ASection section = sections.get(i);
@@ -274,9 +270,9 @@ public class LegacyHtmlWriter extends SwingWorker {
 			);
 		}
 		Element rootElem = document.getDefaultRootElement();
-		SimpleAttributeSet boldAttribute = new SimpleAttributeSet();
+		MutableAttributeSet boldAttribute = new SimpleAttributeSet();
 		StyleConstants.setBold(boldAttribute, true);
-		SimpleAttributeSet italicAttribute = new SimpleAttributeSet();
+		MutableAttributeSet italicAttribute = new SimpleAttributeSet();
 		StyleConstants.setItalic(italicAttribute, true);
 		for (int parIndex = 0; parIndex < rootElem.getElementCount(); parIndex++) {
 			Element parElem = rootElem.getElement(parIndex);
@@ -303,7 +299,7 @@ public class LegacyHtmlWriter extends SwingWorker {
 			int lb = position.getOffset();
 			boolean replaceBreak = false;
 			if (!flowEvents.isEmpty()) {
-				DocumentFlowEvent prevEvent = flowEvents.lastElement();
+				DocumentFlowEvent prevEvent = flowEvents.get(flowEvents.size() - 1);
 				if (prevEvent.getType() == EventType.LINE_BREAK &&
 					prevEvent.getOffset() == lb - 1) {
 					// Заменяем два идущих подряд LINE_BREAK на NEW_ROW
@@ -321,13 +317,13 @@ public class LegacyHtmlWriter extends SwingWorker {
 		}
 		Collections.sort(flowEvents);
 
-		if (!flowEvents.isEmpty() && (flowEvents.lastElement().getType() != EventType.NEW_ROW)) {
+		if (!flowEvents.isEmpty() && (flowEvents.get(flowEvents.size() - 1).getType() != EventType.NEW_ROW)) {
 			flowEvents.add(new DocumentFlowEvent(
 				EventType.NEW_ROW, document.getEndPosition().getOffset() - 1,
 				null, null, 0));
 		}
 
-		setProgress(headerSaveProgress + writePreparationProgress);
+		setProgress(HEADER_PROGRESS + PREPARATION_PROGRESS);
 
 		// write contents
 		RDStack stack = new RDStack();
@@ -340,7 +336,7 @@ public class LegacyHtmlWriter extends SwingWorker {
 				int pos0 = pos1;
 				pos1 = event.getOffset();
 
-				setProgress(headerSaveProgress + writePreparationProgress + textWriteProgress * z / flowEvents.size());
+				setProgress(HEADER_PROGRESS + PREPARATION_PROGRESS + TEXT_PROGRESS * z / flowEvents.size());
 
 				//writing text
 				writer.write(document.getText(pos0, pos1 - pos0));
@@ -422,7 +418,7 @@ public class LegacyHtmlWriter extends SwingWorker {
 
 		writer.write("</tr>\n</table>\n");
 		//if not generating report
-		setProgress(headerSaveProgress + writePreparationProgress + textWriteProgress + reportWriteProgress);
+		setProgress(HEADER_PROGRESS + PREPARATION_PROGRESS + TEXT_PROGRESS + REPORT_PROGRESS);
 
 		// if generating report
 		if (analystWindow.getGenerateReport()) {

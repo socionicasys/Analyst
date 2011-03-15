@@ -61,7 +61,6 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 	public void propertyChange(PropertyChangeEvent evt) {
 		String name = evt.getPropertyName();
 		Object newValue = evt.getNewValue();
-		Object oldValue = evt.getOldValue();
 
 		if (name.equals("AppendStyledText")) {
 			@SuppressWarnings("unchecked")

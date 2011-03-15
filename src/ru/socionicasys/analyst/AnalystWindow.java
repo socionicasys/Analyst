@@ -11,49 +11,50 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Map;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.*;
+import javax.swing.text.JTextComponent.KeyBinding;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
 @SuppressWarnings("serial")
 public class AnalystWindow extends JFrame implements PropertyChangeListener {
-	public final static String version = "1.1-dev";
-	private JTextPane textPane;
+	public static final String version = "1.1-dev";
+	private final JTextPane textPane;
 	ADocument aDoc;
-	private ControlsPane controlsPane;
-	private StatusLabel status;
-	private ATree navigateTree;
-	private BTree analysisTree;
-	private CTree histogramTree;
-	private JFileChooser fc;
-	private JFrame frame = this;
+	private final ControlsPane controlsPane;
+	private final StatusLabel status;
+	private final ATree navigateTree;
+	private final BTree analysisTree;
+	private final CTree histogramTree;
+	private final JFileChooser fc;
+	private final JFrame frame = this;
 	private String fileName = "";
-	private JPopupMenu popupMenu;
+	private final JPopupMenu popupMenu;
 
 	private boolean generateReport = false;
 	private boolean programExit = false;
 	private boolean makeNewDocument = false;
-	private final static String extension = "htm";
-
+	private static final String extension = "htm";
 
 	private static final String applicationName = "Информационный анализ";
 
-	private HashMap<Object, Action> actions;
+	private final Map<Object, Action> actions;
 
 	//undo helpers
-	protected static UndoAction undoAction = null;
-	protected static RedoAction redoAction = null;
-	protected static UndoManager undo = new UndoManager();
+	private static UndoAction undoAction = null;
+	private static RedoAction redoAction = null;
+	private static final UndoManager undo = new UndoManager();
 
 	private static final Logger logger = LoggerFactory.getLogger(AnalystWindow.class);
 
 	public AnalystWindow(String startupFilename) {
-		super(applicationName + " - " + ADocument.DEFAULT_TITLE);
+		super(String.format("%s - %s", applicationName, ADocument.DEFAULT_TITLE));
 
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -187,7 +188,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		//Start watching for undoable edits and caret changes.
 		aDoc.addUndoableEditListener(new MyUndoableEditListener());
 		textPane.addCaretListener(status);
-		aDoc.addDocumentListener(new MyDocumentListener());
 
 		// load document passed in the command line
 		if (startupFilename != null) {
@@ -221,7 +221,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		return navigateTabs;
 	}
 
-	protected JMenu createFileMenu() {
+	private JMenu createFileMenu() {
 		JMenu menu = new JMenu("Файл");
 
 		//Undo and redo are actions of our own creation.
@@ -231,12 +231,15 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		JMenuItem newDocumnet = new JMenuItem("Создать новый документ");
 		newDocumnet.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				int option = saveConfirmation();
-				if (option == JOptionPane.YES_OPTION) {
+			public void actionPerformed(ActionEvent e) {
+				switch (saveConfirmation()) {
+				case JOptionPane.YES_OPTION:
 					makeNewDocument = true;
-				} else if (option == JOptionPane.NO_OPTION) {
+					break;
+
+				case JOptionPane.NO_OPTION:
 					initNewDocument();
+					break;
 				}
 			}
 		});
@@ -244,14 +247,16 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		JMenuItem exit = new JMenuItem("Выход");
 		exit.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				programExit = true;
-				int option = saveConfirmation();
-				if (option == JOptionPane.CANCEL_OPTION) {
+				switch (saveConfirmation()) {
+				case JOptionPane.CANCEL_OPTION:
 					programExit = false;
-				}
-				else if (option == JOptionPane.NO_OPTION) {
+					break;
+
+				case JOptionPane.NO_OPTION:
 					System.exit(0);
+					break;
 				}
 			}
 		});
@@ -259,7 +264,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		JMenuItem save = new JMenuItem("Сохранить");
 		save.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent event) {
 				try {
 					File file = null;
 					if (fileName.length() == 0) {
@@ -268,8 +273,8 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 						if (returnVal == JFileChooser.APPROVE_OPTION) {
 							file = fc.getSelectedFile();
 							fileName = file.getAbsolutePath();
-							if (!fileName.endsWith("." + extension)) {
-								fileName += "." + extension;
+							if (!fileName.endsWith('.' + extension)) {
+								fileName += '.' + extension;
 							}
 							file = new File(fileName);
 
@@ -281,7 +286,9 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 									JOptionPane.QUESTION_MESSAGE,
 									null,
 									options, null) ==
-									JOptionPane.NO_OPTION) return;
+									JOptionPane.NO_OPTION) {
+									return;
+								}
 							}
 						}
 					} else {
@@ -312,16 +319,18 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		JMenuItem saveAs = new JMenuItem("Сохранить как...");
 		saveAs.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent event) {
 				try {
-					File file = null;
 					fc.setDialogTitle("Сохранение документа под новым именем");
 
 					int returnVal = fc.showDialog(AnalystWindow.this, "Сохранить как...");
+					File file;
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
 						file = fc.getSelectedFile();
 						fileName = file.getAbsolutePath();
-						if (!fileName.endsWith("." + extension)) fileName += "." + extension;
+						if (!fileName.endsWith('.' + extension)) {
+							fileName += '.' + extension;
+						}
 						file = new File(fileName);
 					} else {
 						return;
@@ -335,7 +344,9 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 							JOptionPane.QUESTION_MESSAGE,
 							null,
 							options, null) ==
-							JOptionPane.NO_OPTION) return;
+							JOptionPane.NO_OPTION) {
+							return;
+						}
 					}
 
 					FileOutputStream fos = new FileOutputStream(file);
@@ -361,7 +372,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		JMenuItem load = new JMenuItem("Открыть");
 		load.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent event) {
 				try {
 					status.setText("Открытие документа...");
 					if (saveConfirmation() == JOptionPane.CANCEL_OPTION) {
@@ -406,8 +417,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		JMenuItem append = new JMenuItem("Открыть и присоединить");
 		append.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-
+			public void actionPerformed(ActionEvent event) {
 				try {
 					fc.setDialogTitle("Открыть и присоединить документ");
 					int returnVal = fc.showDialog(AnalystWindow.this, "Открыть и присоединить");
@@ -463,7 +473,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	}
 
 	//This listens for and reports caret movements.
-	protected class StatusLabel extends JLabel implements CaretListener, ADataChangeListener {
+	private class StatusLabel extends JLabel implements CaretListener, ADataChangeListener {
 		public StatusLabel(String label) {
 			super(label);
 		}
@@ -471,21 +481,17 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		//Might not be invoked from the event dispatch thread.
 		@Override
 		public void caretUpdate(CaretEvent e) {
-			ASection s;
-			s = aDoc.getASectionThatStartsAt(textPane.getCaretPosition());
+			ASection section = aDoc.getASectionThatStartsAt(textPane.getCaretPosition());
 			if (textPane.getText().length() <= 0) {
 				setText("Откройте сохраненный документ или вставтьте анализируемый текст в центральное окно");
-			}
-			else if (s != null) {
-				setText(aDoc.getAData(s).toString());
+			} else if (section != null) {
+				setText(aDoc.getAData(section).toString());
 			} else if (e.getDot() == e.getMark()) {
 				setText("Выделите область текста чтобы начать анализ...");
-			}
-			else {
+			} else {
 				setText("Выберите аспект  и параметры обработки, используя панель справа...");
 			}
-		} //caretUpdate()
-
+		}
 
 		@Override
 		public void aDataChanged(int start, int end, AData data) {
@@ -495,16 +501,14 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			else {
 				setText(" ");
 			}
-			return;
-		} //aDataChanged()
-	} //class StatusLabel
+		}
+	}
 
 	//This one listens for edits that can be undone.
-	protected class MyUndoableEditListener implements UndoableEditListener {
+	private class MyUndoableEditListener implements UndoableEditListener {
 		@Override
 		public void undoableEditHappened(UndoableEditEvent e) {
 			//Remember the edit and update the menus.
-
 			undo.addEdit(e.getEdit());
 			undoAction.updateUndoState();
 			redoAction.updateRedoState();
@@ -517,38 +521,16 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		}
 	}
 
-	//And this one listens for any changes to the document.
-	protected class MyDocumentListener
-		implements DocumentListener {
-		@Override
-		public void insertUpdate(DocumentEvent e) {
-			displayEditInfo(e);
-		}
-
-		@Override
-		public void removeUpdate(DocumentEvent e) {
-			displayEditInfo(e);
-		}
-
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-			displayEditInfo(e);
-		}
-
-		private void displayEditInfo(DocumentEvent e) {
-		}
-	}
-
 	//Add a couple of emacs key bindings for navigation.
-	protected void addBindings() {
-		final JTextComponent.KeyBinding[] defaultBindings = {
-			new JTextComponent.KeyBinding(
+	private void addBindings() {
+		final KeyBinding[] defaultBindings = {
+			new KeyBinding(
 				KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK),
 				AEditorKit.copyAction),
-			new JTextComponent.KeyBinding(
+			new KeyBinding(
 				KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK),
 				AEditorKit.pasteAction),
-			new JTextComponent.KeyBinding(
+			new KeyBinding(
 				KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK),
 				AEditorKit.cutAction),
 		};
@@ -558,28 +540,20 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			new AEditorKit.CutAction(textPane),
 		};
 
-		Keymap k = textPane.getKeymap();
-		JTextComponent.loadKeymap(k, defaultBindings, defaultActions);
+		JTextComponent.loadKeymap(textPane.getKeymap(), defaultBindings, defaultActions);
 	}
 
 	//Create the edit menu.
-	protected JMenu createEditMenu() {
-		InputMap inputMap = textPane.getInputMap();
-		Keymap keyMap = textPane.getKeymap();
-		KeyStroke key = null;
-		JMenuItem menuItem = null;
-
+	private JMenu createEditMenu() {
 		JMenu menu = new JMenu("Редактирование");
 
 		//Undo and redo are actions of our own creation.
 		undoAction = new UndoAction();
 		undoAction.putValue(Action.NAME, "Отменить действие");
-		menuItem = new JMenuItem(undoAction);
-		key = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK);
+		JMenuItem menuItem = new JMenuItem(undoAction);
+		KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK);
 		menuItem.setAccelerator(key);
 		menu.add(menuItem);
-
-//        menu.add(undoAction);
 
 		redoAction = new RedoAction();
 		redoAction.putValue(Action.NAME, "Вернуть действие");
@@ -587,7 +561,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		key = KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK);
 		menuItem.setAccelerator(key);
 		menu.add(menuItem);
-//        menu.add(redoAction);
 
 		menu.addSeparator();
 
@@ -637,7 +610,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	}
 
 	//Create the style menu.
-	protected JMenu createStyleMenu() {
+	private JMenu createStyleMenu() {
 		JMenu menu = new JMenu("Стиль");
 
 		JMenuItem menuItem = new JMenuItem();
@@ -663,18 +636,16 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	}
 
 	// infoMenu
-	protected JMenu createInfoMenu() {
+	private JMenu createInfoMenu() {
 		JMenu menu = new JMenu("Информация");
 
 		Action docProperties = new AbstractAction() {
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-
+			public void actionPerformed(ActionEvent e) {
 				JTextArea titleField = new JTextArea(1, 30);
 				titleField.setLineWrap(true);
 				JTextArea expertField = new JTextArea(4, 30);
 				expertField.setLineWrap(true);
-				//expertField.setWrapStyleWord(true);
 				JTextArea clientField = new JTextArea(1, 30);
 				clientField.setLineWrap(true);
 				JTextArea dateField = new JTextArea(1, 30);
@@ -704,7 +675,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 				Panel pd = new Panel();
 				Panel ppc = new Panel();
 				Panel panel = new Panel();
-				//BoxLayout layout  = new BoxLayout (panel,BoxLayout.Y_AXIS);
 				panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 				pt.add(lt);
@@ -723,7 +693,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 				ppc.setMinimumSize(new Dimension(500, 70));
 				ppc.add(new JScrollPane(commentArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 
-				String title = (String) aDoc.getProperty(ADocument.TitleProperty);
+				String title = (String) aDoc.getProperty(Document.TitleProperty);
 				String expert = (String) aDoc.getProperty(ADocument.ExpertProperty);
 				String client = (String) aDoc.getProperty(ADocument.ClientProperty);
 				String date = (String) aDoc.getProperty(ADocument.DateProperty);
@@ -734,7 +704,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 				panel.add(pc);
 				panel.add(pd);
 				panel.add(ppc);
-				//panel.add(new Panel());
 
 				if (title != null) {
 					titleField.setText(title);
@@ -781,10 +750,8 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		};
 
 		Action about = new AbstractAction() {
-
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-
+			public void actionPerformed(ActionEvent event) {
 				JPanel panel = new JPanel();
 				panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 				JTextArea info = new JTextArea(6, 40);
@@ -805,29 +772,33 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 				licText.setWrapStyleWord(true);
 				licText.setAutoscrolls(false);
 
-				String license = "ВНИМАНИЕ!!! Не удалось отрыть файл лицензии.\n\n" +
+				licText.setText("ВНИМАНИЕ!!! Не удалось отрыть файл лицензии.\n\n" +
 					"Согласно условий оригинальной лицензии GNU GPL, программное обеспечение должно поставляться вместе с текстом оригинальной лицензии.\n\n" +
 					"Отсутствие такой лицензии может неправомерно ограничивать ваши права как пользователя. \n\n" +
 					"Требуйте получение исходной лицензии от поставщика данного программного продукта.\n\n" +
-					"Оригинальный текст GNU GPL на английском языке вы можете прочитать здесь: http://www.gnu.org/copyleft/gpl.html";
+					"Оригинальный текст GNU GPL на английском языке вы можете прочитать здесь: http://www.gnu.org/copyleft/gpl.html");
 
 				InputStream is = AnalystWindow.class.getClassLoader().getResourceAsStream("license.txt");
 				if (is != null) {
 					BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-					license = "";
-					String next;
 					try {
-						next = br.readLine();
+						StringBuilder license = new StringBuilder();
+						String next = br.readLine();
 						while (next != null) {
-							license += next + "\n";
+							license.append(next).append('\n');
 							next = br.readLine();
 						}
+						licText.setText(license.toString());
 					} catch (IOException e) {
 						logger.error("Error opening license file", e);
+					} finally {
+						try {
+							br.close();
+						} catch (IOException e) {
+							logger.error("Error closing BufferedReader", e);
+						}
 					}
 				}
-
-				licText.setText(license);
 
 				JScrollPane licenseScrl = new JScrollPane(licText, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -859,7 +830,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		return menu;
 	}
 
-	protected JMenu createSettingsMenu() {
+	private JMenu createSettingsMenu() {
 		JMenu menu = new JMenu("Установки");
 
 		//Settings.
@@ -868,8 +839,8 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 		reportCheckbox.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent ae) {
-				generateReport = ((JCheckBox) ae.getSource()).isSelected();
+			public void actionPerformed(ActionEvent e) {
+				generateReport = ((AbstractButton) e.getSource()).isSelected();
 			}
 		});
 
@@ -878,44 +849,13 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		return menu;
 	}
 
-	protected SimpleAttributeSet[] initAttributes(int length) {
-		//Hard-code some attributes.
-		SimpleAttributeSet[] attrs = new SimpleAttributeSet[length];
-
-		attrs[0] = new SimpleAttributeSet();
-		StyleConstants.setFontFamily(attrs[0], "Tahoma");
-		StyleConstants.setFontSize(attrs[0], 16);
-		StyleConstants.setForeground(attrs[0], Color.BLUE);
-		//     StyleConstants.setFirstLineIndent(attrs[0], 10);
-
-		attrs[1] = new SimpleAttributeSet(attrs[0]);
-		StyleConstants.setBold(attrs[1], true);
-		StyleConstants.setForeground(attrs[0], Color.black);
-		attrs[1].addAttribute("AData", "R+3V");
-
-		attrs[2] = new SimpleAttributeSet(attrs[0]);
-		StyleConstants.setItalic(attrs[2], true);
-
-		attrs[3] = new SimpleAttributeSet(attrs[0]);
-		StyleConstants.setFontSize(attrs[3], 20);
-
-		attrs[4] = new SimpleAttributeSet(attrs[0]);
-		StyleConstants.setFontSize(attrs[4], 12);
-
-		attrs[5] = new SimpleAttributeSet(attrs[0]);
-		StyleConstants.setForeground(attrs[5], Color.red);
-
-		return attrs;
-	}
-
 	//The following two methods allow us to find an
 	//action provided by the editor kit by its name.
-	private HashMap<Object, Action> createActionTable(JTextComponent textComponent) {
-		HashMap<Object, Action> actions = new HashMap<Object, Action>();
+	private Map<Object, Action> createActionTable(JTextComponent textComponent) {
+		Map<Object, Action> actions = new HashMap<Object, Action>();
 		Action[] actionsArray = textComponent.getActions();
 		for (Action a : actionsArray) {
 			actions.put(a.getValue(Action.NAME), a);
-			//System.out.println(a.getValue(Action.NAME));
 		}
 		return actions;
 	}
@@ -924,7 +864,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		return actions.get(name);
 	}
 
-	class UndoAction extends AbstractAction {
+	private class UndoAction extends AbstractAction {
 		private final Logger logger = LoggerFactory.getLogger(UndoAction.class);
 
 		public UndoAction() {
@@ -968,7 +908,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		}
 	}
 
-	class RedoAction extends AbstractAction {
+	private class RedoAction extends AbstractAction {
 		private final Logger logger = LoggerFactory.getLogger(RedoAction.class);
 
 		public RedoAction() {
@@ -999,9 +939,15 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		}
 
 		private Object getRussianRedoName(String redoPresentationName) {
-			if (redoPresentationName.contains("deletion")) return "Вернуть удаление";
-			if (redoPresentationName.contains("style")) return "Вернуть";
-			if (redoPresentationName.contains("addition")) return "Вернуть ввод";
+			if (redoPresentationName.contains("deletion")) {
+				return "Вернуть удаление";
+			}
+			if (redoPresentationName.contains("style")) {
+				return "Вернуть";
+			}
+			if (redoPresentationName.contains("addition")) {
+				return "Вернуть ввод";
+			}
 			return redoPresentationName;
 		}
 	}
@@ -1030,22 +976,19 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 				new Object[]{"Сохранить", "Не сохранять", "Отмена"},
 				null);
 			if (choice == JOptionPane.YES_OPTION) {
-				File file = null;
+				File file;
 				if (fileName == null || fileName.length() == 0) {
 					boolean cancel = false;
 					boolean overwrite = false;
-					int returnVal = 0;
-					int option = 0;
-
 					while (!(cancel || overwrite)) {
 						fc.setDialogTitle("Сохранение документа");
-						returnVal = fc.showDialog(AnalystWindow.this, "Сохранить");
+						int returnVal = fc.showDialog(AnalystWindow.this, "Сохранить");
 						if (returnVal == JFileChooser.APPROVE_OPTION) {
 							file = fc.getSelectedFile();
 							fileName = file.getAbsolutePath();
 							if (file.exists()) {
 								Object[] options = {"Да", "Нет"};
-								option = JOptionPane.showOptionDialog(frame,
+								int option = JOptionPane.showOptionDialog(frame,
 									"Такой файл существует!\n\nХотите перезаписать этот файл?", "Предупреждение!!!",
 									JOptionPane.YES_NO_OPTION,
 									JOptionPane.QUESTION_MESSAGE,
@@ -1061,7 +1004,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 						} else if (returnVal == JFileChooser.CANCEL_OPTION) {
 							cancel = true;
 						}
-					} //end while
+					}
 				}
 
 				if (fileName != null && fileName.length() > 0) {
@@ -1110,41 +1053,41 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		return choice;
 	}
 
-	public class MyEventQueue extends EventQueue {
+	private class MyEventQueue extends EventQueue {
 		@Override
 		protected void dispatchEvent(AWTEvent event) {
 			super.dispatchEvent(event);
 
 			// interested only in mouseevents
-			if (!(event instanceof MouseEvent))
+			if (!(event instanceof MouseEvent)) {
 				return;
+			}
 
 			MouseEvent me = (MouseEvent) event;
 
 			// interested only in popuptriggers
-			if (!me.isPopupTrigger())
+			if (!me.isPopupTrigger()) {
 				return;
+			}
 
 			// me.getComponent(...) retunrs the heavy weight component on which event occured
 			Component comp = SwingUtilities.getDeepestComponentAt(me.getComponent(), me.getX(), me.getY());
 
 			// interested only in textcomponents
-			if (!(comp instanceof JTextPane))
+			if (!(comp instanceof JTextPane)) {
 				return;
+			}
 
 			// no popup shown by user code
-			if (MenuSelectionManager.defaultManager().getSelectedPath().length > 0)
+			if (MenuSelectionManager.defaultManager().getSelectedPath().length > 0) {
 				return;
+			}
 
 			// create popup menu and show
 
 			Point pt = SwingUtilities.convertPoint(me.getComponent(), me.getPoint(), textPane);
 			popupMenu.show(textPane, pt.x, pt.y);
 		}
-	}
-
-	public Frame getFrame() {
-		return frame;
 	}
 
 	public ATree getNavigeTree() {
@@ -1175,7 +1118,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 	private void initNewDocument() {
 		aDoc.initNew();
-		frame.setTitle(applicationName + " - " + (String) aDoc.getProperty((Document.TitleProperty)));
+		frame.setTitle(String.format("%s - %s", applicationName, aDoc.getProperty(Document.TitleProperty)));
 		fileName = "";
 		makeNewDocument = false;
 	}
@@ -1189,5 +1132,4 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			redoAction.updateRedoState();
 		}
 	}
-}//end class AnalystWindow
-
+}
