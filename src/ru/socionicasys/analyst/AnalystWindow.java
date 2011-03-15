@@ -129,6 +129,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		analysisTree = new BTree(aDoc);
 		aDoc.addADocumentChangeListener(analysisTree);
 		histogramTree = new CTree(aDoc);
+		aDoc.addADocumentChangeListener(histogramTree);
 		JTabbedPane navigateTabs = createTabPane();
 
 		JSplitPane splitPaneH = new JSplitPane(
