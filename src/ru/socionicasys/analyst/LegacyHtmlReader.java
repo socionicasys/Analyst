@@ -18,6 +18,11 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 	private static final int LEFT_COLUMN_PROGRESS = 50;
 	private static final int RIGHT_COLUMN_PROGRESS = 25;
 
+	private static final String HTML_CELL_OPEN = "<td>";
+	private static final String HTML_CELL_CLOSE = "</td>";
+	private static final String HTML_ROW_OPEN = "<tr>";
+	private static final Pattern HTML_BR_PATTERN = Pattern.compile("<br/>");
+
 	private final InputStream inputStream;
 	private final boolean append;
 	private final ADocument document;
@@ -114,72 +119,10 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 		String allText = readFromStream();
 		setProgress(FILE_LOAD_PROGRESS);
 
-		// looking for the table "header"
-		int searchIndex = allText.indexOf("title=\"header\"", 0);
-		String leftHeaderText = allText.substring(searchIndex, allText.indexOf("</table", searchIndex));
-
-		// looking through columns of table "header" and retreiving text of the left and right columns
-		searchIndex = leftHeaderText.indexOf("<tr>", 0);
-		String colStartToken = "<td>";
-		String colEndToken = "</td>";
-		String leftHeaderColumn = null;
-		String rightHeaderColumn = null;
-		Dictionary<Object, Object> documentProperties = document.getDocumentProperties();
-		while (searchIndex > 0) {
-			searchIndex = leftHeaderText.indexOf("<tr>", searchIndex);
-			String headerResult;
-			if (searchIndex > 0) {
-				headerResult = findTagContent(leftHeaderText, colStartToken, colEndToken, searchIndex);
-			} else {
-				break;
-			}
-			if (headerResult != null) {
-				leftHeaderColumn = headerResult.trim();
-				searchIndex = leftHeaderText.indexOf(colEndToken, searchIndex) + colEndToken.length();
-			}
-
-			if (searchIndex > 0) {
-				headerResult = findTagContent(leftHeaderText, colStartToken, colEndToken, searchIndex);
-			} else {
-				break;
-			}
-			if (headerResult != null) {
-				rightHeaderColumn = headerResult.trim();
-				searchIndex = leftHeaderText.indexOf(colEndToken, searchIndex) + colEndToken.length();
-			}
-
-			//обработка заголовка
-			rightHeaderColumn = rightHeaderColumn.replaceAll("<br/>", "\n");
-
-			if (!append) {
-				if (leftHeaderColumn.equals(ADocument.TitleProperty1)) {
-					documentProperties.put(Document.TitleProperty, rightHeaderColumn);
-				}
-				if (leftHeaderColumn.equals(ADocument.ExpertProperty)) {
-					documentProperties.put(ADocument.ExpertProperty, rightHeaderColumn);
-				}
-				if (leftHeaderColumn.equals(ADocument.ClientProperty)) {
-					documentProperties.put(ADocument.ClientProperty, rightHeaderColumn);
-				}
-				if (leftHeaderColumn.equals(ADocument.DateProperty)) {
-					documentProperties.put(ADocument.DateProperty, rightHeaderColumn);
-				}
-				if (leftHeaderColumn.equals(ADocument.CommentProperty)) {
-					documentProperties.put(ADocument.CommentProperty, rightHeaderColumn);
-				}
-			} else {
-				if (leftHeaderColumn.equals(ADocument.ExpertProperty)) {
-					String expert = (String) documentProperties.get(ADocument.ExpertProperty);
-					if (!expert.contains(rightHeaderColumn)) {
-						expert += "; " + rightHeaderColumn;
-					}
-					documentProperties.put(ADocument.ExpertProperty, expert);
-				}
-			}
-		}
+		parseDocumentProperties(allText);
 
 		// looking for the table "protocol"
-		searchIndex = allText.indexOf("title=\"protocol\"", 0);
+		int searchIndex = allText.indexOf("title=\"protocol\"", 0);
 
 		//limiting ourselves only to the Protocol table
 		int tableProtocolEndIndex = allText.indexOf("</table", searchIndex);
@@ -189,27 +132,27 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 		StringBuilder leftColumnBuilder = new StringBuilder();
 		StringBuilder rightColumnBuilder = new StringBuilder();
 		while (searchIndex > 0) {
-			searchIndex = allText.indexOf("<tr>", searchIndex);
+			searchIndex = allText.indexOf(HTML_ROW_OPEN, searchIndex);
 			String result;
 			if (searchIndex > 0) {
-				result = findTagContent(allText, colStartToken, colEndToken, searchIndex);
+				result = findTagContent(allText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
 			} else {
 				break;
 			}
 			if (result != null) {
 				leftColumnBuilder.append(result);
 				leftColumnBuilder.append("<br/><br/>"); //adding breaks because there are no breaks on row boundaries
-				searchIndex = allText.indexOf(colEndToken, searchIndex) + colEndToken.length();
+				searchIndex = allText.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
 			}
 
 			if (searchIndex > 0) {
-				result = findTagContent(allText, colStartToken, colEndToken, searchIndex);
+				result = findTagContent(allText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
 			} else {
 				break;
 			}
 			if (result != null) {
 				rightColumnBuilder.append(result);
-				searchIndex = allText.indexOf(colEndToken, searchIndex) + colEndToken.length();
+				searchIndex = allText.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
 			}
 		}
 
@@ -358,6 +301,73 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 		} finally {
 			inputStream.close();
 			reader.close();
+		}
+	}
+
+	private void parseDocumentProperties(String text) {
+		// looking for the table "header"
+		int tableStart = text.indexOf("title=\"header\"", 0);
+		String leftHeaderText = text.substring(tableStart, text.indexOf("</table", tableStart));
+
+		// looking through columns of table "header" and retreiving text of the left and right columns
+		int searchIndex = leftHeaderText.indexOf(HTML_ROW_OPEN, 0);
+		Dictionary<Object, Object> documentProperties = document.getDocumentProperties();
+		while (searchIndex > 0) {
+			searchIndex = leftHeaderText.indexOf(HTML_ROW_OPEN, searchIndex);
+			String headerResult;
+			if (searchIndex > 0) {
+				headerResult = findTagContent(leftHeaderText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
+			} else {
+				break;
+			}
+			String propertyName;
+			if (headerResult != null) {
+				propertyName = headerResult.trim();
+				searchIndex = leftHeaderText.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
+			} else {
+				break;
+			}
+
+			if (searchIndex > 0) {
+				headerResult = findTagContent(leftHeaderText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
+			} else {
+				break;
+			}
+			String propertyValue;
+			if (headerResult != null) {
+				propertyValue = headerResult.trim();
+				searchIndex = leftHeaderText.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
+			} else {
+				break;
+			}
+
+			//обработка заголовка
+			propertyValue = HTML_BR_PATTERN.matcher(propertyValue).replaceAll("\n");
+
+			if (!append) {
+				if (ADocument.TitleProperty1.equals(propertyName)) {
+					documentProperties.put(Document.TitleProperty, propertyValue);
+				} else if (ADocument.ExpertProperty.equals(propertyName)) {
+					documentProperties.put(ADocument.ExpertProperty, propertyValue);
+				} else if (ADocument.ClientProperty.equals(propertyName)) {
+					documentProperties.put(ADocument.ClientProperty, propertyValue);
+				} else if (ADocument.DateProperty.equals(propertyName)) {
+					documentProperties.put(ADocument.DateProperty, propertyValue);
+				} else if (ADocument.CommentProperty.equals(propertyName)) {
+					documentProperties.put(ADocument.CommentProperty, propertyValue);
+				}
+			} else {
+				if (ADocument.ExpertProperty.equals(propertyName)) {
+					String expert = (String) documentProperties.get(ADocument.ExpertProperty);
+					if (!expert.contains(propertyValue)) {
+						StringBuilder expertBuilder = new StringBuilder(expert);
+						expertBuilder.append("; ").append(propertyValue);
+						documentProperties.put(ADocument.ExpertProperty, expertBuilder.toString());
+					} else {
+						documentProperties.put(ADocument.ExpertProperty, expert);
+					}
+				}
+			}
 		}
 	}
 
