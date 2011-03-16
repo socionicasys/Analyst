@@ -79,7 +79,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		popupMenu = new JPopupMenu();
 
 		textPane.setCaretPosition(0);
-		//textPane.setMargin(new Insets(5,5,5,5));
 		textPane.setMinimumSize(new Dimension(400, 100));
 
 		// binding the popup menu for textPane
@@ -114,7 +113,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		splitPaneV.setOneTouchExpandable(false);
 
 		//Create the status area.
-		JPanel statusPane = new JPanel(new BorderLayout()); // GridLayout(1, 2));
+		JPanel statusPane = new JPanel(new BorderLayout());
 		status =
 			new StatusLabel("Откройте сохраненный документ или вставтьте анализируемый текст в центральное окно");
 		JProgressBar progress = new JProgressBar(0, 100);
@@ -146,15 +145,11 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		controlsPane.addADataListener(status);
 		navigateTree.addTreeSelectionListener(controlsPane);
 		analysisTree.addTreeSelectionListener(controlsPane);
-
-		commentField.getCaret().addChangeListener((ChangeListener) controlsPane);
+		commentField.getCaret().addChangeListener(controlsPane);
 
 		JScrollPane scrollPaneControls = new JScrollPane(controlsPane);
 		scrollPaneControls.setMinimumSize(new Dimension(300, 500));
 		scrollPaneControls.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-		//getContentPane().add(navigateTabs, BorderLayout.WEST);
-		JPanel allButToolbar = new JPanel();
 
 		getContentPane().add(splitPaneH, BorderLayout.CENTER);
 		getContentPane().add(statusPane, BorderLayout.SOUTH);
@@ -162,8 +157,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		controlsPane.setMargin(new Insets(1, 1, 1, 1));
 		controlsPane.setBorderPainted(true);
 
-		//getContentPane().setLayout(new BorderLayout());
-		//getContentPane().add(allButToolbar, BorderLayout.CENTER);
 		getContentPane().add(controlsPane, BorderLayout.EAST);
 
 		//Set up the menu bar.
@@ -194,30 +187,34 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		// load document passed in the command line
 		if (startupFilename != null) {
 			File file = new File(startupFilename);
-			FileInputStream fis;
 			try {
-				fis = new FileInputStream(file);
-
-				ProgressWindow pw = new ProgressWindow(frame, "    Идет загрузка файла...   ");
-				aDoc.load(fis, pw);
-
-				fileName = file.getAbsolutePath();
-
-				status.setText("");
-				frame.setTitle(applicationName + " - " + file.getName());
-			} catch (Exception e) {
-				logger.error("Error loading file " + startupFilename, e);
+				FileInputStream fis = new FileInputStream(file);
+				try {
+					ProgressWindow pw = new ProgressWindow(frame, "    Идет загрузка файла...   ");
+					aDoc.load(fis, pw);
+					fileName = file.getAbsolutePath();
+					status.setText("");
+					frame.setTitle(String.format("%s - %s", applicationName, file.getName()));
+				} catch (Exception e) {
+					logger.error("Error loading file " + startupFilename, e);
+				} finally {
+					try {
+						fis.close();
+					} catch (IOException e) {
+						logger.error("Error closing input stream", e);
+					}
+				}
+			} catch (FileNotFoundException e) {
+				logger.error("Unable to open file " + startupFilename, e);
 			}
 		}
 	}
 
 	private JTabbedPane createTabPane() {
 		JTabbedPane navigateTabs = new JTabbedPane();
-
 		navigateTabs.addTab("Навигация", navigateTree.getContainer());
 		navigateTabs.addTab("Анализ", analysisTree.getContainer());
 		navigateTabs.addTab("График", histogramTree.getContainer());
-		//navigateTabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		navigateTabs.setMinimumSize(new Dimension(200, 400));
 		navigateTabs.setPreferredSize(new Dimension(300, 400));
 		return navigateTabs;

@@ -42,7 +42,7 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 		addPropertyChangeListener(this);
 		try {
 			readDocument();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			progressWindow.close();
 			this.exception = e;
 			logger.error("IO error in doInBackground()", e);
