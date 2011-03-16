@@ -21,7 +21,8 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 	private static final String HTML_CELL_OPEN = "<td>";
 	private static final String HTML_CELL_CLOSE = "</td>";
 	private static final String HTML_ROW_OPEN = "<tr>";
-	private static final Pattern HTML_BR_PATTERN = Pattern.compile("<br/>");
+	private static final Pattern HTML_BR_PATTERN = Pattern.compile("<br/>", Pattern.LITERAL);
+	private static final Pattern LINEBREAK_PATTERN = Pattern.compile("\n", Pattern.LITERAL);
 
 	private final InputStream inputStream;
 	private final boolean append;
@@ -156,12 +157,12 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 			}
 		}
 
-		String leftColumn = leftColumnBuilder.toString().replaceAll("\n", "");
-		leftColumn = leftColumn.replace("<br/>", "\n");
+		String leftColumn = LINEBREAK_PATTERN.matcher(leftColumnBuilder.toString()).replaceAll("");
+		leftColumn = HTML_BR_PATTERN.matcher(leftColumn).replaceAll("\n");
 		leftColumn = leftColumn.trim();
 
-		String rightColumn = rightColumnBuilder.toString().replaceAll("\n", "");
-		rightColumn = rightColumn.replace("<br/>", "\n");
+		String rightColumn = LINEBREAK_PATTERN.matcher(rightColumnBuilder.toString()).replaceAll("");
+		rightColumn = HTML_BR_PATTERN.matcher(rightColumn).replaceAll("\n");
 
 		// Убираем все лишние теги
 		leftColumn = removeTag(leftColumn, "<span", ">");
@@ -169,43 +170,16 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 		leftColumn = removeTag(leftColumn, "<small", ">");
 		leftColumn = removeTag(leftColumn, "</small", ">");
 
-		int posBeg = leftColumn.indexOf('[');
 		// processing the left column's content
-		while (leftColumn.indexOf('[', 0) >= 0 || leftColumn.indexOf(']', 0) >= 0) {
-			setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS * posBeg / leftColumn.length());
-			int handle;
-			RawAData data;
-			String handleNo;
-			//if we met the opening tag
-			if ((leftColumn.indexOf('[', 0) >= 0) && (leftColumn.indexOf('[', 0) <= leftColumn.indexOf(']', 0))) {
-				posBeg = leftColumn.indexOf('[');
-				handleNo = findTagContent(leftColumn, "[", "|", 0);
-				handle = Integer.parseInt(handleNo);
-				leftColumn = leftColumn.replace(findTag(leftColumn, "[", "|", 0), "");
-				data = new RawAData();
-				data.setBegin(posBeg);
-				rawData.put(handle, data);
-				//if we met the closing tag
-			} else if (leftColumn.indexOf(']', 0) >= 0) {
-				int posEnd = leftColumn.indexOf('|');
-				handleNo = findTagContent(leftColumn, "|", "]", 0);
-				handle = Integer.parseInt(handleNo);
-				leftColumn = leftColumn.replace(findTag(leftColumn, "|", "]", 0), "");
-				data = rawData.get(handle);
-				if (data != null) {
-					data.setEnd(posEnd);
-				}
-			}
-		}
-
+		leftColumn = parseLeftColumn(leftColumn);
 		setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS);
 
-		posBeg = rightColumn.indexOf('{');
+		int posBeg = rightColumn.indexOf('{');
 
 		// processing the right column's content
 		while (posBeg >= 0) {
 			setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS +
-				RIGHT_COLUMN_PROGRESS * (posBeg / rightColumn.length()));
+				RIGHT_COLUMN_PROGRESS * posBeg / rightColumn.length());
 			String handleNo = findTagContent(rightColumn, "{", ":", posBeg);
 			int handle = Integer.parseInt(handleNo);
 			RawAData data = rawData.get(handle);
@@ -369,6 +343,40 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 				}
 			}
 		}
+	}
+
+	private String parseLeftColumn(String text) {
+		int openingBracketPos = text.indexOf('[');
+		int closingBracketPos = text.indexOf(']');
+		StringBuilder columnBuilder = new StringBuilder(text);
+		while (openingBracketPos >= 0 || closingBracketPos >= 0) {
+			setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS * openingBracketPos / text.length());
+			int handle;
+			RawAData data;
+			int middleBracketPos = text.indexOf('|');
+			if (openingBracketPos >= 0 && openingBracketPos <= closingBracketPos) {
+				// Открывающий тег [n|
+				handle = Integer.parseInt(text.substring(openingBracketPos + 1, middleBracketPos));
+				columnBuilder.delete(openingBracketPos, middleBracketPos + 1);
+				data = new RawAData();
+				data.setBegin(openingBracketPos);
+				rawData.put(handle, data);
+			} else if (closingBracketPos >= 0) {
+				// Закрывающий тег |n]
+				handle = Integer.parseInt(text.substring(middleBracketPos + 1, closingBracketPos));
+				columnBuilder.delete(middleBracketPos, closingBracketPos + 1);
+				data = rawData.get(handle);
+				if (data != null) {
+					data.setEnd(middleBracketPos);
+				} else {
+					logger.warn("Closing tag |{}] without corresponding opening tag", handle);
+				}
+			}
+			text = columnBuilder.toString();
+			openingBracketPos = text.indexOf('[');
+			closingBracketPos = text.indexOf(']');
+		}
+		return text;
 	}
 
 	private static String removeTag(final String source, final String startToken, final String endToken) {
