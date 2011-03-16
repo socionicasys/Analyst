@@ -101,7 +101,7 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 			}
 			document.fireADocumentChanged();
 		} catch (Exception e) {
-			logger.error("Error while working on RawData in propertyChange()", e);
+			logger.error("Error while working with RawData", e);
 			progressWindow.close();
 			this.exception = e;
 			this.cancel(true);
@@ -117,45 +117,14 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 	private void readDocument() throws IOException {
 		setProgress(0);
 
-		String allText = readFromStream();
+		String text = readFromStream();
 		setProgress(FILE_LOAD_PROGRESS);
 
-		parseDocumentProperties(allText);
+		parseDocumentProperties(text);
 
-		// looking for the table "protocol"
-		int searchIndex = allText.indexOf("title=\"protocol\"", 0);
-
-		//limiting ourselves only to the Protocol table
-		int tableProtocolEndIndex = allText.indexOf("</table", searchIndex);
-		allText = allText.substring(0, tableProtocolEndIndex);
-
-		// looking through columns of table "protocol" and retreiving text of the left and right columns
 		StringBuilder leftColumnBuilder = new StringBuilder();
 		StringBuilder rightColumnBuilder = new StringBuilder();
-		while (searchIndex > 0) {
-			searchIndex = allText.indexOf(HTML_ROW_OPEN, searchIndex);
-			String result;
-			if (searchIndex > 0) {
-				result = findTagContent(allText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
-			} else {
-				break;
-			}
-			if (result != null) {
-				leftColumnBuilder.append(result);
-				leftColumnBuilder.append("<br/><br/>"); //adding breaks because there are no breaks on row boundaries
-				searchIndex = allText.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
-			}
-
-			if (searchIndex > 0) {
-				result = findTagContent(allText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
-			} else {
-				break;
-			}
-			if (result != null) {
-				rightColumnBuilder.append(result);
-				searchIndex = allText.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
-			}
-		}
+		splitTextColumns(text, leftColumnBuilder, rightColumnBuilder);
 
 		String leftColumn = LINEBREAK_PATTERN.matcher(leftColumnBuilder.toString()).replaceAll("");
 		leftColumn = HTML_BR_PATTERN.matcher(leftColumn).replaceAll("\n");
@@ -172,39 +141,7 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 		leftColumn = parseLeftColumn(leftColumn);
 		setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS);
 
-		int posBeg = rightColumn.indexOf('{');
-
-		// processing the right column's content
-		while (posBeg >= 0) {
-			setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS +
-				RIGHT_COLUMN_PROGRESS * posBeg / rightColumn.length());
-			String handleNo = findTagContent(rightColumn, "{", ":", posBeg);
-			int handle = Integer.parseInt(handleNo);
-			RawAData data = rawData.get(handle);
-			if (data != null) {
-				String aDataString = findTagContent(rightColumn, ":", "}", posBeg);
-				data.setAData(aDataString);
-				int posEnd = rightColumn.indexOf('{', posBeg + 1);
-				if (posEnd < 0) {
-					posEnd = rightColumn.length() - 1;
-				}
-				int posBeg1 = rightColumn.indexOf('}', posBeg) + 1;
-				String comment = null;
-				if (posBeg1 > 0) {
-					comment = rightColumn.substring(posBeg1, posEnd).trim();
-				}
-				comment = ' ' + comment;
-				//removing last line brake which was added when saving
-				while (comment != null && (comment.lastIndexOf('\n') == (comment.length() - 1))) {
-					comment = comment.substring(0, comment.length() - 1);
-				}
-				if (comment == null) {
-					comment = "";
-				}
-				data.setComment(comment);
-			}
-			posBeg = rightColumn.indexOf('{', posBeg + 1);
-		}
+		parseRightColumn(rightColumn);
 		setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS + RIGHT_COLUMN_PROGRESS);
 
 		// Обрабатываем стили в уже прочитанном тексте
@@ -343,6 +280,40 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 		}
 	}
 
+	private static void splitTextColumns(String text, StringBuilder leftColumnBuilder, StringBuilder rightColumnBuilder) {
+		// looking for the table "protocol"
+		int searchIndex = text.indexOf("title=\"protocol\"", 0);
+
+		//limiting ourselves only to the Protocol table
+		text = text.substring(0, text.indexOf("</table", searchIndex));
+
+		// looking through columns of table "protocol" and retrieving text of the left and right columns
+		while (searchIndex > 0) {
+			searchIndex = text.indexOf(HTML_ROW_OPEN, searchIndex);
+			String result;
+			if (searchIndex > 0) {
+				result = findTagContent(text, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
+			} else {
+				break;
+			}
+			if (result != null) {
+				leftColumnBuilder.append(result);
+				leftColumnBuilder.append("<br/><br/>"); //adding breaks because there are no breaks on row boundaries
+				searchIndex = text.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
+			}
+
+			if (searchIndex > 0) {
+				result = findTagContent(text, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
+			} else {
+				break;
+			}
+			if (result != null) {
+				rightColumnBuilder.append(result);
+				searchIndex = text.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
+			}
+		}
+	}
+
 	private String parseLeftColumn(String text) {
 		int openingBracketPos = text.indexOf('[');
 		int closingBracketPos = text.indexOf(']');
@@ -377,6 +348,57 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 		return text;
 	}
 
+	private void parseRightColumn(String text) {
+		int openingBracePos = text.indexOf('{');
+		// processing the right column's content
+		while (openingBracePos >= 0) {
+			setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS +
+				RIGHT_COLUMN_PROGRESS * openingBracePos / text.length());
+			// Обрабатываем теги вида:
+			// {n:пометки типировщика} комментарий
+			int middleBracePos = text.indexOf(':', openingBracePos);
+			if (middleBracePos < 0) {
+				logger.warn("Incorrect right column tag format, missing ':'");
+				openingBracePos = text.indexOf('{', openingBracePos + 1);
+				continue;
+			}
+			int handle;
+			try {
+				handle = Integer.parseInt(text.substring(openingBracePos + 1, middleBracePos));
+			} catch (NumberFormatException e) {
+				logger.warn("Incorrect right column tag format, missing mark number", e);
+				openingBracePos = text.indexOf('{', openingBracePos + 1);
+				continue;
+			}
+
+			int closingBracePos = text.indexOf('}', openingBracePos);
+			openingBracePos = text.indexOf('{', openingBracePos + 1);
+			if (closingBracePos < 0) {
+				logger.warn("Incorrect right column tag format, missing '}'");
+				continue;
+			}
+
+			RawAData data = rawData.get(handle);
+			if (data == null) {
+				logger.warn("Incorrect mark number in right column tag: {}", handle);
+				continue;
+			}
+
+			String aDataString = text.substring(middleBracePos + 1, closingBracePos);
+			data.setAData(aDataString);
+
+			// В комментарий попадает текст от конца текущего тега '}' до начала следующего '{'
+			String comment = ' ' + text.substring(closingBracePos + 1,
+				openingBracePos >= 0 ? openingBracePos : text.length() - 1).trim();
+
+			// removing last line break which was added when saving
+			while (comment.lastIndexOf('\n') == comment.length() - 1) {
+				comment = comment.substring(0, comment.length() - 1);
+			}
+			data.setComment(comment);
+		}
+	}
+
 	private static String findTagContent(final String text, final String startToken, final String endToken,
 			final int fromIndex) {
 		int startIndex = text.indexOf(startToken, fromIndex);
@@ -384,17 +406,6 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 
 		if (startIndex >= 0 && endIndex > 0 && endIndex > startIndex) {
 			return text.substring(startIndex + startToken.length(), endIndex);
-		}
-		return null;
-	}
-
-	private static String findTag(final String text, final String startToken, final String endToken,
-			final int fromIndex) {
-		int startIndex = text.indexOf(startToken, fromIndex);
-		int endIndex = text.indexOf(endToken, startIndex);
-
-		if (startIndex >= 0 && endIndex > 0 && endIndex > startIndex) {
-			return text.substring(startIndex, endIndex + endToken.length());
 		}
 		return null;
 	}
