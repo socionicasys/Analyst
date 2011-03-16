@@ -165,10 +165,8 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 		rightColumn = HTML_BR_PATTERN.matcher(rightColumn).replaceAll("\n");
 
 		// Убираем все лишние теги
-		leftColumn = removeTag(leftColumn, "<span", ">");
-		leftColumn = removeTag(leftColumn, "</span", ">");
-		leftColumn = removeTag(leftColumn, "<small", ">");
-		leftColumn = removeTag(leftColumn, "</small", ">");
+		Pattern tagPattern = Pattern.compile("</?(span|small)[^>]*>");
+		leftColumn = tagPattern.matcher(leftColumn).replaceAll("");
 
 		// processing the left column's content
 		leftColumn = parseLeftColumn(leftColumn);
@@ -377,16 +375,6 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 			closingBracketPos = text.indexOf(']');
 		}
 		return text;
-	}
-
-	private static String removeTag(final String source, final String startToken, final String endToken) {
-		String buffer = source;
-		String tag = findTag(buffer, startToken, endToken, 0);
-		while (tag != null) {
-			buffer = buffer.replace(tag, "");
-			tag = findTag(buffer, startToken, endToken, 0);
-		}
-		return buffer;
 	}
 
 	private static String findTagContent(final String text, final String startToken, final String endToken,
