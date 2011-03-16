@@ -2,7 +2,7 @@ package ru.socionicasys.analyst;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-class EndTreeNode extends DefaultMutableTreeNode {
+public class EndTreeNode extends DefaultMutableTreeNode {
 	private static final long serialVersionUID = -6457224131039102370L;
 
 	public EndTreeNode(Object o) {
