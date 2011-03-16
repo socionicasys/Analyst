@@ -3,8 +3,6 @@ package ru.socionicasys.analyst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -12,8 +10,8 @@ import java.util.regex.Pattern;
 import javax.swing.*;
 import javax.swing.text.*;
 
-public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListener {
-	private static final String encoding = "UTF-8";
+public class LegacyHtmlReader extends SwingWorker<Object, Object> {
+	private static final String FILE_ENCODING = "UTF-8";
 	private static final Logger logger = LoggerFactory.getLogger(LegacyHtmlReader.class);
 
 	private static final int FILE_LOAD_PROGRESS = 20;
@@ -22,11 +20,12 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 
 	private final InputStream inputStream;
 	private final boolean append;
-	private boolean firstWrite = true;
 	private final ADocument document;
 	private final ProgressWindow progressWindow;
 	private Exception exception = null;
-	private int appendOffset = 0;
+
+	private final Map<Integer, RawAData> rawData = new HashMap<Integer, RawAData>();
+	private final Collection<StyledText> styledTextBlocks = new ArrayList<StyledText>();
 
 	LegacyHtmlReader(ProgressWindow progressWindow, ADocument document, InputStream inputStream, boolean append) {
 		this.inputStream = inputStream;
@@ -39,7 +38,6 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 
 	@Override
 	protected Object doInBackground() throws Exception {
-		addPropertyChangeListener(this);
 		try {
 			readDocument();
 		} catch (IOException e) {
@@ -54,66 +52,56 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 	@Override
 	protected void done() {
 		super.done();
-		progressWindow.close();
-	}
 
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		String name = evt.getPropertyName();
-		Object newValue = evt.getNewValue();
-
-		if (name.equals("AppendStyledText")) {
-			@SuppressWarnings("unchecked")
-			Iterable<StyledText> styledTextBlocks = (Iterable<StyledText>) newValue;
-			for (StyledText styledText : styledTextBlocks) {
-				String textBlock = styledText.getText();
-				AttributeSet textStyle = styledText.getStyle();
-				try {
-					if (firstWrite) {
-						firstWrite = false;
-						if (append) {
-							appendOffset = document.getLength();
-						} else {
-							// Если мы не добавляем в старый документ, то перед
-							// первой записью его нужно очистить
-							appendOffset = 0;
-							document.getADataMap().clear();
-							document.remove(0, document.getEndPosition().getOffset() - 1);
-						}
-					}
-					int docPosition = document.getEndPosition().getOffset() - 1;
-					document.insertString(docPosition, textBlock, textStyle);
-					// Исправляем ошибку insertString: текст вставляется без стилей
-					document.setCharacterAttributes(docPosition, textBlock.length(),
-						textStyle, true);
-				} catch (BadLocationException e) {
-					logger.error("Illegal document location while working on AppendStyleText in propertyChange()", e);
-				}
-			}
-		}
-		if (name.equals("RawData")) {
-			//getting AData
-			Map<Integer, RawAData> rawData = (Map<Integer, RawAData>) newValue;
+		int appendOffset;
+		if (append) {
+			appendOffset = document.getLength();
+		} else {
+			// Если мы не добавляем в старый документ, то перед
+			// первой записью его нужно очистить
+			appendOffset = 0;
+			document.getADataMap().clear();
 			try {
-				for (RawAData rawAData : rawData.values()) {
-					AData data = AData.parseAData(rawAData.getAData());
-					data.setComment(rawAData.getComment());
-					int begin = rawAData.getBegin();
-					int end = rawAData.getEnd();
-					ASection section = new ASection(begin + appendOffset, end + appendOffset,
-						document.defaultSectionAttributes);
-					document.getADataMap().put(section, data);
-					document.setCharacterAttributes(begin + appendOffset, end - begin,
-						document.defaultSectionAttributes, false);
-				}
-				document.fireADocumentChanged();
-			} catch (Exception e) {
-				logger.error("Error while working on RawData in propertyChange()", e);
-				progressWindow.close();
-				this.exception = e;
-				this.cancel(true);
+				document.remove(0, document.getEndPosition().getOffset() - 1);
+			} catch (BadLocationException e) {
+				logger.error("Illegal document location while clearing document", e);
 			}
 		}
+		// Применяем к документу блоки текста со стилями из styledTextBlocks
+		for (StyledText styledText : styledTextBlocks) {
+			String textBlock = styledText.getText();
+			AttributeSet textStyle = styledText.getStyle();
+			try {
+				int docPosition = document.getEndPosition().getOffset() - 1;
+				document.insertString(docPosition, textBlock, textStyle);
+				// Исправляем ошибку insertString: текст вставляется без стилей
+				document.setCharacterAttributes(docPosition, textBlock.length(), textStyle, true);
+			} catch (BadLocationException e) {
+				logger.error("Illegal document location applying styles to document", e);
+			}
+		}
+
+		try {
+			for (RawAData rawAData : rawData.values()) {
+				AData data = AData.parseAData(rawAData.getAData());
+				data.setComment(rawAData.getComment());
+				int begin = rawAData.getBegin();
+				int end = rawAData.getEnd();
+				ASection section = new ASection(begin + appendOffset, end + appendOffset,
+					document.defaultSectionAttributes);
+				document.getADataMap().put(section, data);
+				document.setCharacterAttributes(begin + appendOffset, end - begin,
+					document.defaultSectionAttributes, false);
+			}
+			document.fireADocumentChanged();
+		} catch (Exception e) {
+			logger.error("Error while working on RawData in propertyChange()", e);
+			progressWindow.close();
+			this.exception = e;
+			this.cancel(true);
+		}
+
+		progressWindow.close();
 	}
 
 	public Exception getException() {
@@ -238,8 +226,6 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 		leftColumn = removeTag(leftColumn, "<small", ">");
 		leftColumn = removeTag(leftColumn, "</small", ">");
 
-		HashMap<Integer, RawAData> rawData = new HashMap<Integer, RawAData>();
-
 		int posBeg = leftColumn.indexOf('[');
 		// processing the left column's content
 		while (leftColumn.indexOf('[', 0) >= 0 || leftColumn.indexOf(']', 0) >= 0) {
@@ -313,7 +299,6 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 		Matcher styleMatcher = styleTag.matcher(sourceText);
 		int sourcePosition = 0;
 		int sourceOffset = 0;
-		Collection<StyledText> styledTextBlocks = new ArrayList<StyledText>();
 		while (styleMatcher.find()) {
 			String currentTag = styleMatcher.group();
 			int tagLength = currentTag.length();
@@ -350,15 +335,12 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 		}
 		// Добавляем в документ текст за последним тегом
 		styledTextBlocks.add(new StyledText(sourceText.substring(sourcePosition), currentStyle));
-		firePropertyChange("AppendStyledText", null, styledTextBlocks);
 
-		/// adding plain text to the document
-		firePropertyChange("RawData", null, rawData);
 		setProgress(100);
 	}
 
 	private String readFromStream() throws IOException {
-		Reader reader = new BufferedReader(new InputStreamReader(inputStream, encoding));
+		Reader reader = new BufferedReader(new InputStreamReader(inputStream, FILE_ENCODING));
 		try {
 			int length = inputStream.available();
 			char[] buf = new char[length];
