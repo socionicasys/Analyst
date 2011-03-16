@@ -2,16 +2,26 @@ package ru.socionicasys.analyst.util;
 
 import java.lang.reflect.Array;
 
-public class HashUtil {
+/**
+ * Вспомогательный класс для реализации методов hashCode().
+ */
+public final class HashUtil {
 	private static final int DEFAULT_SEED = 17;
 	private static final int PRIME = 31;
 
 	private int hashCode;
 
+	/**
+	 * Инициализирует класс зерном по умолчанию.
+	 */
 	public HashUtil() {
 		hashCode = DEFAULT_SEED;
 	}
 
+	/**
+	 * Инициализирует класс заданным зерном.
+	 * @param seed зерно для инициализации
+	 */
 	public HashUtil(int seed) {
 		hashCode = seed;
 	}
