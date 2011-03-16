@@ -21,9 +21,11 @@ public class ProgressWindow implements PropertyChangeListener {
 	private final AnalystWindow analystWindow;
 	private final JLabel label;
 	private final JProgressBar progressBar;
+	private final ADocument document;
 
-	public ProgressWindow(AnalystWindow analystWindow, String message) {
+	public ProgressWindow(AnalystWindow analystWindow, ADocument document, String message) {
 		this.analystWindow = analystWindow;
+		this.document = document;
 
 		progressBar = new JProgressBar(SwingConstants.HORIZONTAL, MIN_VALUE, MAX_VALUE);
 		progressBar.setMaximumSize(new Dimension(PROGRESS_WIDTH, PROGRESS_HEIGHT));
@@ -54,7 +56,7 @@ public class ProgressWindow implements PropertyChangeListener {
 	public void close() {
 		dialog.setVisible(false);
 		dialog.dispose();
-		analystWindow.aDoc.fireADocumentChanged();
+		document.fireADocumentChanged();
 	}
 
 	public AnalystWindow getAnalyst() {

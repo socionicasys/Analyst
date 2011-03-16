@@ -114,7 +114,6 @@ public class LegacyHtmlReader extends SwingWorker implements PropertyChangeListe
 				this.cancel(true);
 			}
 		}
-		AnalystWindow.initUndoManager();
 	}
 
 	public Exception getException() {

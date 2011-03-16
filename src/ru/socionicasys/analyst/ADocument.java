@@ -3,17 +3,18 @@ package ru.socionicasys.analyst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.Color;
+import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.InputStream;
 import java.util.*;
 import java.util.Map.Entry;
-import javax.swing.event.*;
+import javax.swing.SwingWorker.StateValue;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.UndoableEditEvent;
 import javax.swing.text.*;
-import javax.swing.undo.AbstractUndoableEdit;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
-import javax.swing.undo.CompoundEdit;
-import javax.swing.undo.UndoableEdit;
+import javax.swing.undo.*;
 
 public class ADocument extends DefaultStyledDocument implements DocumentListener {
 	public static final String DEFAULT_TITLE = "Новый документ";
@@ -76,7 +77,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 		setCharacterAttributes(0, 1, defaultStyle, true);
 		fireADocumentChanged();
-		AnalystWindow.initUndoManager();
 	}
 
 	/**
@@ -258,16 +258,25 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	public void insertUpdate(DocumentEvent e) {
 	}
 
-	public void load(InputStream stream, ProgressWindow pw) throws Exception {
-		LegacyHtmlReader iow = new LegacyHtmlReader(pw, this, stream, false);
-		iow.execute();
-		if (iow.getException() != null) {
-			throw iow.getException();
-		}
+	public void load(final InputStream stream, final ProgressWindow pw) throws Exception {
+		loadDocument(stream, pw, false);
 	}
 
-	public void append(InputStream stream, ProgressWindow pw) throws Exception {
-		LegacyHtmlReader iow = new LegacyHtmlReader(pw, this, stream, true);
+	public void append(final InputStream stream, final ProgressWindow pw) throws Exception {
+		loadDocument(stream, pw, true);
+	}
+
+	private void loadDocument(final InputStream stream, final ProgressWindow pw, final boolean append) throws Exception {
+		LegacyHtmlReader iow = new LegacyHtmlReader(pw, this, stream, append);
+		iow.getPropertyChangeSupport().addPropertyChangeListener("state", new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				StateValue state = (StateValue) evt.getNewValue();
+				if (state == StateValue.DONE) {
+					pw.getAnalyst().initUndoManager();
+				}
+			}
+		});
 		iow.execute();
 		if (iow.getException() != null) {
 			throw iow.getException();
