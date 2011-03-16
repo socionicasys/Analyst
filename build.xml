@@ -49,6 +49,7 @@
 				version="${analyst.version}">
 			<property key="sonar.java.source" value="1.6" />
 			<property key="sonar.java.target" value="1.6" />
+			<property key="sonar.sourceEncoding" value="UTF-8" />
 			<property key="project.build.sourceEncoding" value="UTF-8" />
 			<sources>
 				<path location="${analyst.source_dir}" />
