@@ -33,7 +33,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private final BTree analysisTree;
 	private final CTree histogramTree;
 	private final JFileChooser fc;
-	private final JFrame frame = this;
+	private final AnalystWindow frame = this;
 	private String fileName = "";
 	private final JPopupMenu popupMenu;
 

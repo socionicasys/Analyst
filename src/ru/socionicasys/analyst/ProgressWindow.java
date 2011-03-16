@@ -1,67 +1,50 @@
-/**
- *
- */
 package ru.socionicasys.analyst;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Vector;
-
-import javax.swing.BoxLayout;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
+import javax.swing.*;
 
 /**
  * @author Виктор
  */
-public class ProgressWindow extends JProgressBar implements PropertyChangeListener {
+public class ProgressWindow implements PropertyChangeListener {
+	private static final int MIN_VALUE = 0;
+	private static final int MAX_VALUE = 100;
 
-	//	JProgressBar bar;
-	private JDialog dialog;
-	private AnalystWindow an;
-	private JLabel label;
+	private static final int PROGRESS_WIDTH = 300;
+	private static final int PROGRESS_HEIGHT = 30;
+	private static final int DIALOG_WIDTH = 500;
+	private static final int DIALOG_HEIGHT = 100;
 
-	//	private String message;
-	static int minValue = 0;
-	static int maxValue = 100;
-	private int value = 0;
-	private Vector<ActionListener> listeners = null;
+	private final JDialog dialog;
+	private final AnalystWindow analystWindow;
+	private final JLabel label;
+	private final JProgressBar progressBar;
 
+	public ProgressWindow(AnalystWindow analystWindow, String message) {
+		this.analystWindow = analystWindow;
 
-	public ProgressWindow(Frame frame, String message) {
-		super(JProgressBar.HORIZONTAL, minValue, maxValue);
-		this.an = (AnalystWindow) frame;
-		setMaximumSize(new Dimension(300, 30));
-		//setMinimumSize(new Dimension(300,30));
-		setPreferredSize(new Dimension(300, 30));
+		progressBar = new JProgressBar(SwingConstants.HORIZONTAL, MIN_VALUE, MAX_VALUE);
+		progressBar.setMaximumSize(new Dimension(PROGRESS_WIDTH, PROGRESS_HEIGHT));
+		progressBar.setPreferredSize(new Dimension(PROGRESS_WIDTH, PROGRESS_HEIGHT));
 
-		JPanel p = new JPanel(new BorderLayout());
-		JPanel pp = new JPanel(new BorderLayout());
-		//p.setMinimumSize(new Dimension(300,200));
-		//p.setLayout();
+		JPanel innerPanel = new JPanel(new BorderLayout());
+		innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
+		innerPanel.add(new JPanel());
+		innerPanel.add(progressBar);
+		innerPanel.add(new JPanel());
+
+		JPanel outerPanel = new JPanel(new BorderLayout());
 		label = new JLabel(message);
-		p.add(label, BorderLayout.WEST);
-		pp.setLayout(new BoxLayout(pp, BoxLayout.Y_AXIS));
+		outerPanel.add(label, BorderLayout.WEST);
+		outerPanel.add(innerPanel, BorderLayout.CENTER);
 
-		pp.add(new JPanel());
-		pp.add(this);
-		pp.add(new JPanel());
-
-		p.add(pp, BorderLayout.CENTER);
-
-		//p.setOpaque(true);
-
-		dialog = new JDialog((Frame) null, "Подождите пожалуйста, выполняется операция...", false);
-		dialog.setContentPane(p);
-		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-		dialog.setSize(new Dimension(500, 100));
-		dialog.setLocationRelativeTo(frame);
+		dialog = new JDialog(analystWindow, "Подождите пожалуйста, выполняется операция...", false);
+		dialog.setContentPane(outerPanel);
+		dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		dialog.setSize(new Dimension(DIALOG_WIDTH, DIALOG_HEIGHT));
+		dialog.setLocationRelativeTo(analystWindow);
 		dialog.setAlwaysOnTop(true);
 		dialog.setResizable(false);
 		dialog.setVisible(true);
@@ -71,35 +54,25 @@ public class ProgressWindow extends JProgressBar implements PropertyChangeListen
 	public void close() {
 		dialog.setVisible(false);
 		dialog.dispose();
-		an.aDoc.fireADocumentChanged();
+		analystWindow.aDoc.fireADocumentChanged();
 	}
 
 	public AnalystWindow getAnalyst() {
-		return an;
-	}
-
-	public void addUserInterruptListener(ActionListener al) {
-		if (listeners == null || (listeners != null && listeners.isEmpty())) listeners = new Vector<ActionListener>();
-		listeners.add(al);
+		return analystWindow;
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent pce) {
-		String propName = pce.getPropertyName();
-
-		if (propName.equals("progress")) {
-			int value = ((Integer) pce.getNewValue()).intValue();
-			if (value >= minValue && value <= maxValue) {
-				setValue(value);
-				label.setText("      Выполнено :" + value + "%");
-			} else {
-				//close();
+	public void propertyChange(PropertyChangeEvent evt) {
+		String propertyName = evt.getPropertyName();
+		if (propertyName.equals("progress")) {
+			int value = (Integer) evt.getNewValue();
+			if (value >= MIN_VALUE && value <= MAX_VALUE) {
+				progressBar.setValue(value);
+				label.setText(String.format("      Выполнено :%d%%", value));
 			}
-		}
-		if (propName.equals("status")) {
-			int value = ((Integer) pce.getNewValue()).intValue();
-
-			if (value > minValue && value <= maxValue) {
+		} else if (propertyName.equals("status")) {
+			int value = (Integer) evt.getNewValue();
+			if (value > MIN_VALUE && value <= MAX_VALUE) {
 				close();
 			}
 		}
