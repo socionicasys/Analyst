@@ -161,84 +161,104 @@ public class LegacyHtmlWriter extends SwingWorker {
 		setProgress(0);
 
 		//writing the header
-		writer.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"> \n");
-		writer.write(String.format("<meta http-equiv=\"Content-Type\" content=\"text/html charset=%s\"/>", encoding));
-		writer.write("<html>\n<head>\n");
-		writer.write(String.format("<title>%s</title>\n", document.getProperty(Document.TitleProperty)));
-		writer.write("	<style>");
-		writer.write("			body 	{font-size:14px;color:black}\n");
-		writer.write("			h1		{}\n");
-		writer.write("			h2		{}\n");
-		writer.write("			th		{font-size:18px;font-weight:bold}\n");
-		writer.write("			small	{font-size:9px;color:darkgray}\n");
-		writer.write("	</style>\n");
-		writer.write("</head> \n");
-		writer.write("<body> \n");
+		writer.write(String.format(
+			"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"> \n" +
+			"<meta http-equiv=\"Content-Type\" content=\"text/html charset=%s\"/>" +
+			"<html>\n<head>\n" +
+			"<title>%s</title>\n" +
+			"	<style>" +
+			"			body 	{font-size:14px;color:black}\n" +
+			"			h1		{}\n" +
+			"			h2		{}\n" +
+			"			th		{font-size:18px;font-weight:bold}\n" +
+			"			small	{font-size:9px;color:darkgray}\n" +
+			"	</style>\n" +
+			"</head> \n" +
+			"<body> \n",
+			encoding,
+			document.getProperty(Document.TitleProperty)
+		));
 
 		//document title
 		writer.write(String.format("\n<h1>%s</h1>\n", document.getProperty(Document.TitleProperty)));
 
 		//document header
-		writer.write("<br/>\n<br/>");
-		writer.write("\n <table title=\"header\" border=1 width=\"40%\"> 	\n");
-		writer.write("<tr>\n");
-		writer.write(String.format("	<td>      %s     </td>\n", ADocument.TitleProperty1));
-		writer.write(String.format("	<td>%s	</td>\n", document.getProperty(Document.TitleProperty)));
-		writer.write("</tr>\n");
-		writer.write("<tr>\n");
-		writer.write(String.format("	<td>      %s     </td>\n", ADocument.ClientProperty));
-		writer.write(String.format("	<td>%s 	</td>\n", document.getProperty(ADocument.ClientProperty)));
-		writer.write("</tr>\n");
-		writer.write("<tr>\n");
-		writer.write(String.format("	<td>      %s     </td>\n", ADocument.ExpertProperty));
-		writer.write(String.format("	<td>%s	</td>\n", document.getProperty(ADocument.ExpertProperty)));
-		writer.write("</tr>\n");
-		writer.write("<tr>\n");
-		writer.write(String.format("	<td>      %s     </td>\n", ADocument.DateProperty));
-		writer.write(String.format("	<td>%s </td>\n", document.getProperty(ADocument.DateProperty)));
-		writer.write("</tr>\n");
-		writer.write("<tr>\n");
-		writer.write(String.format("	<td>      %s     </td>\n", ADocument.CommentProperty));
-		writer.write(String.format("	<td>%s </td>\n", document.getProperty(ADocument.CommentProperty)));
-		writer.write("</tr>\n");
-		writer.write("</table >\n");
+		writer.write(String.format(
+			"<br/>\n<br/>" +
+			"\n <table title=\"header\" border=1 width=\"40%\"> 	\n" +
+			"<tr>\n" +
+			"	<td>      %s     </td>\n" +
+			"	<td>%s	</td>\n" +
+			"</tr>\n" +
+			"<tr>\n" +
+			"	<td>      %s     </td>\n" +
+			"	<td>%s 	</td>\n" +
+			"</tr>\n" +
+			"<tr>\n" +
+			"	<td>      %s     </td>\n" +
+			"	<td>%s	</td>\n" +
+			"</tr>\n" +
+			"<tr>\n" +
+			"	<td>      %s     </td>\n" +
+			"	<td>%s </td>\n" +
+			"</tr>\n" +
+			"<tr>\n" +
+			"	<td>      %s     </td>\n" +
+			"	<td>%s </td>\n" +
+			"</tr>\n" +
+			"</table >\n",
+			ADocument.TitleProperty1,
+			document.getProperty(Document.TitleProperty),
+			ADocument.ClientProperty,
+			document.getProperty(ADocument.ClientProperty),
+			ADocument.ExpertProperty,
+			document.getProperty(ADocument.ExpertProperty),
+			ADocument.DateProperty,
+			document.getProperty(ADocument.DateProperty),
+			ADocument.CommentProperty,
+			document.getProperty(ADocument.CommentProperty)
+		));
 
 		//  writing the color legend
-		writer.write("<br/>\n<br/>");
-		writer.write("<h3> Расшифровка цветовых обозначений: </h3>");
-		writer.write("\n <table title=\"legend\" border=0 width=\"40%\"> 	\n");
-		writer.write("<tr>\n");
-		writer.write("	<td style=\"background-color:#EAEAEA\">Непонятное место</td>\n");
-		writer.write("</tr>\n");
-		writer.write("<tr>\n");
-		writer.write("	<td style=\"background-color:#AAEEEE;\">      Маломерность     </td>\n");
-		writer.write("</tr>\n");
-		writer.write("<tr>\n");
-		writer.write("	<td style=\"background-color:#AAEEAA;\">      Многомерность     </td>\n");
-		writer.write("</tr>\n");
-		writer.write("<tr>\n");
-		writer.write("	<td  style=\"color:#FF0000;\">      		  Фрагмент содержит информацию о знаке     </td>\n");
-		writer.write("</tr>\n");
-		writer.write("<tr>\n");
-		writer.write("	<td style=\"background-color:#FFFFCC;\">      Фрагмент содержит информацию о ментале или витале     </td>\n");
-		writer.write("</tr>\n");
-		writer.write("<tr>\n");
-		writer.write("	<td style=\"text-decoration:underline\">      Прочий выделенный фрагмент анализа     </td>\n");
-		writer.write("</tr>\n");
-		writer.write("</table >\n");
+		writer.write(
+			"<br/>\n<br/>" +
+			"<h3> Расшифровка цветовых обозначений: </h3>" +
+			"\n <table title=\"legend\" border=0 width=\"40%\"> 	\n" +
+			"<tr>\n" +
+			"	<td style=\"background-color:#EAEAEA\">Непонятное место</td>\n" +
+			"</tr>\n" +
+			"<tr>\n" +
+			"	<td style=\"background-color:#AAEEEE;\">      Маломерность     </td>\n" +
+			"</tr>\n" +
+			"<tr>\n" +
+			"	<td style=\"background-color:#AAEEAA;\">      Многомерность     </td>\n" +
+			"</tr>\n" +
+			"<tr>\n" +
+			"	<td  style=\"color:#FF0000;\">      		  Фрагмент содержит информацию о знаке     </td>\n" +
+			"</tr>\n" +
+			"<tr>\n" +
+			"	<td style=\"background-color:#FFFFCC;\">      Фрагмент содержит информацию о ментале или витале     </td>\n" +
+			"</tr>\n" +
+			"<tr>\n" +
+			"	<td style=\"text-decoration:underline\">      Прочий выделенный фрагмент анализа     </td>\n" +
+			"</tr>\n" +
+			"</table >\n"
+		);
 
 		setProgress(HEADER_PROGRESS);
 
 		//document content
-		writer.write("<br/>\n");
-		writer.write("\n<h2>  АНАЛИЗ </h2>\n");
-		writer.write("\n <table title=\"protocol\" border=2 width=\"100%\"> 	\n");
-		writer.write("<tr>\n");
-		writer.write("	<th width=\"60%\"> ВОПРОСЫ И ОТВЕТЫ </th>\n");
-		writer.write("	<th width=\"40%\"> АНАЛИЗ ЭКСПЕРТА</th>\n");
-		writer.write("</tr>\n");
-		writer.write("<tr>\n");
-		writer.write("	<td>");
+		writer.write(
+			"<br/>\n\n" +
+			"<h2>  АНАЛИЗ </h2>\n\n" +
+			" <table title=\"protocol\" border=2 width=\"100%\"> 	\n" +
+			"<tr>\n" +
+			"	<th width=\"60%\"> ВОПРОСЫ И ОТВЕТЫ </th>\n" +
+			"	<th width=\"40%\"> АНАЛИЗ ЭКСПЕРТА</th>\n" +
+			"</tr>\n" +
+			"<tr>\n" +
+			"	<td>"
+		);
 
 		// PREPARING
 		List<DocumentFlowEvent> flowEvents = new ArrayList<DocumentFlowEvent>();
@@ -422,19 +442,24 @@ public class LegacyHtmlWriter extends SwingWorker {
 
 		// if generating report
 		if (analystWindow.getGenerateReport()) {
-			writer.write("<br/>");
-			writer.write("<h1> Определение ТИМа </h1>");
-			writer.write("<br/>");
+			writer.write(
+				"<br/>" +
+				"<h1> Определение ТИМа </h1>" +
+				"<br/>"
+			);
 			writer.write(analystWindow.getNavigeTree().getReport());
 			writer.write(analystWindow.getAnalysisTree().getReport());
 		}
 
-		writer.write("<br/>");
-		writer.write(String.format("Протокол определения ТИМа создан программой \"Информационный анализ\", верисия: %s <br/>",
-			AnalystWindow.VERSION));
-		writer.write("© Школа системной соционики, Киев.<br/>");
-		writer.write("http://www.socionicasys.ru\n");
-		writer.write("</body>\n</html>\n");
+		writer.write(String.format(
+			"<br/>" +
+			"Протокол определения ТИМа создан программой \"Информационный анализ\", верисия: %s <br/>" +
+			"© Школа системной соционики, Киев.<br/>" +
+			"http://www.socionicasys.ru\n" +
+			"</body>\n" +
+			"</html>\n",
+			AnalystWindow.VERSION
+		));
 
 		setProgress(100);
 	}
