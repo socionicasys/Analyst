@@ -9,7 +9,7 @@ import javax.swing.*;
 import javax.swing.text.*;
 
 public class LegacyHtmlWriter extends SwingWorker {
-	private static final String encoding = "UTF-8";
+	private static final String FILE_ENCODING = "UTF-8";
 	private static final Logger logger = LoggerFactory.getLogger(LegacyHtmlWriter.class);
 
 	private static final int HEADER_PROGRESS = 20;
@@ -133,7 +133,7 @@ public class LegacyHtmlWriter extends SwingWorker {
 
 	@Override
 	protected Object doInBackground() throws Exception {
-		Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, encoding));
+		Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, FILE_ENCODING));
 		try {
 			writeDocument(writer);
 		} catch (Exception e) {
@@ -175,7 +175,7 @@ public class LegacyHtmlWriter extends SwingWorker {
 			"	</style>\n" +
 			"</head> \n" +
 			"<body> \n",
-			encoding,
+			FILE_ENCODING,
 			document.getProperty(Document.TitleProperty)
 		));
 
