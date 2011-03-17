@@ -2,6 +2,8 @@ package ru.socionicasys.analyst.predicates;
 
 import ru.socionicasys.analyst.types.Aspect;
 import ru.socionicasys.analyst.types.Sociotype;
+import ru.socionicasys.analyst.util.EqualsUtil;
+import ru.socionicasys.analyst.util.HashUtil;
 
 /**
  * Предикат исполняется, если функция с заданным аспектом имеет размерность не ниже указанной.
@@ -45,5 +47,26 @@ public class DimensionPredicate implements Predicate {
 		default:
 			return "";
 		}
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof DimensionPredicate)) {
+			return false;
+		}
+
+		DimensionPredicate otherPredicate = (DimensionPredicate) obj;
+		return EqualsUtil.areEqual(aspect, otherPredicate.aspect) && dimension == otherPredicate.dimension;
+	}
+
+	@Override
+	public int hashCode() {
+		HashUtil hashUtil = new HashUtil();
+		hashUtil.hash(aspect);
+		hashUtil.hash(dimension);
+		return hashUtil.getComputedHash();
 	}
 }

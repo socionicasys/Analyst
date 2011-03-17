@@ -2,6 +2,8 @@ package ru.socionicasys.analyst.predicates;
 
 import ru.socionicasys.analyst.types.Aspect;
 import ru.socionicasys.analyst.types.Sociotype;
+import ru.socionicasys.analyst.util.EqualsUtil;
+import ru.socionicasys.analyst.util.HashUtil;
 
 /**
  * Предикат исполняется, если функции с заданными аспектами находятся в одном блоке.
@@ -34,5 +36,27 @@ public class BlockPredicate implements Predicate {
 	@Override
 	public String toString() {
 		return String.format("%s-%s", sourceAspect, destinationAspect);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof BlockPredicate)) {
+			return false;
+		}
+
+		BlockPredicate otherPredicate = (BlockPredicate) obj;
+		return EqualsUtil.areEqual(sourceAspect, otherPredicate.sourceAspect)
+			&& EqualsUtil.areEqual(destinationAspect, otherPredicate.destinationAspect);
+	}
+
+	@Override
+	public int hashCode() {
+		HashUtil hashUtil = new HashUtil();
+		hashUtil.hash(sourceAspect);
+		hashUtil.hash(destinationAspect);
+		return hashUtil.getComputedHash();
 	}
 }

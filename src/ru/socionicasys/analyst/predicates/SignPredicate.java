@@ -3,6 +3,8 @@ package ru.socionicasys.analyst.predicates;
 import ru.socionicasys.analyst.types.Aspect;
 import ru.socionicasys.analyst.types.Sign;
 import ru.socionicasys.analyst.types.Sociotype;
+import ru.socionicasys.analyst.util.EqualsUtil;
+import ru.socionicasys.analyst.util.HashUtil;
 
 /**
  * Предикат исполняется, если заданная функция имеет свойства заданного знака.
@@ -33,5 +35,26 @@ public class SignPredicate implements Predicate {
 	@Override
 	public String toString() {
 		return String.format(" %s ", sign);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof SignPredicate)) {
+			return false;
+		}
+
+		SignPredicate otherPredicate = (SignPredicate) obj;
+		return EqualsUtil.areEqual(aspect, otherPredicate.aspect) && sign == otherPredicate.sign;
+	}
+
+	@Override
+	public int hashCode() {
+		HashUtil hashUtil = new HashUtil();
+		hashUtil.hash(aspect);
+		hashUtil.hash(sign);
+		return hashUtil.getComputedHash();
 	}
 }
