@@ -11,4 +11,9 @@ public class MentalPredicate extends PositionPredicate {
 	public MentalPredicate(Aspect aspect) {
 		super(aspect, Arrays.asList(1, 2, 3, 4));
 	}
+
+	@Override
+	public String toString() {
+		return "Ментал";
+	}
 }

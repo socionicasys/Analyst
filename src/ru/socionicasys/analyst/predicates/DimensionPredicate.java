@@ -30,4 +30,20 @@ public class DimensionPredicate implements Predicate {
 	public boolean check(Sociotype sociotype) {
 		return sociotype.getFunctionByAspect(aspect).getDimension() >= dimension;
 	}
+
+	@Override
+	public String toString() {
+		switch (dimension) {
+		case 1:
+			return "Ex";
+		case 2:
+			return "Nr";
+		case 3:
+			return "St";
+		case 4:
+			return "Tm";
+		default:
+			return "";
+		}
+	}
 }

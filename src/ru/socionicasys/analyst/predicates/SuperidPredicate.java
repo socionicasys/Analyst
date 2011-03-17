@@ -11,4 +11,9 @@ public class SuperidPredicate extends PositionPredicate {
 	public SuperidPredicate(Aspect aspect) {
 		super(aspect, Arrays.asList(5, 6));
 	}
+
+	@Override
+	public String toString() {
+		return "Суперид";
+	}
 }

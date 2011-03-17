@@ -11,4 +11,9 @@ public class HighDimensionPredicate extends PositionPredicate {
 	public HighDimensionPredicate(Aspect aspect) {
 		super(aspect, Arrays.asList(1, 2, 7, 8));
 	}
+
+	@Override
+	public String toString() {
+		return "Многомерность";
+	}
 }

@@ -30,4 +30,9 @@ public class BlockPredicate implements Predicate {
 		// Функции находятся в одном блоке, если их индексы отличаются на 1 и меньший из них — нечетный
 		return Math.abs(sourcePosition - destinationPosition) == 1 && minPosition % 2 == 1;
 	}
+
+	@Override
+	public String toString() {
+		return String.format("%s-%s", sourceAspect, destinationAspect);
+	}
 }

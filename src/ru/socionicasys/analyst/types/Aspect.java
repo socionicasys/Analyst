@@ -18,13 +18,11 @@ public enum Aspect {
 	 */
 	private final String abbreviation;
 
-	private Aspect(String abbreviation)
-	{
+	private Aspect(String abbreviation) {
 		this.abbreviation = abbreviation;
 	}
 
-	public String getAbbreviation()
-	{
+	public String getAbbreviation() {
 		return abbreviation;
 	}
 
@@ -57,5 +55,10 @@ public enum Aspect {
 			}
 		}
 		throw new IllegalArgumentException("Illegal aspect abbreviation");
+	}
+
+	@Override
+	public String toString() {
+		return abbreviation;
 	}
 }

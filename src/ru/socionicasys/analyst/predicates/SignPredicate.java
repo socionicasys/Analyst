@@ -29,4 +29,9 @@ public class SignPredicate implements Predicate {
 		Sign actualSign = sociotype.getFunctionByAspect(aspect).getSign();
 		return sign == Sign.PLUS || actualSign == Sign.MINUS;
 	}
+
+	@Override
+	public String toString() {
+		return String.format(" %s ", sign);
+	}
 }

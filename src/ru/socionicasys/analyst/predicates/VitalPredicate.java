@@ -11,4 +11,9 @@ public class VitalPredicate extends PositionPredicate {
 	public VitalPredicate(Aspect aspect) {
 		super(aspect, Arrays.asList(5, 6, 7, 8));
 	}
+
+	@Override
+	public String toString() {
+		return "Витал";
+	}
 }

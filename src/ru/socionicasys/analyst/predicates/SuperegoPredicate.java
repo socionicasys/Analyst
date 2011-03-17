@@ -11,4 +11,9 @@ public class SuperegoPredicate extends PositionPredicate {
 	public SuperegoPredicate(Aspect aspect) {
 		super(aspect, Arrays.asList(3, 4));
 	}
+
+	@Override
+	public String toString() {
+		return "Суперэго";
+	}
 }
