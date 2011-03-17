@@ -22,7 +22,6 @@ public class BTree extends JTree implements ADocumentChangeListener {
 
 	private final DefaultMutableTreeNode rootNode;
 	private final DefaultTreeModel treeModel;
-	private TreePath path = null;
 
 	private final Map<Sociotype, DefaultMutableTreeNode> matchNodes;
 	private final Map<Sociotype, DefaultMutableTreeNode> missNodes;
@@ -63,10 +62,12 @@ public class BTree extends JTree implements ADocumentChangeListener {
 			return;
 		}
 
+		logger.debug("Document has changed, updating tree");
+
 		rootNode.setUserObject(document.getProperty(Document.TitleProperty));
-		TreePath newPath = getSelectionPath();
-		if (newPath != null) {
-			path = newPath;
+		TreePath selectionPath = getSelectionPath();
+		if (selectionPath != null) {
+			logger.debug("Previous selection path {}", selectionPath);
 		}
 
 		//Analyze document structure and update tree nodes
@@ -110,13 +111,9 @@ public class BTree extends JTree implements ADocumentChangeListener {
 
 		treeModel.reload();
 
-		if (path != null) {
-			Object lastPathComponent = path.getLastPathComponent();
-			if (lastPathComponent instanceof TreeNode && ((TreeNode) lastPathComponent).isLeaf()) {
-				expandPath(path.getParentPath());
-			} else {
-				expandPath(path);
-			}
+		if (selectionPath != null) {
+			logger.debug("Setting back selection path to {} after model reload", selectionPath);
+			setSelectionPath(selectionPath);
 		}
 	}
 
