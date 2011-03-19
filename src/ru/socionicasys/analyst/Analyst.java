@@ -42,12 +42,10 @@ public class Analyst {
 	private static void createAndShowGUI(String startupFilename) {
 		//Create and set up the window.
 		logger.trace("> createAndShowGUI(), startupFilename={}", startupFilename);
-		final AnalystWindow frame = new AnalystWindow(startupFilename);
-		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		final AnalystWindow analystWindow = new AnalystWindow(startupFilename);
 
 		//Display the window.
-		frame.pack();
-		frame.setVisible(true);
+		analystWindow.setVisible(true);
 		logger.trace("< createAndShowGUI()");
 	}
 }

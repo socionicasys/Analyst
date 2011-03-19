@@ -58,6 +58,8 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	public AnalystWindow(String startupFilename) {
 		super(String.format("%s - %s", APPLICATION_NAME, ADocument.DEFAULT_TITLE));
 
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -187,6 +189,8 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		//Start watching for undoable edits and caret changes.
 		document.addUndoableEditListener(new MyUndoableEditListener());
 		textPane.addCaretListener(status);
+
+		pack();
 
 		// load document passed in the command line
 		if (startupFilename != null) {
