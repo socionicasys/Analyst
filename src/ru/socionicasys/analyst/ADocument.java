@@ -479,7 +479,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		int selectionEnd = offset + length;
 		String text;
 		Map<DocSection, AttributeSet> styleMap = new HashMap<DocSection, AttributeSet>();
-		Map<DocSection, AData> docMap = null;
+		Map<DocSection, AData> docMap = new HashMap<DocSection, AData>();
 
 		try {
 			text = getText(offset, length);
@@ -493,7 +493,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 				if (currentSet == null) {
 					currentSet = attributeSet;
 				}
-				if (!attributeSet.isEqual(currentSet) || i == (selectionEnd)) {
+				if (!attributeSet.isEqual(currentSet) || i == selectionEnd) {
 					styleMap.put(new DocSection(styleRunStart - offset, i - offset),
 						new SimpleAttributeSet(currentSet));
 					currentSet = attributeSet;
@@ -503,7 +503,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 			//putting AData to a HashMap
 			if (aDataMap != null) {
-				docMap = new HashMap<DocSection, AData>();
 				for (Entry<ASection, AData> dataEntry : aDataMap.entrySet()) {
 					int secSt = dataEntry.getKey().getStartOffset();
 					int secEnd = dataEntry.getKey().getEndOffset();
@@ -531,37 +530,29 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	public void pasteADocFragment(int position, ADocumentFragment fragment) {
-		String text = fragment.getText();
-		Map<DocSection, AttributeSet> styleMap = fragment.getStyleMap();
-		Map<DocSection, AData> fragMap = fragment.getADataMap();
-
+		// inserting plain text
 		try {
-			// inserting plain text
-			if (text != null) {
-				insertString(position, text, defaultStyle);
-			}
-
-			//  inserting styles
-			if (styleMap != null) {
-				for (Entry<DocSection, AttributeSet> entry : styleMap.entrySet()) {
-					setCharacterAttributes(position + entry.getKey().getStart(),
-						entry.getKey().getLength(),
-						entry.getValue(),
-						true);
-				}
-			}
-
-			//  inserting AData
-			if (fragMap != null) {
-				for (Entry<DocSection, AData> entry : fragMap.entrySet()) {
-					DocSection docSection = entry.getKey();
-					aDataMap.put(
-						new ASection(position + docSection.getStart(), position + docSection.getEnd()),
-						entry.getValue());
-				}
-			}
+			String text = fragment.getText();
+			insertString(position, text, defaultStyle);
 		} catch (BadLocationException e) {
-			logger.error("Error in pasteADocFragment()", e);
+			logger.error("Invalid document position {} for pasting text", position, e);
+			return;
+		}
+
+		// inserting styles
+		Map<DocSection, AttributeSet> styleMap = fragment.getStyleMap();
+		for (Entry<DocSection, AttributeSet> entry : styleMap.entrySet()) {
+			DocSection section = entry.getKey();
+			AttributeSet style = entry.getValue();
+			setCharacterAttributes(position + section.getStart(), section.getLength(), style, true);
+		}
+
+		// inserting AData
+		Map<DocSection, AData> fragMap = fragment.getADataMap();
+		for (Entry<DocSection, AData> entry : fragMap.entrySet()) {
+			DocSection section = entry.getKey();
+			AData data = entry.getValue();
+			aDataMap.put(new ASection(position + section.getStart(), position + section.getEnd()), data);
 		}
 	}
 }

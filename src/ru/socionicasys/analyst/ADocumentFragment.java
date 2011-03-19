@@ -15,6 +15,9 @@ import java.util.Map;
 import javax.swing.text.AttributeSet;
 
 public class ADocumentFragment implements Transferable, Serializable {
+	private static final Logger logger = LoggerFactory.getLogger(ADocumentFragment.class);
+	private static final long serialVersionUID = -5267960680238237369L;
+
 	public static final String MIME_TYPE =
 		"application/x-java-serialized-object; class=ru.socionicasys.analyst.ADocumentFragment";
 
@@ -22,13 +25,15 @@ public class ADocumentFragment implements Transferable, Serializable {
 	private final Map<DocSection, AttributeSet> styleMap;
 	private final Map<DocSection, AData> aDataMap;
 
-	private static final Logger logger = LoggerFactory.getLogger(ADocumentFragment.class);
+	public ADocumentFragment(String text) {
+		this.text = text;
+		styleMap = new HashMap<DocSection, AttributeSet>();
+		aDataMap = new HashMap<DocSection, AData>();
+	}
 
 	public ADocumentFragment(String text, Map<DocSection, AttributeSet> styleMap, Map<DocSection, AData> aDataMap) {
-		this.text = text;
-		this.styleMap = new HashMap<DocSection, AttributeSet>();
+		this(text);
 		this.styleMap.putAll(styleMap);
-		this.aDataMap = new HashMap<DocSection, AData>();
 		this.aDataMap.putAll(aDataMap);
 	}
 

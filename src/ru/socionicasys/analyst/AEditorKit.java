@@ -17,15 +17,9 @@ import javax.swing.text.StyledEditorKit;
 import javax.swing.text.TextAction;
 
 public class AEditorKit extends StyledEditorKit {
-
-
-	public AEditorKit() {
-		super();
-	}
-
 	public static class CutAction extends TextAction {
-		private JTextPane textPane;
 		private static final Logger logger = LoggerFactory.getLogger(CutAction.class);
+		private final JTextPane textPane;
 
 		public CutAction(JTextPane textPane) {
 			super("cut-to-clipboard");
@@ -35,12 +29,13 @@ public class AEditorKit extends StyledEditorKit {
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			ADocument aDoc = (ADocument) textPane.getDocument();
-			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 			Caret caret = textPane.getCaret();
 			int dot = caret.getDot();
 			int mark = caret.getMark();
 			//if there is no selection - do nothing
-			if (dot == mark) return;
+			if (dot == mark) {
+				return;
+			}
 			int selectionStart = Math.min(dot, mark);
 			int selectionEnd = Math.max(dot, mark);
 
@@ -55,11 +50,10 @@ public class AEditorKit extends StyledEditorKit {
 
 			aDoc.fireADocumentChanged();
 		}
-	}//end class CutAction
+	}
 
-	//
 	public static class CopyAction extends TextAction {
-		private JTextPane textPane;
+		private final JTextPane textPane;
 
 		public CopyAction(JTextPane textPane) {
 			super("copy-to-clipboard");
@@ -70,13 +64,11 @@ public class AEditorKit extends StyledEditorKit {
 		public void actionPerformed(ActionEvent ae) {
 			copyToClipboard(textPane);
 		}
-	}//end class CopyAction
+	}
 
-
-	//
 	public static class PasteAction extends TextAction {
-		private JTextPane textPane;
 		private static final Logger logger = LoggerFactory.getLogger(PasteAction.class);
+		private final JTextPane textPane;
 
 		public PasteAction(JTextPane textPane) {
 			super("paste-from-clipboard");
@@ -84,70 +76,60 @@ public class AEditorKit extends StyledEditorKit {
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent ae) {
-			ADocument aDoc = (ADocument) textPane.getDocument();
-			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		public void actionPerformed(ActionEvent event) {
 			Caret caret = textPane.getCaret();
 			int dot = caret.getDot();
 			int mark = caret.getMark();
+
 			//if there is something selected - do nothing
-			if (dot != mark) return;
-
-			ADocumentFragment fragment = null;
-			/*
-		 DataFlavor [] f = clipboard.getAvailableDataFlavors();
-		 for (int i = 0 ; i<f.length; i++){
-			 System.out.println(f[i].getMimeType());
-		 }
-		 */
-			try {
-				Transferable tr = clipboard.getContents(this);
-
-				DataFlavor flavor = new DataFlavor(ADocumentFragment.MIME_TYPE);
-
-				if (tr.isDataFlavorSupported(flavor))
-					fragment = (ADocumentFragment) tr.getTransferData(flavor);
-				else {
-					flavor = new DataFlavor("application/x-java-serialized-object; class=java.lang.String");
-					if (tr.isDataFlavorSupported(flavor)) {
-						String s = new String((((String) tr.getTransferData(flavor))));
-						fragment = new ADocumentFragment(s, null, null);
-					}
-				}
-			} catch (UnsupportedFlavorException e) {
-				logger.error("Error in actionPerformed()", e);
-			} catch (IOException e) {
-				logger.error("Error in actionPerformed()", e);
-			} catch (ClassNotFoundException e) {
-				logger.error("Error in actionPerformed()", e);
+			if (dot != mark) {
+				return;
 			}
 
-			if (fragment == null) return;
+			try {
+				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+				Transferable clipboardContents = clipboard.getContents(this);
+				DataFlavor nativeFlavor = new DataFlavor(ADocumentFragment.MIME_TYPE);
+				ADocumentFragment fragment;
+				if (clipboardContents.isDataFlavorSupported(nativeFlavor)) {
+					fragment = (ADocumentFragment) clipboardContents.getTransferData(nativeFlavor);
+				} else if (clipboardContents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+					String clipboardText = (String) clipboardContents.getTransferData(DataFlavor.stringFlavor);
+					fragment = new ADocumentFragment(clipboardText);
+				} else {
+					return;
+				}
 
-			aDoc.startCompoundEdit();
-			aDoc.pasteADocFragment(dot, fragment);
-			aDoc.endCompoundEdit(null);
-			//aDoc.fireUndoableEditUpdate(new UndoableEditEvent(this, aDoc.new ADocFragmentPasteEdit(dot, aDoc, fragment)));
-			//AnalystWindow.undo.addEdit((UndoableEdit)  aDoc.new ADocFragmentPasteEdit(dot, aDoc, fragment));
-
-			aDoc.fireADocumentChanged();
+				ADocument document = (ADocument) textPane.getDocument();
+				document.startCompoundEdit();
+				document.pasteADocFragment(dot, fragment);
+				document.endCompoundEdit(null);
+				document.fireADocumentChanged();
+			} catch (UnsupportedFlavorException e) {
+				logger.error("Unable to get clipboard contents", e);
+			} catch (IOException e) {
+				logger.error("Unable to get clipboard contents", e);
+			} catch (ClassNotFoundException e) {
+				logger.error("Unable to create ADocumentFragment data flavor", e);
+			}
 		}
-	}//end class PasteAction
+	}
 
 	private static void copyToClipboard(JTextPane textPane) {
-		ADocument aDoc = (ADocument) textPane.getDocument();
-		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-
 		Caret caret = textPane.getCaret();
 		int dot = caret.getDot();
 		int mark = caret.getMark();
 		//if there is no selection - do nothing
-		if (dot == mark) return;
+		if (dot == mark) {
+			return;
+		}
 		int selectionStart = Math.min(dot, mark);
 		int selectionEnd = Math.max(dot, mark);
 
-		// putting data to clipboard
+		ADocument document = (ADocument) textPane.getDocument();
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 
-		clipboard.setContents(aDoc.getADocFragment(selectionStart, selectionEnd - selectionStart), null);
+		// putting data to clipboard
+		clipboard.setContents(document.getADocFragment(selectionStart, selectionEnd - selectionStart), null);
 	}
 }
