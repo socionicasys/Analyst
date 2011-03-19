@@ -81,12 +81,9 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		);
 		// popup menu for the textPane
 		popupMenu = new JPopupMenu();
-
+		textPane.setComponentPopupMenu(popupMenu);
 		textPane.setCaretPosition(0);
 		textPane.setMinimumSize(new Dimension(400, 100));
-
-		// binding the popup menu for textPane
-		Toolkit.getDefaultToolkit().getSystemEventQueue().push(new MyEventQueue());
 
 		fileChooser = new JFileChooser();
 		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Файлы ." + EXTENSION, EXTENSION));
@@ -1044,43 +1041,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			choice = JOptionPane.NO_OPTION;
 		}
 		return choice;
-	}
-
-	private class MyEventQueue extends EventQueue {
-		@Override
-		protected void dispatchEvent(AWTEvent event) {
-			super.dispatchEvent(event);
-
-			// interested only in mouse events
-			if (!(event instanceof MouseEvent)) {
-				return;
-			}
-
-			MouseEvent me = (MouseEvent) event;
-
-			// interested only in popup triggers
-			if (!me.isPopupTrigger()) {
-				return;
-			}
-
-			// me.getComponent(...) returns the heavy weight component on which event occured
-			Component comp = SwingUtilities.getDeepestComponentAt(me.getComponent(), me.getX(), me.getY());
-
-			// interested only in text components
-			if (!(comp instanceof JTextPane)) {
-				return;
-			}
-
-			// no popup shown by user code
-			if (MenuSelectionManager.defaultManager().getSelectedPath().length > 0) {
-				return;
-			}
-
-			// create popup menu and show
-
-			Point pt = SwingUtilities.convertPoint(me.getComponent(), me.getPoint(), textPane);
-			popupMenu.show(textPane, pt.x, pt.y);
-		}
 	}
 
 	public ATree getNavigeTree() {
