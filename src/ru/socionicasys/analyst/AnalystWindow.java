@@ -595,7 +595,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		menu.addSeparator();
 		popupMenu.addSeparator();
 
-		a = new SearchAction((JTextComponent) textPane, document);
+		a = new SearchAction(textPane);
 		a.putValue(Action.NAME, "Поиск");
 		menuItem = new JMenuItem(a);
 		menuItem.setAction(a);

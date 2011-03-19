@@ -8,33 +8,36 @@ import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 
 public class SearchAction extends AbstractAction {
-	private ADocument aDoc;
-	private JTextComponent component;
-	private JPanel mainPanel;
-	private JTextArea searchQuote;
-	private JCheckBox caseCheckbox;
-	private JLabel status;
-	private ButtonGroup bg;
 	private static final Logger logger = LoggerFactory.getLogger(SearchAction.class);
 
-	public SearchAction(JTextComponent component, ADocument aDoc) {
-		super();
-		putValue(Action.NAME, "Поиск");
-		this.aDoc = aDoc;
-		this.component = component;
+	private final JTextComponent textComponent;
+	private final JPanel mainPanel;
+	private final JTextArea searchQuote;
+	private final JCheckBox caseCheckbox;
+	private final JLabel status;
+	private final ButtonGroup searchDirectionButtons;
+
+	public SearchAction(JTextComponent textComponent) {
+		super("Поиск");
+		this.textComponent = textComponent;
 
 		JRadioButton forwardDirection = new JRadioButton("Вперед");
 		forwardDirection.setActionCommand("f");
+
 		JRadioButton backwardDirection = new JRadioButton("Назад");
 		backwardDirection.setActionCommand("b");
-		bg = new ButtonGroup();
-		bg.add(forwardDirection);
-		bg.add(backwardDirection);
+
+		searchDirectionButtons = new ButtonGroup();
+		searchDirectionButtons.add(forwardDirection);
+		searchDirectionButtons.add(backwardDirection);
 		forwardDirection.setSelected(true);
+
 		JButton searchButton = new JButton("Искать");
+
 		searchQuote = new JTextArea(3, 30);
 		searchQuote.setMaximumSize(new Dimension(400, 100));
 		searchQuote.setMinimumSize(new Dimension(400, 100));
@@ -90,19 +93,19 @@ public class SearchAction extends AbstractAction {
 		} else {
 			boolean caseSensitive = caseCheckbox.isSelected();
 			boolean forward = true;
-			if ((bg.getSelection()).getActionCommand().equals("f")) {
+			if (searchDirectionButtons.getSelection().getActionCommand().equals("f")) {
 				forward = true;
 			}
-			if ((bg.getSelection()).getActionCommand().equals("b")) {
+			if (searchDirectionButtons.getSelection().getActionCommand().equals("b")) {
 				forward = false;
 			}
 
-			int searchOffset = component.getCaret().getDot();
+			int searchOffset = textComponent.getCaret().getDot();
 
-			int searchResult = -1;
 			String text = "";
 			try {
-				text = aDoc.getText(0, aDoc.getLength());
+				Document document = textComponent.getDocument();
+				text = document.getText(0, document.getLength());
 			} catch (BadLocationException e) {
 				logger.error("Illegal document position in actionPerformed()", e);
 			}
@@ -122,31 +125,29 @@ public class SearchAction extends AbstractAction {
 
 			int dot = searchOffset;
 			int mark = searchOffset;
-
+			int searchResult;
 			if (forward) {
 				searchResult = text.indexOf(searchText, searchOffset);
 				if (searchResult > 0) {
-					searchOffset = Math.min(searchResult + searchText.length(), text.length());
-					dot = searchOffset;
+					dot = Math.min(searchResult + searchText.length(), text.length());
 					mark = searchResult;
 				}
 			} else {
-				searchResult = (text.substring(0, searchOffset)).lastIndexOf(searchText);
+				searchResult = text.substring(0, searchOffset).lastIndexOf(searchText);
 				if (searchResult > 0) {
-					searchOffset = searchResult;
 					dot = Math.min(searchResult + searchText.length(), text.length());
-					mark = searchOffset;
+					mark = searchResult;
 				}
 			}
 
 			if (searchResult >= 0) {
 				status.setText("Найдено позиция: " + searchResult);
 				try {
-					Rectangle rect = component.modelToView(searchResult);
-					((JViewport) component.getParent()).scrollRectToVisible(rect);
-					component.getCaret().setDot(dot);
-					component.getCaret().moveDot(mark);
-					component.requestFocus();
+					Rectangle rect = textComponent.modelToView(searchResult);
+					((JComponent) textComponent.getParent()).scrollRectToVisible(rect);
+					textComponent.getCaret().setDot(dot);
+					textComponent.getCaret().moveDot(mark);
+					textComponent.requestFocus();
 					status.setText("");
 				} catch (BadLocationException e1) {
 					logger.error("SearchPane: error setting model to view :: bad location", e1);
