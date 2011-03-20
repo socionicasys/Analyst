@@ -8,7 +8,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.text.*;
 
-public class LegacyHtmlWriter extends SwingWorker {
+public class LegacyHtmlWriter extends SwingWorker<Object, Object> {
 	private static final String FILE_ENCODING = "UTF-8";
 	private static final Logger logger = LoggerFactory.getLogger(LegacyHtmlWriter.class);
 
@@ -136,12 +136,19 @@ public class LegacyHtmlWriter extends SwingWorker {
 		Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, FILE_ENCODING));
 		try {
 			writeDocument(writer);
+		} catch (BadLocationException e) {
+			exception = e;
+			logger.error("Incorrect document position while saving document", e);
+		} catch (IOException e) {
+			exception = e;
+			logger.error("IO error while saving document", e);
 		} catch (Exception e) {
-			progressWindow.close();
-			this.exception = e;
-			logger.error("IO error in doInBackground()", e);
+			exception = e;
+			logger.error("Unexpected exception while saving document", e);
 		} finally {
+			progressWindow.close();
 			writer.close();
+			outputStream.close();
 		}
 
 		return null;
@@ -185,7 +192,7 @@ public class LegacyHtmlWriter extends SwingWorker {
 		//document header
 		writer.write(String.format(
 			"<br/>\n<br/>" +
-			"\n <table title=\"header\" border=1 width=\"40%\"> 	\n" +
+			"\n <table title=\"header\" border=1 width=\"40%%\"> 	\n" +
 			"<tr>\n" +
 			"	<td>      %s     </td>\n" +
 			"	<td>%s	</td>\n" +
