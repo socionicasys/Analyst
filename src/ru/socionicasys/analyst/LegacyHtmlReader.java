@@ -47,9 +47,13 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 		try {
 			readDocument();
 		} catch (IOException e) {
+			exception = e;
+			logger.error("IO error while loading document", e);
+		} catch (Exception e) {
+			exception = e;
+			logger.error("Non-IO exception while loading document", e);
+		} finally {
 			progressWindow.close();
-			this.exception = e;
-			logger.error("IO error in doInBackground()", e);
 		}
 
 		return null;
