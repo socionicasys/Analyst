@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="analyst" default="all">
+<project name="analyst" default="all" xmlns:ivy="antlib:org.apache.ivy.ant">
 	<dirname property="analyst.base_dir" file="${ant.file}" />
 	<property file="build.properties" />
 	<property name="analyst.source_dir" value="${analyst.base_dir}/src" />
@@ -18,7 +18,11 @@
 		<delete dir="${analyst.bin_dir}" />
 	</target>
 
-	<target name="compile">
+	<target name="resolve">
+		<ivy:retrieve />
+	</target>
+
+	<target name="compile" depends="resolve">
 		<mkdir dir="${analyst.output_dir}" />
 		<javac srcdir="${analyst.source_dir}" destdir="${analyst.output_dir}" debug="false" encoding="utf-8" >
 			<classpath>
