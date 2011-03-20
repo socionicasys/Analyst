@@ -262,87 +262,8 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		JMenuItem save = new JMenuItem(new SaveAction(false));
 		JMenuItem saveAs = new JMenuItem(new SaveAction(true));
 
-		JMenuItem load = new JMenuItem("Открыть");
-		load.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				try {
-					status.setText("Открытие документа...");
-					if (saveConfirmation() == JOptionPane.CANCEL_OPTION) {
-						return;
-					}
-					fileChooser.setDialogTitle("Открытие документа");
-					int returnVal = fileChooser.showDialog(AnalystWindow.this, "Открыть");
-					File file = null;
-					if (returnVal == JFileChooser.APPROVE_OPTION) {
-						file = fileChooser.getSelectedFile();
-					} else {
-						return;
-					}
-
-					FileInputStream fis = new FileInputStream(file);
-					ProgressWindow pw = new ProgressWindow(frame, document, "    Идет загрузка файла...   ");
-					document.load(fis, pw);
-
-					fileName = file.getAbsolutePath();
-					// after loading the document scroll it to the beginning
-					textPane.grabFocus();
-
-					status.setText("");
-					frame.setTitle(APPLICATION_NAME + " - " + file.getName());
-				} catch (FileNotFoundException e) {
-					logger.error("Error opening file " + fileName, e);
-					JOptionPane.showOptionDialog(frame,
-						"Ошибка открытия файла: " + fileName + "\n\n" + e.getMessage(),
-						"Ошибка открытия файла",
-						JOptionPane.OK_OPTION,
-						JOptionPane.ERROR_MESSAGE,
-						null,
-						new Object[]{"Закрыть"},
-						null);
-				} catch (Exception e) {
-					logger.error("Error setting model to view :: bad location", e);
-				}
-			}
-		});
-
-		JMenuItem append = new JMenuItem("Открыть и присоединить");
-		append.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				try {
-					fileChooser.setDialogTitle("Открыть и присоединить документ");
-					int returnVal = fileChooser.showDialog(AnalystWindow.this, "Открыть и присоединить");
-					File file = null;
-					if (returnVal == JFileChooser.APPROVE_OPTION) {
-						file = fileChooser.getSelectedFile();
-					}
-
-					if (file != null) {
-						FileInputStream fis = new FileInputStream(file);
-						ProgressWindow pw = new ProgressWindow(frame, document, "    Идет загрузка файла...   ");
-						document.append(fis, pw);
-					}
-					// after loading the document scroll it to the beginning
-					JViewport viewport = (JViewport) textPane.getParent();
-					String d = textPane.getText();
-					Rectangle rect = textPane.modelToView(0);
-					viewport.scrollRectToVisible(rect);
-				} catch (FileNotFoundException e) {
-					logger.error("Error opening file", fileName);
-					JOptionPane.showOptionDialog(frame,
-						"Ошибка открытия файла: " + fileName + "\n\n" + e.getMessage(),
-						"Ошибка открытия файла",
-						JOptionPane.OK_OPTION,
-						JOptionPane.ERROR_MESSAGE,
-						null,
-						new Object[]{"Закрыть"},
-						null);
-				} catch (Exception e) {
-					logger.error("Error setting model to view :: bad location");
-				}
-			}
-		});
+		JMenuItem load = new JMenuItem(new OpenAction(false));
+		JMenuItem append = new JMenuItem(new OpenAction(true));
 
 		menu.add(newDocumnet);
 		menu.addSeparator();
@@ -965,6 +886,64 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 					null,
 					new Object[]{"Закрыть"},
 					null);
+			}
+		}
+	}
+
+	private class OpenAction extends AbstractAction {
+		private final boolean append;
+
+		public OpenAction(boolean append) {
+			super(append ? "Открыть и присоединить..." : "Открыть...");
+			this.append = append;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				if (!append) {
+					status.setText("Открытие документа...");
+					if (saveConfirmation() == JOptionPane.CANCEL_OPTION) {
+						return;
+					}
+				}
+				fileChooser.setDialogTitle(append ? "Открыть и присоединить документ" : "Открытие документа");
+				File file;
+				int openResult = fileChooser.showDialog(AnalystWindow.this, append ? "Открыть и присоединить" : "Открыть");
+				if (openResult == JFileChooser.APPROVE_OPTION) {
+					file = fileChooser.getSelectedFile();
+				} else {
+					return;
+				}
+
+				// Загрузка происходит асинхронно, FileInputStream будет закрыт в LegacyHtmlReader
+				@SuppressWarnings({"IOResourceOpenedButNotSafelyClosed"})
+				FileInputStream fis = new FileInputStream(file);
+				ProgressWindow pw = new ProgressWindow(AnalystWindow.this, document, "    Идет загрузка файла...   ");
+				if (append) {
+					document.append(fis, pw);
+				} else {
+					document.load(fis, pw);
+				}
+
+				fileName = file.getAbsolutePath();
+				textPane.grabFocus();
+				status.setText("");
+				setTitle(String.format("%s - %s", APPLICATION_NAME, file.getName()));
+			} catch (HeadlessException ex) {
+				logger.error("Somehow got stuck in a headless environment", ex);
+			} catch (FileNotFoundException ex) {
+				logger.error("Error opening file {}", fileName, ex);
+				JOptionPane.showOptionDialog(AnalystWindow.this,
+					String.format("Ошибка открытия файла: %s\n\n%s", fileName, ex.getMessage()),
+					"Ошибка открытия файла",
+					JOptionPane.OK_OPTION,
+					JOptionPane.ERROR_MESSAGE,
+					null,
+					new Object[]{"Закрыть"},
+					null);
+			} catch (Exception ex) {
+				logger.error("Error setting model to view :: bad location", ex);
 			}
 		}
 	}
