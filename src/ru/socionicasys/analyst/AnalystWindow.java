@@ -8,13 +8,11 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.SwingWorker.StateValue;
-import javax.swing.border.Border;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.*;
@@ -639,85 +637,9 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			}
 		};
 
-		Action about = new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				JPanel panel = new JPanel();
-				panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-				JTextArea info = new JTextArea(6, 40);
-				info.setEditable(false);
-				info.setBackground(panel.getBackground());
-				info.setText(
-					"Программа \"Информационный анализ\"\n" +
-						"\n" +
-						"© Школа системной соционики, Киев, 2010 г.\n" +
-						"http://www.socionicasys.ru\n" +
-						"Версия: " + VERSION);
-
-				JTextArea licText = new JTextArea(15, 40);
-				info.setEditable(false);
-				licText.setEditable(false);
-				licText.setLineWrap(true);
-				licText.setMargin(new Insets(3, 3, 3, 3));
-				licText.setWrapStyleWord(true);
-				licText.setAutoscrolls(false);
-
-				licText.setText("ВНИМАНИЕ!!! Не удалось отрыть файл лицензии.\n\n" +
-					"Согласно условий оригинальной лицензии GNU GPL, программное обеспечение должно поставляться вместе с текстом оригинальной лицензии.\n\n" +
-					"Отсутствие такой лицензии может неправомерно ограничивать ваши права как пользователя. \n\n" +
-					"Требуйте получение исходной лицензии от поставщика данного программного продукта.\n\n" +
-					"Оригинальный текст GNU GPL на английском языке вы можете прочитать здесь: http://www.gnu.org/copyleft/gpl.html");
-
-				InputStream is = AnalystWindow.class.getClassLoader().getResourceAsStream("license.txt");
-				if (is != null) {
-					BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-					try {
-						StringBuilder license = new StringBuilder();
-						String next = br.readLine();
-						while (next != null) {
-							license.append(next).append('\n');
-							next = br.readLine();
-						}
-						licText.setText(license.toString());
-					} catch (IOException e) {
-						logger.error("Error opening license file", e);
-					} finally {
-						try {
-							br.close();
-						} catch (IOException e) {
-							logger.error("Error closing BufferedReader", e);
-						}
-					}
-				}
-
-				JScrollPane licenseScrl = new JScrollPane(licText, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-				licText.getCaret().setDot(0);
-				licText.insert("", 0);
-
-				Border border = BorderFactory.createTitledBorder("Лицензия:");
-				licenseScrl.setBorder(border);
-
-				panel.add(info);
-				panel.add(licenseScrl);
-
-				JOptionPane.showOptionDialog(frame,
-					panel,
-					"О программе",
-					JOptionPane.INFORMATION_MESSAGE,
-					JOptionPane.PLAIN_MESSAGE,
-					null,
-					new Object[]{"Закрыть"},
-					null
-				);
-			}
-		};
-
 		docProperties.putValue(Action.NAME, "Свойства документа");
-		about.putValue(Action.NAME, "О программе");
 		menu.add(docProperties);
-		menu.add(about);
+		menu.add(new AboutAction(this));
 		return menu;
 	}
 
