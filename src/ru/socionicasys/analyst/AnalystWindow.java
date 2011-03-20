@@ -198,11 +198,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			@SuppressWarnings({"IOResourceOpenedButNotSafelyClosed"})
 			FileInputStream fis = new FileInputStream(file);
 			ProgressWindow pw = new ProgressWindow(this, document, "    Идет загрузка файла...   ");
-			if (append) {
-				document.append(fis, pw);
-			} else {
-				document.load(fis, pw);
-			}
+			document.loadDocument(fis, pw, append);
 
 			fileName = file.getAbsolutePath();
 			textPane.grabFocus();

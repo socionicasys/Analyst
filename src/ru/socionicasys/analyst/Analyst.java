@@ -43,7 +43,7 @@ public class Analyst {
 			try {
 				analystWindow.openFile(startupFilename, false);
 			} catch (FileNotFoundException ignored) {
-				// Ошибка уже попала в логы
+				// Ошибка уже попала в логи
 			}
 		}
 

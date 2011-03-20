@@ -258,15 +258,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	public void insertUpdate(DocumentEvent e) {
 	}
 
-	public void load(final InputStream stream, final ProgressWindow pw) throws Exception {
-		loadDocument(stream, pw, false);
-	}
-
-	public void append(final InputStream stream, final ProgressWindow pw) throws Exception {
-		loadDocument(stream, pw, true);
-	}
-
-	private void loadDocument(final InputStream stream, final ProgressWindow pw, final boolean append) throws Exception {
+	public void loadDocument(final InputStream stream, final ProgressWindow pw, final boolean append) throws Exception {
 		LegacyHtmlReader iow = new LegacyHtmlReader(pw, this, stream, append);
 		iow.getPropertyChangeSupport().addPropertyChangeListener("state", new PropertyChangeListener() {
 			@Override
