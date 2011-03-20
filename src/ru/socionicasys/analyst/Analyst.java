@@ -2,6 +2,7 @@ package ru.socionicasys.analyst;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import javax.swing.*;
 
 public class Analyst {
@@ -15,13 +16,7 @@ public class Analyst {
 		} else {
 			startupFilename = null;
 		}
-		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-			@Override
-			public void uncaughtException(Thread t, Throwable e) {
-				Logger logger = LoggerFactory.getLogger("UncaughtExceptionHandler");
-				logger.error("Uncaught exception in thread " + t.toString(), e);
-			}
-		});
+		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionLogger());
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
