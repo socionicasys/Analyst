@@ -265,113 +265,8 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			}
 		});
 
-		JMenuItem save = new JMenuItem("Сохранить");
-		save.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				try {
-					File file = null;
-					if (fileName.length() == 0) {
-						fileChooser.setDialogTitle("Сохранение документа");
-						int returnVal = fileChooser.showDialog(AnalystWindow.this, "Сохранить");
-						if (returnVal == JFileChooser.APPROVE_OPTION) {
-							file = fileChooser.getSelectedFile();
-							fileName = file.getAbsolutePath();
-							if (!fileName.endsWith('.' + EXTENSION)) {
-								fileName += '.' + EXTENSION;
-							}
-							file = new File(fileName);
-
-							if (file.exists()) {
-								Object[] options = {"Да", "Нет"};
-								if (JOptionPane.showOptionDialog(frame,
-									"Такой файл существует!\n\nХотите перезаписать этот файл?", "Предупреждение!!!",
-									JOptionPane.YES_NO_OPTION,
-									JOptionPane.QUESTION_MESSAGE,
-									null,
-									options, null) ==
-									JOptionPane.NO_OPTION) {
-									return;
-								}
-							}
-						}
-					} else {
-						file = new File(fileName);
-					}
-
-					if (file != null) {
-						FileOutputStream fos = new FileOutputStream(file);
-						ProgressWindow pw = new ProgressWindow(frame, document, "    Сохранение файла: ");
-						LegacyHtmlWriter iow = new LegacyHtmlWriter(pw, document, fos);
-						iow.execute();
-						frame.setTitle(APPLICATION_NAME + " - " + file.getName());
-					}
-				} catch (Exception e) {
-					logger.error("Error writing document to file " + fileName, e);
-					JOptionPane.showOptionDialog(frame,
-						"Ошибка сохранения файла: " + fileName + "\n\n" + e.getMessage(),
-						"Ошибка сохранения файла",
-						JOptionPane.OK_OPTION,
-						JOptionPane.ERROR_MESSAGE,
-						null,
-						new Object[]{"Закрыть"},
-						null);
-				}
-			}
-		});
-
-		JMenuItem saveAs = new JMenuItem("Сохранить как...");
-		saveAs.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				try {
-					fileChooser.setDialogTitle("Сохранение документа под новым именем");
-
-					int returnVal = fileChooser.showDialog(AnalystWindow.this, "Сохранить как...");
-					File file;
-					if (returnVal == JFileChooser.APPROVE_OPTION) {
-						file = fileChooser.getSelectedFile();
-						fileName = file.getAbsolutePath();
-						if (!fileName.endsWith('.' + EXTENSION)) {
-							fileName += '.' + EXTENSION;
-						}
-						file = new File(fileName);
-					} else {
-						return;
-					}
-
-					if (file.exists()) {
-						Object[] options = {"Да", "Нет"};
-						if (JOptionPane.showOptionDialog(frame,
-							"Такой файл существует!\n\nХотите перезаписать этот файл?", "Предупреждение!!!",
-							JOptionPane.YES_NO_OPTION,
-							JOptionPane.QUESTION_MESSAGE,
-							null,
-							options, null) ==
-							JOptionPane.NO_OPTION) {
-							return;
-						}
-					}
-
-					FileOutputStream fos = new FileOutputStream(file);
-					ProgressWindow pw = new ProgressWindow(frame, document, "    Сохранение файла: ");
-					LegacyHtmlWriter iow = new LegacyHtmlWriter(pw, document, fos);
-					iow.execute();
-
-					frame.setTitle(APPLICATION_NAME + " - " + file.getName());
-				} catch (Exception e) {
-					logger.error("Error writing document to file " + fileName, e);
-					JOptionPane.showOptionDialog(frame,
-						"Ошибка сохранения файла: " + fileName + "\n\n" + e.getMessage(),
-						"Ошибка сохранения файла",
-						JOptionPane.OK_OPTION,
-						JOptionPane.ERROR_MESSAGE,
-						null,
-						new Object[]{"Закрыть"},
-						null);
-				}
-			}
-		});
+		JMenuItem save = new JMenuItem(new SaveAction(false));
+		JMenuItem saveAs = new JMenuItem(new SaveAction(true));
 
 		JMenuItem load = new JMenuItem("Открыть");
 		load.addActionListener(new ActionListener() {
@@ -1085,6 +980,76 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		}
 		if (redoAction != null) {
 			redoAction.updateRedoState();
+		}
+	}
+
+	private class SaveAction extends AbstractAction {
+		private final boolean saveAs;
+
+		public SaveAction(boolean saveAs) {
+			super(saveAs ? "Сохранить как..." : "Сохранить");
+			this.saveAs = saveAs;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				File saveFile;
+				if (saveAs || fileName.isEmpty()) {
+					// Если у документа еще нет привязки к имени файла, или выбран пункт «Сохранить как…»,
+					// нужно показать диалог сохранения файла
+					fileChooser.setDialogTitle(saveAs ? "Сохранение документа под новым именем" : "Сохранение документа");
+					int saveResult = fileChooser.showDialog(AnalystWindow.this, saveAs ? "Сохранить как..." : "Сохранить");
+					if (saveResult != JFileChooser.APPROVE_OPTION) {
+						return;
+					}
+
+					fileName = fileChooser.getSelectedFile().getAbsolutePath();
+					if (!fileName.endsWith('.' + EXTENSION)) {
+						fileName += '.' + EXTENSION;
+					}
+					saveFile = new File(fileName);
+
+					// Подтверждение замены файла
+					if (saveFile.exists()) {
+						Object[] options = {"Да", "Нет"};
+						int replaceResult = JOptionPane.showOptionDialog(AnalystWindow.this,
+							"Такой файл существует!\n\nХотите перезаписать этот файл?", "Предупреждение!!!",
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.QUESTION_MESSAGE,
+							null,
+							options,
+							null
+						);
+						if (replaceResult == JOptionPane.NO_OPTION) {
+							return;
+						}
+					}
+				} else {
+					// Если документ уже связан с именем файла
+					saveFile = new File(fileName);
+				}
+
+				// Поскольку сохранение происходит асинхронно, поток закрывается в LegacyHtmlWriter
+				@SuppressWarnings({"IOResourceOpenedButNotSafelyClosed"})
+				FileOutputStream fos = new FileOutputStream(saveFile);
+				ProgressWindow pw = new ProgressWindow(AnalystWindow.this, document, "    Сохранение файла: ");
+				LegacyHtmlWriter backgroundWriter = new LegacyHtmlWriter(pw, document, fos);
+				backgroundWriter.execute();
+				frame.setTitle(String.format("%s - %s", APPLICATION_NAME, saveFile.getName()));
+			} catch (HeadlessException ex) {
+				logger.error("Somehow got stuck in a headless environment", ex);
+			} catch (FileNotFoundException ex) {
+				logger.error("Error writing document to file {}", fileName, ex);
+				JOptionPane.showOptionDialog(frame,
+					String.format("Ошибка сохранения файла: %s\n\n%s", fileName, ex.getMessage()),
+					"Ошибка сохранения файла",
+					JOptionPane.OK_OPTION,
+					JOptionPane.ERROR_MESSAGE,
+					null,
+					new Object[]{"Закрыть"},
+					null);
+			}
 		}
 	}
 }
