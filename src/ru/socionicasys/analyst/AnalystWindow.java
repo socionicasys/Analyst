@@ -53,7 +53,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private final RedoAction redoAction = new RedoAction();
 	private final UndoManager undo = new UndoManager();
 
-	public AnalystWindow(String startupFilename) {
+	public AnalystWindow() {
 		super(String.format("%s - %s", APPLICATION_NAME, ADocument.DEFAULT_TITLE));
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -186,30 +186,35 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		textPane.addCaretListener(status);
 
 		pack();
+	}
 
-		// load document passed in the command line
-		if (startupFilename != null) {
-			File file = new File(startupFilename);
-			try {
-				FileInputStream fis = new FileInputStream(file);
-				try {
-					ProgressWindow pw = new ProgressWindow(frame, document, "    Идет загрузка файла...   ");
-					document.load(fis, pw);
-					fileName = file.getAbsolutePath();
-					status.setText("");
-					frame.setTitle(String.format("%s - %s", APPLICATION_NAME, file.getName()));
-				} catch (Exception e) {
-					logger.error("Error loading file " + startupFilename, e);
-				} finally {
-					try {
-						fis.close();
-					} catch (IOException e) {
-						logger.error("Error closing input stream", e);
-					}
-				}
-			} catch (FileNotFoundException e) {
-				logger.error("Unable to open file " + startupFilename, e);
+	public void openFile(String filename, boolean append) throws FileNotFoundException {
+		openFile(new File(filename), append);
+	}
+
+	public void openFile(File file, boolean append) throws FileNotFoundException {
+		try {
+			// Загрузка происходит асинхронно, FileInputStream будет закрыт в LegacyHtmlReader
+			@SuppressWarnings({"IOResourceOpenedButNotSafelyClosed"})
+			FileInputStream fis = new FileInputStream(file);
+			ProgressWindow pw = new ProgressWindow(this, document, "    Идет загрузка файла...   ");
+			if (append) {
+				document.append(fis, pw);
+			} else {
+				document.load(fis, pw);
 			}
+
+			fileName = file.getAbsolutePath();
+			textPane.grabFocus();
+			status.setText("");
+			setTitle(String.format("%s - %s", APPLICATION_NAME, file.getName()));
+		} catch (HeadlessException ex) {
+			logger.error("Somehow got stuck in a headless environment", ex);
+		} catch (FileNotFoundException e) {
+			logger.error("Error opening file {}", file.getAbsolutePath(), e);
+			throw e;
+		} catch (Exception e) {
+			logger.error("Error loading file {}", file.getAbsolutePath(), e);
 		}
 	}
 
@@ -908,32 +913,11 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 					}
 				}
 				fileChooser.setDialogTitle(append ? "Открыть и присоединить документ" : "Открытие документа");
-				File file;
 				int openResult = fileChooser.showDialog(AnalystWindow.this, append ? "Открыть и присоединить" : "Открыть");
 				if (openResult == JFileChooser.APPROVE_OPTION) {
-					file = fileChooser.getSelectedFile();
-				} else {
-					return;
+					openFile(fileChooser.getSelectedFile(), append);
 				}
-
-				// Загрузка происходит асинхронно, FileInputStream будет закрыт в LegacyHtmlReader
-				@SuppressWarnings({"IOResourceOpenedButNotSafelyClosed"})
-				FileInputStream fis = new FileInputStream(file);
-				ProgressWindow pw = new ProgressWindow(AnalystWindow.this, document, "    Идет загрузка файла...   ");
-				if (append) {
-					document.append(fis, pw);
-				} else {
-					document.load(fis, pw);
-				}
-
-				fileName = file.getAbsolutePath();
-				textPane.grabFocus();
-				status.setText("");
-				setTitle(String.format("%s - %s", APPLICATION_NAME, file.getName()));
-			} catch (HeadlessException ex) {
-				logger.error("Somehow got stuck in a headless environment", ex);
 			} catch (FileNotFoundException ex) {
-				logger.error("Error opening file {}", fileName, ex);
 				JOptionPane.showOptionDialog(AnalystWindow.this,
 					String.format("Ошибка открытия файла: %s\n\n%s", fileName, ex.getMessage()),
 					"Ошибка открытия файла",
@@ -942,8 +926,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 					null,
 					new Object[]{"Закрыть"},
 					null);
-			} catch (Exception ex) {
-				logger.error("Error setting model to view :: bad location", ex);
 			}
 		}
 	}

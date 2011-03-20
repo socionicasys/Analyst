@@ -3,6 +3,7 @@ package ru.socionicasys.analyst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileNotFoundException;
 import javax.swing.*;
 
 public class Analyst {
@@ -37,7 +38,14 @@ public class Analyst {
 	private static void createAndShowGUI(String startupFilename) {
 		//Create and set up the window.
 		logger.trace("> createAndShowGUI(), startupFilename={}", startupFilename);
-		final AnalystWindow analystWindow = new AnalystWindow(startupFilename);
+		final AnalystWindow analystWindow = new AnalystWindow();
+		if (startupFilename != null) {
+			try {
+				analystWindow.openFile(startupFilename, false);
+			} catch (FileNotFoundException ignored) {
+				// Ошибка уже попала в логы
+			}
+		}
 
 		//Display the window.
 		analystWindow.setVisible(true);
