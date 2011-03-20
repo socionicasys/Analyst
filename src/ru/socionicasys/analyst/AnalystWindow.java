@@ -228,10 +228,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private JMenu createFileMenu() {
 		JMenu menu = new JMenu("Файл");
 
-		//Undo and redo are actions of our own creation.
-
-		menu.addSeparator();
-
 		JMenuItem newDocumnet = new JMenuItem("Создать новый документ");
 		newDocumnet.addActionListener(new ActionListener() {
 			@Override
@@ -359,8 +355,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		menu.add(saveAs);
 		menu.addSeparator();
 		menu.add(exit);
-
-		menu.addSeparator();
 
 		return menu;
 	}
