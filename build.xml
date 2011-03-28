@@ -1,24 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="analyst" default="all" xmlns:ivy="antlib:org.apache.ivy.ant">
-	<dirname property="analyst.base_dir" file="${ant.file}" />
 	<property file="build.properties" />
-	<property name="analyst.source_dir" value="${analyst.base_dir}/src" />
-	<property name="analyst.output_dir" value="${analyst.base_dir}/out/production/Analyst" />
-	<property name="analyst.bin_dir" value="${analyst.base_dir}/bin" />
+	<property name="analyst.source_dir" value="src" />
+	<property name="analyst.output_dir" value="out/production/Analyst" />
+	<property name="analyst.bin_dir" value="bin" />
+	<property name="analyst.lib_dir" value="lib" />
 	<property name="analyst.main_class" value="ru.socionicasys.analyst.Analyst" />
 	<property name="analyst.jar_name" value="${analyst.bin_dir}/Analyst-${analyst.version}.jar" />
-	<fileset id="dependencies" dir="${analyst.base_dir}/lib" includes="**/*.jar" />
+
+	<property name="ivy.install.version" value="2.2.0"/>
+	<property name="ivy.jar.file" value="${analyst.lib_dir}/ivy-${ivy.install.version}.jar"/>
+	<property name="ivy.antlib" value="org/apache/ivy/ant/antlib.xml" />
+
+	<fileset id="dependencies" dir="${analyst.lib_dir}" includes="**/*.jar" />
 
 	<taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
 		<classpath path="${ant.core.lib}/sonar-ant-task.jar" />
 	</taskdef>
+
+	<target name="check-ivy">
+		<available resource="${ivy.antlib}" property="ivy.installed" />
+	</target>
+
+	<target name="install-ivy" depends="check-ivy" unless="ivy.installed">
+		<mkdir dir="${analyst.lib_dir}" />
+		<echo message="downloading ivy... ${ivy.jar.file}" />
+		<get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+			dest="${ivy.jar.file}" usetimestamp="true" />
+	</target>
+
+	<target name="include-ivy" depends="install-ivy" unless="ivy.installed">
+		<taskdef resource="${ivy.antlib}" uri="antlib:org.apache.ivy.ant">
+			<classpath path="${ivy.jar.file}" />
+		</taskdef>
+	</target>
 
 	<target name="clean">
 		<delete dir="${analyst.output_dir}" />
 		<delete dir="${analyst.bin_dir}" />
 	</target>
 
-	<target name="resolve">
+	<target name="resolve" depends="include-ivy">
 		<ivy:retrieve />
 	</target>
 
