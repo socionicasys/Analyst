@@ -194,11 +194,8 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 	public void openFile(File file, boolean append) throws FileNotFoundException {
 		try {
-			// Загрузка происходит асинхронно, FileInputStream будет закрыт в LegacyHtmlReader
-			@SuppressWarnings({"IOResourceOpenedButNotSafelyClosed"})
-			FileInputStream fis = new FileInputStream(file);
 			ProgressWindow pw = new ProgressWindow(this, document, "    Идет загрузка файла...   ");
-			document.loadDocument(fis, pw, append);
+			document.loadDocument(file, pw, append);
 
 			fileName = file.getAbsolutePath();
 			textPane.grabFocus();

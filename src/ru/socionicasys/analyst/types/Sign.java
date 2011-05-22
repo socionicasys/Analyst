@@ -16,7 +16,7 @@ public enum Sign {
 		this.representation = representation;
 	}
 
-	public Sign	inverse() {
+	public Sign inverse() {
 		switch (this) {
 		case PLUS:
 			return MINUS;

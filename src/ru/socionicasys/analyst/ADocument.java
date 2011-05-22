@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.InputStream;
+import java.io.File;
 import java.util.*;
 import java.util.Map.Entry;
 import javax.swing.SwingWorker.StateValue;
@@ -258,9 +258,9 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	public void insertUpdate(DocumentEvent e) {
 	}
 
-	public void loadDocument(final InputStream stream, final ProgressWindow pw, final boolean append) throws Exception {
-		LegacyHtmlReader iow = new LegacyHtmlReader(pw, this, stream, append);
-		iow.getPropertyChangeSupport().addPropertyChangeListener("state", new PropertyChangeListener() {
+	public void loadDocument(File sourceFile, final ProgressWindow pw, boolean append) throws Exception {
+		LegacyHtmlReader worker = new LegacyHtmlReader(pw, this, sourceFile, append);
+		worker.getPropertyChangeSupport().addPropertyChangeListener("state", new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				StateValue state = (StateValue) evt.getNewValue();
@@ -269,9 +269,9 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 				}
 			}
 		});
-		iow.execute();
-		if (iow.getException() != null) {
-			throw iow.getException();
+		worker.execute();
+		if (worker.getException() != null) {
+			throw worker.getException();
 		}
 	}
 

@@ -24,7 +24,9 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 	private static final Pattern HTML_BR_PATTERN = Pattern.compile("<br/>", Pattern.LITERAL);
 	private static final Pattern LINEBREAK_PATTERN = Pattern.compile("\n", Pattern.LITERAL);
 
-	private final InputStream inputStream;
+	private static final int BUFFER_SIZE = 1024;
+
+	private final File sourceFile;
 	private final boolean append;
 	private final ADocument document;
 	private final ProgressWindow progressWindow;
@@ -33,8 +35,8 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 	private final Map<Integer, RawAData> rawData = new HashMap<Integer, RawAData>();
 	private final Collection<StyledText> styledTextBlocks = new ArrayList<StyledText>();
 
-	LegacyHtmlReader(ProgressWindow progressWindow, ADocument document, InputStream inputStream, boolean append) {
-		this.inputStream = inputStream;
+	LegacyHtmlReader(ProgressWindow progressWindow, ADocument document, File sourceFile, boolean append) {
+		this.sourceFile = sourceFile;
 		this.document = document;
 		this.progressWindow = progressWindow;
 		this.append = append;
@@ -107,8 +109,8 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 		} catch (Exception e) {
 			logger.error("Error while working with RawData", e);
 			progressWindow.close();
-			this.exception = e;
-			this.cancel(true);
+			exception = e;
+			cancel(true);
 		}
 
 		progressWindow.close();
@@ -195,15 +197,15 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 		setProgress(100);
 	}
 
+	@SuppressWarnings("OverlyBroadThrowsClause")
 	private String readFromStream() throws IOException {
-		Reader reader = new BufferedReader(new InputStreamReader(inputStream, FILE_ENCODING));
+		Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile), FILE_ENCODING));
 		try {
-			int length = inputStream.available();
-			char[] buf = new char[length];
 			boolean finished = false;
-			StringBuilder textBuilder = new StringBuilder();
+			char[] buf = new char[BUFFER_SIZE];
+			StringBuilder textBuilder = new StringBuilder(BUFFER_SIZE);
 			while (!finished) {
-				int bytesRead = reader.read(buf, 0, length);
+				int bytesRead = reader.read(buf, 0, BUFFER_SIZE);
 				if (bytesRead > 0) {
 					textBuilder.append(buf, 0, bytesRead);
 				} else {
@@ -212,7 +214,6 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 			}
 			return textBuilder.toString();
 		} finally {
-			inputStream.close();
 			reader.close();
 		}
 	}
