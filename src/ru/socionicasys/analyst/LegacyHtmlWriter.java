@@ -17,8 +17,8 @@ public class LegacyHtmlWriter extends SwingWorker<Object, Object> {
 	private static final int TEXT_PROGRESS = 40;
 	private static final int REPORT_PROGRESS = 20;
 
-	private final OutputStream outputStream;
 	private final ADocument document;
+	private final File outputFile;
 	private final AnalystWindow analystWindow;
 	private final ProgressWindow progressWindow;
 	private Exception exception = null;
@@ -117,13 +117,9 @@ public class LegacyHtmlWriter extends SwingWorker<Object, Object> {
 		}
 	}
 
-	LegacyHtmlWriter(ProgressWindow progressWindow, ADocument document, OutputStream outputStream) {
-		if (outputStream == null) {
-			logger.error("Error attempting to save file: FileOutputStream is null");
-			throw new NullPointerException();
-		}
-		this.outputStream = outputStream;
+	LegacyHtmlWriter(ProgressWindow progressWindow, ADocument document, File outputFile) {
 		this.document = document;
+		this.outputFile = outputFile;
 		this.analystWindow = progressWindow.getAnalyst();
 		this.progressWindow = progressWindow;
 
@@ -132,8 +128,8 @@ public class LegacyHtmlWriter extends SwingWorker<Object, Object> {
 	}
 
 	@Override
-	protected Object doInBackground() throws Exception {
-		Writer writer = new BufferedWriter(new OutputStreamWriter(outputStream, FILE_ENCODING));
+	protected Object doInBackground() throws IOException {
+		Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), FILE_ENCODING));
 		try {
 			writeDocument(writer);
 		} catch (BadLocationException e) {
@@ -148,7 +144,6 @@ public class LegacyHtmlWriter extends SwingWorker<Object, Object> {
 		} finally {
 			progressWindow.close();
 			writer.close();
-			outputStream.close();
 		}
 
 		return null;

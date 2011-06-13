@@ -730,9 +730,8 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 				if (fileName != null && fileName.length() > 0) {
 					try {
 						file = new File(fileName);
-						FileOutputStream fos = new FileOutputStream(file);
 						ProgressWindow pw = new ProgressWindow(frame, document, "    Сохранение файла: ");
-						LegacyHtmlWriter iow = new LegacyHtmlWriter(pw, document, fos);
+						LegacyHtmlWriter iow = new LegacyHtmlWriter(pw, document, file);
 						iow.execute();
 					} catch (Exception e) {
 						logger.error("Error writing document to file" + fileName, e);
@@ -828,63 +827,46 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			try {
-				File saveFile;
-				if (saveAs || fileName.isEmpty()) {
-					// Если у документа еще нет привязки к имени файла, или выбран пункт «Сохранить как…»,
-					// нужно показать диалог сохранения файла
-					fileChooser.setDialogTitle(saveAs ? "Сохранение документа под новым именем" : "Сохранение документа");
-					int saveResult = fileChooser.showDialog(AnalystWindow.this, saveAs ? "Сохранить как..." : "Сохранить");
-					if (saveResult != JFileChooser.APPROVE_OPTION) {
-						return;
-					}
-
-					fileName = fileChooser.getSelectedFile().getAbsolutePath();
-					if (!fileName.endsWith('.' + EXTENSION)) {
-						fileName += '.' + EXTENSION;
-					}
-					saveFile = new File(fileName);
-
-					// Подтверждение замены файла
-					if (saveFile.exists()) {
-						Object[] options = {"Да", "Нет"};
-						int replaceResult = JOptionPane.showOptionDialog(AnalystWindow.this,
-							"Такой файл существует!\n\nХотите перезаписать этот файл?", "Предупреждение!!!",
-							JOptionPane.YES_NO_OPTION,
-							JOptionPane.QUESTION_MESSAGE,
-							null,
-							options,
-							null
-						);
-						if (replaceResult == JOptionPane.NO_OPTION) {
-							return;
-						}
-					}
-				} else {
-					// Если документ уже связан с именем файла
-					saveFile = new File(fileName);
+			File saveFile;
+			if (saveAs || fileName.isEmpty()) {
+				// Если у документа еще нет привязки к имени файла, или выбран пункт «Сохранить как…»,
+				// нужно показать диалог сохранения файла
+				fileChooser.setDialogTitle(saveAs ? "Сохранение документа под новым именем" : "Сохранение документа");
+				int saveResult = fileChooser.showDialog(AnalystWindow.this, saveAs ? "Сохранить как..." : "Сохранить");
+				if (saveResult != JFileChooser.APPROVE_OPTION) {
+					return;
 				}
 
-				// Поскольку сохранение происходит асинхронно, поток закрывается в LegacyHtmlWriter
-				@SuppressWarnings({"IOResourceOpenedButNotSafelyClosed"})
-				FileOutputStream fos = new FileOutputStream(saveFile);
-				ProgressWindow pw = new ProgressWindow(AnalystWindow.this, document, "    Сохранение файла: ");
-				LegacyHtmlWriter backgroundWriter = new LegacyHtmlWriter(pw, document, fos);
-				backgroundWriter.execute();
-				frame.setTitle(String.format("%s - %s", APPLICATION_NAME, saveFile.getName()));
-			} catch (HeadlessException ex) {
-				logger.error("Somehow got stuck in a headless environment", ex);
-			} catch (FileNotFoundException ex) {
-				logger.error("Error writing document to file {}", fileName, ex);
-				JOptionPane.showOptionDialog(frame,
-					String.format("Ошибка сохранения файла: %s\n\n%s", fileName, ex.getMessage()),
-					"Ошибка сохранения файла",
-					JOptionPane.OK_OPTION,
-					JOptionPane.ERROR_MESSAGE,
-					null,
-					new Object[]{"Закрыть"},
-					null);
+				fileName = fileChooser.getSelectedFile().getAbsolutePath();
+				if (!fileName.endsWith('.' + EXTENSION)) {
+					fileName += '.' + EXTENSION;
+				}
+				saveFile = new File(fileName);
+
+				// Подтверждение замены файла
+				if (saveFile.exists()) {
+					Object[] options = {"Да", "Нет"};
+					int replaceResult = JOptionPane.showOptionDialog(AnalystWindow.this,
+						"Такой файл существует!\n\nХотите перезаписать этот файл?", "Предупреждение!!!",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE,
+						null,
+						options,
+						null
+					);
+					if (replaceResult == JOptionPane.NO_OPTION) {
+						return;
+					}
+				}
+			} else {
+				// Если документ уже связан с именем файла
+				saveFile = new File(fileName);
 			}
+
+			ProgressWindow pw = new ProgressWindow(AnalystWindow.this, document, "    Сохранение файла: ");
+			LegacyHtmlWriter backgroundWriter = new LegacyHtmlWriter(pw, document, saveFile);
+			backgroundWriter.execute();
+			frame.setTitle(String.format("%s - %s", APPLICATION_NAME, saveFile.getName()));
 		}
 	}
 
