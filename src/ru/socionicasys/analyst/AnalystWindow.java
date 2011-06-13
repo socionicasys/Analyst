@@ -67,16 +67,12 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		setMinimumSize(new Dimension(600, 400));
 		setPreferredSize(new Dimension(1000, 700));
 		//Create the text pane and configure it.
-		textPane = new JTextPane();
+		document = new ADocument();
+		textPane = new JTextPane(document);
 		// Replace the built-in  behavior when the caret highlight
 		// becomes invisible when focus moves to another component
-		textPane.setCaret(
-			new DefaultCaret() {
-				@Override
-				public void focusLost(FocusEvent e) {
-				}
-			}
-		);
+		textPane.setCaret(new HighlightCaret());
+		textPane.setNavigationFilter(new BlockNavigationFilter(document));
 		// popup menu for the textPane
 		popupMenu = new JPopupMenu();
 		textPane.setComponentPopupMenu(popupMenu);
@@ -85,9 +81,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 		fileChooser = new JFileChooser();
 		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Файлы ." + EXTENSION, EXTENSION));
-		document = new ADocument();
-		textPane.setEditorKit(new AEditorKit());
-		textPane.setDocument(document);
 
 		JScrollPane scrollPane = new JScrollPane(textPane);
 		scrollPane.setPreferredSize(new Dimension(600, 500));
@@ -178,8 +171,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 		//Add some key bindings.
 		addBindings();
-
-		textPane.setCaretPosition(0);
 
 		//Start watching for undoable edits and caret changes.
 		document.addUndoableEditListener(new MyUndoableEditListener());

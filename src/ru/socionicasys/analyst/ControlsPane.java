@@ -617,6 +617,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		private JRadioButton d1, d2, d3, d4, malo, mnogo, odno, indi;
 		private ButtonGroup dimensionGroup;
 		private JButton clearDimensionSelection;
+		private final Logger logger = LoggerFactory.getLogger(DimensionPanel.class);
 
 		public DimensionPanel() {
 			super();
@@ -700,6 +701,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 
 		@Override
 		public void setPanelEnabled(boolean enabled) {
+			logger.debug("setPanelEnabled({})", enabled);
 			if (!enabled) {
 				dimensionGroup.clearSelection();
 				clearDimensionSelection.setEnabled(false);
@@ -724,6 +726,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		}
 
 		public void setDimension(String dimension) {
+			logger.debug("setDimension({})", dimension);
 			if (dimension == null) {
 				dimensionGroup.clearSelection();
 			} else if (dimension.equals(AData.D1)) {
@@ -780,24 +783,15 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 	public void caretUpdate(CaretEvent e) {
 		int dot = e.getDot();
 		int mark = e.getMark();
+		logger.debug("caretUpdate: {}, {}", dot, mark);
 		int begin = Math.min(dot, mark);
 
 		//try to find current ASection to edit
-		currentASection = null;
+		currentASection = aDoc.getASectionThatStartsAt(begin);
 
 		// if found mark the section with caret
-		if ((dot == mark) && (aDoc.getASection(begin) != null)) {
-			currentASection = aDoc.getASection(begin);
-			dot = currentASection.getStartOffset();
-			mark = currentASection.getEndOffset();
-
-			Caret c = textPane.getCaret();
-			textPane.removeCaretListener(this);
-
-			c.setDot(mark);
-			c.moveDot(dot);
-
-			textPane.addCaretListener(this);
+		if (currentASection != null) {
+			logger.debug("currentASection = {}", currentASection);
 			commentField.getCaret().removeChangeListener(this);
 
 			aspectPanel.setPanelEnabled(false);
@@ -806,28 +800,8 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			setContols(data);
 
 			commentField.getCaret().addChangeListener(this);
-		} else if (dot != mark) {
-			currentASection = aDoc.getASectionThatStartsAt(begin);
-			if (currentASection != null) {
-				AData data = aDoc.getAData(currentASection);
-				setContols(data);
-				dot = currentASection.getStartOffset();
-				mark = currentASection.getEndOffset();
-
-				Caret c = textPane.getCaret();
-				textPane.removeCaretListener(this);
-
-				c.setDot(mark);
-				c.moveDot(dot);
-
-				textPane.addCaretListener(this);
-				setContols(data);
-			} else {
-				aspectPanel.setPanelEnabled(false);
-			}
-
-			aspectPanel.setPanelEnabled(true);
 		} else {
+			logger.debug("currentASection = null");
 			aspectPanel.setPanelEnabled(false);
 		}
 	}
@@ -836,9 +810,13 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		removeADataListener(this);
 
 		if (data != null) {
+			logger.debug("aspectPanel.setAspect({})", data);
 			aspectPanel.setAspect(data);
+			logger.debug("dimensionPanel.setDimension({})", data.getDimension());
 			dimensionPanel.setDimension(data.getDimension());
+			logger.debug("mvPanel.setMV({})", data.getMV());
 			mvPanel.setMV(data.getMV());
+			logger.debug("signPanel.setSign({})", data.getSign());
 			signPanel.setSign(data.getSign());
 
 			//need this not to receive notification
@@ -848,10 +826,15 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 				//	commentField.getCaret().addChangeListener(this);
 			}
 		} else {
+			logger.debug("aspectPanel.setAspect(null)");
 			aspectPanel.setAspect(null);
+			logger.debug("dimensionPanel.setDimension(null)");
 			dimensionPanel.setDimension(null);
+			logger.debug("mvPanel.setMV(null)");
 			mvPanel.setMV(null);
+			logger.debug("signPanel.setSign(null)");
 			signPanel.setSign(null);
+			logger.debug("commentField.setText(null)");
 			commentField.setText(null);
 		}
 
