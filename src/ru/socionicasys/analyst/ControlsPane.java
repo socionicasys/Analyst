@@ -759,20 +759,8 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 	}
 
 	public AData getAData() {
-		AData adata = null;
-		try {
-			adata = AData.parseAData(aspectPanel.getAspectSelection() + AData.SEPARATOR +
-				signPanel.getSignSelection() + AData.SEPARATOR +
-				dimensionPanel.getDimensionSelection() + AData.SEPARATOR +
-				mvPanel.getMVSelection() + AData.SEPARATOR
-			);
-			if (adata != null) {
-				adata.setComment(commentField.getText());
-			}
-		} catch (IllegalArgumentException e) {
-			logger.error("Error in getAData()", e);
-		}
-		return adata;
+		return new AData(aspectPanel.getAspectSelection(), signPanel.getSignSelection(),
+			dimensionPanel.getDimensionSelection(), mvPanel.getMVSelection(), commentField.getText());
 	}
 
 
