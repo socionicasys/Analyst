@@ -12,32 +12,41 @@ import javax.swing.text.Position;
  */
 public class BlockNavigationFilter extends NavigationFilter {
 	private final ADocument document;
+	private int backupDot;
+	private boolean backupDotActive;
 	private static final Logger logger = LoggerFactory.getLogger(BlockNavigationFilter.class);
 
 	public BlockNavigationFilter(ADocument document) {
 		this.document = document;
+		backupDotActive = false;
 	}
 
 	@Override
 	public void setDot(FilterBypass fb, int dot, Position.Bias bias) {
-		Caret caret = fb.getCaret();
-		logger.debug("setDot: dot = {} (caret.dot = {}, caret.mark = {})",
-			new Object[]{dot, caret.getDot(), caret.getMark()});
+		logger.debug("setDot: dot = {}", dot);
 		ASection currentSection = document.getASection(dot);
 		if (currentSection == null) {
 			logger.debug("setDot: no section here, keep dot where it is");
+			backupDotActive = false;
 			fb.setDot(dot, bias);
 			return;
 		}
 		logger.debug("setDot: moving dot to section borders: {}, {}",
 			currentSection.getStartOffset(), currentSection.getEndOffset());
+		backupDotActive = true;
+		backupDot = dot;
 		fb.setDot(currentSection.getEndOffset(), bias);
 		fb.moveDot(currentSection.getStartOffset(), bias);
 	}
 
 	@Override
 	public void moveDot(FilterBypass fb, int dot, Position.Bias bias) {
-		logger.debug(String.format("moveDot: dot = %d", dot));
+		logger.debug("moveDot: dot = {}", dot);
+		if (backupDotActive) {
+			backupDotActive = false;
+			logger.debug("moveDot: restoring previous dot = {}", backupDot);
+			fb.setDot(backupDot, bias);
+		}
 		super.moveDot(fb, dot, bias);
 	}
 }
