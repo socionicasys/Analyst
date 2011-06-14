@@ -701,7 +701,6 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 
 		@Override
 		public void setPanelEnabled(boolean enabled) {
-			logger.debug("setPanelEnabled({})", enabled);
 			if (!enabled) {
 				dimensionGroup.clearSelection();
 				clearDimensionSelection.setEnabled(false);
@@ -726,7 +725,6 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		}
 
 		public void setDimension(String dimension) {
-			logger.debug("setDimension({})", dimension);
 			if (dimension == null) {
 				dimensionGroup.clearSelection();
 			} else if (dimension.equals(AData.D1)) {
@@ -810,13 +808,9 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		removeADataListener(this);
 
 		if (data != null) {
-			logger.debug("aspectPanel.setAspect({})", data);
 			aspectPanel.setAspect(data);
-			logger.debug("dimensionPanel.setDimension({})", data.getDimension());
 			dimensionPanel.setDimension(data.getDimension());
-			logger.debug("mvPanel.setMV({})", data.getMV());
 			mvPanel.setMV(data.getMV());
-			logger.debug("signPanel.setSign({})", data.getSign());
 			signPanel.setSign(data.getSign());
 
 			//need this not to receive notification
@@ -826,15 +820,10 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 				//	commentField.getCaret().addChangeListener(this);
 			}
 		} else {
-			logger.debug("aspectPanel.setAspect(null)");
 			aspectPanel.setAspect(null);
-			logger.debug("dimensionPanel.setDimension(null)");
 			dimensionPanel.setDimension(null);
-			logger.debug("mvPanel.setMV(null)");
 			mvPanel.setMV(null);
-			logger.debug("signPanel.setSign(null)");
 			signPanel.setSign(null);
-			logger.debug("commentField.setText(null)");
 			commentField.setText(null);
 		}
 
