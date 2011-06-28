@@ -47,8 +47,8 @@
 				<fileset refid="dependencies" />
 			</classpath>
 		</javac>
-		<copy file="${analyst.base_dir}/license.txt" todir="${analyst.output_dir}" />
-		<copy file="${analyst.base_dir}/logback.xml" todir="${analyst.output_dir}" />
+		<copy file="license.txt" todir="${analyst.output_dir}" />
+		<copy file="logback.xml" todir="${analyst.output_dir}" />
 	</target>
 
 	<target name="jar" depends="compile">
