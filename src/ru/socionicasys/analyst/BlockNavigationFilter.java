@@ -11,9 +11,21 @@ import javax.swing.text.Position;
  * Реализует выделение блока с пометкой в документе при клике внутри этого блока.
  */
 public class BlockNavigationFilter extends NavigationFilter {
+	/**
+	 * Документ, к которому привязан фильтр
+	 */
 	private final ADocument document;
+
+	/**
+	 * Позиция курсора до перемещения к границам блока
+	 */
 	private int backupDot;
+
+	/**
+	 * Произошло ли во время последнего вызова setDot перемещение курсора к границам блока
+	 */
 	private boolean backupDotActive;
+
 	private static final Logger logger = LoggerFactory.getLogger(BlockNavigationFilter.class);
 
 	public BlockNavigationFilter(ADocument document) {
@@ -24,19 +36,32 @@ public class BlockNavigationFilter extends NavigationFilter {
 	@Override
 	public void setDot(FilterBypass fb, int dot, Position.Bias bias) {
 		logger.debug("setDot: dot = {}", dot);
+		backupDotActive = false;
 		ASection currentSection = document.getASection(dot);
 		if (currentSection == null) {
 			logger.debug("setDot: no section here, keep dot where it is");
-			backupDotActive = false;
+			super.setDot(fb, dot, bias);
+			return;
+		}
+
+		Caret caret = fb.getCaret();
+		logger.debug("setDot: getCaret() = {}", caret);
+		int startOffset = currentSection.getStartOffset();
+		int endOffset = currentSection.getEndOffset();
+		int caretDot = caret.getDot();
+		int caretMark = caret.getMark();
+		if (caretDot == endOffset && caretMark == startOffset
+			|| caretDot == startOffset && caretMark == endOffset) {
 			fb.setDot(dot, bias);
 			return;
 		}
+
 		logger.debug("setDot: moving dot to section borders: {}, {}",
-			currentSection.getStartOffset(), currentSection.getEndOffset());
+			startOffset, endOffset);
 		backupDotActive = true;
 		backupDot = dot;
-		fb.setDot(currentSection.getEndOffset(), bias);
-		fb.moveDot(currentSection.getStartOffset(), bias);
+		fb.setDot(endOffset, bias);
+		fb.moveDot(startOffset, bias);
 	}
 
 	@Override
