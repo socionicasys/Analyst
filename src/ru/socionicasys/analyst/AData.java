@@ -49,10 +49,10 @@ public class AData {
 
 	public AData(String aspect, String sign, String dimension, String mv, String comment) {
 		if (aspect == null) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Aspect cannot be null");
 		}
 		if (!(isValidAspect(aspect) || aspect.equals(DOUBT))) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(String.format("Invalid aspect value (%s)", aspect));
 		}
 		this.aspect = aspect;
 
