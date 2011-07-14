@@ -1669,7 +1669,7 @@ if (!jc.isEmpty()){
 			"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.S) + " </td>"  + "\n" +		
 			"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.F) + " </td>"  + "\n" +		
 			"		<td align=\"center\">" + "X"  + " </td>"  + "\n" +		
-			"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.I) + " </td>"  + "\n" +		
+			"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.I) + " </td>"  + "\n" +		
 			"</tr>" 														+ "\n"  +		
 			"<tr>" 															+ "\n" +		
 			"	<td style=\"font-weight:bold\"> ×È </td>"	+ "\n" +			
