@@ -22,18 +22,6 @@ dependencies {
 	compile 'org.swinglabs:swingx-core:1.6.2-2'
 }
 
-sourceSets.main {
-	java {
-		srcDirs = ['src']
-	}
-
-	resources {
-		srcDirs = ['.']
-		include 'license.txt'
-		include 'logback.xml'
-	}
-}
-
 def sharedManifest = manifest {
 		attributes 'Main-Class': mainClassName, 'Specification-Version': version
 }
