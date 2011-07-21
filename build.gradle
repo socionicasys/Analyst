@@ -73,3 +73,7 @@ ideaProject {
 		provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = 'Git'
 	}
 }
+
+ideaModule {
+	excludeDirs += file('gradle')
+}
