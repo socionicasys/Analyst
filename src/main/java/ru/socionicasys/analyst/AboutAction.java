@@ -28,12 +28,13 @@ public class AboutAction extends AbstractAction {
 		info.setEditable(false);
 		info.setBackground(panel.getBackground());
 		info.setEditable(false);
-		info.setText(String.format("Программа \"Информационный анализ\"\n" +
+		info.setText(String.format("Программа \"%s\"\n" +
 			'\n' +
 			"© Школа системной соционики, Киев, 2010 г.\n" +
 			"http://www.socionicasys.ru\n" +
 			"Версия: %s",
-			AnalystWindow.VERSION
+			VersionInfo.getApplicationName(),
+			VersionInfo.getVersion()
 		));
 
 		JTextArea licText = new JTextArea(15, 40);

@@ -23,10 +23,7 @@ import javax.swing.undo.UndoManager;
 
 @SuppressWarnings("serial")
 public class AnalystWindow extends JFrame implements PropertyChangeListener {
-	public static final String VERSION = "1.1-dev";
-
 	private static final String EXTENSION = "htm";
-	private static final String APPLICATION_NAME = "Информационный анализ";
 	private static final Logger logger = LoggerFactory.getLogger(AnalystWindow.class);
 
 	private final ADocument document;
@@ -54,7 +51,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private final UndoManager undo = new UndoManager();
 
 	public AnalystWindow() {
-		super(String.format("%s - %s", APPLICATION_NAME, ADocument.DEFAULT_TITLE));
+		super(String.format("%s - %s", VersionInfo.getApplicationName(), ADocument.DEFAULT_TITLE));
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
@@ -191,7 +188,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			fileName = file.getAbsolutePath();
 			textPane.grabFocus();
 			status.setText("");
-			setTitle(String.format("%s - %s", APPLICATION_NAME, file.getName()));
+			setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), file.getName()));
 		} catch (HeadlessException ex) {
 			logger.error("Somehow got stuck in a headless environment", ex);
 		} catch (FileNotFoundException e) {
@@ -793,7 +790,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private void initNewDocument() {
 		document.initNew();
 		initUndoManager();
-		frame.setTitle(String.format("%s - %s", APPLICATION_NAME, document.getProperty(Document.TitleProperty)));
+		frame.setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), document.getProperty(Document.TitleProperty)));
 		fileName = "";
 		makeNewDocument = false;
 	}
@@ -857,7 +854,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			ProgressWindow pw = new ProgressWindow(AnalystWindow.this, document, "    Сохранение файла: ");
 			LegacyHtmlWriter backgroundWriter = new LegacyHtmlWriter(pw, document, saveFile);
 			backgroundWriter.execute();
-			frame.setTitle(String.format("%s - %s", APPLICATION_NAME, saveFile.getName()));
+			frame.setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), saveFile.getName()));
 		}
 	}
 

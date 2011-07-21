@@ -455,12 +455,13 @@ public class LegacyHtmlWriter extends SwingWorker<Object, Object> {
 
 		writer.write(String.format(
 			"<br/>" +
-			"Протокол определения ТИМа создан программой \"Информационный анализ\", верисия: %s <br/>" +
+			"Протокол определения ТИМа создан программой &laquo;%s&raquo;, верисия: %s <br/>" +
 			"© Школа системной соционики, Киев.<br/>" +
 			"http://www.socionicasys.ru\n" +
 			"</body>\n" +
 			"</html>\n",
-			AnalystWindow.VERSION
+			VersionInfo.getApplicationName(),
+			VersionInfo.getVersion()
 		));
 
 		setProgress(100);
