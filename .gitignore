@@ -1,6 +1,9 @@
-bin
+build
 lib
 out
+.gradle
 .idea
-Analyst.iml
+*.iml
+*.ipr
+*.iws
 *.log

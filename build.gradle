@@ -1,0 +1,75 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+version = '1.1-SNAPSHOT'
+group = 'ru.socionicasys'
+mainClassName = 'ru.socionicasys.analyst.Analyst'
+sourceCompatibility = '1.6'
+
+def compileOptions = [compileJava, compileTestJava].options
+compileOptions*.encoding = 'UTF-8'
+compileOptions*.debug = false
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile 'org.slf4j:slf4j-api:1.6.1'
+	compile 'ch.qos.logback:logback-classic:0.9.29'
+	compile 'org.swinglabs:swingx-core:1.6.2-2'
+}
+
+sourceSets.main {
+	java {
+		srcDirs = ['src']
+	}
+
+	resources {
+		srcDirs = ['.']
+		include 'license.txt'
+		include 'logback.xml'
+	}
+}
+
+def sharedManifest = manifest {
+		attributes 'Main-Class': mainClassName, 'Specification-Version': version
+}
+
+jar {
+	manifest = sharedManifest
+}
+
+task jarDependencies(type: Jar, dependsOn: compileJava) {
+	classifier = 'deps'
+	destinationDir = distsDir
+	from sourceSets.main.classes
+	from {
+		configurations.runtime.collect {
+			it.isDirectory() ? it : zipTree(it).matching {
+				exclude 'META-INF/maven/**'
+			}
+		}
+	}
+	manifest = sharedManifest
+}
+
+task syncLibs(type: Sync) {
+	from configurations.runtime
+	into file('lib')
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '1.0-milestone-3'
+}
+
+ideaProject {
+	// TODO: remove after migration to Gradle 1.0-milestone-4 which fixes ideaProject.javaVersion bug
+	javaVersion = sourceCompatibility
+
+	withXml { provider ->
+		provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = 'Git'
+	}
+}
