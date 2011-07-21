@@ -6,7 +6,7 @@
 			<pattern>%-7relative [%16thread]  %-5level  %logger | %msg%n</pattern>
 		</encoder>
 	</appender>
-	<root level="trace">
+	<root level="info">
 		<appender-ref ref="FILE" />
 	</root>
 </configuration>
