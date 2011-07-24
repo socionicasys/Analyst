@@ -20,7 +20,6 @@ public class LegacyHtmlWriter extends SwingWorker<Object, Object> {
 	private final ADocument document;
 	private final File outputFile;
 	private final AnalystWindow analystWindow;
-	private final ProgressWindow progressWindow;
 	private Exception exception = null;
 
 	private enum EventType {
@@ -117,14 +116,10 @@ public class LegacyHtmlWriter extends SwingWorker<Object, Object> {
 		}
 	}
 
-	LegacyHtmlWriter(ProgressWindow progressWindow, ADocument document, File outputFile) {
+	LegacyHtmlWriter(AnalystWindow analystWindow, ADocument document, File outputFile) {
 		this.document = document;
 		this.outputFile = outputFile;
-		this.analystWindow = progressWindow.getAnalyst();
-		this.progressWindow = progressWindow;
-
-		addPropertyChangeListener(progressWindow);
-		addPropertyChangeListener(analystWindow);
+		this.analystWindow = analystWindow;
 	}
 
 	@Override
@@ -142,17 +137,10 @@ public class LegacyHtmlWriter extends SwingWorker<Object, Object> {
 			exception = e;
 			logger.error("Unexpected exception while saving document", e);
 		} finally {
-			progressWindow.close();
 			writer.close();
 		}
 
 		return null;
-	}
-
-	@Override
-	protected void done() {
-		super.done();
-		progressWindow.close();
 	}
 
 	public Exception getException() {

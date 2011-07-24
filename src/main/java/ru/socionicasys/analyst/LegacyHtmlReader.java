@@ -29,19 +29,15 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 	private final File sourceFile;
 	private final boolean append;
 	private final ADocument document;
-	private final ProgressWindow progressWindow;
 	private Exception exception = null;
 
 	private final Map<Integer, RawAData> rawData = new HashMap<Integer, RawAData>();
 	private final Collection<StyledText> styledTextBlocks = new ArrayList<StyledText>();
 
-	LegacyHtmlReader(ProgressWindow progressWindow, ADocument document, File sourceFile, boolean append) {
+	LegacyHtmlReader(ADocument document, File sourceFile, boolean append) {
 		this.sourceFile = sourceFile;
 		this.document = document;
-		this.progressWindow = progressWindow;
 		this.append = append;
-
-		addPropertyChangeListener(progressWindow);
 	}
 
 	@Override
@@ -54,8 +50,6 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 		} catch (Exception e) {
 			exception = e;
 			logger.error("Non-IO exception while loading document", e);
-		} finally {
-			progressWindow.close();
 		}
 
 		return null;
@@ -108,12 +102,9 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 			document.fireADocumentChanged();
 		} catch (Exception e) {
 			logger.error("Error while working with RawData", e);
-			progressWindow.close();
 			exception = e;
 			cancel(true);
 		}
-
-		progressWindow.close();
 	}
 
 	public Exception getException() {

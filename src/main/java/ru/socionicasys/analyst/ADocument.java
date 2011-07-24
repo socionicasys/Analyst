@@ -264,23 +264,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	public void insertUpdate(DocumentEvent e) {
 	}
 
-	public void loadDocument(File sourceFile, final ProgressWindow pw, boolean append) throws Exception {
-		LegacyHtmlReader worker = new LegacyHtmlReader(pw, this, sourceFile, append);
-		worker.getPropertyChangeSupport().addPropertyChangeListener("state", new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				StateValue state = (StateValue) evt.getNewValue();
-				if (state == StateValue.DONE) {
-					pw.getAnalyst().initUndoManager();
-				}
-			}
-		});
-		worker.execute();
-		if (worker.getException() != null) {
-			throw worker.getException();
-		}
-	}
-
 	public Map<ASection, AData> getADataMap() {
 		return aDataMap;
 	}

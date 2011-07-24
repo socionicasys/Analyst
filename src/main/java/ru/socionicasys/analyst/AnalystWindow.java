@@ -182,8 +182,21 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	public void openFile(File file, boolean append) throws FileNotFoundException {
 		try {
 			ADocument document = documentHolder.getModel();
-			ProgressWindow pw = new ProgressWindow(this, document, "    Идет загрузка файла...   ");
-			document.loadDocument(file, pw, append);
+			LegacyHtmlReader worker = new LegacyHtmlReader(document, file, append);
+			worker.getPropertyChangeSupport().addPropertyChangeListener("state", new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					StateValue state = (StateValue) evt.getNewValue();
+					if (state == StateValue.DONE) {
+						AnalystWindow.this.initUndoManager();
+					}
+				}
+			});
+			worker.addPropertyChangeListener(new ProgressWindow(this, document, "    Идет загрузка файла...   "));
+			worker.execute();
+			if (worker.getException() != null) {
+				throw worker.getException();
+			}
 
 			fileName = file.getAbsolutePath();
 			textPane.grabFocus();
@@ -722,7 +735,9 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 					try {
 						file = new File(fileName);
 						ProgressWindow pw = new ProgressWindow(frame, document, "    Сохранение файла: ");
-						LegacyHtmlWriter iow = new LegacyHtmlWriter(pw, document, file);
+						LegacyHtmlWriter iow = new LegacyHtmlWriter(this, document, file);
+						iow.addPropertyChangeListener(pw);
+						iow.addPropertyChangeListener(this);
 						iow.execute();
 					} catch (Exception e) {
 						logger.error("Error writing document to file" + fileName, e);
@@ -858,7 +873,9 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 			ADocument document = documentHolder.getModel();
 			ProgressWindow pw = new ProgressWindow(AnalystWindow.this, document, "    Сохранение файла: ");
-			LegacyHtmlWriter backgroundWriter = new LegacyHtmlWriter(pw, document, saveFile);
+			LegacyHtmlWriter backgroundWriter = new LegacyHtmlWriter(AnalystWindow.this, document, saveFile);
+			backgroundWriter.addPropertyChangeListener(pw);
+			backgroundWriter.addPropertyChangeListener(AnalystWindow.this);
 			backgroundWriter.execute();
 			frame.setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), saveFile.getName()));
 		}

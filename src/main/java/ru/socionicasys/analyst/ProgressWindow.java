@@ -52,29 +52,24 @@ public class ProgressWindow implements PropertyChangeListener {
 		dialog.setVisible(true);
 	}
 
-
 	public void close() {
 		dialog.setVisible(false);
 		dialog.dispose();
 		document.fireADocumentChanged();
 	}
 
-	public AnalystWindow getAnalyst() {
-		return analystWindow;
-	}
-
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
-		if (propertyName.equals("progress")) {
+		if ("progress".equals(propertyName)) {
 			int value = (Integer) evt.getNewValue();
 			if (value >= MIN_VALUE && value <= MAX_VALUE) {
 				progressBar.setValue(value);
 				label.setText(String.format("      Выполнено :%d%%", value));
 			}
-		} else if (propertyName.equals("status")) {
-			int value = (Integer) evt.getNewValue();
-			if (value > MIN_VALUE && value <= MAX_VALUE) {
+		} else if ("state".equals(propertyName)) {
+			SwingWorker.StateValue state = (SwingWorker.StateValue) evt.getNewValue();
+			if (state == SwingWorker.StateValue.DONE) {
 				close();
 			}
 		}
