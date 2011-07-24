@@ -23,7 +23,7 @@ dependencies {
 }
 
 def sharedManifest = manifest {
-		attributes 'Main-Class': mainClassName, 'Specification-Version': version
+	attributes 'Main-Class': mainClassName, 'Specification-Version': version
 }
 
 jar {
