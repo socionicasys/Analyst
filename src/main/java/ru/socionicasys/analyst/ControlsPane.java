@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
@@ -23,20 +24,24 @@ import javax.swing.tree.DefaultMutableTreeNode;
  * @author Виктор
  */
 public class ControlsPane extends JToolBar implements CaretListener, ADataChangeListener, ChangeListener, TreeSelectionListener {
-	private AspectPanel aspectPanel;
-	private SignPanel signPanel;
-	private MVPanel mvPanel;
-	private DimensionPanel dimensionPanel;
-	private JTextPane textPane;
-	private ADocument aDoc = null;
-	private ArrayList<ADataChangeListener> aDataListeners;
-	private ASection currentASection = null;
-	private JTextArea commentField;
-	private Object oldTreeObject = null;
+	private final AspectPanel aspectPanel;
+	private final SignPanel signPanel;
+	private final MVPanel mvPanel;
+	private final DimensionPanel dimensionPanel;
+	private final JTextPane textPane;
+	private final List<ADataChangeListener> aDataListeners;
+	private final JTextArea commentField;
+	private final DocumentHolder documentHolder;
+	private ASection currentASection;
+	private Object oldTreeObject;
 	private static final Logger logger = LoggerFactory.getLogger(ControlsPane.class);
 
-	public ControlsPane() {
+	public ControlsPane(JTextPane textPane, DocumentHolder documentHolder, JTextArea commentField) {
 		super("Панель разметки", JToolBar.VERTICAL);
+
+		this.textPane = textPane;
+		this.documentHolder = documentHolder;
+		this.commentField = commentField;
 
 		aDataListeners = new ArrayList<ADataChangeListener>();
 		signPanel = new SignPanel();
@@ -68,7 +73,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 	}
 
 	private interface AspectSelectionListener {
-		public void setPanelEnabled(boolean enabled);
+		void setPanelEnabled(boolean enabled);
 	}
 
 	private class MVPanel extends JPanel implements ActionListener, AspectSelectionListener {
@@ -753,12 +758,6 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		}
 	}
 
-	public void bindToTextPane(JTextPane textComponent, ADocument adoc, JTextArea commentField) {
-		this.textPane = textComponent;
-		this.aDoc = adoc;
-		this.commentField = commentField;
-	}
-
 	public AData getAData() {
 		AData adata = null;
 		try {
@@ -785,7 +784,8 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		int begin = Math.min(dot, mark);
 
 		//try to find current ASection to edit
-		currentASection = aDoc.getASectionThatStartsAt(begin);
+		ADocument document = documentHolder.getModel();
+		currentASection = document.getASectionThatStartsAt(begin);
 
 		// if found mark the section with caret
 		if (currentASection != null) {
@@ -793,7 +793,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			commentField.getCaret().removeChangeListener(this);
 
 			aspectPanel.setPanelEnabled(false);
-			AData data = aDoc.getAData(currentASection);
+			AData data = document.getAData(currentASection);
 			aspectPanel.setPanelEnabled(true);
 			setContols(data);
 
@@ -859,20 +859,21 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 
 	@Override
 	public void aDataChanged(int start, int end, AData data) {
+		ADocument document = documentHolder.getModel();
 		if ((data == null) && (currentASection != null)) {
-			aDoc.startCompoundEdit();
-			aDoc.removeASection(currentASection);
-			aDoc.endCompoundEdit(null);
+			document.startCompoundEdit();
+			document.removeASection(currentASection);
+			document.endCompoundEdit(null);
 			currentASection = null;
 		} else if ((data != null) && (currentASection != null)) {
-			aDoc.startCompoundEdit();
-			aDoc.updateASection(currentASection, data);
-			aDoc.endCompoundEdit(null);
+			document.startCompoundEdit();
+			document.updateASection(currentASection, data);
+			document.endCompoundEdit(null);
 		} else if (data != null) {
-			currentASection = new ASection(start, end, aDoc.defaultSectionAttributes);
-			aDoc.startCompoundEdit();
-			aDoc.addASection(currentASection, data);
-			aDoc.endCompoundEdit(null);
+			currentASection = new ASection(start, end, document.defaultSectionAttributes);
+			document.startCompoundEdit();
+			document.addASection(currentASection, data);
+			document.endCompoundEdit(null);
 		}
 	}
 
@@ -908,7 +909,8 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		//////////////test for text positioning in scroll pane////////////////////////
 		JViewport viewport = (JViewport) textPane.getParent();
 
-		currentASection = aDoc.getASectionThatStartsAt(index);
+		ADocument document = documentHolder.getModel();
+		currentASection = document.getASectionThatStartsAt(index);
 		if (currentASection != null) {
 			int offset = currentASection.getMiddleOffset();
 			int start = currentASection.getStartOffset();
@@ -924,7 +926,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			commentField.getCaret().removeChangeListener(this);
 
 			aspectPanel.setPanelEnabled(false);
-			AData data = aDoc.getAData(currentASection);
+			AData data = document.getAData(currentASection);
 			aspectPanel.setPanelEnabled(true);
 			setContols(data);
 
@@ -942,7 +944,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 
 	public void update() {
 		if (currentASection != null) {
-			AData data = aDoc.getAData(currentASection);
+			AData data = documentHolder.getModel().getAData(currentASection);
 			setContols(data);
 		}
 	}

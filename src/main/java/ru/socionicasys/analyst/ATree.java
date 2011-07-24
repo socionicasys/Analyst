@@ -16,7 +16,7 @@ import javax.swing.tree.*;
  */
 public class ATree extends JTree {
 	public static final int MAX_PRESENTATION_CHARS = 100;
-	private ADocument aDoc;
+	private final DocumentHolder documentHolder;
 	private DefaultMutableTreeNode rootNode;
 	private DefaultTreeModel treeModel;
 	private TreePath path;
@@ -284,36 +284,35 @@ public class ATree extends JTree {
 	private DefaultMutableTreeNode doubtNode = new EndTreeNode("Непонятные места");
 	private DefaultMutableTreeNode jumpNode = new EndTreeNode("Переводы");
 
-	public ATree(ADocument doc) {
-		super();
-		rootNode = new DefaultMutableTreeNode(doc.getProperty(Document.TitleProperty));
+	public ATree(DocumentHolder documentHolder) {
+		this.documentHolder = documentHolder;
+		rootNode = new DefaultMutableTreeNode(documentHolder.getModel().getProperty(Document.TitleProperty));
 		treeModel = new DefaultTreeModel(rootNode);
 		this.setModel(treeModel);
-		this.aDoc = doc;
-		doc.addADocumentChangeListener(new ADocumentChangeListener() {
+		documentHolder.addADocumentChangeListener(new ADocumentChangeListener() {
 			@Override
-			public void aDocumentChanged(ADocument doc) {
-				updateTree();
+			public void aDocumentChanged(ADocument document) {
+				updateTree(document);
 			}
 		});
 		jc = new JumpCounter();
-		init();
+		init(documentHolder.getModel());
 	}
 
-	private void init() {
+	private void init(ADocument document) {
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		setEditable(false);
 		toggleClickCount = 1;
 		makeTreeStructure();
-		updateTree();
+		updateTree(document);
 	}
 
-	private void updateTree() {
-		if (aDoc == null) {
+	private void updateTree(ADocument document) {
+		if (document == null) {
 			return;
 		}
 
-		rootNode.setUserObject(aDoc.getProperty(Document.TitleProperty));
+		rootNode.setUserObject(document.getProperty(Document.TitleProperty));
 		TreePath newPath = getSelectionPath();
 		if (newPath != null) {
 			path = newPath;
@@ -322,7 +321,7 @@ public class ATree extends JTree {
 		//Analyze document structure and update tree nodes
 		try {
 			removeAllChildren();
-			for (Entry<ASection, AData> entry : aDoc.getADataMap().entrySet()) {
+			for (Entry<ASection, AData> entry : document.getADataMap().entrySet()) {
 				int sectionOffset = entry.getKey().getStartOffset();
 				int sectionLength = Math.abs(entry.getKey().getEndOffset() - sectionOffset);
 				int quoteLength = Math.min(sectionLength, MAX_PRESENTATION_CHARS);
@@ -336,7 +335,7 @@ public class ATree extends JTree {
 				String sign = data.getSign();
 				String comment = data.getComment();
 				String mv = data.getMV();
-				String quote = aDoc.getText(sectionOffset, quoteLength);
+				String quote = document.getText(sectionOffset, quoteLength);
 
 				if (aspect != null && aspect.equals(AData.L)) {
 					if (sign != null && sign.equals(AData.PLUS)) {
@@ -1263,7 +1262,7 @@ public class ATree extends JTree {
 
 	public String getReport() {
 		String report;
-		if (!aDoc.getADataMap().isEmpty()) {
+		if (!documentHolder.getModel().getADataMap().isEmpty()) {
 			report =
 				"<br/>" +
 					"<h2> Выявленные параметры функций ИМ: </h2>" +

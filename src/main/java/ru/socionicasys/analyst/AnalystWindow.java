@@ -26,7 +26,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private static final String EXTENSION = "htm";
 	private static final Logger logger = LoggerFactory.getLogger(AnalystWindow.class);
 
-	private final ADocument document;
+	private final DocumentHolder documentHolder;
 	private final JTextPane textPane;
 	private final ControlsPane controlsPane;
 	private final StatusLabel status;
@@ -64,12 +64,12 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		setMinimumSize(new Dimension(600, 400));
 		setPreferredSize(new Dimension(1000, 700));
 		//Create the text pane and configure it.
-		document = new ADocument();
-		textPane = new JTextPane(document);
+		documentHolder = new DocumentHolder(new ADocument());
+		textPane = new JTextPane(documentHolder.getModel());
 		// Replace the built-in  behavior when the caret highlight
 		// becomes invisible when focus moves to another component
 		textPane.setCaret(new HighlightCaret());
-		textPane.setNavigationFilter(new BlockNavigationFilter(document));
+		textPane.setNavigationFilter(new BlockNavigationFilter(documentHolder.getModel()));
 		// popup menu for the textPane
 		popupMenu = new JPopupMenu();
 		textPane.setComponentPopupMenu(popupMenu);
@@ -113,11 +113,11 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		statusPane.add(progress, BorderLayout.CENTER);
 
 		// Create tabbed navigation pane
-		navigateTree = new ATree(document);
-		analysisTree = new BTree(document);
-		document.addADocumentChangeListener(analysisTree);
-		histogramTree = new CTree(document);
-		document.addADocumentChangeListener(histogramTree);
+		navigateTree = new ATree(documentHolder);
+		analysisTree = new BTree(documentHolder.getModel());
+		documentHolder.addADocumentChangeListener(analysisTree);
+		histogramTree = new CTree(documentHolder);
+		documentHolder.addADocumentChangeListener(histogramTree);
 		JTabbedPane navigateTabs = createTabPane();
 
 		JSplitPane splitPaneH = new JSplitPane(
@@ -126,8 +126,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		splitPaneH.setOneTouchExpandable(true);
 
 		//Add the control panels.
-		controlsPane = new ControlsPane();
-		controlsPane.bindToTextPane(textPane, document, commentField);
+		controlsPane = new ControlsPane(textPane, documentHolder, commentField);
 
 		textPane.addCaretListener(controlsPane);
 		controlsPane.addADataListener(controlsPane);
@@ -170,7 +169,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		addBindings();
 
 		//Start watching for undoable edits and caret changes.
-		document.addUndoableEditListener(new MyUndoableEditListener());
+		documentHolder.addUndoableEditListener(new MyUndoableEditListener());
 		textPane.addCaretListener(status);
 
 		pack();
@@ -182,6 +181,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 	public void openFile(File file, boolean append) throws FileNotFoundException {
 		try {
+			ADocument document = documentHolder.getModel();
 			ProgressWindow pw = new ProgressWindow(this, document, "    Идет загрузка файла...   ");
 			document.loadDocument(file, pw, append);
 
@@ -273,6 +273,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		//Might not be invoked from the event dispatch thread.
 		@Override
 		public void caretUpdate(CaretEvent e) {
+			ADocument document = documentHolder.getModel();
 			ASection section = document.getASectionThatStartsAt(textPane.getCaretPosition());
 			if (textPane.getText().length() <= 0) {
 				setText("Откройте сохраненный документ или вставтьте анализируемый текст в центральное окно");
@@ -488,6 +489,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 				ppc.add(new JScrollPane(commentArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
 					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
 
+				ADocument document = documentHolder.getModel();
 				String title = (String) document.getProperty(Document.TitleProperty);
 				String expert = (String) document.getProperty(ADocument.ExpertProperty);
 				String client = (String) document.getProperty(ADocument.ClientProperty);
@@ -674,6 +676,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private int saveConfirmation() {
 		int choice = JOptionPane.NO_OPTION;
 		// if existing document is not empty
+		ADocument document = documentHolder.getModel();
 		if (document.getLength() > 0) {
 			choice = JOptionPane.showOptionDialog(frame,
 				"Текущий документ не пустой.\n\nСохранить текущий документ?",
@@ -742,6 +745,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		int choice = JOptionPane.YES_OPTION;
 		int offset = textPane.getCaret().getMark();
 		int dot = textPane.getCaret().getDot();
+		ADocument document = documentHolder.getModel();
 		if (document.getASectionThatStartsAt(offset) != null) {
 			choice = JOptionPane.showOptionDialog(frame,
 				"Вы собираетесь удалить размеченный фрагмент документа\n\nВы действительно хотите удалить фрагмент?",
@@ -788,6 +792,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	}
 
 	private void initNewDocument() {
+		ADocument document = documentHolder.getModel();
 		document.initNew();
 		initUndoManager();
 		frame.setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), document.getProperty(Document.TitleProperty)));
@@ -851,6 +856,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 				saveFile = new File(fileName);
 			}
 
+			ADocument document = documentHolder.getModel();
 			ProgressWindow pw = new ProgressWindow(AnalystWindow.this, document, "    Сохранение файла: ");
 			LegacyHtmlWriter backgroundWriter = new LegacyHtmlWriter(pw, document, saveFile);
 			backgroundWriter.execute();

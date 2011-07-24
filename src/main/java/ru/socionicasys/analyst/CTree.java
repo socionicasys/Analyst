@@ -26,7 +26,7 @@ public class CTree extends JTree implements ADocumentChangeListener {
 	private static final int SCALE = 10;
 	private static final float PERCENT = 100.0f;
 
-	private final ADocument document;
+	private final DocumentHolder documentHolder;
 	private final DefaultMutableTreeNode rootNode;
 	private final DefaultTreeModel treeModel;
 
@@ -35,10 +35,9 @@ public class CTree extends JTree implements ADocumentChangeListener {
 	private Map<Sociotype, Integer> missCount;
 	private Map<Sociotype, Float> matchCoefficients;
 
-	public CTree(ADocument document) {
-		super();
-
-		rootNode = new DefaultMutableTreeNode(document.getProperty(Document.TitleProperty));
+	public CTree(DocumentHolder documentHolder) {
+		this.documentHolder = documentHolder;
+		rootNode = new DefaultMutableTreeNode(documentHolder.getModel().getProperty(Document.TitleProperty));
 		treeModel = new DefaultTreeModel(rootNode);
 		setModel(treeModel);
 
@@ -59,12 +58,10 @@ public class CTree extends JTree implements ADocumentChangeListener {
 		toggleClickCount = 1;
 		putClientProperty("JTree.lineStyle", "None");
 
-		this.document = document;
-
-		updateTree();
+		updateTree(documentHolder.getModel());
 	}
 
-	private void updateTree() {
+	private void updateTree(ADocument document) {
 		if (document == null) {
 			return;
 		}
@@ -149,8 +146,8 @@ public class CTree extends JTree implements ADocumentChangeListener {
 	}
 
 	@Override
-	public void aDocumentChanged(ADocument doc) {
-		updateTree();
+	public void aDocumentChanged(ADocument document) {
+		updateTree(document);
 	}
 
 	private static class HistogramCellRenderer implements TreeCellRenderer {
@@ -171,7 +168,7 @@ public class CTree extends JTree implements ADocumentChangeListener {
 	}
 
 	public String getReport() {
-		if (!document.getADataMap().isEmpty()) {
+		if (!documentHolder.getModel().getADataMap().isEmpty()) {
 			StringBuilder reportBuilder = new StringBuilder(
 				"<br/>" +
 				"<h2> Соответствие ТИМу </h2>" +

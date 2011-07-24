@@ -245,6 +245,12 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		listeners.add(listener);
 	}
 
+	public void removeADocumentChangeListener(ADocumentChangeListener listener) {
+		if (listeners != null) {
+			listeners.remove(listener);
+		}
+	}
+
 	public void fireADocumentChanged() {
 		if (listeners == null) {
 			return;

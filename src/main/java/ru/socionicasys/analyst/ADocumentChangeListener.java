@@ -1,5 +1,7 @@
 package ru.socionicasys.analyst;
 
-public interface ADocumentChangeListener {
-	void aDocumentChanged(ADocument doc);
+import java.util.EventListener;
+
+public interface ADocumentChangeListener extends EventListener {
+	void aDocumentChanged(ADocument document);
 }
