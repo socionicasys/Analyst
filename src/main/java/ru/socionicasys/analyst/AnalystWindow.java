@@ -192,7 +192,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 					}
 				}
 			});
-			worker.addPropertyChangeListener(new ProgressWindow(this, document, "    Идет загрузка файла...   "));
+			worker.addPropertyChangeListener(new ProgressWindow(this, "    Идет загрузка файла...   "));
 			worker.execute();
 			if (worker.getException() != null) {
 				throw worker.getException();
@@ -734,7 +734,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 				if (fileName != null && fileName.length() > 0) {
 					try {
 						file = new File(fileName);
-						ProgressWindow pw = new ProgressWindow(frame, document, "    Сохранение файла: ");
+						ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
 						LegacyHtmlWriter iow = new LegacyHtmlWriter(this, document, file);
 						iow.addPropertyChangeListener(pw);
 						iow.addPropertyChangeListener(this);
@@ -872,7 +872,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			}
 
 			ADocument document = documentHolder.getModel();
-			ProgressWindow pw = new ProgressWindow(AnalystWindow.this, document, "    Сохранение файла: ");
+			ProgressWindow pw = new ProgressWindow(AnalystWindow.this, "    Сохранение файла: ");
 			LegacyHtmlWriter backgroundWriter = new LegacyHtmlWriter(AnalystWindow.this, document, saveFile);
 			backgroundWriter.addPropertyChangeListener(pw);
 			backgroundWriter.addPropertyChangeListener(AnalystWindow.this);
