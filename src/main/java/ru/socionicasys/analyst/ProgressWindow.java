@@ -47,11 +47,6 @@ public class ProgressWindow implements PropertyChangeListener {
 		dialog.setVisible(true);
 	}
 
-	public void close() {
-		dialog.setVisible(false);
-		dialog.dispose();
-	}
-
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		String propertyName = evt.getPropertyName();
@@ -64,7 +59,8 @@ public class ProgressWindow implements PropertyChangeListener {
 		} else if ("state".equals(propertyName)) {
 			SwingWorker.StateValue state = (SwingWorker.StateValue) evt.getNewValue();
 			if (state == SwingWorker.StateValue.DONE) {
-				close();
+				dialog.setVisible(false);
+				dialog.dispose();
 			}
 		}
 	}
