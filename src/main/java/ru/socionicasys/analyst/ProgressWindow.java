@@ -21,7 +21,7 @@ public class ProgressWindow implements PropertyChangeListener {
 	private final JLabel label;
 	private final JProgressBar progressBar;
 
-	public ProgressWindow(AnalystWindow analystWindow, String message) {
+	public ProgressWindow(Frame parent, String message) {
 		progressBar = new JProgressBar(SwingConstants.HORIZONTAL, MIN_VALUE, MAX_VALUE);
 		progressBar.setMaximumSize(new Dimension(PROGRESS_WIDTH, PROGRESS_HEIGHT));
 		progressBar.setPreferredSize(new Dimension(PROGRESS_WIDTH, PROGRESS_HEIGHT));
@@ -37,11 +37,11 @@ public class ProgressWindow implements PropertyChangeListener {
 		outerPanel.add(label, BorderLayout.WEST);
 		outerPanel.add(innerPanel, BorderLayout.CENTER);
 
-		dialog = new JDialog(analystWindow, "Подождите пожалуйста, выполняется операция...", false);
+		dialog = new JDialog(parent, "Подождите пожалуйста, выполняется операция...", false);
 		dialog.setContentPane(outerPanel);
 		dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		dialog.setSize(new Dimension(DIALOG_WIDTH, DIALOG_HEIGHT));
-		dialog.setLocationRelativeTo(analystWindow);
+		dialog.setLocationRelativeTo(parent);
 		dialog.setAlwaysOnTop(true);
 		dialog.setResizable(false);
 		dialog.setVisible(true);
