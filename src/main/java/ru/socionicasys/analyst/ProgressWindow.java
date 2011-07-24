@@ -18,13 +18,11 @@ public class ProgressWindow implements PropertyChangeListener {
 	private static final int DIALOG_HEIGHT = 100;
 
 	private final JDialog dialog;
-	private final AnalystWindow analystWindow;
 	private final JLabel label;
 	private final JProgressBar progressBar;
 	private final ADocument document;
 
 	public ProgressWindow(AnalystWindow analystWindow, ADocument document, String message) {
-		this.analystWindow = analystWindow;
 		this.document = document;
 
 		progressBar = new JProgressBar(SwingConstants.HORIZONTAL, MIN_VALUE, MAX_VALUE);
