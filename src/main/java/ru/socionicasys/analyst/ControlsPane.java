@@ -798,9 +798,12 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			setContols(data);
 
 			commentField.getCaret().addChangeListener(this);
-		} else {
-			logger.debug("currentASection = null");
+		} else if (dot == mark) {
+			logger.debug("Empty selection, disable aspect panel");
 			aspectPanel.setPanelEnabled(false);
+		} else {
+			logger.debug("Non-empty selection, enable aspect panel");
+			aspectPanel.setPanelEnabled(true);
 		}
 	}
 
