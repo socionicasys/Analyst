@@ -69,7 +69,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		// Replace the built-in  behavior when the caret highlight
 		// becomes invisible when focus moves to another component
 		textPane.setCaret(new HighlightCaret());
-		textPane.setNavigationFilter(new BlockNavigationFilter(documentHolder.getModel()));
+		textPane.setNavigationFilter(new BlockNavigationFilter(documentHolder));
 		// popup menu for the textPane
 		popupMenu = new JPopupMenu();
 		textPane.setComponentPopupMenu(popupMenu);

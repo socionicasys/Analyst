@@ -14,7 +14,7 @@ public class BlockNavigationFilter extends NavigationFilter {
 	/**
 	 * Документ, к которому привязан фильтр
 	 */
-	private final ADocument document;
+	private final DocumentHolder documentHolder;
 
 	/**
 	 * Позиция курсора до перемещения к границам блока
@@ -28,8 +28,8 @@ public class BlockNavigationFilter extends NavigationFilter {
 
 	private static final Logger logger = LoggerFactory.getLogger(BlockNavigationFilter.class);
 
-	public BlockNavigationFilter(ADocument document) {
-		this.document = document;
+	public BlockNavigationFilter(DocumentHolder documentHolder) {
+		this.documentHolder = documentHolder;
 		backupDotActive = false;
 	}
 
@@ -37,7 +37,7 @@ public class BlockNavigationFilter extends NavigationFilter {
 	public void setDot(FilterBypass fb, int dot, Position.Bias bias) {
 		logger.debug("setDot: dot = {}", dot);
 		backupDotActive = false;
-		ASection currentSection = document.getASection(dot);
+		ASection currentSection = documentHolder.getModel().getASection(dot);
 		if (currentSection == null) {
 			logger.debug("setDot: no section here, keep dot where it is");
 			super.setDot(fb, dot, bias);
