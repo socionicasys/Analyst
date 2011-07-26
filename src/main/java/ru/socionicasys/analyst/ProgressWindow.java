@@ -42,9 +42,7 @@ public class ProgressWindow implements PropertyChangeListener {
 		dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		dialog.setSize(new Dimension(DIALOG_WIDTH, DIALOG_HEIGHT));
 		dialog.setLocationRelativeTo(parent);
-		dialog.setAlwaysOnTop(true);
 		dialog.setResizable(false);
-		dialog.setVisible(true);
 	}
 
 	@Override
@@ -58,9 +56,14 @@ public class ProgressWindow implements PropertyChangeListener {
 			}
 		} else if ("state".equals(propertyName)) {
 			SwingWorker.StateValue state = (SwingWorker.StateValue) evt.getNewValue();
-			if (state == SwingWorker.StateValue.DONE) {
+			switch (state) {
+			case STARTED:
+				dialog.setVisible(true);
+				break;
+			case DONE:
 				dialog.setVisible(false);
 				dialog.dispose();
+				break;
 			}
 		}
 	}
