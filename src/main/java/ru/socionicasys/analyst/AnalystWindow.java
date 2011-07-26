@@ -11,6 +11,7 @@ import java.io.*;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import javax.swing.*;
 import javax.swing.SwingWorker.StateValue;
 import javax.swing.event.*;
@@ -181,32 +182,16 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 	public void openFile(File file, boolean append) throws FileNotFoundException {
 		try {
-			ADocument document = documentHolder.getModel();
-			LegacyHtmlReader worker = new LegacyHtmlReader(document, file, append);
-			worker.getPropertyChangeSupport().addPropertyChangeListener("state", new PropertyChangeListener() {
-				@Override
-				public void propertyChange(PropertyChangeEvent evt) {
-					StateValue state = (StateValue) evt.getNewValue();
-					if (state == StateValue.DONE) {
-						AnalystWindow.this.initUndoManager();
-					}
-				}
-			});
+			final LegacyHtmlReader worker = new LegacyHtmlReader(file);
+			worker.getPropertyChangeSupport().addPropertyChangeListener("state",
+					new DocumentLoadListener(append));
 			worker.addPropertyChangeListener(new ProgressWindow(this, "    Идет загрузка файла...   "));
 			worker.execute();
-			if (worker.getException() != null) {
-				throw worker.getException();
-			}
 
 			fileName = file.getAbsolutePath();
 			textPane.grabFocus();
 			status.setText("");
 			setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), file.getName()));
-		} catch (HeadlessException ex) {
-			logger.error("Somehow got stuck in a headless environment", ex);
-		} catch (FileNotFoundException e) {
-			logger.error("Error opening file {}", file.getAbsolutePath(), e);
-			throw e;
 		} catch (Exception e) {
 			logger.error("Error loading file {}", file.getAbsolutePath(), e);
 		}
@@ -815,7 +800,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		makeNewDocument = false;
 	}
 
-	public void initUndoManager() {
+	private void initUndoManager() {
 		undo.discardAllEdits();
 		if (undoAction != null) {
 			undoAction.updateUndoState();
@@ -912,6 +897,39 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 					null,
 					new Object[]{"Закрыть"},
 					null);
+			}
+		}
+	}
+
+	/**
+	 * Класс, слушающий состояние загрузки документа. Помещает документ в главное окно по окончанию загрузки.
+	 */
+	private class DocumentLoadListener implements PropertyChangeListener {
+		private final boolean append;
+
+		private DocumentLoadListener(boolean append) {
+			this.append = append;
+		}
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			StateValue state = (StateValue) evt.getNewValue();
+			if (state == StateValue.DONE) {
+				try {
+					LegacyHtmlReader worker = (LegacyHtmlReader) evt.getSource();
+					ADocument document = worker.get();
+					if (append) {
+						documentHolder.getModel().appendDocument(document);
+					} else {
+						documentHolder.setModel(document);
+						textPane.setDocument(document);
+					}
+					initUndoManager();
+				} catch (InterruptedException e) {
+					logger.info("Document loading interrupted", e);
+				} catch (ExecutionException e) {
+					logger.error("Error while loading document", e.getCause());
+				}
 			}
 		}
 	}

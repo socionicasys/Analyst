@@ -4,12 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.util.*;
+import java.util.List;
 import java.util.Map.Entry;
-import javax.swing.SwingWorker.StateValue;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.UndoableEditEvent;
@@ -534,6 +531,73 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			DocSection section = entry.getKey();
 			AData data = entry.getValue();
 			aDataMap.put(new ASection(position + section.getStart(), position + section.getEnd()), data);
+		}
+	}
+
+	/**
+	 * Добавляет содержимое из документа anotherDocument в конец данного документа.
+	 * @param anotherDocument документ, содержимое которого нужно добавить.
+	 */
+	public void appendDocument(ADocument anotherDocument) {
+		List<ElementSpec> specs = new ArrayList<ElementSpec>();
+		ElementSpec spec = new ElementSpec(new SimpleAttributeSet(), ElementSpec.StartTagType);
+		specs.add(spec);
+		visitElements(anotherDocument.getDefaultRootElement(), specs, false);
+		spec = new ElementSpec(new SimpleAttributeSet(), ElementSpec.EndTagType);
+		specs.add(spec);
+
+		ElementSpec[] arr = new ElementSpec[specs.size()];
+		specs.toArray(arr);
+		int documentLength = getLength();
+		try {
+			insert(documentLength, arr);
+		} catch (BadLocationException e) {
+			logger.error("Error while appending to document");
+		}
+
+		for (Entry<ASection, AData> entry : anotherDocument.aDataMap.entrySet()) {
+			ASection sourceSection = entry.getKey();
+			ASection destinationSection = new ASection(sourceSection.getStartOffset() + documentLength,
+					sourceSection.getEndOffset() + documentLength);
+			aDataMap.put(destinationSection, entry.getValue());
+		}
+
+		StringBuilder builder = new StringBuilder(getProperty(ExpertProperty).toString());
+		builder.append("; ");
+		builder.append(anotherDocument.getProperty(ExpertProperty));
+		getDocumentProperties().put(ExpertProperty, builder.toString());
+
+		fireADocumentChanged();
+	}
+
+	/**
+	 * Проходится по элементу и всем его дочерним элементам, собирая всю информацию в список ElementSpec-ов.
+	 * @param element элемент, с которого начинается обход
+	 * @param specs список, в который будут добавлены описания элементов
+	 * @param includeRoot добавлять ли в описание теги открытия/закрытия начального элемента
+	 */
+	private static void visitElements(Element element, List<ElementSpec> specs, boolean includeRoot) {
+		if (element.isLeaf()) {
+			try {
+				String elementText = element.getDocument().getText(element.getStartOffset(),
+						element.getEndOffset() - element.getStartOffset());
+				specs.add(new ElementSpec(element.getAttributes(), ElementSpec.ContentType,
+						elementText.toCharArray(), 0, elementText.length()));
+			} catch (BadLocationException e) {
+				logger.error("Error while traversing document");
+			}
+		}
+		else {
+			if (includeRoot) {
+				specs.add(new ElementSpec(element.getAttributes(), ElementSpec.StartTagType));
+			}
+			for (int i = 0; i < element.getElementCount(); i++) {
+				visitElements(element.getElement(i), specs, true);
+			}
+
+			if (includeRoot) {
+				specs.add(new ElementSpec(element.getAttributes(), ElementSpec.EndTagType));
+			}
 		}
 	}
 }

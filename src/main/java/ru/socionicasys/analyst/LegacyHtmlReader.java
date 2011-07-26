@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import javax.swing.*;
 import javax.swing.text.*;
 
-public class LegacyHtmlReader extends SwingWorker<Object, Object> {
+public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 	private static final String FILE_ENCODING = "UTF-8";
 	private static final Logger logger = LoggerFactory.getLogger(LegacyHtmlReader.class);
 
@@ -27,97 +27,37 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 	private static final int BUFFER_SIZE = 1024;
 
 	private final File sourceFile;
-	private final boolean append;
-	private final ADocument document;
-	private Exception exception = null;
 
 	private final Map<Integer, RawAData> rawData = new HashMap<Integer, RawAData>();
-	private final Collection<StyledText> styledTextBlocks = new ArrayList<StyledText>();
 
-	LegacyHtmlReader(ADocument document, File sourceFile, boolean append) {
+	LegacyHtmlReader(File sourceFile) {
 		this.sourceFile = sourceFile;
-		this.document = document;
-		this.append = append;
 	}
 
 	@Override
-	protected Object doInBackground() throws Exception {
+	protected ADocument doInBackground() throws Exception {
 		try {
-			readDocument();
+			return readDocument();
 		} catch (IOException e) {
-			exception = e;
 			logger.error("IO error while loading document", e);
+			throw e;
 		} catch (Exception e) {
-			exception = e;
 			logger.error("Non-IO exception while loading document", e);
-		}
-
-		return null;
-	}
-
-	@Override
-	protected void done() {
-		super.done();
-
-		int appendOffset;
-		if (append) {
-			appendOffset = document.getLength();
-		} else {
-			// Если мы не добавляем в старый документ, то перед
-			// первой записью его нужно очистить
-			appendOffset = 0;
-			document.getADataMap().clear();
-			try {
-				document.remove(0, document.getEndPosition().getOffset() - 1);
-			} catch (BadLocationException e) {
-				logger.error("Illegal document location while clearing document", e);
-			}
-		}
-		// Применяем к документу блоки текста со стилями из styledTextBlocks
-		for (StyledText styledText : styledTextBlocks) {
-			String textBlock = styledText.getText();
-			AttributeSet textStyle = styledText.getStyle();
-			try {
-				int docPosition = document.getEndPosition().getOffset() - 1;
-				document.insertString(docPosition, textBlock, textStyle);
-				// Исправляем ошибку insertString: текст вставляется без стилей
-				document.setCharacterAttributes(docPosition, textBlock.length(), textStyle, true);
-			} catch (BadLocationException e) {
-				logger.error("Illegal document location applying styles to document", e);
-			}
-		}
-
-		try {
-			for (RawAData rawAData : rawData.values()) {
-				AData data = AData.parseAData(rawAData.getAData());
-				data.setComment(rawAData.getComment());
-				int begin = rawAData.getBegin();
-				int end = rawAData.getEnd();
-				ASection section = new ASection(begin + appendOffset, end + appendOffset,
-					document.defaultSectionAttributes);
-				document.getADataMap().put(section, data);
-				document.setCharacterAttributes(begin + appendOffset, end - begin,
-					document.defaultSectionAttributes, false);
-			}
-			document.fireADocumentChanged();
-		} catch (Exception e) {
-			logger.error("Error while working with RawData", e);
-			exception = e;
-			cancel(true);
+			throw e;
 		}
 	}
 
-	public Exception getException() {
-		return exception;
-	}
-
-	private void readDocument() throws IOException {
+	private ADocument readDocument() throws IOException {
 		setProgress(0);
 
+		ADocument document = new ADocument();
 		String text = readFromStream();
 		setProgress(FILE_LOAD_PROGRESS);
 
-		parseDocumentProperties(text);
+		Dictionary<Object, Object> documentProperties = document.getDocumentProperties();
+		for (Map.Entry<String, String> entry : parseDocumentProperties(text).entrySet()) {
+			documentProperties.put(entry.getKey(), entry.getValue());
+		}
 
 		StringBuilder leftColumnBuilder = new StringBuilder();
 		StringBuilder rightColumnBuilder = new StringBuilder();
@@ -148,6 +88,7 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 		Matcher styleMatcher = styleTag.matcher(sourceText);
 		int sourcePosition = 0;
 		int sourceOffset = 0;
+		List<StyledText> styledTextBlocks = new ArrayList<StyledText>();
 		while (styleMatcher.find()) {
 			String currentTag = styleMatcher.group();
 			int tagLength = currentTag.length();
@@ -186,6 +127,38 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 		styledTextBlocks.add(new StyledText(sourceText.substring(sourcePosition), currentStyle));
 
 		setProgress(100);
+
+		// Применяем к документу блоки текста со стилями из styledTextBlocks
+		for (StyledText styledText : styledTextBlocks) {
+			String textBlock = styledText.getText();
+			AttributeSet textStyle = styledText.getStyle();
+			try {
+				int docPosition = document.getEndPosition().getOffset() - 1;
+				document.insertString(docPosition, textBlock, textStyle);
+				// Исправляем ошибку insertString: текст вставляется без стилей
+				document.setCharacterAttributes(docPosition, textBlock.length(), textStyle, true);
+			} catch (BadLocationException e) {
+				logger.error("Illegal document location applying styles to document", e);
+			}
+		}
+
+		try {
+			for (RawAData rawAData : rawData.values()) {
+				AData data = AData.parseAData(rawAData.getAData());
+				data.setComment(rawAData.getComment());
+				int begin = rawAData.getBegin();
+				int end = rawAData.getEnd();
+				ASection section = new ASection(begin, end, document.defaultSectionAttributes);
+				document.getADataMap().put(section, data);
+				document.setCharacterAttributes(begin, end - begin, document.defaultSectionAttributes, false);
+			}
+			document.fireADocumentChanged();
+		} catch (Exception e) {
+			logger.error("Error while working with RawData", e);
+			cancel(true);
+		}
+
+		return document;
 	}
 
 	@SuppressWarnings("OverlyBroadThrowsClause")
@@ -209,14 +182,14 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 		}
 	}
 
-	private void parseDocumentProperties(String text) {
+	private static Map<String, String> parseDocumentProperties(String text) {
 		// looking for the table "header"
 		int tableStart = text.indexOf("title=\"header\"", 0);
 		String leftHeaderText = text.substring(tableStart, text.indexOf("</table", tableStart));
 
 		// looking through columns of table "header" and retreiving text of the left and right columns
 		int searchIndex = leftHeaderText.indexOf(HTML_ROW_OPEN, 0);
-		Dictionary<Object, Object> documentProperties = document.getDocumentProperties();
+		Map<String, String> documentProperties = new HashMap<String, String>();
 		while (searchIndex > 0) {
 			searchIndex = leftHeaderText.indexOf(HTML_ROW_OPEN, searchIndex);
 			String headerResult;
@@ -249,31 +222,19 @@ public class LegacyHtmlReader extends SwingWorker<Object, Object> {
 			//обработка заголовка
 			propertyValue = HTML_BR_PATTERN.matcher(propertyValue).replaceAll("\n");
 
-			if (!append) {
-				if (ADocument.TitleProperty1.equals(propertyName)) {
-					documentProperties.put(Document.TitleProperty, propertyValue);
-				} else if (ADocument.ExpertProperty.equals(propertyName)) {
-					documentProperties.put(ADocument.ExpertProperty, propertyValue);
-				} else if (ADocument.ClientProperty.equals(propertyName)) {
-					documentProperties.put(ADocument.ClientProperty, propertyValue);
-				} else if (ADocument.DateProperty.equals(propertyName)) {
-					documentProperties.put(ADocument.DateProperty, propertyValue);
-				} else if (ADocument.CommentProperty.equals(propertyName)) {
-					documentProperties.put(ADocument.CommentProperty, propertyValue);
-				}
-			} else {
-				if (ADocument.ExpertProperty.equals(propertyName)) {
-					String expert = (String) documentProperties.get(ADocument.ExpertProperty);
-					if (!expert.contains(propertyValue)) {
-						StringBuilder expertBuilder = new StringBuilder(expert);
-						expertBuilder.append("; ").append(propertyValue);
-						documentProperties.put(ADocument.ExpertProperty, expertBuilder.toString());
-					} else {
-						documentProperties.put(ADocument.ExpertProperty, expert);
-					}
-				}
+			if (ADocument.TitleProperty1.equals(propertyName)) {
+				documentProperties.put(Document.TitleProperty, propertyValue);
+			} else if (ADocument.ExpertProperty.equals(propertyName)) {
+				documentProperties.put(ADocument.ExpertProperty, propertyValue);
+			} else if (ADocument.ClientProperty.equals(propertyName)) {
+				documentProperties.put(ADocument.ClientProperty, propertyValue);
+			} else if (ADocument.DateProperty.equals(propertyName)) {
+				documentProperties.put(ADocument.DateProperty, propertyValue);
+			} else if (ADocument.CommentProperty.equals(propertyName)) {
+				documentProperties.put(ADocument.CommentProperty, propertyValue);
 			}
 		}
+		return documentProperties;
 	}
 
 	private static void splitTextColumns(String text, StringBuilder leftColumnBuilder, StringBuilder rightColumnBuilder) {
