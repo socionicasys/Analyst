@@ -8,7 +8,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.text.*;
 
-public class LegacyHtmlWriter extends SwingWorker<Object, Object> {
+public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 	private static final String FILE_ENCODING = "UTF-8";
 	private static final Logger logger = LoggerFactory.getLogger(LegacyHtmlWriter.class);
 
@@ -20,7 +20,6 @@ public class LegacyHtmlWriter extends SwingWorker<Object, Object> {
 	private final ADocument document;
 	private final File outputFile;
 	private final AnalystWindow analystWindow;
-	private Exception exception = null;
 
 	private enum EventType {
 		LINE_BREAK,
@@ -40,7 +39,7 @@ public class LegacyHtmlWriter extends SwingWorker<Object, Object> {
 		private final String style;
 		private final String comment;
 
-		public DocumentFlowEvent(EventType type, int offset, String style, String comment, int sectionNo) {
+		private DocumentFlowEvent(EventType type, int offset, String style, String comment, int sectionNo) {
 			this.offset = offset;
 			this.type = type;
 			this.style = style;
@@ -81,7 +80,7 @@ public class LegacyHtmlWriter extends SwingWorker<Object, Object> {
 		private final List<String> styleStack;
 		private final Map<Integer, Integer> positionMap;
 
-		public RDStack() {
+		private RDStack() {
 			styleStack = new ArrayList<String>();
 			positionMap = new HashMap<Integer, Integer>();
 		}
@@ -123,28 +122,24 @@ public class LegacyHtmlWriter extends SwingWorker<Object, Object> {
 	}
 
 	@Override
-	protected Object doInBackground() throws IOException {
+	protected Void doInBackground() throws Exception {
 		Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), FILE_ENCODING));
 		try {
 			writeDocument(writer);
 		} catch (BadLocationException e) {
-			exception = e;
 			logger.error("Incorrect document position while saving document", e);
+			throw e;
 		} catch (IOException e) {
-			exception = e;
 			logger.error("IO error while saving document", e);
+			throw e;
 		} catch (Exception e) {
-			exception = e;
 			logger.error("Unexpected exception while saving document", e);
+			throw e;
 		} finally {
 			writer.close();
 		}
 
 		return null;
-	}
-
-	public Exception getException() {
-		return exception;
 	}
 
 	private void writeDocument(Writer writer) throws IOException, BadLocationException {
