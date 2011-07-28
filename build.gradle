@@ -16,7 +16,7 @@ compileOptions*.encoding = 'UTF-8'
 gradle.taskGraph.whenReady { taskGraph ->
 	if (taskGraph.hasTask(':debug')) {
 		compileOptions*.debug = true
-		sourceSets.main.classesDir = file("$buildDir/classes-debug/main")
+		sourceSets.main.output.classesDir = file("$buildDir/classes-debug/main")
 	} else {
 		compileOptions*.debug = false
 	}
@@ -43,7 +43,7 @@ jar {
 task jarDependencies(type: Jar, dependsOn: compileJava) {
 	classifier = 'deps'
 	destinationDir = distsDir
-	from sourceSets.main.classes
+	from sourceSets.main.output
 	from {
 		configurations.runtime.collect {
 			it.isDirectory() ? it : zipTree(it).matching {
@@ -62,18 +62,15 @@ task syncLibs(type: Sync) {
 task debug(dependsOn: run)
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '1.0-milestone-3'
+	gradleVersion = '1.0-milestone-4'
 }
 
-ideaProject {
-	// TODO: remove after migration to Gradle 1.0-milestone-4 which fixes ideaProject.javaVersion bug
-	javaVersion = sourceCompatibility
-
-	withXml { provider ->
+idea {
+	project.ipr.withXml { provider ->
 		provider.node.component.find { it.@name == 'VcsDirectoryMappings' }.mapping.@vcs = 'Git'
 	}
-}
 
-ideaModule {
-	excludeDirs += file('gradle')
+	module {
+		excludeDirs += file('gradle')
+	}
 }
