@@ -16,8 +16,8 @@ import javax.swing.tree.TreeSelectionModel;
  * Окно статистики совпадений и несовпадений с разными ТИМами.
  * @author Виктор
  */
-public class CTree extends JTree implements ADocumentChangeListener {
-	private static final Logger logger = LoggerFactory.getLogger(CTree.class);
+public class MatchMissView extends JTree implements ADocumentChangeListener {
+	private static final Logger logger = LoggerFactory.getLogger(MatchMissView.class);
 	private static final Color TEXT_COLOR = new Color(30, 120, 255);
 	private static final int SCALE = 10;
 	private static final float PERCENT = 100.0f;
@@ -25,7 +25,7 @@ public class CTree extends JTree implements ADocumentChangeListener {
 	private final DefaultMutableTreeNode rootNode;
 	private final DefaultTreeModel treeModel;
 
-	public CTree(DocumentHolder documentHolder) {
+	public MatchMissView(DocumentHolder documentHolder) {
 		rootNode = new DefaultMutableTreeNode();
 		treeModel = new DefaultTreeModel(rootNode);
 		setModel(treeModel);

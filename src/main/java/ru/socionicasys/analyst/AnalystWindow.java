@@ -33,7 +33,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private final StatusLabel status;
 	private final ATree navigateTree;
 	private final BTree analysisTree;
-	private final CTree histogramTree;
+	private final MatchMissView histogramTree;
 	private final JFileChooser fileChooser;
 	private final JPopupMenu popupMenu;
 	private final AnalystWindow frame = this;
@@ -117,7 +117,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		navigateTree = new ATree(documentHolder);
 		analysisTree = new BTree(documentHolder.getModel());
 		documentHolder.addADocumentChangeListener(analysisTree);
-		histogramTree = new CTree(documentHolder);
+		histogramTree = new MatchMissView(documentHolder);
 		documentHolder.addADocumentChangeListener(histogramTree);
 		JTabbedPane navigateTabs = createTabPane();
 
