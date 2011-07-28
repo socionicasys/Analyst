@@ -32,6 +32,11 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	private CompoundEdit currentCompoundEdit;
 	private String keyword;
 
+	/**
+	 * Информация о соответствиях/несоответствиях ТИМам
+	 */
+	private final MatchMissModel matchMissModel;
+
 	private static final Logger logger = LoggerFactory.getLogger(ADocument.class);
 
 	ADocument() {
@@ -48,6 +53,9 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		defaultSectionAttributes.addAttribute(StyleConstants.Background, Color.decode("#E0ffff"));
 		defaultSearchHighlightAttributes = new SimpleAttributeSet();
 		defaultSearchHighlightAttributes.addAttribute(StyleConstants.Background, Color.decode("#ff0000"));
+
+		matchMissModel = new MatchMissModel();
+		addADocumentChangeListener(matchMissModel);
 
 		//init new Document
 		initNew();
@@ -599,5 +607,12 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 				specs.add(new ElementSpec(element.getAttributes(), ElementSpec.EndTagType));
 			}
 		}
+	}
+
+	/**
+	 * @return объект, описывающий (не)соответствия всем ТИМамы
+	 */
+	public MatchMissModel getMatchMissModel() {
+		return matchMissModel;
 	}
 }

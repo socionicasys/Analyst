@@ -1,5 +1,7 @@
 package ru.socionicasys.analyst;
 
+import ru.socionicasys.analyst.types.Sociotype;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -433,7 +435,7 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 				"<br/>"
 			);
 			writer.write(analystWindow.getNavigeTree().getReport());
-			writer.write(analystWindow.getAnalysisTree().getReport());
+			writeMissMatchReport(writer);
 		}
 
 		writer.write(String.format(
@@ -479,5 +481,48 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 		}
 		res.append('\"');
 		return res.toString();
+	}
+
+	private void writeMissMatchReport(Writer writer) throws IOException {
+		if (!document.getADataMap().isEmpty()) {
+			writer.write(
+				"<br/>" +
+				"<h2> Соответствие ТИМу </h2>" +
+				"Приведенная ниже таблица позволяет определить наиболее вероятный ТИМ типируемого.<br/>" +
+				"Для получения данных таблицы использовался следующий алгоритм. Каждый из отмеченных экспертом фрагментов текста<br/> " +
+				"типируемого проверяется на соответствие обработке информации каждым из 16 ТИМов. Если фрагмент соответствует модели <br/>" +
+				"обработки информации для данного ТИМа, значение в столбце \"Соответствие\" для данного ТИМа будет увеличено на 1.<br/>" +
+				"Если нет, соответственно, увеличивается значение  в столбце \"Несоответствие\" для данного ТИМа.<br/><br/>" +
+				"В столбце \"Коэффициент соответствия\" приведен нормализованный расчетный коэффициент, который рассчитывается для каждого ТИМа " +
+				"по формуле:<br/>   <code> К.С. = NORM<small style=\"vertical-align:sub;color:black\"> 100</small>( СООТВЕТСТВИЕ / НЕСООТВЕТСТВИЕ )</code><br/>" +
+				"Этот коэффициент применяется для выделения наиболее вероятного ТИМа,<br/>" +
+				"но не следует рассматривать его как математическую вероятность определения ТИМа. <br/><br/>" +
+				"<table title=\"TIM analysis\" border=1 width=\"80%\">" +
+				"<tr>\n" +
+				"	<th width=\"40%\"> ТИМ </th>\n" +
+				"	<th width=\"20%\"> Соответствие </th>\n" +
+				"	<th width=\"20%\"> Несоответствие </th>\n" +
+				"	<th width=\"20%\"> Коэффициент соответствия </th>\n" +
+				"</tr>\n"
+			);
+			for (Sociotype sociotype : Sociotype.values()) {
+				MatchMissItem matchMissItem = document.getMatchMissModel().get(sociotype);
+				writer.write(String.format(
+					"<tr>\n" +
+					"	<td style=\"font-weight:bold\">%s</td>\n" +
+					"		<td align=\"center\">%s </td>\n" +
+					"		<td align=\"center\">%s </td>\n" +
+					"		<td align=\"center\"> %2.0f </td>\n" +
+					"</tr>\n",
+					sociotype,
+					matchMissItem.getMatchCount(),
+					matchMissItem.getMissCount(),
+					100.0f * matchMissItem.getMatchCoefficient()
+				));
+			}
+			writer.write("</table>");
+		} else {
+			writer.write("<br/><h2> Невозможно определить ТИМ </h2><br/>");
+		}
 	}
 }

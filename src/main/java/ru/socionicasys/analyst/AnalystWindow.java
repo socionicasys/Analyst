@@ -768,10 +768,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		return navigateTree;
 	}
 
-	public CTree getAnalysisTree() {
-		return histogramTree;
-	}
-
 	public boolean getGenerateReport() {
 		return generateReport;
 	}
