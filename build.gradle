@@ -10,7 +10,17 @@ sourceCompatibility = '1.6'
 
 def compileOptions = [compileJava, compileTestJava].options
 compileOptions*.encoding = 'UTF-8'
-compileOptions*.debug = false
+
+// По-умолчанию запускается release-конфигурация. Если среди тасков есть debug,
+// сбока переключается на debug-конфигурацию
+gradle.taskGraph.whenReady { taskGraph ->
+	if (taskGraph.hasTask(':debug')) {
+		compileOptions*.debug = true
+		sourceSets.main.classesDir = file("$buildDir/classes-debug/main")
+	} else {
+		compileOptions*.debug = false
+	}
+}
 
 repositories {
 	mavenCentral()
@@ -48,6 +58,8 @@ task syncLibs(type: Sync) {
 	from configurations.runtime
 	into file('lib')
 }
+
+task debug(dependsOn: run)
 
 task wrapper(type: Wrapper) {
 	gradleVersion = '1.0-milestone-3'
