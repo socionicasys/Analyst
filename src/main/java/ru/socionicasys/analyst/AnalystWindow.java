@@ -404,8 +404,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 		JMenuItem menuItem = new JMenuItem();
 
-		InputMap keyMap = menu.getInputMap();
-
 		Action action = new StyledEditorKit.BoldAction();
 		action.putValue(Action.NAME, "Вопрос");
 		menuItem.setAction(action);
@@ -428,121 +426,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private JMenu createInfoMenu() {
 		JMenu menu = new JMenu("Информация");
 
-		Action docProperties = new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JTextArea titleField = new JTextArea(1, 30);
-				titleField.setLineWrap(true);
-				JTextArea expertField = new JTextArea(4, 30);
-				expertField.setLineWrap(true);
-				JTextArea clientField = new JTextArea(1, 30);
-				clientField.setLineWrap(true);
-				JTextArea dateField = new JTextArea(1, 30);
-				dateField.setLineWrap(true);
-				JTextArea commentArea = new JTextArea(5, 30);
-				commentArea.setLineWrap(true);
-
-				JLabel lt = new JLabel("Название:");
-				lt.setPreferredSize(new Dimension(100, 40));
-				lt.setMaximumSize(new Dimension(100, 40));
-				JLabel le = new JLabel("Эксперт(ы):");
-				le.setPreferredSize(new Dimension(100, 40));
-				le.setMaximumSize(new Dimension(100, 40));
-				JLabel lc = new JLabel("Типируемый:");
-				lc.setPreferredSize(new Dimension(100, 40));
-				lc.setMaximumSize(new Dimension(100, 40));
-				JLabel ld = new JLabel("Дата:");
-				ld.setPreferredSize(new Dimension(100, 40));
-				ld.setMaximumSize(new Dimension(100, 40));
-				JLabel lcm = new JLabel("Примечание:");
-				lcm.setPreferredSize(new Dimension(100, 40));
-				lcm.setMaximumSize(new Dimension(100, 40));
-
-				Panel pt = new Panel();
-				Panel pe = new Panel();
-				Panel pc = new Panel();
-				Panel pd = new Panel();
-				Panel ppc = new Panel();
-				Panel panel = new Panel();
-				panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-				pt.add(lt);
-				pt.setMinimumSize(new Dimension(500, 40));
-				pt.add(new JScrollPane(titleField, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
-				pe.add(le);
-				pe.setMinimumSize(new Dimension(500, 50));
-				pe.add(new JScrollPane(expertField, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
-				pc.add(lc);
-				pc.setMinimumSize(new Dimension(500, 40));
-				pc.add(new JScrollPane(clientField, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
-				pd.add(ld);
-				pd.setMinimumSize(new Dimension(500, 40));
-				pd.add(new JScrollPane(dateField, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
-				ppc.add(lcm);
-				ppc.setMinimumSize(new Dimension(500, 70));
-				ppc.add(new JScrollPane(commentArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
-
-				ADocument document = documentHolder.getModel();
-				String title = (String) document.getProperty(Document.TitleProperty);
-				String expert = (String) document.getProperty(ADocument.ExpertProperty);
-				String client = (String) document.getProperty(ADocument.ClientProperty);
-				String date = (String) document.getProperty(ADocument.DateProperty);
-				String comment = (String) document.getProperty(ADocument.CommentProperty);
-
-				panel.add(pt);
-				panel.add(pe);
-				panel.add(pc);
-				panel.add(pd);
-				panel.add(ppc);
-
-				if (title != null) {
-					titleField.setText(title);
-				}
-				if (expert != null) {
-					expertField.setText(expert);
-				}
-				if (client != null) {
-					clientField.setText(client);
-				}
-				if (date != null) {
-					dateField.setText(date);
-				}
-				if (comment != null) {
-					commentArea.setText(comment);
-				}
-
-				if (JOptionPane.showOptionDialog(frame,
-					panel,
-					"Информация о документе",
-					JOptionPane.YES_NO_OPTION,
-					JOptionPane.INFORMATION_MESSAGE,
-					null,
-					new Object[]{"Принять", "Отмена"},
-					null
-				) == JOptionPane.YES_OPTION) {
-
-					title = titleField.getText();
-					expert = expertField.getText();
-					client = clientField.getText();
-					date = dateField.getText();
-					comment = commentArea.getText();
-
-					Dictionary<Object, Object> properties = document.getDocumentProperties();
-
-					properties.put(ADocument.TitleProperty, title);
-					properties.put(ADocument.ClientProperty, client);
-					properties.put(ADocument.ExpertProperty, expert);
-					properties.put(ADocument.DateProperty, date);
-					properties.put(ADocument.CommentProperty, comment);
-					document.fireADocumentChanged();
-				}
-			}
-		};
+		Action docProperties = new DocumentPropertiesAction();
 
 		docProperties.putValue(Action.NAME, "Свойства документа");
 		menu.add(docProperties);
@@ -898,9 +782,132 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	}
 
 	/**
+	 * Отображает окно свойств документа.
+	 */
+	private final class DocumentPropertiesAction extends AbstractAction {
+		private DocumentPropertiesAction() {
+			super("Свойства документа");
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JTextArea titleField = new JTextArea(1, 30);
+			titleField.setLineWrap(true);
+			JTextArea expertField = new JTextArea(4, 30);
+			expertField.setLineWrap(true);
+			JTextArea clientField = new JTextArea(1, 30);
+			clientField.setLineWrap(true);
+			JTextArea dateField = new JTextArea(1, 30);
+			dateField.setLineWrap(true);
+			JTextArea commentArea = new JTextArea(5, 30);
+			commentArea.setLineWrap(true);
+
+			JLabel lt = new JLabel("Название:");
+			lt.setPreferredSize(new Dimension(100, 40));
+			lt.setMaximumSize(new Dimension(100, 40));
+			JLabel le = new JLabel("Эксперт(ы):");
+			le.setPreferredSize(new Dimension(100, 40));
+			le.setMaximumSize(new Dimension(100, 40));
+			JLabel lc = new JLabel("Типируемый:");
+			lc.setPreferredSize(new Dimension(100, 40));
+			lc.setMaximumSize(new Dimension(100, 40));
+			JLabel ld = new JLabel("Дата:");
+			ld.setPreferredSize(new Dimension(100, 40));
+			ld.setMaximumSize(new Dimension(100, 40));
+			JLabel lcm = new JLabel("Примечание:");
+			lcm.setPreferredSize(new Dimension(100, 40));
+			lcm.setMaximumSize(new Dimension(100, 40));
+
+			Panel pt = new Panel();
+			Panel pe = new Panel();
+			Panel pc = new Panel();
+			Panel pd = new Panel();
+			Panel ppc = new Panel();
+			Panel panel = new Panel();
+			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+			pt.add(lt);
+			pt.setMinimumSize(new Dimension(500, 40));
+			pt.add(new JScrollPane(titleField, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
+			pe.add(le);
+			pe.setMinimumSize(new Dimension(500, 50));
+			pe.add(new JScrollPane(expertField, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
+			pc.add(lc);
+			pc.setMinimumSize(new Dimension(500, 40));
+			pc.add(new JScrollPane(clientField, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
+			pd.add(ld);
+			pd.setMinimumSize(new Dimension(500, 40));
+			pd.add(new JScrollPane(dateField, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
+			ppc.add(lcm);
+			ppc.setMinimumSize(new Dimension(500, 70));
+			ppc.add(new JScrollPane(commentArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER));
+
+			ADocument document = documentHolder.getModel();
+			String title = (String) document.getProperty(Document.TitleProperty);
+			String expert = (String) document.getProperty(ADocument.ExpertProperty);
+			String client = (String) document.getProperty(ADocument.ClientProperty);
+			String date = (String) document.getProperty(ADocument.DateProperty);
+			String comment = (String) document.getProperty(ADocument.CommentProperty);
+
+			panel.add(pt);
+			panel.add(pe);
+			panel.add(pc);
+			panel.add(pd);
+			panel.add(ppc);
+
+			if (title != null) {
+				titleField.setText(title);
+			}
+			if (expert != null) {
+				expertField.setText(expert);
+			}
+			if (client != null) {
+				clientField.setText(client);
+			}
+			if (date != null) {
+				dateField.setText(date);
+			}
+			if (comment != null) {
+				commentArea.setText(comment);
+			}
+
+			if (JOptionPane.showOptionDialog(frame,
+				panel,
+				"Информация о документе",
+				JOptionPane.YES_NO_OPTION,
+				JOptionPane.INFORMATION_MESSAGE,
+				null,
+				new Object[]{"Принять", "Отмена"},
+				null
+			) == JOptionPane.YES_OPTION) {
+
+				title = titleField.getText();
+				expert = expertField.getText();
+				client = clientField.getText();
+				date = dateField.getText();
+				comment = commentArea.getText();
+
+				Dictionary<Object, Object> properties = document.getDocumentProperties();
+
+				properties.put(ADocument.TitleProperty, title);
+				properties.put(ADocument.ClientProperty, client);
+				properties.put(ADocument.ExpertProperty, expert);
+				properties.put(ADocument.DateProperty, date);
+				properties.put(ADocument.CommentProperty, comment);
+				document.fireADocumentChanged();
+			}
+		}
+	}
+
+	/**
 	 * Класс, слушающий состояние загрузки документа. Помещает документ в главное окно по окончанию загрузки.
 	 */
-	private class DocumentLoadListener implements PropertyChangeListener {
+	private final class DocumentLoadListener implements PropertyChangeListener {
 		private final boolean append;
 
 		private DocumentLoadListener(boolean append) {
