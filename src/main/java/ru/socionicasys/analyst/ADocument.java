@@ -39,9 +39,32 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 	private static final Logger logger = LoggerFactory.getLogger(ADocument.class);
 
-	ADocument() {
-		super();
+	/**
+	 * Сравнивает две ASection исходя из их близости к определенному положению в документе.
+	 */
+	private static final class SectionDistanceComparator implements Comparator<ASection> {
+		private final int targetPosition;
 
+		/**
+		 * @param targetPosition позиция в документе. Секции, центры которых близки к этой позиции
+		 * будут выше при сортировке.
+		 */
+		private SectionDistanceComparator(int targetPosition) {
+			this.targetPosition = targetPosition;
+		}
+
+		@Override
+		public int compare(ASection o1, ASection o2) {
+			int midDistance1 = Math.abs(targetPosition - o1.getMiddleOffset());
+			int midDistance2 = Math.abs(targetPosition - o2.getMiddleOffset());
+			if (midDistance1 != midDistance2) {
+				return midDistance1 - midDistance2;
+			}
+			return -(o1.getStartOffset() - o2.getStartOffset());
+		}
+	}
+
+	ADocument() {
 		addDocumentListener(this);
 
 		//style of general text
@@ -68,7 +91,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			aDataMap.clear();
 		}
 		try {
-			this.replace(0, getLength(), "", defaultStyle);
+			replace(0, getLength(), "", defaultStyle);
 		} catch (BadLocationException e) {
 			logger.error("Invalid document replace() in initNew()", e);
 		}
@@ -91,7 +114,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	 * @param pos позиция в документе, для которой нужно найти блок
 	 * @return блок, содержащий заданную позицию, или null, если такого нет
 	 */
-	public ASection getASection(final int pos) {
+	public ASection getASection(int pos) {
 		Collection<ASection> results = new ArrayList<ASection>();
 		for (ASection as : aDataMap.keySet()) {
 			if (as.containsOffset(pos)) {
@@ -102,17 +125,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			return null;
 		}
 
-		return Collections.min(results, new Comparator<ASection>() {
-			@Override
-			public int compare(ASection o1, ASection o2) {
-				int midDistance1 = Math.abs(pos - o1.getMiddleOffset());
-				int midDistance2 = Math.abs(pos - o2.getMiddleOffset());
-				if (midDistance1 != midDistance2) {
-					return midDistance1 - midDistance2;
-				}
-				return -(o1.getStartOffset() - o2.getStartOffset());
-			}
-		});
+		return Collections.min(results, new SectionDistanceComparator(pos));
 	}
 
 	public ASection getASectionThatStartsAt(int startOffset) {
