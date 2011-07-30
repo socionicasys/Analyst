@@ -1,16 +1,45 @@
+import org.eclipse.jgit.lib.RepositoryBuilder
+import org.eclipse.jgit.api.Git
+import java.text.SimpleDateFormat
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 apply plugin: 'application'
 apply plugin: 'sonar'
 
-version = '1.1-SNAPSHOT'
+buildscript {
+	repositories {
+		mavenCentral()
+		mavenRepo urls: 'http://download.eclipse.org/jgit/maven'
+	}
+
+	dependencies {
+		classpath 'org.eclipse.jgit:org.eclipse.jgit:1.0.0.201106090707-r'
+	}
+}
+
+version = '1.1'
 group = 'ru.socionicasys'
 mainClassName = 'ru.socionicasys.analyst.Analyst'
 sourceCompatibility = '1.6'
 
 def compileOptions = [compileJava, compileTestJava].options
 compileOptions*.encoding = 'UTF-8'
+
+// Получение информации о текущей ревизии Git
+def builder = new RepositoryBuilder();
+def repository = builder.readEnvironment().findGitDir().build();
+def objectReader = repository.newObjectReader();
+def git = new Git(repository);
+def logCommand = git.log();
+def commitIterator = logCommand.call().iterator();
+if (commitIterator.hasNext()) {
+	def commit = commitIterator.next()
+	project.gitFullRevision = commit.name;
+	project.gitAbbrevRevision = objectReader.abbreviate(commit).name();
+	project.gitCommitDate = commit.authorIdent.when;
+}
 
 // По-умолчанию запускается release-конфигурация. Если среди тасков есть debug,
 // сбока переключается на debug-конфигурацию
@@ -21,16 +50,29 @@ gradle.taskGraph.whenReady { taskGraph ->
 	} else {
 		compileOptions*.debug = false
 	}
+
+	if (!taskGraph.hasTask(':release')) {
+		version += '-SNAPSHOT'
+		if (project.hasProperty('gitAbbrevRevision')) {
+			version += '-' + gitAbbrevRevision;
+		}
+	}
 }
 
 repositories {
 	mavenCentral()
+	mavenRepo urls: 'http://download.eclipse.org/jgit/maven'
+}
+
+configurations {
+	jgit
 }
 
 dependencies {
 	compile 'org.slf4j:slf4j-api:1.6.1'
 	compile 'org.swinglabs:swingx-core:1.6.2-2'
 	runtime 'ch.qos.logback:logback-classic:0.9.29'
+	jgit 'org.eclipse.jgit:org.eclipse.jgit:1.0.0.201106090707-r'
 }
 
 def sharedManifest = manifest {
@@ -73,10 +115,13 @@ idea {
 
 	module {
 		excludeDirs += file('gradle')
+		scopes.PROVIDED.plus += configurations.jgit
 	}
 }
 
 sonar {
+	def format = new SimpleDateFormat('yyyy-MM-dd')
 	projectDependencies = project.configurations.runtime.resolve()
 	projectProperty 'sonar.sourceEncoding', 'UTF-8'
+	projectProperty 'sonar.projectDate', format.format(gitCommitDate)
 }
