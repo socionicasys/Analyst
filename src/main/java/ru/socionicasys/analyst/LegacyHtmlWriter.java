@@ -34,7 +34,7 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 		ITALIC_END
 	}
 
-	private static class DocumentFlowEvent implements Comparable<DocumentFlowEvent> {
+	private static final class DocumentFlowEvent implements Comparable<DocumentFlowEvent> {
 		private final EventType type;
 		private final int offset;
 		private final int sectionNo;
@@ -78,7 +78,7 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 		}
 	}
 
-	private static class RDStack {
+	private static final class RDStack {
 		private final List<String> styleStack;
 		private final Map<Integer, Integer> positionMap;
 
@@ -124,7 +124,7 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 	}
 
 	@Override
-	protected Void doInBackground() throws Exception {
+	protected Void doInBackground() throws BadLocationException, IOException {
 		Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), FILE_ENCODING));
 		try {
 			writeDocument(writer);
@@ -133,9 +133,6 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 			throw e;
 		} catch (IOException e) {
 			logger.error("IO error while saving document", e);
-			throw e;
-		} catch (Exception e) {
-			logger.error("Unexpected exception while saving document", e);
 			throw e;
 		} finally {
 			writer.close();

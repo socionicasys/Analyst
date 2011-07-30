@@ -35,14 +35,11 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 	}
 
 	@Override
-	protected ADocument doInBackground() throws Exception {
+	protected ADocument doInBackground() throws IOException {
 		try {
 			return readDocument();
 		} catch (IOException e) {
 			logger.error("IO error while loading document", e);
-			throw e;
-		} catch (Exception e) {
-			logger.error("Non-IO exception while loading document", e);
 			throw e;
 		}
 	}
