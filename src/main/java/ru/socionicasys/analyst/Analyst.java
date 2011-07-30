@@ -6,38 +6,39 @@ import org.slf4j.LoggerFactory;
 import java.io.FileNotFoundException;
 import javax.swing.*;
 
-public class Analyst {
+/**
+ * Главный класс, точка входа в «Информационный аналитик».
+ */
+public class Analyst implements Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(Analyst.class);
+	private final String startupFilename;
+
+	/**
+	 * Создает экземпляр приложения
+	 * @param startupFilename имя файла для начальной загрузки
+	 */
+	public Analyst(String startupFilename) {
+		this.startupFilename = startupFilename;
+	}
 
 	public static void main(String[] args) {
 		logger.trace("> main()");
-		final String startupFilename;
+		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionLogger());
+		String startupFilename;
 		if (args != null && args.length > 0) {
 			startupFilename = args[0];
 		} else {
 			startupFilename = null;
 		}
-		Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionLogger());
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				UIManager.put("swing.boldMetal", Boolean.FALSE);
-				createAndShowGUI(startupFilename);
-			}
-		});
+		SwingUtilities.invokeLater(new Analyst(startupFilename));
 		logger.trace("< main()");
 	}
 
-	/**
-	 * Create the GUI and show it.  For thread safety,
-	 * this method should be invoked from the
-	 * event dispatch thread.
-	 *
-	 * @param startupFilename
-	 */
-	private static void createAndShowGUI(String startupFilename) {
-		//Create and set up the window.
-		logger.trace("> createAndShowGUI(), startupFilename={}", startupFilename);
+	@Override
+	public void run() {
+		logger.trace("> run(), startupFilename={}", startupFilename);
+		UIManager.put("swing.boldMetal", Boolean.FALSE);
+
 		final AnalystWindow analystWindow = new AnalystWindow();
 		if (startupFilename != null) {
 			try {
@@ -49,6 +50,6 @@ public class Analyst {
 
 		//Display the window.
 		analystWindow.setVisible(true);
-		logger.trace("< createAndShowGUI()");
+		logger.trace("< run()");
 	}
 }
