@@ -279,13 +279,13 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 	}
 
 	private class AspectPanel extends JPanel implements ItemListener {
-		private HashMap<Aspect, JRadioButton> primaryAspectButtons;
-		private HashMap<Aspect, JRadioButton> secondaryAspectButtons;
+		private Map<Aspect, JRadioButton> primaryAspectButtons;
+		private Map<Aspect, JRadioButton> secondaryAspectButtons;
 		private JRadioButton d;
 		private JRadioButton aspect, block, jump;
 		private ButtonGroup aspectGroup, secondAspectGroup, controlGroup;
 		private JButton clearAspectSelection;
-		private ArrayList<AspectSelectionListener> actionListeners = new ArrayList<AspectSelectionListener>();
+		private List<AspectSelectionListener> actionListeners = new ArrayList<AspectSelectionListener>();
 
 		public AspectPanel() {
 			super();
