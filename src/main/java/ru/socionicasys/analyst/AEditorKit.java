@@ -89,7 +89,7 @@ public class AEditorKit extends StyledEditorKit {
 			try {
 				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 				Transferable clipboardContents = clipboard.getContents(this);
-				DataFlavor nativeFlavor = new DataFlavor(ADocumentFragment.MIME_TYPE);
+				DataFlavor nativeFlavor = ADocumentFragment.getNativeFlavor();
 				ADocumentFragment fragment;
 				if (clipboardContents.isDataFlavorSupported(nativeFlavor)) {
 					fragment = (ADocumentFragment) clipboardContents.getTransferData(nativeFlavor);
@@ -109,8 +109,6 @@ public class AEditorKit extends StyledEditorKit {
 				logger.error("Unable to get clipboard contents", e);
 			} catch (IOException e) {
 				logger.error("Unable to get clipboard contents", e);
-			} catch (ClassNotFoundException e) {
-				logger.error("Unable to create ADocumentFragment data flavor", e);
 			}
 		}
 	}

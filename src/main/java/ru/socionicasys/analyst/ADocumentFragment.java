@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,11 +17,8 @@ import javax.swing.text.AttributeSet;
  * Представление части документа для буфера обмена.
  */
 public class ADocumentFragment implements Transferable, Serializable {
-	private static final Logger logger = LoggerFactory.getLogger(ADocumentFragment.class);
 	private static final long serialVersionUID = -5267960680238237369L;
 
-	public static final String MIME_TYPE =
-		"application/x-java-serialized-object; class=ru.socionicasys.analyst.ADocumentFragment";
 	private static DataFlavor nativeFlavor;
 
 	private final String text;
@@ -77,10 +73,9 @@ public class ADocumentFragment implements Transferable, Serializable {
 	 */
 	@Override
 	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
-		String requestedMimeType = flavor.getMimeType();
-		if (requestedMimeType.equals(MIME_TYPE)) {
+		if (flavor.equals(getNativeFlavor())) {
 			return this;
-		} else if (requestedMimeType.equals(DataFlavor.stringFlavor.getMimeType())) {
+		} else if (flavor.equals(DataFlavor.stringFlavor)) {
 			return text;
 		} else {
 			throw new UnsupportedFlavorException(flavor);
@@ -92,12 +87,7 @@ public class ADocumentFragment implements Transferable, Serializable {
 	 */
 	@Override
 	public DataFlavor[] getTransferDataFlavors() {
-		createNativeFlavor();
-		if (nativeFlavor != null) {
-			return new DataFlavor[]{nativeFlavor, DataFlavor.stringFlavor};
-		} else {
-			return new DataFlavor[]{DataFlavor.stringFlavor};
-		}
+		return new DataFlavor[]{getNativeFlavor(), DataFlavor.stringFlavor};
 	}
 
 	/**
@@ -105,20 +95,17 @@ public class ADocumentFragment implements Transferable, Serializable {
 	 */
 	@Override
 	public boolean isDataFlavorSupported(DataFlavor flavor) {
-		String flavorMimeType = flavor.getMimeType();
-		return flavorMimeType.equals(MIME_TYPE) || flavorMimeType.equals(DataFlavor.stringFlavor.getMimeType());
+		return flavor.equals(getNativeFlavor()) || flavor.equals(DataFlavor.stringFlavor);
 	}
 
 	/**
 	 * Инициализирует DataFlavor, предствляющий ADocumentFragment.
+	 * @return DataFlavor для представлнения фрагмента в документе
 	 */
-	private static void createNativeFlavor() {
+	public static DataFlavor getNativeFlavor() {
 		if (nativeFlavor == null) {
-			try {
-				nativeFlavor = new DataFlavor(MIME_TYPE);
-			} catch (ClassNotFoundException e) {
-				logger.error("Unable to create class for native data flavour", e);
-			}
+			nativeFlavor = new DataFlavor(ADocumentFragment.class, "ADocumentFragment");
 		}
+		return nativeFlavor;
 	}
 }
