@@ -3,6 +3,7 @@ package ru.socionicasys.analyst;
 import java.io.Serializable;
 
 public class DocSection implements Serializable {
+	private static final long serialVersionUID = 663613735893809509L;
 	private final int start;
 	private final int end;
 

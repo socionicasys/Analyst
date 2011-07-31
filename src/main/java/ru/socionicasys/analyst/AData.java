@@ -3,48 +3,55 @@ package ru.socionicasys.analyst;
 import ru.socionicasys.analyst.util.EqualsUtil;
 import ru.socionicasys.analyst.util.HashUtil;
 
+import java.io.Serializable;
 import java.util.Arrays;
+import java.util.List;
 
-public class AData {
-	public final static String L = "БЛ";
-	public final static String P = "ЧЛ";
-	public final static String R = "БЭ";
-	public final static String E = "ЧЭ";
-	public final static String S = "БС";
-	public final static String F = "ЧС";
-	public final static String T = "БИ";
-	public final static String I = "ЧИ";
+public class AData implements Serializable {
+	private static final long serialVersionUID = -7524659842673948203L;
+	public static final String L = "БЛ";
+	public static final String P = "ЧЛ";
+	public static final String R = "БЭ";
+	public static final String E = "ЧЭ";
+	public static final String S = "БС";
+	public static final String F = "ЧС";
+	public static final String T = "БИ";
+	public static final String I = "ЧИ";
 
-	public final static String DOUBT = "Фрагмент требует уточнения";
+	public static final String DOUBT = "Фрагмент требует уточнения";
 
-	public final static String BLOCK = "БЛОК";
-	public final static String BLOCK_TOKEN = "~";
-	public final static String JUMP = "ПЕРЕВОД";
-	public final static String JUMP_TOKEN = ">";
-	public final static String SEPARATOR = ";";
+	public static final String BLOCK = "БЛОК";
+	public static final String BLOCK_TOKEN = "~";
+	public static final String JUMP = "ПЕРЕВОД";
+	public static final String JUMP_TOKEN = ">";
+	public static final String SEPARATOR = ";";
 
-	public final static String PLUS = "ПЛЮС";
-	public final static String MINUS = "МИНУС";
-	public final static String MENTAL = "Ментал";
-	public final static String VITAL = "Витал";
-	public final static String D1 = "Размерность ОПЫТ";
-	public final static String D2 = "Размерность НОРМА";
-	public final static String D3 = "Размерность СИТУАЦИЯ";
-	public final static String D4 = "Размерность ВРЕМЯ";
-	public final static String ODNOMERNOST = "Одномерность";
-	public final static String INDIVIDUALNOST = "Индивидуальность";
-	public final static String MALOMERNOST = "Маломерность";
-	public final static String MNOGOMERNOST = "Многомерность";
+	public static final String PLUS = "ПЛЮС";
+	public static final String MINUS = "МИНУС";
+	public static final List<String> VALID_SIGNS = Arrays.asList(PLUS, MINUS);
 
-	public final static String SUPERID = "Супер-Ид";
-	public final static String SUPEREGO = "Супер-Эго";
+	public static final String D1 = "Размерность ОПЫТ";
+	public static final String D2 = "Размерность НОРМА";
+	public static final String D3 = "Размерность СИТУАЦИЯ";
+	public static final String D4 = "Размерность ВРЕМЯ";
+	public static final String ODNOMERNOST = "Одномерность";
+	public static final String INDIVIDUALNOST = "Индивидуальность";
+	public static final String MALOMERNOST = "Маломерность";
+	public static final String MNOGOMERNOST = "Многомерность";
+	public static final List<String> VALID_DIMENSIONS = Arrays.asList(D1, D2, D3, D4, MALOMERNOST, MNOGOMERNOST, ODNOMERNOST, INDIVIDUALNOST);
 
-	private String secondAspect = null;
-	private String modifier = null;
-	private String aspect;
-	private String sign;
-	private String mv;
-	private String dimension;
+	public static final String MENTAL = "Ментал";
+	public static final String VITAL = "Витал";
+	public static final String SUPERID = "Супер-Ид";
+	public static final String SUPEREGO = "Супер-Эго";
+	public static final List<String> VALID_MVS = Arrays.asList(MENTAL, VITAL, SUPERID, SUPEREGO);
+
+	private String secondAspect;
+	private String modifier;
+	private final String aspect;
+	private final String sign;
+	private final String mv;
+	private final String dimension;
 	private String comment;
 
 	public AData(String aspect, String sign, String dimension, String mv, String comment) {
@@ -56,26 +63,23 @@ public class AData {
 		}
 		this.aspect = aspect;
 
-		if (sign == null) {
-			this.sign = null;
-		} else if (!(sign.equals(PLUS) || sign.equals(MINUS))) {
+		if (sign == null || VALID_SIGNS.contains(sign)) {
+			this.sign = sign;
+		} else {
 			throw new IllegalArgumentException();
 		}
-		this.sign = sign;
 
-		if (dimension == null) {
-			this.dimension = null;
-		} else if (!Arrays.asList(D1, D2, D3, D4, MALOMERNOST, MNOGOMERNOST, ODNOMERNOST, INDIVIDUALNOST).contains(dimension)) {
+		if (dimension == null || VALID_DIMENSIONS.contains(dimension)) {
+			this.dimension = dimension;
+		} else {
 			throw new IllegalArgumentException();
 		}
-		this.dimension = dimension;
 
-		if (mv == null) {
-			this.mv = null;
-		} else if (!Arrays.asList(MENTAL, VITAL, SUPERID, SUPEREGO).contains(mv)) {
+		if (mv == null || VALID_MVS.contains(mv)) {
+			this.mv = mv;
+		} else {
 			throw new IllegalArgumentException();
 		}
-		this.mv = mv;
 
 		this.comment = comment;
 	}
@@ -118,8 +122,8 @@ public class AData {
 		return mv;
 	}
 
-	public void setComment(String s) {
-		this.comment = s;
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public String getComment() {
@@ -128,25 +132,25 @@ public class AData {
 
 	@Override
 	public String toString() {
-		String res = aspect;
+		StringBuilder builder = new StringBuilder(aspect);
 		if (modifier != null && modifier.equals(BLOCK)) {
-			res += BLOCK_TOKEN + secondAspect + SEPARATOR;
+			builder.append(BLOCK_TOKEN).append(secondAspect).append(SEPARATOR);
 		} else if (modifier != null && modifier.equals(JUMP)) {
-			res += JUMP_TOKEN + secondAspect + SEPARATOR;
+			builder.append(JUMP_TOKEN).append(secondAspect).append(SEPARATOR);
 		} else {
-			res += SEPARATOR;
+			builder.append(SEPARATOR);
 		}
 
 		if (sign != null) {
-			res += (sign + SEPARATOR);
+			builder.append(sign).append(SEPARATOR);
 		}
 		if (dimension != null) {
-			res += (dimension + SEPARATOR);
+			builder.append(dimension).append(SEPARATOR);
 		}
 		if (mv != null) {
-			res += mv;
+			builder.append(mv);
 		}
-		return res;
+		return builder.toString();
 	}
 
 	public static AData parseAData(String s) {
