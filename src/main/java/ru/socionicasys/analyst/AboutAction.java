@@ -9,6 +9,7 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+@SuppressWarnings("serial")
 public class AboutAction extends AbstractAction {
 	private static final Logger logger = LoggerFactory.getLogger(AboutAction.class);
 

@@ -16,6 +16,7 @@ import javax.swing.text.Caret;
 import javax.swing.text.StyledEditorKit;
 import javax.swing.text.TextAction;
 
+@SuppressWarnings("serial")
 public class AEditorKit extends StyledEditorKit {
 	public static class CutAction extends TextAction {
 		private static final Logger logger = LoggerFactory.getLogger(CutAction.class);

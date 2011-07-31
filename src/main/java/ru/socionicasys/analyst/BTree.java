@@ -16,7 +16,6 @@ import javax.swing.tree.*;
 /**
  * @author Виктор
  */
-@SuppressWarnings("serial")
 public class BTree extends JTree implements ADocumentChangeListener {
 	private static final Logger logger = LoggerFactory.getLogger(BTree.class);
 
@@ -27,8 +26,6 @@ public class BTree extends JTree implements ADocumentChangeListener {
 	private final Map<Sociotype, DefaultMutableTreeNode> missNodes;
 
 	public BTree(ADocument document) {
-		super();
-
 		rootNode = new DefaultMutableTreeNode(document.getProperty(Document.TitleProperty));
 		treeModel = new DefaultTreeModel(rootNode);
 		setModel(treeModel);

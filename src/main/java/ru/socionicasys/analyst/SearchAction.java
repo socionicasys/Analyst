@@ -11,6 +11,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 
+@SuppressWarnings("serial")
 public class SearchAction extends AbstractAction {
 	private static final Logger logger = LoggerFactory.getLogger(SearchAction.class);
 
