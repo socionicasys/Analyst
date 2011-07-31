@@ -12,10 +12,10 @@ public final class StyledText {
 	}
 
 	String getText() {
-		return this.text;
+		return text;
 	}
 
 	AttributeSet getStyle() {
-		return this.style;
+		return style;
 	}
 }

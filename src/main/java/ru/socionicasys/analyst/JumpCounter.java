@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JumpCounter {
-	private static class JumpPair {
+	private static final class JumpPair {
 		private final String from;
 		private final String to;
 
-		public JumpPair(final String from, final String to) {
+		private JumpPair(final String from, final String to) {
 			this.from = from;
 			this.to = to;
 		}
