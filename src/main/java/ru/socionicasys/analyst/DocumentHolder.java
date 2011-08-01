@@ -26,9 +26,11 @@ public final class DocumentHolder extends GenericModelHolder<ADocument> implemen
 		}
 		if (this.model != null) {
 			this.model.removeADocumentChangeListener(this);
+			this.model.removeUndoableEditListener(this);
 		}
 		super.setModel(model);
 		this.model.addADocumentChangeListener(this);
+		this.model.addUndoableEditListener(this);
 		fireDocumentChanged();
 	}
 
