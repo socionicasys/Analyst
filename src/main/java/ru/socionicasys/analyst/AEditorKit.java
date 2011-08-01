@@ -11,10 +11,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Caret;
-import javax.swing.text.StyledEditorKit;
-import javax.swing.text.TextAction;
+import javax.swing.text.*;
 
 @SuppressWarnings("serial")
 public class AEditorKit extends StyledEditorKit {
@@ -130,5 +127,10 @@ public class AEditorKit extends StyledEditorKit {
 
 		// putting data to clipboard
 		clipboard.setContents(document.getADocFragment(selectionStart, selectionEnd - selectionStart), null);
+	}
+
+	@Override
+	public Document createDefaultDocument() {
+		return new ADocument();
 	}
 }

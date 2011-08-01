@@ -9,8 +9,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import javax.swing.*;
 import javax.swing.SwingWorker.StateValue;
@@ -28,7 +26,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private static final Logger logger = LoggerFactory.getLogger(AnalystWindow.class);
 
 	private final DocumentHolder documentHolder;
-	private final JTextPane textPane;
+	private final TextPane textPane;
 	private final ControlsPane controlsPane;
 	private final StatusLabel status;
 	private final ATree navigateTree;
@@ -43,8 +41,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private boolean generateReport = false;
 	private boolean programExit = false;
 	private boolean makeNewDocument = false;
-
-	private final Map<Object, Action> actions = new HashMap<Object, Action>();
 
 	//undo helpers
 	private final UndoAction undoAction = new UndoAction();
@@ -66,16 +62,10 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		setPreferredSize(new Dimension(1000, 700));
 		//Create the text pane and configure it.
 		documentHolder = new DocumentHolder(new ADocument());
-		textPane = new JTextPane(documentHolder.getModel());
-		// Replace the built-in  behavior when the caret highlight
-		// becomes invisible when focus moves to another component
-		textPane.setCaret(new HighlightCaret());
-		textPane.setNavigationFilter(new BlockNavigationFilter(documentHolder));
+		textPane = new TextPane(documentHolder);
 		// popup menu for the textPane
 		popupMenu = new JPopupMenu();
 		textPane.setComponentPopupMenu(popupMenu);
-		textPane.setCaretPosition(0);
-		textPane.setMinimumSize(new Dimension(400, 100));
 
 		fileChooser = new JFileChooser();
 		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Файлы ." + EXTENSION, EXTENSION));
@@ -148,10 +138,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 		getContentPane().add(controlsPane, BorderLayout.EAST);
 
-		//Set up the menu bar.
-		for (Action a : textPane.getActions()) {
-			actions.put(a.getValue(Action.NAME), a);
-		}
 		JMenu fileMenu = createFileMenu();
 		JMenu editMenu = createEditMenu();
 		JMenu styleMenu = createStyleMenu();
@@ -375,7 +361,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 		popupMenu.add(a);
 		menu.addSeparator();
-		a = getActionByName(DefaultEditorKit.selectAllAction);
+		a = textPane.getAction(DefaultEditorKit.selectAllAction);
 		a.putValue(Action.NAME, "Выделить всё");
 		menuItem = new JMenuItem(a);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK));
@@ -450,10 +436,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		menu.add(reportCheckbox);
 
 		return menu;
-	}
-
-	private Action getActionByName(String name) {
-		return actions.get(name);
 	}
 
 	private class UndoAction extends AbstractAction {
@@ -925,7 +907,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 						documentHolder.getModel().appendDocument(document);
 					} else {
 						documentHolder.setModel(document);
-						textPane.setDocument(document);
 					}
 					initUndoManager();
 				} catch (InterruptedException e) {
