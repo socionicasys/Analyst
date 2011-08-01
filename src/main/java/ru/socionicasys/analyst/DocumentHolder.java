@@ -44,7 +44,7 @@ public final class DocumentHolder extends GenericModelHolder<ADocument> implemen
 
 	/**
 	 * Добавляет слушателя для событий обновления документа. Эти события транслируются от экземпляра ADocument,
-	 * хранимого к контейнере.
+	 * хранимого в контейнере.
 	 * @param listener слушатель
 	 */
 	public void addADocumentChangeListener(ADocumentChangeListener listener) {
