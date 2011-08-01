@@ -35,6 +35,33 @@ public class TextPane extends JTextPane implements ModelChangedListener<ADocumen
 			actionMap.put((String) action.getValue(Action.NAME), action);
 		}
 
+		setComponentPopupMenu(createPopupMenu());
+	}
+
+	private JPopupMenu createPopupMenu() {
+		JPopupMenu popupMenu = new JPopupMenu();
+
+		Action cutAction = new AEditorKit.CutAction(this);
+		cutAction.putValue(Action.NAME, "Вырезать");
+		popupMenu.add(cutAction);
+
+		Action copyAction = new AEditorKit.CopyAction(this);
+		copyAction.putValue(Action.NAME, "Копировать");
+		popupMenu.add(copyAction);
+
+		Action pasteAction = new AEditorKit.PasteAction(this);
+		pasteAction.putValue(Action.NAME, "Вставить");
+		popupMenu.add(pasteAction);
+
+		Action selectAllAction = getAction(DefaultEditorKit.selectAllAction);
+		selectAllAction.putValue(Action.NAME, "Выделить всё");
+		popupMenu.add(selectAllAction);
+
+		popupMenu.addSeparator();
+
+		popupMenu.add(new SearchAction(this));
+
+		return popupMenu;
 	}
 
 	@Override

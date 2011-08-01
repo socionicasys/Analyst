@@ -33,7 +33,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private final BTree analysisTree;
 	private final MatchMissView histogramTree;
 	private final JFileChooser fileChooser;
-	private final JPopupMenu popupMenu;
 	private final AnalystWindow frame = this;
 
 	private String fileName = "";
@@ -63,9 +62,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		//Create the text pane and configure it.
 		documentHolder = new DocumentHolder(new ADocument());
 		textPane = new TextPane(documentHolder);
-		// popup menu for the textPane
-		popupMenu = new JPopupMenu();
-		textPane.setComponentPopupMenu(popupMenu);
 
 		fileChooser = new JFileChooser();
 		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Файлы ." + EXTENSION, EXTENSION));
@@ -345,41 +341,35 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		menuItem = new JMenuItem(a);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK));
 		menu.add(menuItem);
-		popupMenu.add(a);
+
 		a = new AEditorKit.CopyAction(textPane);
 		a.putValue(Action.NAME, "Копировать");
 		menuItem = new JMenuItem(a);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
-
 		menu.add(menuItem);
-		popupMenu.add(a);
+
 		a = new AEditorKit.PasteAction(textPane);
 		a.putValue(Action.NAME, "Вставить");
 		menuItem = new JMenuItem(a);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Event.CTRL_MASK));
 		menu.add(menuItem);
 
-		popupMenu.add(a);
 		menu.addSeparator();
+
 		a = textPane.getAction(DefaultEditorKit.selectAllAction);
 		a.putValue(Action.NAME, "Выделить всё");
 		menuItem = new JMenuItem(a);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK));
 		menu.add(menuItem);
-		popupMenu.add(a);
 
 		menu.addSeparator();
-		popupMenu.addSeparator();
 
 		a = new SearchAction(textPane);
-		a.putValue(Action.NAME, "Поиск");
 		menuItem = new JMenuItem(a);
 		menuItem.setAction(a);
 		key = KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK);
 		menuItem.setAccelerator(key);
-		menuItem.setAction(a);
 		menu.add(menuItem);
-		popupMenu.add(a);
 
 		return menu;
 	}
