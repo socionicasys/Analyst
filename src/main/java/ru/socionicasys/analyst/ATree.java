@@ -1262,201 +1262,196 @@ public class ATree extends JTree {
 	}
 
 	public String getReport() {
-		String report;
-		if (!documentHolder.getModel().getADataMap().isEmpty()) {
-			report =
-				"<br/>" +
-					"<h2> Выявленные параметры функций ИМ: </h2>" +
-					"Каждый из отмеченных экспертом фрагментов текста представляет собой анализ аспектного содержания фрагмента и <br/>" +
-					"параметров обработки этой информации. <br/>" +
-					"Приведенная ниже таблица иллюстрирует распределение ответов типируемого по параметрам модели А.<br/><br/>" +
-					"<table title=\"function analysis\" border=2 width=\"80%\">" +
-					"<tr>" + "\n" +
-					"	<th width=\"20%\">  </th>" + "\n" +
-					"	<th width=\"10%\"> БЛ </th>" + "\n" +
-					"	<th width=\"10%\"> ЧЛ </th>" + "\n" +
-					"	<th width=\"10%\"> БЭ </th>" + "\n" +
-					"	<th width=\"10%\"> ЧЭ </th>" + "\n" +
-					"	<th width=\"10%\"> БС </th>" + "\n" +
-					"	<th width=\"10%\"> ЧС </th>" + "\n" +
-					"	<th width=\"10%\"> БИ </th>" + "\n" +
-					"	<th width=\"10%\"> ЧИ </th>" + "\n" +
-					"</tr>" + "\n" +
-					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\"> Ментал 				</td>" + "\n" +
-					"		<td align=\"center\">" + aspectLVMMentalNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\">" + aspectPVMMentalNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\">" + aspectRVMMentalNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectEVMMentalNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectSVMMentalNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectFVMMentalNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectTVMMentalNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectIVMMentalNode.getChildCount() + " </td>" + "\n" + "</tr>" + "\n" +
-					"</tr>" + "\n" +
-					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\"> Витал					</td>" + "\n" +
-					"		<td align=\"center\" >" + aspectLVMVitalNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectPVMVitalNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectRVMVitalNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectEVMVitalNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectSVMVitalNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectFVMVitalNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectTVMVitalNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectIVMVitalNode.getChildCount() + " </td>" + "\n" +
-					"</tr>" + "\n" +
-					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\"> Знак \"+\" 			</td>" + "\n" +
-					"		<td align=\"center\" >" + aspectLSignPlusNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectPSignPlusNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectRSignPlusNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectESignPlusNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectSSignPlusNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectFSignPlusNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectTSignPlusNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectISignPlusNode.getChildCount() + " </td>" + "\n" +
-					"</tr>" + "\n" +
-					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\"> Знак \"-\" 			</td>" + "\n" +
-					"		<td align=\"center\" >" + aspectLSignMinusNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectPSignMinusNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectRSignMinusNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectESignMinusNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectSSignMinusNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectFSignMinusNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectTSignMinusNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectISignMinusNode.getChildCount() + " </td>" + "\n" +
-					"</tr>" + "\n" +
-					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\"> Ex 					</td>" + "\n" +
-					"		<td align=\"center\" >" + aspectLDimensionD1Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectPDimensionD1Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectRDimensionD1Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectEDimensionD1Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectSDimensionD1Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectFDimensionD1Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectTDimensionD1Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectIDimensionD1Node.getChildCount() + " </td>" + "\n" +
-					"</tr>" + "\n" +
-					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\"> Nm 					</td>" + "\n" +
-					"		<td align=\"center\" >" + aspectLDimensionD2Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectPDimensionD2Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectRDimensionD2Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectEDimensionD2Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectSDimensionD2Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectFDimensionD2Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectTDimensionD2Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectIDimensionD2Node.getChildCount() + " </td>" + "\n" +
-					"</tr>" + "\n" +
-					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\"> St 					</td>" + "\n" +
-					"		<td align=\"center\" >" + aspectLDimensionD3Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectPDimensionD3Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectRDimensionD3Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectEDimensionD3Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectSDimensionD3Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectFDimensionD3Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectTDimensionD3Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectIDimensionD3Node.getChildCount() + " </td>" + "\n" +
-					"</tr>" + "\n" +
-					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\"> Tm 					</td>" + "\n" +
-					"		<td align=\"center\" >" + aspectLDimensionD4Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectPDimensionD4Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectRDimensionD4Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectEDimensionD4Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectSDimensionD4Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectFDimensionD4Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectTDimensionD4Node.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectIDimensionD4Node.getChildCount() + " </td>" + "\n" +
-					"</tr>" + "\n" +
-					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\"> Одномерность 			</td>" + "\n" +
-					"		<td align=\"center\" >" + aspectLDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectPDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectRDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectEDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectSDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectFDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectTDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectIDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
-					"</tr>" + "\n" +
-					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\"> Маломерность 			</td>" + "\n" +
-					"		<td align=\"center\" >" + aspectLDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectPDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectRDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectEDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectSDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectFDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectTDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectIDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
-
-					"</tr>" + "\n" +
-					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\"> Многомерность 			</td>" + "\n" +
-					"		<td align=\"center\" >" + aspectLDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectPDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectRDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectEDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectSDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectFDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectTDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectIDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
-
-					"</tr>" + "\n" +
-					"<tr>" + "\n" +
-					"	<td style=\"font-weight:bold\"> Индивидуальность 		</td>" + "\n" +
-					"		<td align=\"center\" >" + aspectLDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectPDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectRDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectEDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectSDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectFDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectTDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
-					"		<td align=\"center\" >" + aspectIDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
-
-					"</tr>" + "\n" +
-					"</table>";
-
-			//Переводы
-			if (!jc.isEmpty()) {
-				report +=
-					"<br/>" +
-						"<h2> Переводы управления </h2>" +
-						"Это наблюдаемый перевод ответа из одного аспекта в другой. <br/>" +
-						"Перевод осуществляется: <br/>" +
-						"1) из  менее мерной функции в более мерную функцию (внутри блока или кольца); <br/>" +
-						"2) из витала в ментал.	<br/><br/>" +
-						"<table title=\"jumps\" border=2 width=\"80%\">" +
-						"<tr>\n" +
-						"	<th width=\"20%\">Переводы <br/>из функции \u25ba<br/>в функцию <br/> \u25bc </th>\n";
-				for (Aspect aspect : Aspect.values()) {
-					report += String.format("	<th width=\"10%\"> %s </th>\n", aspect.name());
-				}
-				report += "</tr>\n";
-
-				for (Aspect firstAspect : Aspect.values()) {
-					report += String.format("<tr>\n	<td style=\"font-weight:bold\"> %s </td>\n", firstAspect.name());
-					for (Aspect secondAspect : Aspect.values()) {
-						Object cellValue;
-						if (firstAspect == secondAspect) {
-							cellValue = "X";
-						} else {
-							cellValue = jc.getJumpCount(firstAspect, secondAspect);
-						}
-						report += String.format("		<td align=\"center\">%s </td>\n", cellValue);
-					}
-					report += "</tr>\n";
-				}
-				report += "</table>";
-			}
-		} else {
-			report =
-				"<br/>" +
-					"<h2> В документе отсутствует анализ </h2>" +
-					"<br/>";
+		if (documentHolder.getModel().getADataMap().isEmpty()) {
+			return "<br/><h2> В документе отсутствует анализ </h2><br/>";
 		}
-		return report;
+
+		StringBuilder reportBuilder = new StringBuilder("<br/>" +
+				"<h2> Выявленные параметры функций ИМ: </h2>" +
+				"Каждый из отмеченных экспертом фрагментов текста представляет собой анализ аспектного содержания фрагмента и <br/>" +
+				"параметров обработки этой информации. <br/>" +
+				"Приведенная ниже таблица иллюстрирует распределение ответов типируемого по параметрам модели А.<br/><br/>" +
+				"<table title=\"function analysis\" border=2 width=\"80%\">" +
+				"<tr>" + "\n" +
+				"	<th width=\"20%\">  </th>" + "\n" +
+				"	<th width=\"10%\"> БЛ </th>" + "\n" +
+				"	<th width=\"10%\"> ЧЛ </th>" + "\n" +
+				"	<th width=\"10%\"> БЭ </th>" + "\n" +
+				"	<th width=\"10%\"> ЧЭ </th>" + "\n" +
+				"	<th width=\"10%\"> БС </th>" + "\n" +
+				"	<th width=\"10%\"> ЧС </th>" + "\n" +
+				"	<th width=\"10%\"> БИ </th>" + "\n" +
+				"	<th width=\"10%\"> ЧИ </th>" + "\n" +
+				"</tr>" + "\n" +
+				"<tr>" + "\n" +
+				"	<td style=\"font-weight:bold\"> Ментал 				</td>" + "\n" +
+				"		<td align=\"center\">" + aspectLVMMentalNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\">" + aspectPVMMentalNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\">" + aspectRVMMentalNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectEVMMentalNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectSVMMentalNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectFVMMentalNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectTVMMentalNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectIVMMentalNode.getChildCount() + " </td>" + "\n" + "</tr>" + "\n" +
+				"</tr>" + "\n" +
+				"<tr>" + "\n" +
+				"	<td style=\"font-weight:bold\"> Витал					</td>" + "\n" +
+				"		<td align=\"center\" >" + aspectLVMVitalNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectPVMVitalNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectRVMVitalNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectEVMVitalNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectSVMVitalNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectFVMVitalNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectTVMVitalNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectIVMVitalNode.getChildCount() + " </td>" + "\n" +
+				"</tr>" + "\n" +
+				"<tr>" + "\n" +
+				"	<td style=\"font-weight:bold\"> Знак \"+\" 			</td>" + "\n" +
+				"		<td align=\"center\" >" + aspectLSignPlusNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectPSignPlusNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectRSignPlusNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectESignPlusNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectSSignPlusNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectFSignPlusNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectTSignPlusNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectISignPlusNode.getChildCount() + " </td>" + "\n" +
+				"</tr>" + "\n" +
+				"<tr>" + "\n" +
+				"	<td style=\"font-weight:bold\"> Знак \"-\" 			</td>" + "\n" +
+				"		<td align=\"center\" >" + aspectLSignMinusNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectPSignMinusNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectRSignMinusNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectESignMinusNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectSSignMinusNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectFSignMinusNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectTSignMinusNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectISignMinusNode.getChildCount() + " </td>" + "\n" +
+				"</tr>" + "\n" +
+				"<tr>" + "\n" +
+				"	<td style=\"font-weight:bold\"> Ex 					</td>" + "\n" +
+				"		<td align=\"center\" >" + aspectLDimensionD1Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectPDimensionD1Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectRDimensionD1Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectEDimensionD1Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectSDimensionD1Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectFDimensionD1Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectTDimensionD1Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectIDimensionD1Node.getChildCount() + " </td>" + "\n" +
+				"</tr>" + "\n" +
+				"<tr>" + "\n" +
+				"	<td style=\"font-weight:bold\"> Nm 					</td>" + "\n" +
+				"		<td align=\"center\" >" + aspectLDimensionD2Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectPDimensionD2Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectRDimensionD2Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectEDimensionD2Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectSDimensionD2Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectFDimensionD2Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectTDimensionD2Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectIDimensionD2Node.getChildCount() + " </td>" + "\n" +
+				"</tr>" + "\n" +
+				"<tr>" + "\n" +
+				"	<td style=\"font-weight:bold\"> St 					</td>" + "\n" +
+				"		<td align=\"center\" >" + aspectLDimensionD3Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectPDimensionD3Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectRDimensionD3Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectEDimensionD3Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectSDimensionD3Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectFDimensionD3Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectTDimensionD3Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectIDimensionD3Node.getChildCount() + " </td>" + "\n" +
+				"</tr>" + "\n" +
+				"<tr>" + "\n" +
+				"	<td style=\"font-weight:bold\"> Tm 					</td>" + "\n" +
+				"		<td align=\"center\" >" + aspectLDimensionD4Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectPDimensionD4Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectRDimensionD4Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectEDimensionD4Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectSDimensionD4Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectFDimensionD4Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectTDimensionD4Node.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectIDimensionD4Node.getChildCount() + " </td>" + "\n" +
+				"</tr>" + "\n" +
+				"<tr>" + "\n" +
+				"	<td style=\"font-weight:bold\"> Одномерность 			</td>" + "\n" +
+				"		<td align=\"center\" >" + aspectLDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectPDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectRDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectEDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectSDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectFDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectTDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectIDimensionOdnomernostNode.getChildCount() + " </td>" + "\n" +
+				"</tr>" + "\n" +
+				"<tr>" + "\n" +
+				"	<td style=\"font-weight:bold\"> Маломерность 			</td>" + "\n" +
+				"		<td align=\"center\" >" + aspectLDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectPDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectRDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectEDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectSDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectFDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectTDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectIDimensionMalomernostNode.getChildCount() + " </td>" + "\n" +
+
+				"</tr>" + "\n" +
+				"<tr>" + "\n" +
+				"	<td style=\"font-weight:bold\"> Многомерность 			</td>" + "\n" +
+				"		<td align=\"center\" >" + aspectLDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectPDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectRDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectEDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectSDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectFDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectTDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectIDimensionMnogomernostNode.getChildCount() + " </td>" + "\n" +
+
+				"</tr>" + "\n" +
+				"<tr>" + "\n" +
+				"	<td style=\"font-weight:bold\"> Индивидуальность 		</td>" + "\n" +
+				"		<td align=\"center\" >" + aspectLDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectPDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectRDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectEDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectSDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectFDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectTDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
+				"		<td align=\"center\" >" + aspectIDimensionIndividualnostNode.getChildCount() + " </td>" + "\n" +
+
+				"</tr>" + "\n" +
+				"</table>");
+
+		//Переводы
+		if (!jc.isEmpty()) {
+			reportBuilder.append("<br/>" +
+					"<h2> Переводы управления </h2>" +
+					"Это наблюдаемый перевод ответа из одного аспекта в другой. <br/>" +
+					"Перевод осуществляется: <br/>" +
+					"1) из  менее мерной функции в более мерную функцию (внутри блока или кольца); <br/>" +
+					"2) из витала в ментал.	<br/><br/>" +
+					"<table title=\"jumps\" border=2 width=\"80%\">" +
+					"<tr>\n" +
+					"	<th width=\"20%\">Переводы <br/>из функции \u25ba<br/>в функцию <br/> \u25bc </th>\n");
+			for (Aspect aspect : Aspect.values()) {
+				reportBuilder.append(String.format("	<th width=\"10%%\"> %s </th>\n", aspect.name()));
+			}
+			reportBuilder.append("</tr>\n");
+
+			for (Aspect firstAspect : Aspect.values()) {
+				reportBuilder.append(String.format("<tr>\n	<td style=\"font-weight:bold\"> %s </td>\n",
+						firstAspect.name()));
+				for (Aspect secondAspect : Aspect.values()) {
+					reportBuilder.append("		<td align=\"center\">");
+					if (firstAspect == secondAspect) {
+						reportBuilder.append('X');
+					} else {
+						reportBuilder.append(jc.getJumpCount(firstAspect, secondAspect));
+					}
+					reportBuilder.append(" </td>\n");
+				}
+				reportBuilder.append("</tr>\n");
+			}
+			reportBuilder.append("</table>");
+		}
+		return reportBuilder.toString();
 	}
 }
