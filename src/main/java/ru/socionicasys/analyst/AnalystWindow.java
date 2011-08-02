@@ -33,7 +33,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private final BTree analysisTree;
 	private final MatchMissView histogramTree;
 	private final JFileChooser fileChooser;
-	private final AnalystWindow frame = this;
 
 	private String fileName = "";
 
@@ -532,7 +531,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		// if existing document is not empty
 		ADocument document = documentHolder.getModel();
 		if (document.getLength() > 0) {
-			choice = JOptionPane.showOptionDialog(frame,
+			choice = JOptionPane.showOptionDialog(this,
 				"Текущий документ не пустой.\n\nСохранить текущий документ?",
 				"Требуется подтверждение",
 				JOptionPane.YES_NO_CANCEL_OPTION,
@@ -547,13 +546,13 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 					boolean overwrite = false;
 					while (!(cancel || overwrite)) {
 						fileChooser.setDialogTitle("Сохранение документа");
-						int returnVal = fileChooser.showDialog(AnalystWindow.this, "Сохранить");
+						int returnVal = fileChooser.showDialog(this, "Сохранить");
 						if (returnVal == JFileChooser.APPROVE_OPTION) {
 							file = fileChooser.getSelectedFile();
 							fileName = file.getAbsolutePath();
 							if (file.exists()) {
 								Object[] options = {"Да", "Нет"};
-								int option = JOptionPane.showOptionDialog(frame,
+								int option = JOptionPane.showOptionDialog(this,
 									"Такой файл существует!\n\nХотите перезаписать этот файл?", "Предупреждение!!!",
 									JOptionPane.YES_NO_OPTION,
 									JOptionPane.QUESTION_MESSAGE,
@@ -575,14 +574,14 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 				if (fileName != null && fileName.length() > 0) {
 					try {
 						file = new File(fileName);
-						ProgressWindow pw = new ProgressWindow(frame, "    Сохранение файла: ");
+						ProgressWindow pw = new ProgressWindow(this, "    Сохранение файла: ");
 						LegacyHtmlWriter iow = new LegacyHtmlWriter(this, document, file);
 						iow.addPropertyChangeListener(pw);
 						iow.addPropertyChangeListener(this);
 						iow.execute();
 					} catch (Exception e) {
 						logger.error("Error writing document to file" + fileName, e);
-						JOptionPane.showOptionDialog(frame,
+						JOptionPane.showOptionDialog(this,
 							"Ошибка сохранения файла: " + fileName + "\n\n" + e.getMessage(),
 							"Ошибка сохранения файла",
 							JOptionPane.OK_OPTION,
@@ -603,7 +602,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		int dot = textPane.getCaret().getDot();
 		ADocument document = documentHolder.getModel();
 		if (document.getASectionThatStartsAt(offset) != null) {
-			choice = JOptionPane.showOptionDialog(frame,
+			choice = JOptionPane.showOptionDialog(this,
 				"Вы собираетесь удалить размеченный фрагмент документа\n\nВы действительно хотите удалить фрагмент?",
 				"Подтверждение удаления",
 				JOptionPane.YES_NO_OPTION,
@@ -647,7 +646,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		ADocument document = documentHolder.getModel();
 		document.initNew();
 		initUndoManager();
-		frame.setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), document.getProperty(Document.TitleProperty)));
+		setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), document.getProperty(Document.TitleProperty)));
 		fileName = "";
 		makeNewDocument = false;
 	}
@@ -714,7 +713,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			backgroundWriter.addPropertyChangeListener(pw);
 			backgroundWriter.addPropertyChangeListener(AnalystWindow.this);
 			backgroundWriter.execute();
-			frame.setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), saveFile.getName()));
+			setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), saveFile.getName()));
 		}
 	}
 
@@ -848,7 +847,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 				commentArea.setText(comment);
 			}
 
-			if (JOptionPane.showOptionDialog(frame,
+			if (JOptionPane.showOptionDialog(AnalystWindow.this,
 				panel,
 				"Информация о документе",
 				JOptionPane.YES_NO_OPTION,
