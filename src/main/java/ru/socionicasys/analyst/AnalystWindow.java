@@ -307,9 +307,9 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 				DefaultEditorKit.cutAction),
 		};
 		final Action[] defaultActions = {
-			new AEditorKit.CopyAction(textPane),
-			new AEditorKit.PasteAction(textPane),
-			new AEditorKit.CutAction(textPane),
+			textPane.getAction(DefaultEditorKit.copyAction),
+			textPane.getAction(DefaultEditorKit.pasteAction),
+			textPane.getAction(DefaultEditorKit.cutAction),
 		};
 
 		JTextComponent.loadKeymap(textPane.getKeymap(), defaultBindings, defaultActions);
@@ -335,19 +335,19 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		menu.addSeparator();
 
 		//Get the actions and stick them in the menu.
-		Action a = new AEditorKit.CutAction(textPane);
+		Action a = textPane.getAction(DefaultEditorKit.cutAction);
 		a.putValue(Action.NAME, "Вырезать");
 		menuItem = new JMenuItem(a);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK));
 		menu.add(menuItem);
 
-		a = new AEditorKit.CopyAction(textPane);
+		a = textPane.getAction(DefaultEditorKit.copyAction);
 		a.putValue(Action.NAME, "Копировать");
 		menuItem = new JMenuItem(a);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
 		menu.add(menuItem);
 
-		a = new AEditorKit.PasteAction(textPane);
+		a = textPane.getAction(DefaultEditorKit.pasteAction);
 		a.putValue(Action.NAME, "Вставить");
 		menuItem = new JMenuItem(a);
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Event.CTRL_MASK));
