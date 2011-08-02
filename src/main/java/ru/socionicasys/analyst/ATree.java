@@ -2,6 +2,7 @@ package ru.socionicasys.analyst;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.socionicasys.analyst.types.Aspect;
 
 import java.awt.Dimension;
 import java.util.Map.Entry;
@@ -1423,112 +1424,32 @@ public class ATree extends JTree {
 				report +=
 					"<br/>" +
 						"<h2> Переводы управления </h2>" +
-						//"<br/>" +
 						"Это наблюдаемый перевод ответа из одного аспекта в другой. <br/>" +
 						"Перевод осуществляется: <br/>" +
 						"1) из  менее мерной функции в более мерную функцию (внутри блока или кольца); <br/>" +
 						"2) из витала в ментал.	<br/><br/>" +
 						"<table title=\"jumps\" border=2 width=\"80%\">" +
-						"<tr>" + "\n" +
-						"	<th width=\"20%\">Переводы <br/>из функции " + '\u25ba' + "<br/>в функцию <br/> " + '\u25bc' + " </th>" + "\n" +
-						"	<th width=\"10%\"> БЛ </th>" + "\n" +
-						"	<th width=\"10%\"> ЧЛ </th>" + "\n" +
-						"	<th width=\"10%\"> БЭ </th>" + "\n" +
-						"	<th width=\"10%\"> ЧЭ </th>" + "\n" +
-						"	<th width=\"10%\"> БС </th>" + "\n" +
-						"	<th width=\"10%\"> ЧС </th>" + "\n" +
-						"	<th width=\"10%\"> БИ </th>" + "\n" +
-						"	<th width=\"10%\"> ЧИ </th>" + "\n" +
-						"</tr>" + "\n" +
-						"<tr>" + "\n" +
-						"	<td style=\"font-weight:bold\"> БЛ </td>" + "\n" +
-						"		<td align=\"center\">" + "X" + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.P) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.R) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.E) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.S) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.F) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.T) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.L, AData.I) + " </td>" + "\n" +
-						"</tr>" + "\n" +
-						"<tr>" + "\n" +
-						"	<td style=\"font-weight:bold\"> ЧЛ </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.L) + " </td>" + "\n" +
-						"		<td align=\"center\">" + "X" + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.R) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.E) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.S) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.F) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.T) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.I) + " </td>" + "\n" +
-						"</tr>" + "\n" +
-						"<tr>" + "\n" +
-						"	<td style=\"font-weight:bold\"> БЭ </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.L) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.P) + " </td>" + "\n" +
-						"		<td align=\"center\">" + "X" + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.E) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.S) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.F) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.T) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.R, AData.I) + " </td>" + "\n" +
-						"</tr>" + "\n" +
-						"<tr>" + "\n" +
-						"	<td style=\"font-weight:bold\"> ЧЭ </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.L) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.P) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.R) + " </td>" + "\n" +
-						"		<td align=\"center\">" + "X" + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.S) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.F) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.T) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.E, AData.I) + " </td>" + "\n" +
-						"</tr>" + "\n" +
-						"<tr>" + "\n" +
-						"	<td style=\"font-weight:bold\"> БС </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.L) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.P) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.R) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.E) + " </td>" + "\n" +
-						"		<td align=\"center\">" + "X" + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.F) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.T) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.S, AData.I) + " </td>" + "\n" +
-						"</tr>" + "\n" +
-						"<tr>" + "\n" +
-						"	<td style=\"font-weight:bold\"> ЧС </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.L) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.P) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.R) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.E) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.S) + " </td>" + "\n" +
-						"		<td align=\"center\">" + "X" + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.T) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.F, AData.I) + " </td>" + "\n" +
-						"</tr>" + "\n" +
-						"<tr>" + "\n" +
-						"	<td style=\"font-weight:bold\"> БИ </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.L) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.P) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.R) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.E) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.S) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.T, AData.F) + " </td>" + "\n" +
-						"		<td align=\"center\">" + "X" + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.P, AData.I) + " </td>" + "\n" +
-						"</tr>" + "\n" +
-						"<tr>" + "\n" +
-						"	<td style=\"font-weight:bold\"> ЧИ </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.L) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.P) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.R) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.E) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.S) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.F) + " </td>" + "\n" +
-						"		<td align=\"center\">" + jc.getJumpCount(AData.I, AData.T) + " </td>" + "\n" +
-						"		<td align=\"center\">" + "X" + " </td>" + "\n" +
-						"</tr>" + "\n" +
-						"</table>";
+						"<tr>\n" +
+						"	<th width=\"20%\">Переводы <br/>из функции \u25ba<br/>в функцию <br/> \u25bc </th>\n";
+				for (Aspect aspect : Aspect.values()) {
+					report += String.format("	<th width=\"10%\"> %s </th>\n", aspect.name());
+				}
+				report += "</tr>\n";
+
+				for (Aspect firstAspect : Aspect.values()) {
+					report += String.format("<tr>\n	<td style=\"font-weight:bold\"> %s </td>\n", firstAspect.name());
+					for (Aspect secondAspect : Aspect.values()) {
+						Object cellValue;
+						if (firstAspect == secondAspect) {
+							cellValue = "X";
+						} else {
+							cellValue = jc.getJumpCount(firstAspect, secondAspect);
+						}
+						report += String.format("		<td align=\"center\">%s </td>\n", cellValue);
+					}
+					report += "</tr>\n";
+				}
+				report += "</table>";
 			}
 		} else {
 			report =

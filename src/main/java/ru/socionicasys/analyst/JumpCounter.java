@@ -1,5 +1,6 @@
 package ru.socionicasys.analyst;
 
+import ru.socionicasys.analyst.types.Aspect;
 import ru.socionicasys.analyst.util.EqualsUtil;
 import ru.socionicasys.analyst.util.HashUtil;
 
@@ -61,6 +62,10 @@ public class JumpCounter {
 		} else {
 			return 0;
 		}
+	}
+
+	public int getJumpCount(Aspect to, Aspect from) {
+		return getJumpCount(to.name(), from.name());
 	}
 
 	public boolean isEmpty() {
