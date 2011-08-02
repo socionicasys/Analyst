@@ -102,7 +102,7 @@ task syncLibs(type: Sync) {
 	into file('lib')
 }
 
-task debug(dependsOn: run)
+task debug
 
 task wrapper(type: Wrapper) {
 	gradleVersion = '1.0-milestone-4'
@@ -125,3 +125,5 @@ sonar {
 	projectProperty 'sonar.sourceEncoding', 'UTF-8'
 	projectProperty 'sonar.projectDate', format.format(gitCommitDate)
 }
+
+sonar.dependsOn(debug, classes)
