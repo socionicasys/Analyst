@@ -453,9 +453,11 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 				actionListener.setPanelEnabled(selected);
 			}
 
-			if (selected && !commentField.isEditable()) {
-				commentField.setEditable(true);
-			} else if (commentField != null) {
+			if (selected) {
+				if (!commentField.isEditable()) {
+					commentField.setEditable(true);
+				}
+			} else {
 				commentField.setText("");
 				commentField.setEditable(false);
 			}
