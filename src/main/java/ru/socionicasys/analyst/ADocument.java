@@ -215,6 +215,9 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		if (section == null) {
 			return;
 		}
+
+		startCompoundEdit();
+
 		AData data = aDataMap.get(section);
 		aDataMap.remove(section);
 
@@ -224,6 +227,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 		fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionDeletionEdit(section, data)));
 		fireADocumentChanged();
+
+		endCompoundEdit();
 	}
 
 	public void updateASection(ASection aSection, AData data) {
@@ -296,7 +301,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	 * Группирует последующие изменения в документе в один {@link CompoundEdit}. Группы могут вкладываться друг
 	 * в друга, но реальная группировка изменений происходит только в группах первого уровня.
 	 */
-	public void startCompoundEdit() {
+	private void startCompoundEdit() {
 		if (currentCompoundDepth == 0) {
 			currentCompoundEdit = new CompoundEdit();
 		}
@@ -306,7 +311,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	/**
 	 * Оканчивает группу изменений, начатую {@link #startCompoundEdit()}.
 	 */
-	public void endCompoundEdit() {
+	private void endCompoundEdit() {
 		currentCompoundDepth--;
 		if (currentCompoundDepth > 0) {
 			return;
