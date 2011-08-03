@@ -224,15 +224,18 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	public void updateASection(ASection aSection, AData data) {
+		startCompoundEdit();
 		AData oldData = aDataMap.get(aSection);
 		aDataMap.remove(aSection);
 		aDataMap.put(aSection, data);
 
 		fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionChangeEdit(aSection, oldData, data)));
 		fireADocumentChanged();
+		endCompoundEdit();
 	}
 
 	public void addASection(ASection aSection, AData data) {
+		startCompoundEdit();
 		int startOffset = aSection.getStartOffset();
 		int endOffset = aSection.getEndOffset();
 		int begin = Math.min(startOffset, endOffset);
@@ -253,6 +256,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 		fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionAdditionEdit(aSection, data)));
 		fireADocumentChanged();
+		endCompoundEdit();
 	}
 
 	public void addADocumentChangeListener(ADocumentChangeListener listener) {
