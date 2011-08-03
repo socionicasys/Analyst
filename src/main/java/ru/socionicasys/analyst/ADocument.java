@@ -30,6 +30,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	public final SimpleAttributeSet defaultSearchHighlightAttributes;
 
 	private CompoundEdit currentCompoundEdit;
+	private int currentCompoundDepth;
 
 	/**
 	 * Информация о соответствиях/несоответствиях ТИМам
@@ -63,7 +64,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		}
 	}
 
-	ADocument() {
+	public ADocument() {
 		addDocumentListener(this);
 
 		//style of general text
@@ -75,6 +76,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		defaultSectionAttributes.addAttribute(StyleConstants.Background, Color.decode("#E0ffff"));
 		defaultSearchHighlightAttributes = new SimpleAttributeSet();
 		defaultSearchHighlightAttributes.addAttribute(StyleConstants.Background, Color.decode("#ff0000"));
+
+		currentCompoundDepth = 0;
 
 		matchMissModel = new MatchMissModel();
 		addADocumentChangeListener(matchMissModel);
@@ -289,23 +292,32 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		return aDataMap;
 	}
 
+	/**
+	 * Группирует последующие изменения в документе в один {@link CompoundEdit}. Группы могут вкладываться друг
+	 * в друга, но реальная группировка изменений происходит только в группах первого уровня.
+	 */
 	public void startCompoundEdit() {
-		endCompoundEdit();
-		currentCompoundEdit = new CompoundEdit();
+		if (currentCompoundDepth == 0) {
+			currentCompoundEdit = new CompoundEdit();
+		}
+		currentCompoundDepth++;
 	}
 
+	/**
+	 * Оканчивает группу изменений, начатую {@link #startCompoundEdit()}.
+	 */
 	public void endCompoundEdit() {
-		if (currentCompoundEdit == null) {
+		currentCompoundDepth--;
+		if (currentCompoundDepth > 0) {
 			return;
 		}
 		currentCompoundEdit.end();
-		fireUndoableEditUpdate(new UndoableEditEvent(this, currentCompoundEdit));
-		currentCompoundEdit = null;
+		super.fireUndoableEditUpdate(new UndoableEditEvent(this, currentCompoundEdit));
 	}
 
 	@Override
 	protected void fireUndoableEditUpdate(UndoableEditEvent e) {
-		if (currentCompoundEdit != null && currentCompoundEdit.isInProgress()) {
+		if (currentCompoundDepth > 0) {
 			currentCompoundEdit.addEdit(e.getEdit());
 		} else {
 			super.fireUndoableEditUpdate(e);
