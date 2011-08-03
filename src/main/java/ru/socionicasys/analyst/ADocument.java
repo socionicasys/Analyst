@@ -30,7 +30,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	public final SimpleAttributeSet defaultSearchHighlightAttributes;
 
 	private CompoundEdit currentCompoundEdit;
-	private String keyword;
 
 	/**
 	 * Информация о соответствиях/несоответствиях ТИМам
@@ -178,7 +177,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		super.removeUpdate(chng);
 
 		fireADocumentChanged();
-		endCompoundEdit(null);
+		endCompoundEdit();
 	}
 
 	@Override
@@ -287,35 +286,21 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	public void startCompoundEdit() {
-		if (currentCompoundEdit != null) {
-			endCompoundEdit(null);
-		}
+		endCompoundEdit();
 		currentCompoundEdit = new CompoundEdit();
-		keyword = null;
 	}
 
-	public void endCompoundEdit(String keyword) {
+	public void endCompoundEdit() {
 		if (currentCompoundEdit == null) {
 			return;
 		}
-		if (keyword == null) {
-			currentCompoundEdit.end();
-			fireUndoableEditUpdate(new UndoableEditEvent(this, currentCompoundEdit));
-			currentCompoundEdit = null;
-		} else {
-			this.keyword = keyword;
-		}
+		currentCompoundEdit.end();
+		fireUndoableEditUpdate(new UndoableEditEvent(this, currentCompoundEdit));
+		currentCompoundEdit = null;
 	}
 
 	@Override
 	protected void fireUndoableEditUpdate(UndoableEditEvent e) {
-		String s = e.getEdit().getPresentationName();
-		if (keyword != null && s.contains(keyword)) {
-			currentCompoundEdit.addEdit(e.getEdit());
-			currentCompoundEdit.end();
-			keyword = null;
-		}
-
 		if (currentCompoundEdit != null && currentCompoundEdit.isInProgress()) {
 			currentCompoundEdit.addEdit(e.getEdit());
 		} else {

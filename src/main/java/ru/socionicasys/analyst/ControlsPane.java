@@ -871,17 +871,17 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		if ((data == null) && (currentASection != null)) {
 			document.startCompoundEdit();
 			document.removeASection(currentASection);
-			document.endCompoundEdit(null);
+			document.endCompoundEdit();
 			currentASection = null;
 		} else if ((data != null) && (currentASection != null)) {
 			document.startCompoundEdit();
 			document.updateASection(currentASection, data);
-			document.endCompoundEdit(null);
+			document.endCompoundEdit();
 		} else if (data != null) {
 			currentASection = new ASection(start, end, document.defaultSectionAttributes);
 			document.startCompoundEdit();
 			document.addASection(currentASection, data);
-			document.endCompoundEdit(null);
+			document.endCompoundEdit();
 		}
 	}
 
