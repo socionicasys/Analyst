@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
+import java.util.Locale;
 import javax.swing.*;
 
 /**
@@ -37,7 +38,16 @@ public class Analyst implements Runnable {
 	@Override
 	public void run() {
 		logger.trace("> run(), startupFilename={}", startupFilename);
-		UIManager.put("swing.boldMetal", Boolean.FALSE);
+
+		// Язык приложения: русский
+		// TODO: возможность менять язык
+		Locale defaultLocale = new Locale("ru");
+		Locale.setDefault(defaultLocale);
+
+		UIDefaults uiDefaults = UIManager.getDefaults();
+		uiDefaults.setDefaultLocale(defaultLocale);
+		uiDefaults.addResourceBundle("ru.socionicasys.analyst.messages");
+		uiDefaults.put("swing.boldMetal", false);
 
 		final AnalystWindow analystWindow = new AnalystWindow();
 		if (startupFilename != null) {

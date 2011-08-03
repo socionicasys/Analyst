@@ -3,6 +3,8 @@ package ru.socionicasys.analyst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.socionicasys.analyst.types.Aspect;
+import ru.socionicasys.analyst.undo.ActiveUndoManager;
+import ru.socionicasys.analyst.undo.ActiveUndoManagerListener;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -23,7 +25,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 /**
  * @author Виктор
  */
-public class ControlsPane extends JToolBar implements CaretListener, ADataChangeListener, ChangeListener, TreeSelectionListener {
+public class ControlsPane extends JToolBar implements CaretListener, ADataChangeListener, ChangeListener,
+		TreeSelectionListener, ActiveUndoManagerListener {
 	private final AspectPanel aspectPanel;
 	private final SignPanel signPanel;
 	private final MVPanel mvPanel;
@@ -952,5 +955,10 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			AData data = documentHolder.getModel().getAData(currentASection);
 			setContols(data);
 		}
+	}
+
+	@Override
+	public void undoStateChanged(ActiveUndoManager undoManager) {
+		update();
 	}
 }

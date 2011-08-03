@@ -2,6 +2,9 @@ package ru.socionicasys.analyst;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.socionicasys.analyst.undo.ActiveUndoManager;
+import ru.socionicasys.analyst.undo.RedoAction;
+import ru.socionicasys.analyst.undo.UndoAction;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -16,9 +19,6 @@ import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.*;
 import javax.swing.text.JTextComponent.KeyBinding;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
-import javax.swing.undo.UndoManager;
 
 @SuppressWarnings("serial")
 public class AnalystWindow extends JFrame implements PropertyChangeListener {
@@ -40,10 +40,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private boolean programExit = false;
 	private boolean makeNewDocument = false;
 
-	//undo helpers
-	private final UndoAction undoAction = new UndoAction();
-	private final RedoAction redoAction = new RedoAction();
-	private final UndoManager undo = new UndoManager();
+	private final ActiveUndoManager undoManager = new ActiveUndoManager();
 
 	public AnalystWindow() {
 		super(String.format("%s - %s", VersionInfo.getApplicationName(), ADocument.DEFAULT_TITLE));
@@ -151,7 +148,8 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		addBindings();
 
 		//Start watching for undoable edits and caret changes.
-		documentHolder.addUndoableEditListener(new MyUndoableEditListener());
+		documentHolder.addUndoableEditListener(undoManager);
+		undoManager.addActiveUndoManagerListener(controlsPane);
 		textPane.addCaretListener(status);
 
 		pack();
@@ -276,23 +274,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		}
 	}
 
-	//This one listens for edits that can be undone.
-	private class MyUndoableEditListener implements UndoableEditListener {
-		@Override
-		public void undoableEditHappened(UndoableEditEvent e) {
-			//Remember the edit and update the menus.
-			undo.addEdit(e.getEdit());
-			undoAction.updateUndoState();
-			redoAction.updateRedoState();
-
-			if (e.getEdit().getPresentationName().contains("deletion")) {
-				if (docDeleteConfirmation() == JOptionPane.NO_OPTION) {
-					undo.undo();
-				}
-			}
-		}
-	}
-
 	//Add a couple of emacs key bindings for navigation.
 	private void addBindings() {
 		final KeyBinding[] defaultBindings = {
@@ -320,14 +301,12 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		JMenu menu = new JMenu("Редактирование");
 
 		//Undo and redo are actions of our own creation.
-		undoAction.putValue(Action.NAME, "Отменить действие");
-		JMenuItem menuItem = new JMenuItem(undoAction);
+		JMenuItem menuItem = new JMenuItem(new UndoAction(undoManager));
 		KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK);
 		menuItem.setAccelerator(key);
 		menu.add(menuItem);
 
-		redoAction.putValue(Action.NAME, "Вернуть действие");
-		menuItem = new JMenuItem(redoAction);
+		menuItem = new JMenuItem(new RedoAction(undoManager));
 		key = KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK);
 		menuItem.setAccelerator(key);
 		menu.add(menuItem);
@@ -425,94 +404,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		menu.add(reportCheckbox);
 
 		return menu;
-	}
-
-	private class UndoAction extends AbstractAction {
-		private final Logger logger = LoggerFactory.getLogger(UndoAction.class);
-
-		public UndoAction() {
-			super("Undo");
-			setEnabled(false);
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			try {
-				undo.undo();
-			} catch (CannotUndoException ex) {
-				logger.error("Unable to undo", ex);
-			}
-			controlsPane.update();
-			updateUndoState();
-			redoAction.updateRedoState();
-		}
-
-		protected void updateUndoState() {
-			if (undo.canUndo()) {
-				setEnabled(true);
-				putValue(Action.NAME, getRussianUndoName(undo.getUndoPresentationName()));
-			} else {
-				setEnabled(false);
-				putValue(Action.NAME, "Отменить действие");
-			}
-		}
-
-		private Object getRussianUndoName(String undoPresentationName) {
-			if (undoPresentationName.contains("deletion")) {
-				return "Отменить удаление";
-			}
-			if (undoPresentationName.contains("style")) {
-				return "Отменить";
-			}
-			if (undoPresentationName.contains("addition")) {
-				return "Отменить ввод";
-			}
-			return undoPresentationName;
-		}
-	}
-
-	private class RedoAction extends AbstractAction {
-		private final Logger logger = LoggerFactory.getLogger(RedoAction.class);
-
-		public RedoAction() {
-			super("Redo");
-			setEnabled(false);
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			try {
-				undo.redo();
-			} catch (CannotRedoException ex) {
-				logger.error("Unable to redo", ex);
-			}
-			controlsPane.update();
-			updateRedoState();
-			undoAction.updateUndoState();
-		}
-
-		protected void updateRedoState() {
-			if (undo.canRedo()) {
-				setEnabled(true);
-				putValue(Action.NAME, getRussianRedoName(undo.getRedoPresentationName()));
-			} else {
-				setEnabled(false);
-				putValue(Action.NAME, "Вернуть действие");
-			}
-		}
-
-		private Object getRussianRedoName(String redoPresentationName) {
-			if (redoPresentationName.contains("deletion")) {
-				return "Вернуть удаление";
-			}
-			if (redoPresentationName.contains("style")) {
-				return "Вернуть";
-			}
-			if (redoPresentationName.contains("addition")) {
-				return "Вернуть ввод";
-			}
-			return redoPresentationName;
-		}
 	}
 
 	private void onWindowClosing() {
@@ -652,13 +543,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	}
 
 	private void initUndoManager() {
-		undo.discardAllEdits();
-		if (undoAction != null) {
-			undoAction.updateUndoState();
-		}
-		if (redoAction != null) {
-			redoAction.updateRedoState();
-		}
+		undoManager.discardAllEdits();
 	}
 
 	private class SaveAction extends AbstractAction {
