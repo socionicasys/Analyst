@@ -822,11 +822,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			signPanel.setSign(data.getSign());
 
 			//need this not to receive notification
-			{
-				//	commentField.getCaret().removeChangeListener(this);
-				commentField.setText(data.getComment());
-				//	commentField.getCaret().addChangeListener(this);
-			}
+			commentField.setText(data.getComment());
 		} else {
 			aspectPanel.setAspect(null);
 			dimensionPanel.setDimension(null);
@@ -858,10 +854,10 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		int begin = Math.min(dot, mark);
 		int end = Math.max(dot, mark);
 
-		AData d = getAData();
+		AData data = getAData();
 
-		for (ADataChangeListener aDataListener : aDataListeners) {
-			aDataListener.aDataChanged(begin, end, d);
+		for (int i = aDataListeners.size() - 1; i >= 0; i--) {
+			aDataListeners.get(i).aDataChanged(begin, end, data);
 		}
 	}
 
@@ -889,20 +885,20 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		Object obj = ((DefaultMutableTreeNode) (e.getPath().getLastPathComponent())).getUserObject();
-		if (obj.equals(oldTreeObject)) {
+		DefaultMutableTreeNode leafNode = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
+		Object leafObject = leafNode.getUserObject();
+		if (leafObject.equals(oldTreeObject)) {
 			return;
-		} else {
-			oldTreeObject = obj;
 		}
 
-		String quote;
+		oldTreeObject = leafObject;
+
 		int index = 0;
 
-		if (obj instanceof EndNodeObject) {
-			index = ((EndNodeObject) obj).getOffset();
+		if (leafObject instanceof EndNodeObject) {
+			index = ((EndNodeObject) leafObject).getOffset();
 		} else {
-			quote = obj.toString();
+			String quote = leafObject.toString();
 			if (quote != null && quote.startsWith("#")) {
 				String indexStr = quote.substring(1, quote.indexOf("::"));
 				index = Integer.parseInt(indexStr);
@@ -917,8 +913,6 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			int offset = currentASection.getMiddleOffset();
 			int start = currentASection.getStartOffset();
 			int end = currentASection.getEndOffset();
-
-			Rectangle rect;
 
 			textPane.removeCaretListener(this);
 			textPane.getCaret().setDot(end);
@@ -935,8 +929,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 			commentField.getCaret().addChangeListener(this);
 
 			try {
-				rect = textPane.modelToView(offset);
-				viewport.scrollRectToVisible(rect);
+				viewport.scrollRectToVisible(textPane.modelToView(offset));
 				textPane.grabFocus();
 			} catch (BadLocationException e1) {
 				logger.error("Error setting model to view :: bad location", e1);
@@ -944,15 +937,11 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		}
 	}
 
-	public void update() {
+	@Override
+	public void undoStateChanged(ActiveUndoManager undoManager) {
 		if (currentASection != null) {
 			AData data = documentHolder.getModel().getAData(currentASection);
 			setContols(data);
 		}
-	}
-
-	@Override
-	public void undoStateChanged(ActiveUndoManager undoManager) {
-		update();
 	}
 }
