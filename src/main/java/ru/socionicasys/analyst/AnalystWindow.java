@@ -27,7 +27,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 	private final DocumentHolder documentHolder;
 	private final TextPane textPane;
-	private final ControlsPane controlsPane;
 	private final StatusLabel status;
 	private final ATree navigateTree;
 	private final BTree analysisTree;
@@ -109,7 +108,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		splitPaneH.setOneTouchExpandable(true);
 
 		//Add the control panels.
-		controlsPane = new ControlsPane(textPane, documentHolder, commentField);
+		ControlsPane controlsPane = new ControlsPane(textPane, documentHolder, commentField);
 
 		textPane.addCaretListener(controlsPane);
 		controlsPane.addADataListener(controlsPane);
@@ -251,7 +250,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		@Override
 		public void caretUpdate(CaretEvent e) {
 			ADocument document = documentHolder.getModel();
-			ASection section = document.getASectionThatStartsAt(textPane.getCaretPosition());
+			ASection section = document.getASectionThatStartsAt(e.getDot());
 			if (textPane.getText().length() <= 0) {
 				setText("Откройте сохраненный документ или вставтьте анализируемый текст в центральное окно");
 			} else if (section != null) {
