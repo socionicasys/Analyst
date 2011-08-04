@@ -16,9 +16,6 @@ public final class DocumentHolder extends GenericModelHolder<ADocument> implemen
 		setModel(model);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setModel(ADocument model) {
 		if (this.model == model) {
@@ -70,9 +67,6 @@ public final class DocumentHolder extends GenericModelHolder<ADocument> implemen
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void undoableEditHappened(UndoableEditEvent e) {
 		fireUndoableEditUpdate(e);

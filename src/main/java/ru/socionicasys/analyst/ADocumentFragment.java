@@ -65,9 +65,6 @@ public class ADocumentFragment implements Transferable, Serializable {
 		return Collections.unmodifiableMap(aDataMap);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
 		if (flavor.equals(getNativeFlavor())) {
@@ -79,17 +76,11 @@ public class ADocumentFragment implements Transferable, Serializable {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public DataFlavor[] getTransferDataFlavors() {
 		return new DataFlavor[]{getNativeFlavor(), DataFlavor.stringFlavor};
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isDataFlavorSupported(DataFlavor flavor) {
 		return flavor.equals(getNativeFlavor()) || flavor.equals(DataFlavor.stringFlavor);

@@ -17,17 +17,11 @@ public class GenericModelHolder<T> implements ModelHolder<T> {
 		listenerList = new EventListenerList();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public T getModel() {
 		return model;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setModel(T model) {
 		if (this.model == model) {
@@ -38,17 +32,11 @@ public class GenericModelHolder<T> implements ModelHolder<T> {
 		fireModelChanged(oldModel);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void addModelChangedListener(ModelChangedListener<T> listener) {
 		listenerList.add(ModelChangedListener.class, listener);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void removeModelChangedListener(ModelChangedListener<T> listener) {
 		listenerList.remove(ModelChangedListener.class, listener);
