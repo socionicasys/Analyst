@@ -150,13 +150,10 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		int length = chng.getLength();
 
 		Iterator<ASection> sectionIterator = aDataMap.keySet().iterator();
-		Map<ASection, AData> tempMap = null;
+		Map<ASection, AData> tempMap = new HashMap<ASection, AData>();
 		while (sectionIterator.hasNext()) {
 			ASection sect = sectionIterator.next();
 			if (sect.getEndOffset() == offset + length) {
-				if (tempMap == null) {
-					tempMap = new HashMap<ASection, AData>();
-				}
 				int start = sect.getStartOffset();
 				AData aData = aDataMap.get(sect);
 				sectionIterator.remove();
@@ -168,9 +165,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			}
 		}
 
-		if (tempMap != null) {
-			aDataMap.putAll(tempMap);
-		}
+		aDataMap.putAll(tempMap);
 
 		super.insertUpdate(chng, defaultStyle);
 	}
