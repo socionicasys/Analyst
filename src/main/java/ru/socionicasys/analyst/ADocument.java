@@ -160,7 +160,11 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 				int start = sect.getStartOffset();
 				AData aData = aDataMap.get(sect);
 				sectionIterator.remove();
-				tempMap.put(new ASection(start, offset), aData);
+				try {
+					tempMap.put(new ASection(this, start, offset), aData);
+				} catch (BadLocationException e) {
+					logger.error("Invalid position for ASection", e);
+				}
 			}
 		}
 
@@ -557,7 +561,12 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		for (Entry<DocSection, AData> entry : fragMap.entrySet()) {
 			DocSection section = entry.getKey();
 			AData data = entry.getValue();
-			aDataMap.put(new ASection(position + section.getStart(), position + section.getEnd()), data);
+			try {
+				ASection aSection = new ASection(this, position + section.getStart(), position + section.getEnd());
+				aDataMap.put(aSection, data);
+			} catch (BadLocationException e) {
+				logger.error("Invalid position for ASection", e);
+			}
 		}
 	}
 
@@ -584,9 +593,14 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 		for (Entry<ASection, AData> entry : anotherDocument.aDataMap.entrySet()) {
 			ASection sourceSection = entry.getKey();
-			ASection destinationSection = new ASection(sourceSection.getStartOffset() + documentLength,
-					sourceSection.getEndOffset() + documentLength);
-			aDataMap.put(destinationSection, entry.getValue());
+			try {
+				ASection destinationSection = new ASection(this,
+						sourceSection.getStartOffset() + documentLength,
+						sourceSection.getEndOffset() + documentLength);
+				aDataMap.put(destinationSection, entry.getValue());
+			} catch (BadLocationException e) {
+				logger.error("Invalid position for ASection", e);
+			}
 		}
 
 		StringBuilder builder = new StringBuilder(getProperty(ExpertProperty).toString());

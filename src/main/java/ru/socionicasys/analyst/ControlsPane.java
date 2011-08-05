@@ -870,8 +870,13 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		} else if (data != null && currentASection != null) {
 			document.updateASection(currentASection, data);
 		} else if (data != null) {
-			currentASection = new ASection(start, end, document.defaultSectionAttributes);
-			document.addASection(currentASection, data);
+			try {
+				currentASection = new ASection(document, start, end, document.defaultSectionAttributes);
+				document.addASection(currentASection, data);
+			} catch (BadLocationException e) {
+				logger.error("Invalid position for ASection", e);
+				currentASection = null;
+			}
 		}
 	}
 

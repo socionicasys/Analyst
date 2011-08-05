@@ -139,21 +139,23 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 			}
 		}
 
-		try {
-			for (RawAData rawAData : rawData.values()) {
-				AData data = AData.parseAData(rawAData.getAData());
-				data.setComment(rawAData.getComment());
-				int begin = rawAData.getBegin();
-				int end = rawAData.getEnd();
-				ASection section = new ASection(begin, end, document.defaultSectionAttributes);
+		for (RawAData rawAData : rawData.values()) {
+			AData data = AData.parseAData(rawAData.getAData());
+			if (data == null) {
+				continue;
+			}
+			data.setComment(rawAData.getComment());
+			int begin = rawAData.getBegin();
+			int end = rawAData.getEnd();
+			try {
+				ASection section = new ASection(document, begin, end, document.defaultSectionAttributes);
 				document.getADataMap().put(section, data);
 				document.setCharacterAttributes(begin, end - begin, document.defaultSectionAttributes, false);
+			} catch (BadLocationException e) {
+				logger.error("Invalid position for ASection", e);
 			}
-			document.fireADocumentChanged();
-		} catch (Exception e) {
-			logger.error("Error while working with RawData", e);
-			cancel(true);
 		}
+		document.fireADocumentChanged();
 
 		return document;
 	}
