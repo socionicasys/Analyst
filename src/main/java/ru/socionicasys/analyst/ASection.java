@@ -7,16 +7,36 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Position;
 
+/**
+ * Представляет собой интервал в документе и стиль выделения этого интервала.
+ * Автоматически отслеживает изменения в документе и корректирует положение
+ * своей начальной и конечной позиции.
+ */
 public class ASection implements Comparable<ASection> {
 	private final Position start;
 	private final Position end;
 	private final AttributeSet attributes;
 
+	/**
+	 * Создает интервал без стилевого выделения.
+	 * @param sourceDocument документ, в котором нужно создать интервал
+	 * @param startOffset начальное смещение интервала
+	 * @param endOffset конечное смещение интервала
+	 * @throws BadLocationException когда начальное/конечное смещения находятся вне границ документа
+	 */
 	public ASection(Document sourceDocument, int startOffset, int endOffset)
 			throws BadLocationException {
 		this(sourceDocument, startOffset, endOffset, null);
 	}
 
+	/**
+	 * Создает интервал со стилевым выделением.
+	 * @param sourceDocument документ, в котором нужно создать интервал
+	 * @param startOffset начальное смещение интервала
+	 * @param endOffset конечное смещение интервала
+	 * @param attributes стиль выделения для интервала
+	 * @throws BadLocationException когда начальное/конечное смещения находятся вне границ документа
+	 */
 	public ASection(Document sourceDocument, int startOffset, int endOffset, AttributeSet attributes)
 			throws BadLocationException {
 		start = sourceDocument.createPosition(startOffset);
@@ -24,22 +44,39 @@ public class ASection implements Comparable<ASection> {
 		this.attributes = attributes;
 	}
 
+	/**
+	 * @return стиль выделения для данного интервала, {@code null} если в интервале нет выделения
+	 */
 	public AttributeSet getAttributes() {
 		return attributes;
 	}
 
+	/**
+	 * @return текущее смещение начала интервала в документе
+	 */
 	public int getStartOffset() {
 		return start.getOffset();
 	}
 
+	/**
+	 * @return текущее смещение конца интервала в документе
+	 */
 	public int getEndOffset() {
 		return end.getOffset();
 	}
 
+	/**
+	 * @return текущее смещение средины интервала в документе
+	 */
 	public int getMiddleOffset() {
 		return (end.getOffset() + start.getOffset()) / 2;
 	}
 
+	/**
+	 * Провряет, содержит ли интервал данную позицию в документе
+	 * @param offset позиция в документе для проверки
+	 * @return содержит ли интервал данную позицию
+	 */
 	public boolean containsOffset(int offset) {
 		int startOffset = start.getOffset();
 		int endOffset = end.getOffset();
