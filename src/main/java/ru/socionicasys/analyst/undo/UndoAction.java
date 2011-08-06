@@ -24,18 +24,24 @@ public class UndoAction extends AbstractAction implements ActiveUndoManagerListe
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
+			logger.trace("actionPerformed(): entering, e={}", e);
 			undoManager.undo();
 		} catch (CannotUndoException exception) {
 			logger.error("Unable to undo", exception);
+		} finally {
+			logger.trace("actionPerformed(): leaving");
 		}
 	}
 
 	@Override
 	public void undoStateChanged(ActiveUndoManager undoManager) {
+		logger.trace("undoStateChanged(): entering");
 		//noinspection ObjectEquality
 		assert undoManager == this.undoManager :
 				"UndoAction can only be used with UndoManager it was created for";
 		setEnabled(undoManager.canUndo());
 		putValue(Action.NAME, undoManager.getUndoPresentationName());
+		logger.debug("undoStateChanged(): new action name is {}", undoManager.getUndoPresentationName());
+		logger.trace("undoStateChanged(): leaving");
 	}
 }

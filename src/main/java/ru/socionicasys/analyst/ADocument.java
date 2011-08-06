@@ -65,6 +65,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	public ADocument() {
+		logger.trace("ADocument(): entering");
 		addDocumentListener(this);
 
 		//style of general text
@@ -84,9 +85,11 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 		//init new Document
 		initNew();
+		logger.trace("ADocument(): leaving");
 	}
 
 	public void initNew() {
+		logger.trace("initNew(): entering");
 		if (aDataMap == null) {
 			aDataMap = new HashMap<ASection, AData>();
 		} else {
@@ -107,6 +110,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 		setCharacterAttributes(0, 1, defaultStyle, true);
 		fireADocumentChanged();
+		logger.trace("initNew(): leaving");
 	}
 
 	/**
@@ -117,6 +121,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	 * @return блок, содержащий заданную позицию, или null, если такого нет
 	 */
 	public ASection getASection(int pos) {
+		logger.trace("getASection(): entering, pos={}", pos);
 		Collection<ASection> results = new ArrayList<ASection>();
 		for (ASection as : aDataMap.keySet()) {
 			if (as.containsOffset(pos)) {
@@ -124,18 +129,24 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			}
 		}
 		if (results.isEmpty()) {
+			logger.trace("getASection(): leaving, no section found");
 			return null;
 		}
 
-		return Collections.min(results, new SectionDistanceComparator(pos));
+		ASection matchingSection = Collections.min(results, new SectionDistanceComparator(pos));
+		logger.trace("getASection(): leaving, found ASection {}", matchingSection);
+		return matchingSection;
 	}
 
 	public ASection getASectionThatStartsAt(int startOffset) {
+		logger.trace("getASectionThatStartsAt(): entering, startOffset={}", startOffset);
 		for (ASection section : aDataMap.keySet()) {
 			if (section.getStartOffset() == startOffset) {
+				logger.trace("getASectionThatStartsAt(): leaving, found ASection {}", section);
 				return section;
 			}
 		}
+		logger.trace("getASectionThatStartsAt(): leaving, no section found");
 		return null;
 	}
 
@@ -145,6 +156,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 	@Override
 	protected void insertUpdate(DefaultDocumentEvent chng, AttributeSet attr) {
+		logger.trace("insertUpdate(): entering, chng={}, attr={}", chng, attr);
 		//if insert is on the section end - do not extend the section to the inserted text
 		int offset = chng.getOffset();
 		int length = chng.getLength();
@@ -168,10 +180,12 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		aDataMap.putAll(tempMap);
 
 		super.insertUpdate(chng, defaultStyle);
+		logger.trace("insertUpdate(): leaving");
 	}
 
 	@Override
 	protected void removeUpdate(DefaultDocumentEvent chng) {
+		logger.trace("removeUpdate(): entering, chng={}", chng);
 		startCompoundEdit();
 
 		int offset = chng.getOffset();
@@ -180,6 +194,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 		fireADocumentChanged();
 		endCompoundEdit();
+		logger.trace("removeUpdate(): leaving");
 	}
 
 	@Override
@@ -187,6 +202,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	public void removeCleanup(int start, int end) {
+		logger.trace("removeCleanup(): entering, start={}, end={}", start, end);
 		// проверяет не нужно ли удалить схлопнувшиеся сегменты
 		boolean foundCollapsed = false;
 		Collection<ASection> toRemove = new ArrayList<ASection>();
@@ -204,6 +220,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		if (foundCollapsed) {
 			fireADocumentChanged();
 		}
+		logger.trace("removeCleanup(): leaving");
 	}
 
 	public AData getAData(ASection section) {
@@ -211,6 +228,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	public void removeASection(ASection section) {
+		logger.trace("removeASection(): entering, section={}", section);
 		if (section == null) {
 			return;
 		}
@@ -228,9 +246,11 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		fireADocumentChanged();
 
 		endCompoundEdit();
+		logger.trace("removeASection(): leaving");
 	}
 
 	public void updateASection(ASection aSection, AData data) {
+		logger.trace("updateASection(): entering, aSection={}, data={}", aSection, data);
 		startCompoundEdit();
 		AData oldData = aDataMap.get(aSection);
 		aDataMap.remove(aSection);
@@ -239,9 +259,11 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionChangeEdit(aSection, oldData, data)));
 		fireADocumentChanged();
 		endCompoundEdit();
+		logger.trace("updateASection(): leaving");
 	}
 
 	public void addASection(ASection aSection, AData data) {
+		logger.trace("addASection(): entering, aSection={}, data={}", aSection, data);
 		startCompoundEdit();
 		int startOffset = aSection.getStartOffset();
 		int endOffset = aSection.getEndOffset();
@@ -264,6 +286,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionAdditionEdit(aSection, data)));
 		fireADocumentChanged();
 		endCompoundEdit();
+		logger.trace("addASection(): leaving");
 	}
 
 	public void addADocumentChangeListener(ADocumentChangeListener listener) {
@@ -280,12 +303,15 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	public void fireADocumentChanged() {
+		logger.trace("fireADocumentChanged(): entering");
 		if (listeners == null) {
+			logger.trace("fireADocumentChanged(): leaving, no listeners to notify");
 			return;
 		}
 		for (ADocumentChangeListener listener : listeners) {
 			listener.aDocumentChanged(this);
 		}
+		logger.trace("fireADocumentChanged(): leaving");
 	}
 
 	@Override
@@ -301,31 +327,39 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	 * в друга, но реальная группировка изменений происходит только в группах первого уровня.
 	 */
 	private void startCompoundEdit() {
+		logger.trace("startCompoundEdit(): entering");
 		if (currentCompoundDepth == 0) {
 			currentCompoundEdit = new CompoundEdit();
 		}
 		currentCompoundDepth++;
+		logger.trace("startCompoundEdit(): leaving. Edit level {} ({})", currentCompoundDepth,
+				currentCompoundEdit.getPresentationName());
 	}
 
 	/**
 	 * Оканчивает группу изменений, начатую {@link #startCompoundEdit()}.
 	 */
 	private void endCompoundEdit() {
+		logger.trace("endCompoundEdit(): entering. Edit level {}, ({})", currentCompoundDepth,
+				currentCompoundEdit.getPresentationName());
 		currentCompoundDepth--;
 		if (currentCompoundDepth > 0) {
 			return;
 		}
 		currentCompoundEdit.end();
 		super.fireUndoableEditUpdate(new UndoableEditEvent(this, currentCompoundEdit));
+		logger.trace("endCompoundEdit(): leaving");
 	}
 
 	@Override
 	protected void fireUndoableEditUpdate(UndoableEditEvent e) {
+		logger.trace("fireUndoableEditUpdate(): entering, event = {}", e);
 		if (currentCompoundDepth > 0) {
 			currentCompoundEdit.addEdit(e.getEdit());
 		} else {
 			super.fireUndoableEditUpdate(e);
 		}
+		logger.trace("fireUndoableEditUpdate(): leaving");
 	}
 
 	//===================================================================
@@ -480,6 +514,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	public ADocumentFragment getADocFragment(int offset, int length) {
+		logger.trace("getADocFragment(): entering, offset={}, length={}", offset, length);
 		int selectionEnd = offset + length;
 		String text;
 		Map<DocSection, AttributeSet> styleMap = new HashMap<DocSection, AttributeSet>();
@@ -527,19 +562,23 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			}
 		} catch (BadLocationException e) {
 			logger.error("Error in getADocFragment()", e);
+			logger.trace("getADocFragment(): leaving");
 			return null;
 		}
 
+		logger.trace("getADocFragment(): leaving");
 		return new ADocumentFragment(text, styleMap, docMap);
 	}
 
 	public void pasteADocFragment(int position, ADocumentFragment fragment) {
+		logger.trace("pasteADocFragment(): entering, position={}, fragment={}", position, fragment);
 		// inserting plain text
 		try {
 			String text = fragment.getText();
 			insertString(position, text, defaultStyle);
 		} catch (BadLocationException e) {
 			logger.error("Invalid document position {} for pasting text", position, e);
+			logger.trace("pasteADocFragment(): leaving");
 			return;
 		}
 
@@ -563,6 +602,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 				logger.error("Invalid position for ASection", e);
 			}
 		}
+		logger.trace("pasteADocFragment(): leaving");
 	}
 
 	/**
@@ -570,6 +610,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	 * @param anotherDocument документ, содержимое которого нужно добавить.
 	 */
 	public void appendDocument(ADocument anotherDocument) {
+		logger.trace("appendDocument(): entering, anotherDocument={}", anotherDocument);
 		List<ElementSpec> specs = new ArrayList<ElementSpec>();
 		ElementSpec spec = new ElementSpec(new SimpleAttributeSet(), ElementSpec.StartTagType);
 		specs.add(spec);
@@ -604,6 +645,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		getDocumentProperties().put(ExpertProperty, builder.toString());
 
 		fireADocumentChanged();
+		logger.trace("appendDocument(): leaving");
 	}
 
 	/**
@@ -613,6 +655,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	 * @param includeRoot добавлять ли в описание теги открытия/закрытия начального элемента
 	 */
 	private static void visitElements(Element element, List<ElementSpec> specs, boolean includeRoot) {
+		logger.trace("visitElements(): entering, element={}, specs={}, includeRoot={}",
+				new Object[]{element, specs, includeRoot});
 		if (element.isLeaf()) {
 			try {
 				String elementText = element.getDocument().getText(element.getStartOffset(),
@@ -635,6 +679,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 				specs.add(new ElementSpec(element.getAttributes(), ElementSpec.EndTagType));
 			}
 		}
+		logger.trace("visitElements(): leaving");
 	}
 
 	/**

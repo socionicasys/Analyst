@@ -24,18 +24,24 @@ public class RedoAction extends AbstractAction implements ActiveUndoManagerListe
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
+			logger.trace("actionPerformed(): entering, e={}", e);
 			undoManager.redo();
 		} catch (CannotRedoException exception) {
 			logger.error("Unable to redo", exception);
+		} finally {
+			logger.trace("actionPerformed(): leaving");
 		}
 	}
 
 	@Override
 	public void undoStateChanged(ActiveUndoManager undoManager) {
+		logger.trace("undoStateChanged(): entering");
 		//noinspection ObjectEquality
 		assert undoManager == this.undoManager :
 				"RedoAction can only be used with UndoManager it was created for";
 		setEnabled(undoManager.canRedo());
 		putValue(Action.NAME, undoManager.getRedoPresentationName());
+		logger.debug("undoStateChanged(): new action name is {}", undoManager.getRedoPresentationName());
+		logger.trace("undoStateChanged(): leaving");
 	}
 }
