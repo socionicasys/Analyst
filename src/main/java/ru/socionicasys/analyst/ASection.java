@@ -68,4 +68,9 @@ public class ASection implements Comparable<ASection> {
 	public int compareTo(ASection o) {
 		return getStartOffset() - o.getStartOffset();
 	}
+
+	@Override
+	public String toString() {
+		return String.format("ASection{start=%s, end=%s, attributes=%s}", start, end, attributes);
+	}
 }
