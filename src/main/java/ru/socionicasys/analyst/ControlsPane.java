@@ -12,9 +12,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
@@ -80,39 +81,27 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 	}
 
 	private class MVPanel extends JPanel implements ActionListener, AspectSelectionListener {
-		private JRadioButton vitalButton;
-		private JRadioButton mentalButton;
-		private JRadioButton superidButton;
-		private JRadioButton superegoButton;
-		private ButtonGroup mvButtonGroup;
-		private JButton clearMVSelection;
+		private final Map<String, JRadioButton> buttons;
+		private final ButtonGroup mvButtonGroup;
+		private final JButton clearMVSelection;
 
-		public MVPanel() {
-			super();
-			vitalButton = new JRadioButton("Витал");
-			mentalButton = new JRadioButton("Ментал");
-			superidButton = new JRadioButton("Супер-ИД");
-			superegoButton = new JRadioButton("Супер-ЭГО");
-
-			vitalButton.addActionListener(this);
-			vitalButton.setActionCommand(AData.VITAL);
-			mentalButton.addActionListener(this);
-			mentalButton.setActionCommand(AData.MENTAL);
-			superidButton.addActionListener(this);
-			superidButton.setActionCommand(AData.SUPERID);
-			superegoButton.addActionListener(this);
-			superegoButton.setActionCommand(AData.SUPEREGO);
+		private MVPanel() {
+			buttons = new HashMap<String, JRadioButton>(4);
+			buttons.put(AData.VITAL, new JRadioButton("Витал"));
+			buttons.put(AData.MENTAL, new JRadioButton("Ментал"));
+			buttons.put(AData.SUPEREGO, new JRadioButton("Супер-ИД"));
+			buttons.put(AData.SUPERID, new JRadioButton("Супер-ЭГО"));
 
 			mvButtonGroup = new ButtonGroup();
-			mvButtonGroup.clearSelection();
+			for (Entry<String, JRadioButton> entry : buttons.entrySet()) {
+				String buttonKey = entry.getKey();
+				JRadioButton button = entry.getValue();
+				button.addActionListener(this);
+				button.setActionCommand(buttonKey);
+				mvButtonGroup.add(button);
+			}
+
 			clearMVSelection = new JButton("Очистить");
-
-			mvButtonGroup.add(vitalButton);
-			mvButtonGroup.add(mentalButton);
-			mvButtonGroup.add(superidButton);
-			mvButtonGroup.add(superegoButton);
-
-			mvButtonGroup.clearSelection();
 			clearMVSelection.addActionListener(this);
 
 			Panel pp1 = new Panel();
@@ -124,10 +113,10 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 
 			pp1.setLayout(new BoxLayout(pp1, BoxLayout.Y_AXIS));
 			pp2.setLayout(new BoxLayout(pp2, BoxLayout.Y_AXIS));
-			pp1.add(vitalButton);
-			pp1.add(mentalButton);
-			pp2.add(superidButton);
-			pp2.add(superegoButton);
+			pp1.add(buttons.get(AData.VITAL));
+			pp1.add(buttons.get(AData.MENTAL));
+			pp2.add(buttons.get(AData.SUPERID));
+			pp2.add(buttons.get(AData.SUPEREGO));
 			pp.setLayout(new BoxLayout(pp, BoxLayout.X_AXIS));
 
 			pp.add(pp1);
@@ -157,10 +146,9 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 				mvButtonGroup.clearSelection();
 				clearMVSelection.setEnabled(false);
 			}
-			vitalButton.setEnabled(enabled);
-			mentalButton.setEnabled(enabled);
-			superegoButton.setEnabled(enabled);
-			superidButton.setEnabled(enabled);
+			for (JRadioButton button : buttons.values()) {
+				button.setEnabled(enabled);
+			}
 		}
 
 		public String getMVSelection() {
@@ -174,21 +162,12 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		public void setMV(String mv) {
 			if (mv == null) {
 				mvButtonGroup.clearSelection();
-			} else if (mv.equals(AData.MENTAL)) {
-				mvButtonGroup.setSelected(mentalButton.getModel(), true);
-			} else if (mv.equals(AData.VITAL)) {
-				mvButtonGroup.setSelected(vitalButton.getModel(), true);
-			} else if (mv.equals(AData.SUPEREGO)) {
-				mvButtonGroup.setSelected(superegoButton.getModel(), true);
-			} else if (mv.equals(AData.SUPERID)) {
-				mvButtonGroup.setSelected(superidButton.getModel(), true);
+			} else if (buttons.containsKey(mv)) {
+				mvButtonGroup.setSelected(buttons.get(mv).getModel(), true);
 			}
 
-			if (mvButtonGroup.getSelection() != null) {
-				clearMVSelection.setEnabled(true);
-			} else {
-				clearMVSelection.setEnabled(false);
-			}
+			boolean enableClearButton = mvButtonGroup.getSelection() != null;
+			clearMVSelection.setEnabled(enableClearButton);
 		}
 	}
 
