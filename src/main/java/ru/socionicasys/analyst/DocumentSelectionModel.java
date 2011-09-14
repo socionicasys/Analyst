@@ -40,7 +40,7 @@ public class DocumentSelectionModel {
 	 * @param enabled активно ли выделение
 	 */
 	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+		this.enabled = updateProperty("enabled", this.enabled, enabled);
 	}
 
 	/**
