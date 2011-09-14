@@ -102,8 +102,16 @@ public class AData implements Serializable {
 		return aspect;
 	}
 
+	public void setModifier(String modifier) {
+		this.modifier = modifier;
+	}
+
 	public String getModifier() {
 		return modifier;
+	}
+
+	public void setSecondAspect(String secondAspect) {
+		this.secondAspect = secondAspect;
 	}
 
 	public String getSecondAspect() {
