@@ -148,7 +148,7 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 			int begin = rawAData.getBegin();
 			int end = rawAData.getEnd();
 			try {
-				ASection section = new ASection(document, begin, end, document.defaultSectionAttributes);
+				ASection section = new ASection(document, begin, end);
 				document.getADataMap().put(section, data);
 				document.setCharacterAttributes(begin, end - begin, document.defaultSectionAttributes, false);
 			} catch (BadLocationException e) {

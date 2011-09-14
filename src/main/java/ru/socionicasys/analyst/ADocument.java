@@ -280,7 +280,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			}
 		}
 
-		setCharacterAttributes(begin, length, aSection.getAttributes(), false);
+		setCharacterAttributes(begin, length, defaultSectionAttributes, false);
 		aDataMap.put(aSection, data);
 
 		fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionAdditionEdit(aSection, data)));

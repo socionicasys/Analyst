@@ -2,7 +2,6 @@ package ru.socionicasys.analyst;
 
 import ru.socionicasys.analyst.util.HashUtil;
 
-import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Position;
@@ -15,10 +14,10 @@ import javax.swing.text.Position;
 public class ASection implements Comparable<ASection> {
 	private final Position start;
 	private final Position end;
-	private final AttributeSet attributes;
 
 	/**
-	 * Создает интервал без стилевого выделения.
+	 * Создает интервал внутри документа.
+	 * 
 	 * @param sourceDocument документ, в котором нужно создать интервал
 	 * @param startOffset начальное смещение интервала
 	 * @param endOffset конечное смещение интервала
@@ -26,29 +25,8 @@ public class ASection implements Comparable<ASection> {
 	 */
 	public ASection(Document sourceDocument, int startOffset, int endOffset)
 			throws BadLocationException {
-		this(sourceDocument, startOffset, endOffset, null);
-	}
-
-	/**
-	 * Создает интервал со стилевым выделением.
-	 * @param sourceDocument документ, в котором нужно создать интервал
-	 * @param startOffset начальное смещение интервала
-	 * @param endOffset конечное смещение интервала
-	 * @param attributes стиль выделения для интервала
-	 * @throws BadLocationException когда начальное/конечное смещения находятся вне границ документа
-	 */
-	public ASection(Document sourceDocument, int startOffset, int endOffset, AttributeSet attributes)
-			throws BadLocationException {
 		start = sourceDocument.createPosition(startOffset);
 		end = sourceDocument.createPosition(endOffset);
-		this.attributes = attributes;
-	}
-
-	/**
-	 * @return стиль выделения для данного интервала, {@code null} если в интервале нет выделения
-	 */
-	public AttributeSet getAttributes() {
-		return attributes;
 	}
 
 	/**
@@ -108,6 +86,6 @@ public class ASection implements Comparable<ASection> {
 
 	@Override
 	public String toString() {
-		return String.format("ASection{start=%s, end=%s, attributes=%s}", start, end, attributes);
+		return String.format("ASection{start=%s, end=%s}", start, end);
 	}
 }
