@@ -151,6 +151,9 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		undoManager.addActiveUndoManagerListener(controlsPane);
 		textPane.addCaretListener(status);
 
+		DocumentSelectionModel selectionModel = new DocumentSelectionModel();
+		DocumentSelectionConnector selectionConnector = new DocumentSelectionConnector(textPane, selectionModel);
+
 		pack();
 	}
 
