@@ -9,6 +9,7 @@ import java.beans.PropertyChangeSupport;
  */
 public class DocumentSelectionModel {
 	private boolean enabled;
+	private boolean initialized;
 	private int startOffset;
 	private int endOffset;
 	private String aspect;
@@ -41,6 +42,23 @@ public class DocumentSelectionModel {
 	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = updateProperty("enabled", this.enabled, enabled);
+	}
+
+	/**
+	 * @return инициализирована ли в данный момент модель. {@code false} означает,
+	 * что сейчас происходит заполнение свойств модели.
+	 */
+	public boolean isInitialized() {
+		return initialized;
+	}
+
+	/**
+	 * Устанавливает флаг инициализированности выделения.
+	 * 
+	 * @param initialized инициализировано ли выделение
+	 */
+	public void setInitialized(boolean initialized) {
+		this.initialized = updateProperty("initialized", this.initialized, initialized);
 	}
 
 	/**
@@ -202,6 +220,7 @@ public class DocumentSelectionModel {
 	 * @param markupData объект с данными для заполнения выделения. {@code null} очищает выделение.
 	 */
 	public void setMarkupData(AData markupData) {
+		setInitialized(false);
 		if (markupData == null) {
 			setAspect(null);
 		} else {
@@ -213,6 +232,7 @@ public class DocumentSelectionModel {
 			setDimension(markupData.getDimension());
 			setComment(markupData.getComment());
 		}
+		setInitialized(true);
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {

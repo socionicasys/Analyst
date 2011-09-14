@@ -47,25 +47,34 @@ public class DocumentSelectionConnector implements PropertyChangeListener, Caret
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		if ("initialized".equals(evt.getPropertyName())) {
+			Boolean newInitialized = (Boolean) evt.getNewValue();
+			if (!newInitialized) {
+				return;
+			}
+		} else if (!selectionModel.isInitialized()) {
+			return;
+		}
+
 		ASection currentSection = getCurrentSection(selectionModel.getStartOffset(), selectionModel.getEndOffset());
 		if (currentSection == null) {
 			return;
 		}
 
 		ADocument document = textPane.getDocument();
-		AData markupData = selectionModel.getMarkupData();
-
-		if (document.getAData(currentSection) == null) {
-			if (markupData != null) {
+		AData newMarkup = selectionModel.getMarkupData();
+		AData oldMarkup = document.getAData(currentSection);
+		if (oldMarkup == null) {
+			if (newMarkup != null) {
 				// Новая отметка в документе
-				document.addASection(currentSection, markupData);
+				document.addASection(currentSection, newMarkup);
 			}
-		} else if (markupData == null) {
+		} else if (newMarkup == null) {
 			// Удаление старой отметки
 			document.removeASection(currentSection);
-		} else {
+		} else if (!newMarkup.equals(oldMarkup)) {
 			// Обновление данных в существующей отметке
-			document.updateASection(currentSection, markupData);
+			document.updateASection(currentSection, newMarkup);
 		}
 	}
 
@@ -79,6 +88,8 @@ public class DocumentSelectionConnector implements PropertyChangeListener, Caret
 		int dot = e.getDot();
 		int mark = e.getMark();
 		logger.trace("caretUpdate: {}, {}", dot, mark);
+
+		selectionModel.setInitialized(false);
 
 		int startOffset = Math.min(dot, mark);
 		int endOffset = Math.max(dot, mark);
@@ -94,6 +105,8 @@ public class DocumentSelectionConnector implements PropertyChangeListener, Caret
 			selectionModel.setEnabled(true);
 			selectionModel.setMarkupData(currentMarkupData);
 		}
+
+		selectionModel.setInitialized(true);
 	}
 
 	/**
