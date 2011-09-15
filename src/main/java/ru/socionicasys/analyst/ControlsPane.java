@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
@@ -35,26 +34,27 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 	private final JTextPane textPane;
 	private final List<ADataChangeListener> aDataListeners;
 	private final JTextArea commentField;
+	private final DocumentSelectionModel selectionModel;
 	private final DocumentHolder documentHolder;
 	private ASection currentASection;
 	private Object oldTreeObject;
 	private static final Logger logger = LoggerFactory.getLogger(ControlsPane.class);
 
-	public ControlsPane(JTextPane textPane, DocumentHolder documentHolder, JTextArea commentField) {
+	public ControlsPane(JTextPane textPane, DocumentHolder documentHolder, JTextArea commentField, DocumentSelectionModel selectionModel) {
 		super("Панель разметки", JToolBar.VERTICAL);
 
 		this.textPane = textPane;
 		this.documentHolder = documentHolder;
 		this.commentField = commentField;
+		this.selectionModel = selectionModel;
 
 		aDataListeners = new ArrayList<ADataChangeListener>();
-		signPanel = new SignPanel();
-		mvPanel = new MVPanel();
-		dimensionPanel = new DimensionPanel();
-		aspectPanel = new AspectPanel();
+		signPanel = new SignPanel(selectionModel);
+		mvPanel = new MVPanel(selectionModel);
+		dimensionPanel = new DimensionPanel(selectionModel);
+		aspectPanel = new AspectPanel(selectionModel);
 
 		aspectPanel.addAspectSelectionListener(signPanel);
-		aspectPanel.addAspectSelectionListener(mvPanel);
 		aspectPanel.addAspectSelectionListener(dimensionPanel);
 
 		JPanel container = new JPanel();
@@ -70,7 +70,6 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		container.add(mvPanel);
 		add(container);
 
-		mvPanel.setPanelEnabled(false);
 		dimensionPanel.setPanelEnabled(false);
 		signPanel.setPanelEnabled(false);
 		aspectPanel.setPanelEnabled(false);
@@ -80,105 +79,15 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		void setPanelEnabled(boolean enabled);
 	}
 
-	private class MVPanel extends JPanel implements ActionListener, AspectSelectionListener {
-		private final Map<String, JRadioButton> buttons;
-		private final ButtonGroup mvButtonGroup;
-		private final JButton clearMVSelection;
-
-		private MVPanel() {
-			buttons = new HashMap<String, JRadioButton>(4);
-			buttons.put(AData.VITAL, new JRadioButton("Витал"));
-			buttons.put(AData.MENTAL, new JRadioButton("Ментал"));
-			buttons.put(AData.SUPEREGO, new JRadioButton("Супер-ИД"));
-			buttons.put(AData.SUPERID, new JRadioButton("Супер-ЭГО"));
-
-			mvButtonGroup = new ButtonGroup();
-			for (Entry<String, JRadioButton> entry : buttons.entrySet()) {
-				String buttonKey = entry.getKey();
-				JRadioButton button = entry.getValue();
-				button.addActionListener(this);
-				button.setActionCommand(buttonKey);
-				mvButtonGroup.add(button);
-			}
-
-			clearMVSelection = new JButton("Очистить");
-			clearMVSelection.addActionListener(this);
-
-			Panel pp1 = new Panel();
-			Panel pp2 = new Panel();
-			Panel pp = new Panel();
-			pp.setMinimumSize(new Dimension(200, 120));
-			setMinimumSize(new Dimension(200, 120));
-			setMaximumSize(new Dimension(200, 120));
-
-			pp1.setLayout(new BoxLayout(pp1, BoxLayout.Y_AXIS));
-			pp2.setLayout(new BoxLayout(pp2, BoxLayout.Y_AXIS));
-			pp1.add(buttons.get(AData.VITAL));
-			pp1.add(buttons.get(AData.MENTAL));
-			pp2.add(buttons.get(AData.SUPERID));
-			pp2.add(buttons.get(AData.SUPEREGO));
-			pp.setLayout(new BoxLayout(pp, BoxLayout.X_AXIS));
-
-			pp.add(pp1);
-			pp.add(pp2);
-
-			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-			add(pp);
-			add(clearMVSelection);
-			setBorder(new TitledBorder("Ментал/Витал"));
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource().equals(clearMVSelection)) {
-				mvButtonGroup.clearSelection();
-				clearMVSelection.setEnabled(false);
-			} else {
-				clearMVSelection.setEnabled(true);
-			}
-			fireADataChanged();
-		}
-
-		@Override
-		public void setPanelEnabled(boolean enabled) {
-			if (!enabled) {
-				mvButtonGroup.clearSelection();
-				clearMVSelection.setEnabled(false);
-			}
-			for (JRadioButton button : buttons.values()) {
-				button.setEnabled(enabled);
-			}
-		}
-
-		public String getMVSelection() {
-			ButtonModel bm = mvButtonGroup.getSelection();
-			if (bm == null) {
-				return null;
-			}
-			return bm.getActionCommand();
-		}
-
-		public void setMV(String mv) {
-			if (mv == null) {
-				mvButtonGroup.clearSelection();
-			} else if (buttons.containsKey(mv)) {
-				mvButtonGroup.setSelected(buttons.get(mv).getModel(), true);
-			}
-
-			boolean enableClearButton = mvButtonGroup.getSelection() != null;
-			clearMVSelection.setEnabled(enableClearButton);
-		}
-	}
-
 	private class SignPanel extends JPanel implements ActionListener, AspectSelectionListener {
 		private JRadioButton plusButton;
 		private JRadioButton minusButton;
 		private ButtonGroup signButtonGroup;
 		private JButton clearSignSelection;
+		private final DocumentSelectionModel selectionModel;
 
-		public SignPanel() {
-			super();
+		private SignPanel(DocumentSelectionModel selectionModel) {
+			this.selectionModel = selectionModel;
 
 			plusButton = new JRadioButton("+");
 			minusButton = new JRadioButton("-");
@@ -268,9 +177,11 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		private ButtonGroup aspectGroup, secondAspectGroup, controlGroup;
 		private JButton clearAspectSelection;
 		private List<AspectSelectionListener> actionListeners = new ArrayList<AspectSelectionListener>();
+		private final DocumentSelectionModel selectionModel;
 
-		public AspectPanel() {
-			super();
+		private AspectPanel(DocumentSelectionModel selectionModel) {
+			this.selectionModel = selectionModel;
+
 			setMinimumSize(new Dimension(200, 270));
 			setMaximumSize(new Dimension(200, 270));
 
@@ -607,9 +518,11 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		private ButtonGroup dimensionGroup;
 		private JButton clearDimensionSelection;
 		private final Logger logger = LoggerFactory.getLogger(DimensionPanel.class);
+		private final DocumentSelectionModel selectionModel;
 
-		public DimensionPanel() {
-			super();
+		private DimensionPanel(DocumentSelectionModel selectionModel) {
+			this.selectionModel = selectionModel;
+
 			d1 = new JRadioButton("Ex");
 			d1.setActionCommand(AData.D1);
 			d2 = new JRadioButton("Nm");

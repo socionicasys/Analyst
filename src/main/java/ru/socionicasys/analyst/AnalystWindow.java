@@ -61,6 +61,9 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		fileChooser = new JFileChooser();
 		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Файлы ." + EXTENSION, EXTENSION));
 
+		DocumentSelectionModel selectionModel = new DocumentSelectionModel();
+		DocumentSelectionConnector selectionConnector = new DocumentSelectionConnector(textPane, selectionModel);
+
 		JScrollPane scrollPane = new JScrollPane(textPane);
 		scrollPane.setPreferredSize(new Dimension(600, 500));
 		scrollPane.setMinimumSize(new Dimension(400, 250));
@@ -108,7 +111,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		splitPaneH.setOneTouchExpandable(true);
 
 		//Add the control panels.
-		ControlsPane controlsPane = new ControlsPane(textPane, documentHolder, commentField);
+		ControlsPane controlsPane = new ControlsPane(textPane, documentHolder, commentField, selectionModel);
 
 		textPane.addCaretListener(controlsPane);
 		controlsPane.addADataListener(controlsPane);
@@ -150,9 +153,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		documentHolder.addUndoableEditListener(undoManager);
 		undoManager.addActiveUndoManagerListener(controlsPane);
 		textPane.addCaretListener(status);
-
-		DocumentSelectionModel selectionModel = new DocumentSelectionModel();
-		DocumentSelectionConnector selectionConnector = new DocumentSelectionConnector(textPane, selectionModel);
 
 		pack();
 	}
