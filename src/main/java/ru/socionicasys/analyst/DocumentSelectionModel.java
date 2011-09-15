@@ -266,7 +266,9 @@ public class DocumentSelectionModel {
 	 * @return новое значение свойства
 	 */
 	private <T> T updateProperty(String propertyName, T oldValue, T newValue) {
-		propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+		if (oldValue != null || newValue != null) {
+			propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+		}
 		return newValue;
 	}
 }
