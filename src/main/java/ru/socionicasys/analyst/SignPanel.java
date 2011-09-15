@@ -9,38 +9,40 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Панель знака («Плюс»/«Минус»).
  */
 public class SignPanel extends JPanel implements PropertyChangeListener, ItemListener {
 	private final DocumentSelectionModel selectionModel;
-	private JRadioButton plusButton;
-	private JRadioButton minusButton;
-	private ButtonGroup signButtonGroup;
-	private JButton clearSignSelection;
+	private final Map<String, JRadioButton> buttons;
+	private final ButtonGroup buttonGroup;
+	private final JButton clearButton;
 
 	public SignPanel(DocumentSelectionModel selectionModel) {
 		this.selectionModel = selectionModel;
 		this.selectionModel.addPropertyChangeListener(this);
 
-		plusButton = new JRadioButton("+");
-		minusButton = new JRadioButton("-");
-		plusButton.addItemListener(this);
-		plusButton.setActionCommand(AData.PLUS);
-		minusButton.addItemListener(this);
-		minusButton.setActionCommand(AData.MINUS);
-		signButtonGroup = new ButtonGroup();
-		signButtonGroup.clearSelection();
-		clearSignSelection = new JButton("Очистить");
+		buttons = new HashMap<String, JRadioButton>(2);
+		buttons.put(AData.PLUS, new JRadioButton("+"));
+		buttons.put(AData.MINUS, new JRadioButton("-"));
 
-		signButtonGroup.add(plusButton);
-		signButtonGroup.add(minusButton);
-		signButtonGroup.clearSelection();
-		clearSignSelection.addActionListener(new ActionListener() {
+		buttonGroup = new ButtonGroup();
+		for (Map.Entry<String, JRadioButton> entry : buttons.entrySet()) {
+			String buttonKey = entry.getKey();
+			JRadioButton button = entry.getValue();
+			button.addItemListener(this);
+			button.setActionCommand(buttonKey);
+			buttonGroup.add(button);
+		}
+
+		clearButton = new JButton("Очистить");
+		clearButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				signButtonGroup.clearSelection();
+				buttonGroup.clearSelection();
 			}
 		});
 
@@ -53,19 +55,21 @@ public class SignPanel extends JPanel implements PropertyChangeListener, ItemLis
 		setMaximumSize(new Dimension(200, 80));
 
 		pp.setLayout(new BoxLayout(pp, BoxLayout.Y_AXIS));
-		pp.add(plusButton);
-		pp.add(minusButton);
+		pp.add(buttons.get(AData.PLUS));
+		pp.add(buttons.get(AData.MINUS));
 
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
 		add(pp);
-		add(clearSignSelection);
+		add(clearButton);
 		setBorder(new TitledBorder("Знак"));
+
+		updateView();
 	}
 
 	@Deprecated
 	public String getSignSelection() {
-		ButtonModel bm = signButtonGroup.getSelection();
+		ButtonModel bm = buttonGroup.getSelection();
 		if (bm == null) {
 			return null;
 		}
@@ -75,17 +79,15 @@ public class SignPanel extends JPanel implements PropertyChangeListener, ItemLis
 	@Deprecated
 	public void setSign(String sign) {
 		if (sign == null) {
-			signButtonGroup.clearSelection();
-		} else if (sign.equals(AData.PLUS)) {
-			signButtonGroup.setSelected(plusButton.getModel(), true);
-		} else if (sign.equals(AData.MINUS)) {
-			signButtonGroup.setSelected(minusButton.getModel(), true);
+			buttonGroup.clearSelection();
+		} else if (buttons.containsKey(sign)) {
+			buttonGroup.setSelected(buttons.get(sign).getModel(), true);
 		}
 
-		if (signButtonGroup.getSelection() != null) {
-			clearSignSelection.setEnabled(true);
+		if (buttonGroup.getSelection() != null) {
+			clearButton.setEnabled(true);
 		} else {
-			clearSignSelection.setEnabled(false);
+			clearButton.setEnabled(false);
 		}
 	}
 
@@ -108,19 +110,16 @@ public class SignPanel extends JPanel implements PropertyChangeListener, ItemLis
 		boolean panelEnabled = !selectionModel.isEmpty() && !selectionModel.isMarkupEmpty();
 		boolean selectionEnabled = panelEnabled && sign != null;
 
-		plusButton.setEnabled(panelEnabled);
-		minusButton.setEnabled(panelEnabled);
-
-		clearSignSelection.setEnabled(selectionEnabled);
+		for (JRadioButton button : buttons.values()) {
+			button.setEnabled(panelEnabled);
+		}
+		clearButton.setEnabled(selectionEnabled);
 
 		if (selectionEnabled) {
-			if (AData.PLUS.equals(sign)) {
-				signButtonGroup.setSelected(plusButton.getModel(), true);
-			} else if (AData.MINUS.equals(sign)) {
-				signButtonGroup.setSelected(minusButton.getModel(), true);
-			}
+			JRadioButton selectedButton = buttons.get(sign);
+			buttonGroup.setSelected(selectedButton.getModel(), true);
 		} else {
-			signButtonGroup.clearSelection();
+			buttonGroup.clearSelection();
 		}
 
 	}
@@ -133,7 +132,7 @@ public class SignPanel extends JPanel implements PropertyChangeListener, ItemLis
 	 */
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		ButtonModel selectedButtonModel = signButtonGroup.getSelection();
+		ButtonModel selectedButtonModel = buttonGroup.getSelection();
 		if (selectedButtonModel == null) {
 			selectionModel.setSign(null);
 		} else {
