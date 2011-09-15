@@ -7,6 +7,7 @@ import java.beans.PropertyChangeSupport;
  * Описывает выделение внутри документа, и возможные отметки в этом выделении.
  * Позволяет другим объектам отслеживать изменения в этом выделении.
  */
+@SuppressWarnings("NestedAssignment")
 public class DocumentSelectionModel {
 	private boolean empty;
 	private boolean initialized;
@@ -41,7 +42,7 @@ public class DocumentSelectionModel {
 	 * @param empty пусто ли выделение
 	 */
 	public void setEmpty(boolean empty) {
-		this.empty = updateProperty("empty", this.empty, empty);
+		updateProperty("empty", this.empty, this.empty = empty);
 	}
 
 	/**
@@ -58,7 +59,7 @@ public class DocumentSelectionModel {
 	 * @param initialized инициализировано ли выделение
 	 */
 	public void setInitialized(boolean initialized) {
-		this.initialized = updateProperty("initialized", this.initialized, initialized);
+		updateProperty("initialized", this.initialized, this.initialized = initialized);
 	}
 
 	/**
@@ -72,7 +73,7 @@ public class DocumentSelectionModel {
 	 * @param startOffset новое значение начальной позиции выделения в документе
 	 */
 	public void setStartOffset(int startOffset) {
-		this.startOffset = updateProperty("startOffset", this.startOffset, startOffset);
+		updateProperty("startOffset", this.startOffset, this.startOffset = startOffset);
 	}
 
 	/**
@@ -86,7 +87,7 @@ public class DocumentSelectionModel {
 	 * @param endOffset новое значение конечной позиции выделения в документе
 	 */
 	public void setEndOffset(int endOffset) {
-		this.endOffset = updateProperty("endOffset", this.endOffset, endOffset);
+		updateProperty("endOffset", this.endOffset, this.endOffset = endOffset);
 	}
 
 	/**
@@ -101,7 +102,7 @@ public class DocumentSelectionModel {
 	 * @param aspect новый основной аспект выделения
 	 */
 	public void setAspect(String aspect) {
-		this.aspect = updateProperty("aspect", this.aspect, aspect);
+		updateProperty("aspect", this.aspect, this.aspect = aspect);
 	}
 
 	/**
@@ -116,7 +117,7 @@ public class DocumentSelectionModel {
 	 * @param secondAspect второй аспект выделения, если отмечены перевод или блок, иначе {@code null}
 	 */
 	public void setSecondAspect(String secondAspect) {
-		this.secondAspect = updateProperty("secondAspect", this.secondAspect, secondAspect);
+		updateProperty("secondAspect", this.secondAspect, this.secondAspect = secondAspect);
 	}
 
 	/**
@@ -130,7 +131,7 @@ public class DocumentSelectionModel {
 	 * @param modifier модификатор выделения — отмечен ли отдельный аспект, блок, или перевод
 	 */
 	public void setModifier(String modifier) {
-		this.modifier = updateProperty("modifier", this.modifier, modifier);
+		updateProperty("modifier", this.modifier, this.modifier = modifier);
 	}
 
 	/**
@@ -144,7 +145,7 @@ public class DocumentSelectionModel {
 	 * @param sign знак основного аспекта в выделении
 	 */
 	public void setSign(String sign) {
-		this.sign = updateProperty("sign", this.sign, sign);
+		updateProperty("sign", this.sign, this.sign = sign);
 	}
 
 	/**
@@ -158,7 +159,7 @@ public class DocumentSelectionModel {
 	 * @param mv индикатор ментала/витала
 	 */
 	public void setMV(String mv) {
-		this.mv = updateProperty("MV", this.mv, mv);
+		updateProperty("MV", this.mv, this.mv = mv);
 	}
 
 	/**
@@ -172,7 +173,7 @@ public class DocumentSelectionModel {
 	 * @param dimension индикатор размерности
 	 */
 	public void setDimension(String dimension) {
-		this.dimension = updateProperty("dimension", this.dimension, dimension);
+		updateProperty("dimension", this.dimension, this.dimension = dimension);
 	}
 
 	/**
@@ -186,7 +187,7 @@ public class DocumentSelectionModel {
 	 * @param comment комментарий к выделению
 	 */
 	public void setComment(String comment) {
-		this.comment = updateProperty("comment", this.comment, comment);
+		updateProperty("comment", this.comment, this.comment = comment);
 	}
 
 	/**
@@ -257,18 +258,16 @@ public class DocumentSelectionModel {
 	 * которое можно присвоить полю.</p>
 	 *
 	 * <p>Использование:
-	 * {@code myProperty = updateProperty("myProperty", myProperty, newPropertyValue)}</p>
+	 * {@code updateProperty("myProperty", myProperty, myProperty = newPropertyValue)}</p>
 	 * 
 	 * @param propertyName имя свойства
 	 * @param oldValue старое значение
 	 * @param newValue новое значение
 	 * @param <T> тип данных свойства
-	 * @return новое значение свойства
 	 */
-	private <T> T updateProperty(String propertyName, T oldValue, T newValue) {
+	private <T> void updateProperty(String propertyName, T oldValue, T newValue) {
 		if (oldValue != null || newValue != null) {
 			propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
 		}
-		return newValue;
 	}
 }

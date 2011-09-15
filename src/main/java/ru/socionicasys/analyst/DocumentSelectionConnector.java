@@ -47,12 +47,7 @@ public class DocumentSelectionConnector implements PropertyChangeListener, Caret
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if ("initialized".equals(evt.getPropertyName())) {
-			Boolean newInitialized = (Boolean) evt.getNewValue();
-			if (!newInitialized) {
-				return;
-			}
-		} else if (!selectionModel.isInitialized()) {
+		if (!selectionModel.isInitialized()) {
 			return;
 		}
 
