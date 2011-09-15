@@ -12,53 +12,47 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Панель размерностей (Ex/Nm/St/Tm/«одно-»/«мало-»/«многомерность»/«индивидуальность»
  */
 public class DimensionPanel extends JPanel implements PropertyChangeListener, ItemListener {
 	private final DocumentSelectionModel selectionModel;
-	private JRadioButton d1, d2, d3, d4, malo, mnogo, odno, indi;
-	private ButtonGroup dimensionGroup;
-	private JButton clearDimensionSelection;
-	private final Logger logger = LoggerFactory.getLogger(DimensionPanel.class);
+	private final Map<String, JRadioButton> buttons;
+	private final ButtonGroup buttonGroup;
+	private final JButton clearButton;
+	private static final Logger logger = LoggerFactory.getLogger(DimensionPanel.class);
 
 	public DimensionPanel(DocumentSelectionModel selectionModel) {
 		this.selectionModel = selectionModel;
 		this.selectionModel.addPropertyChangeListener(this);
 
-		d1 = new JRadioButton("Ex");
-		d1.setActionCommand(AData.D1);
-		d2 = new JRadioButton("Nm");
-		d2.setActionCommand(AData.D2);
-		d3 = new JRadioButton("St");
-		d3.setActionCommand(AData.D3);
-		d4 = new JRadioButton("Tm");
-		d4.setActionCommand(AData.D4);
-		odno = new JRadioButton("Одномерность");
-		odno.setActionCommand(AData.ODNOMERNOST);
-		malo = new JRadioButton("Маломерность");
-		malo.setActionCommand(AData.MALOMERNOST);
-		mnogo = new JRadioButton("Многомерность");
-		mnogo.setActionCommand(AData.MNOGOMERNOST);
-		indi = new JRadioButton("Индивидуальность");
-		indi.setActionCommand(AData.INDIVIDUALNOST);
+		buttons = new HashMap<String, JRadioButton>(8);
+		buttons.put(AData.D1, new JRadioButton("Ex"));
+		buttons.put(AData.D2, new JRadioButton("Nm"));
+		buttons.put(AData.D3, new JRadioButton("St"));
+		buttons.put(AData.D4, new JRadioButton("Tm"));
+		buttons.put(AData.ODNOMERNOST, new JRadioButton("Одномерность"));
+		buttons.put(AData.MALOMERNOST, new JRadioButton("Маломерность"));
+		buttons.put(AData.MNOGOMERNOST, new JRadioButton("Многомерность"));
+		buttons.put(AData.INDIVIDUALNOST, new JRadioButton("Индивидуальность"));
 
-		dimensionGroup = new ButtonGroup();
-		dimensionGroup.add(d1);
-		dimensionGroup.add(d2);
-		dimensionGroup.add(d3);
-		dimensionGroup.add(d4);
-		dimensionGroup.add(odno);
-		dimensionGroup.add(malo);
-		dimensionGroup.add(mnogo);
-		dimensionGroup.add(indi);
-		dimensionGroup.clearSelection();
-		clearDimensionSelection = new JButton("Очистить");
-		clearDimensionSelection.addActionListener(new ActionListener() {
+		buttonGroup = new ButtonGroup();
+		for (Map.Entry<String, JRadioButton> entry : buttons.entrySet()) {
+			String buttonKey = entry.getKey();
+			JRadioButton button = entry.getValue();
+			button.addItemListener(this);
+			button.setActionCommand(buttonKey);
+			buttonGroup.add(button);
+		}
+
+		clearButton = new JButton("Очистить");
+		clearButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dimensionGroup.clearSelection();
+				buttonGroup.clearSelection();
 			}
 		});
 
@@ -73,29 +67,21 @@ public class DimensionPanel extends JPanel implements PropertyChangeListener, It
 		setMinimumSize(new Dimension(200, 170));
 		setMaximumSize(new Dimension(200, 170));
 
-		p1.add(d1);
-		d1.addItemListener(this);
-		p1.add(d2);
-		d2.addItemListener(this);
-		p1.add(d3);
-		d3.addItemListener(this);
-		p1.add(d4);
-		d4.addItemListener(this);
-		p2.add(indi);
-		indi.addItemListener(this);
-		p2.add(odno);
-		odno.addItemListener(this);
-		p2.add(malo);
-		malo.addItemListener(this);
-		p2.add(mnogo);
-		mnogo.addItemListener(this);
+		p1.add(buttons.get(AData.D1));
+		p1.add(buttons.get(AData.D2));
+		p1.add(buttons.get(AData.D3));
+		p1.add(buttons.get(AData.D4));
+		p2.add(buttons.get(AData.INDIVIDUALNOST));
+		p2.add(buttons.get(AData.ODNOMERNOST));
+		p2.add(buttons.get(AData.MALOMERNOST));
+		p2.add(buttons.get(AData.MNOGOMERNOST));
 
 		p.add(p1);
 		p.add(p2);
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		add(p);
-		add(clearDimensionSelection);
+		add(clearButton);
 		setBorder(new TitledBorder("Размерность"));
 
 		updateView();
@@ -103,7 +89,7 @@ public class DimensionPanel extends JPanel implements PropertyChangeListener, It
 
 	@Deprecated
 	public String getDimensionSelection() {
-		ButtonModel bm = dimensionGroup.getSelection();
+		ButtonModel bm = buttonGroup.getSelection();
 		if (bm == null) {
 			return null;
 		}
@@ -113,29 +99,15 @@ public class DimensionPanel extends JPanel implements PropertyChangeListener, It
 	@Deprecated
 	public void setDimension(String dimension) {
 		if (dimension == null) {
-			dimensionGroup.clearSelection();
-		} else if (dimension.equals(AData.D1)) {
-			d1.setSelected(true);
-		} else if (dimension.equals(AData.D2)) {
-			d2.setSelected(true);
-		} else if (dimension.equals(AData.D3)) {
-			d3.setSelected(true);
-		} else if (dimension.equals(AData.D4)) {
-			d4.setSelected(true);
-		} else if (dimension.equals(AData.ODNOMERNOST)) {
-			odno.setSelected(true);
-		} else if (dimension.equals(AData.MALOMERNOST)) {
-			malo.setSelected(true);
-		} else if (dimension.equals(AData.MNOGOMERNOST)) {
-			mnogo.setSelected(true);
-		} else if (dimension.equals(AData.INDIVIDUALNOST)) {
-			indi.setSelected(true);
+			buttonGroup.clearSelection();
+		} else if (buttons.containsKey(dimension)) {
+			buttonGroup.setSelected(buttons.get(dimension).getModel(), true);
 		}
 
-		if (dimensionGroup.getSelection() != null) {
-			clearDimensionSelection.setEnabled(true);
+		if (buttonGroup.getSelection() != null) {
+			clearButton.setEnabled(true);
 		} else {
-			clearDimensionSelection.setEnabled(false);
+			clearButton.setEnabled(false);
 		}
 	}
 
@@ -158,36 +130,16 @@ public class DimensionPanel extends JPanel implements PropertyChangeListener, It
 		boolean panelEnabled = !selectionModel.isEmpty() && !selectionModel.isMarkupEmpty();
 		boolean selectionEnabled = panelEnabled && dimension != null;
 
-		d1.setEnabled(panelEnabled);
-		d2.setEnabled(panelEnabled);
-		d3.setEnabled(panelEnabled);
-		d4.setEnabled(panelEnabled);
-		odno.setEnabled(panelEnabled);
-		mnogo.setEnabled(panelEnabled);
-		malo.setEnabled(panelEnabled);
-		indi.setEnabled(panelEnabled);
-		clearDimensionSelection.setEnabled(selectionEnabled);
+		for (JRadioButton button : buttons.values()) {
+			button.setEnabled(panelEnabled);
+		}
+		clearButton.setEnabled(selectionEnabled);
 
 		if (selectionEnabled) {
-			if (dimension.equals(AData.D1)) {
-				dimensionGroup.setSelected(d1.getModel(), true);
-			} else if (dimension.equals(AData.D2)) {
-				dimensionGroup.setSelected(d2.getModel(), true);
-			} else if (dimension.equals(AData.D3)) {
-				dimensionGroup.setSelected(d3.getModel(), true);
-			} else if (dimension.equals(AData.D4)) {
-				dimensionGroup.setSelected(d4.getModel(), true);
-			} else if (dimension.equals(AData.ODNOMERNOST)) {
-				dimensionGroup.setSelected(odno.getModel(), true);
-			} else if (dimension.equals(AData.MALOMERNOST)) {
-				dimensionGroup.setSelected(malo.getModel(), true);
-			} else if (dimension.equals(AData.MNOGOMERNOST)) {
-				dimensionGroup.setSelected(mnogo.getModel(), true);
-			} else if (dimension.equals(AData.INDIVIDUALNOST)) {
-				dimensionGroup.setSelected(indi.getModel(), true);
-			}
+			JRadioButton selectedButton = buttons.get(dimension);
+			buttonGroup.setSelected(selectedButton.getModel(), true);
 		} else {
-			dimensionGroup.clearSelection();
+			buttonGroup.clearSelection();
 		}
 	}
 
@@ -199,7 +151,7 @@ public class DimensionPanel extends JPanel implements PropertyChangeListener, It
 	 */
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		ButtonModel selectedButtonModel = dimensionGroup.getSelection();
+		ButtonModel selectedButtonModel = buttonGroup.getSelection();
 		if (selectedButtonModel == null) {
 			selectionModel.setDimension(null);
 		} else {
