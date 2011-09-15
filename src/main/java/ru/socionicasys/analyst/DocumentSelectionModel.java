@@ -8,7 +8,7 @@ import java.beans.PropertyChangeSupport;
  * Позволяет другим объектам отслеживать изменения в этом выделении.
  */
 public class DocumentSelectionModel {
-	private boolean enabled;
+	private boolean empty;
 	private boolean initialized;
 	private int startOffset;
 	private int endOffset;
@@ -27,21 +27,21 @@ public class DocumentSelectionModel {
 	 */
 	public DocumentSelectionModel() {
 		propertyChangeSupport = new PropertyChangeSupport(this);
+		empty = true;
 	}
 
 	/**
-	 * @return активно (не пусто) ли выделение
+	 * @return пусто ли выделение
 	 */
-	public boolean isEnabled() {
-		return enabled;
+	public boolean isEmpty() {
+		return empty;
 	}
 
 	/**
-	 * Устанавливает флаг активности выделения.
-	 * @param enabled активно ли выделение
+	 * @param empty пусто ли выделение
 	 */
-	public void setEnabled(boolean enabled) {
-		this.enabled = updateProperty("enabled", this.enabled, enabled);
+	public void setEmpty(boolean empty) {
+		this.empty = updateProperty("empty", this.empty, empty);
 	}
 
 	/**
