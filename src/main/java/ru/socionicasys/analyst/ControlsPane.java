@@ -54,7 +54,6 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		dimensionPanel = new DimensionPanel(selectionModel);
 		aspectPanel = new AspectPanel(selectionModel);
 
-		aspectPanel.addAspectSelectionListener(signPanel);
 		aspectPanel.addAspectSelectionListener(dimensionPanel);
 
 		JPanel container = new JPanel();
@@ -71,102 +70,11 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		add(container);
 
 		dimensionPanel.setPanelEnabled(false);
-		signPanel.setPanelEnabled(false);
 		aspectPanel.setPanelEnabled(false);
 	}
 
 	private interface AspectSelectionListener {
 		void setPanelEnabled(boolean enabled);
-	}
-
-	private class SignPanel extends JPanel implements ActionListener, AspectSelectionListener {
-		private JRadioButton plusButton;
-		private JRadioButton minusButton;
-		private ButtonGroup signButtonGroup;
-		private JButton clearSignSelection;
-		private final DocumentSelectionModel selectionModel;
-
-		private SignPanel(DocumentSelectionModel selectionModel) {
-			this.selectionModel = selectionModel;
-
-			plusButton = new JRadioButton("+");
-			minusButton = new JRadioButton("-");
-			plusButton.addActionListener(this);
-			plusButton.setActionCommand(AData.PLUS);
-			minusButton.addActionListener(this);
-			minusButton.setActionCommand(AData.MINUS);
-			signButtonGroup = new ButtonGroup();
-			signButtonGroup.clearSelection();
-			clearSignSelection = new JButton("Очистить");
-
-			signButtonGroup.add(plusButton);
-			signButtonGroup.add(minusButton);
-			signButtonGroup.clearSelection();
-			clearSignSelection.addActionListener(this);
-
-			Panel pp = new Panel();
-			pp.setMaximumSize(new Dimension(100, 50));
-			pp.setPreferredSize(new Dimension(100, 50));
-
-			setMinimumSize(new Dimension(200, 80));
-			setPreferredSize(new Dimension(200, 80));
-			setMaximumSize(new Dimension(200, 80));
-
-			pp.setLayout(new BoxLayout(pp, BoxLayout.Y_AXIS));
-			pp.add(plusButton);
-			pp.add(minusButton);
-
-			setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-
-			add(pp);
-			add(clearSignSelection);
-			setBorder(new TitledBorder("Знак"));
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource().equals(clearSignSelection)) {
-				signButtonGroup.clearSelection();
-				clearSignSelection.setEnabled(false);
-			} else {
-				clearSignSelection.setEnabled(true);
-			}
-			fireADataChanged();
-		}
-
-		@Override
-		public void setPanelEnabled(boolean enabled) {
-			if (!enabled) {
-				signButtonGroup.clearSelection();
-				clearSignSelection.setEnabled(false);
-			}
-			plusButton.setEnabled(enabled);
-			minusButton.setEnabled(enabled);
-		}
-
-		public String getSignSelection() {
-			ButtonModel bm = signButtonGroup.getSelection();
-			if (bm == null) {
-				return null;
-			}
-			return bm.getActionCommand();
-		}
-
-		public void setSign(String sign) {
-			if (sign == null) {
-				signButtonGroup.clearSelection();
-			} else if (sign.equals(AData.PLUS)) {
-				signButtonGroup.setSelected(plusButton.getModel(), true);
-			} else if (sign.equals(AData.MINUS)) {
-				signButtonGroup.setSelected(minusButton.getModel(), true);
-			}
-
-			if (signButtonGroup.getSelection() != null) {
-				clearSignSelection.setEnabled(true);
-			} else {
-				clearSignSelection.setEnabled(false);
-			}
-		}
 	}
 
 	private class AspectPanel extends JPanel implements ItemListener {
