@@ -70,10 +70,6 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		aspectPanel.setPanelEnabled(false);
 	}
 
-	private interface AspectSelectionListener {
-		void setPanelEnabled(boolean enabled);
-	}
-
 	private class AspectPanel extends JPanel implements ItemListener {
 		private Map<Aspect, JRadioButton> primaryAspectButtons;
 		private Map<Aspect, JRadioButton> secondaryAspectButtons;
@@ -81,7 +77,6 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		private JRadioButton aspect, block, jump;
 		private ButtonGroup aspectGroup, secondAspectGroup, controlGroup;
 		private JButton clearAspectSelection;
-		private List<AspectSelectionListener> actionListeners = new ArrayList<AspectSelectionListener>();
 		private final DocumentSelectionModel selectionModel;
 
 		private AspectPanel(DocumentSelectionModel selectionModel) {
@@ -234,31 +229,10 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 					setSecondAspectGroupEnabled(false);
 					controlGroup.setSelected(aspect.getModel(), true);
 					clearAspectSelection.setEnabled(false);
-					informListeners(false);
 					updateSelections();
 				}
 			});
 			clearAspectSelection.setEnabled(false);
-		}
-
-		public void addAspectSelectionListener(AspectSelectionListener asl) {
-			actionListeners.add(asl);
-			informListeners(isAspectSelected());
-		}
-
-		private void informListeners(boolean selected) {
-			for (AspectSelectionListener actionListener : actionListeners) {
-				actionListener.setPanelEnabled(selected);
-			}
-
-			if (selected) {
-				if (!commentField.isEditable()) {
-					commentField.setEditable(true);
-				}
-			} else {
-				commentField.setText("");
-				commentField.setEditable(false);
-			}
 		}
 
 		private void updateSelections() {
@@ -318,7 +292,6 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 				setSecondAspectGroupEnabled(false);
 				setControlGroupEnabled(false);
 				clearAspectSelection.setEnabled(false);
-				informListeners(enabled);
 			} else {
 				setControlGroupEnabled(true);
 				controlGroup.setSelected(aspect.getModel(), true);
@@ -363,9 +336,7 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		}
 
 		@Override
-		public void itemStateChanged(ItemEvent arg0) {
-			//извещение от поля комментария
-			informListeners(isAspectSelected());
+		public void itemStateChanged(ItemEvent e) {
 		}
 
 		public void setAspect(AData data) {
@@ -413,7 +384,6 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 				}
 			}
 
-			informListeners(isAspectSelected());
 			clearAspectSelection.setEnabled(isAspectSelected());
 		}
 	}
