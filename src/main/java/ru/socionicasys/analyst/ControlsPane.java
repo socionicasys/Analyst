@@ -54,8 +54,6 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		dimensionPanel = new DimensionPanel(selectionModel);
 		aspectPanel = new AspectPanel(selectionModel);
 
-		aspectPanel.addAspectSelectionListener(dimensionPanel);
-
 		JPanel container = new JPanel();
 		container.setMinimumSize(new Dimension(200, 500));
 		JScrollPane scrl = new JScrollPane(container);
@@ -69,7 +67,6 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 		container.add(mvPanel);
 		add(container);
 
-		dimensionPanel.setPanelEnabled(false);
 		aspectPanel.setPanelEnabled(false);
 	}
 
@@ -418,148 +415,6 @@ public class ControlsPane extends JToolBar implements CaretListener, ADataChange
 
 			informListeners(isAspectSelected());
 			clearAspectSelection.setEnabled(isAspectSelected());
-		}
-	}
-
-	private class DimensionPanel extends JPanel implements ActionListener, AspectSelectionListener {
-		private JRadioButton d1, d2, d3, d4, malo, mnogo, odno, indi;
-		private ButtonGroup dimensionGroup;
-		private JButton clearDimensionSelection;
-		private final Logger logger = LoggerFactory.getLogger(DimensionPanel.class);
-		private final DocumentSelectionModel selectionModel;
-
-		private DimensionPanel(DocumentSelectionModel selectionModel) {
-			this.selectionModel = selectionModel;
-
-			d1 = new JRadioButton("Ex");
-			d1.setActionCommand(AData.D1);
-			d2 = new JRadioButton("Nm");
-			d2.setActionCommand(AData.D2);
-			d3 = new JRadioButton("St");
-			d3.setActionCommand(AData.D3);
-			d4 = new JRadioButton("Tm");
-			d4.setActionCommand(AData.D4);
-			odno = new JRadioButton("Одномерность");
-			odno.setActionCommand(AData.ODNOMERNOST);
-			malo = new JRadioButton("Маломерность");
-			malo.setActionCommand(AData.MALOMERNOST);
-			mnogo = new JRadioButton("Многомерность");
-			mnogo.setActionCommand(AData.MNOGOMERNOST);
-			indi = new JRadioButton("Индивидуальность");
-			indi.setActionCommand(AData.INDIVIDUALNOST);
-
-			dimensionGroup = new ButtonGroup();
-			dimensionGroup.add(d1);
-			dimensionGroup.add(d2);
-			dimensionGroup.add(d3);
-			dimensionGroup.add(d4);
-			dimensionGroup.add(odno);
-			dimensionGroup.add(malo);
-			dimensionGroup.add(mnogo);
-			dimensionGroup.add(indi);
-			dimensionGroup.clearSelection();
-			clearDimensionSelection = new JButton("Очистить");
-			clearDimensionSelection.addActionListener(this);
-
-			Panel p = new Panel();
-			Panel p1 = new Panel();
-			Panel p2 = new Panel();
-
-			p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
-			p1.setLayout(new BoxLayout(p1, BoxLayout.Y_AXIS));
-			p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
-
-			setMinimumSize(new Dimension(200, 170));
-			setMaximumSize(new Dimension(200, 170));
-
-			p1.add(d1);
-			d1.addActionListener(this);
-			p1.add(d2);
-			d2.addActionListener(this);
-			p1.add(d3);
-			d3.addActionListener(this);
-			p1.add(d4);
-			d4.addActionListener(this);
-			p2.add(indi);
-			indi.addActionListener(this);
-			p2.add(odno);
-			odno.addActionListener(this);
-			p2.add(malo);
-			malo.addActionListener(this);
-			p2.add(mnogo);
-			mnogo.addActionListener(this);
-
-			p.add(p1);
-			p.add(p2);
-
-			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-			add(p);
-			add(clearDimensionSelection);
-			setBorder(new TitledBorder("Размерность"));
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource().equals(clearDimensionSelection)) {
-				dimensionGroup.clearSelection();
-				clearDimensionSelection.setEnabled(false);
-			} else {
-				clearDimensionSelection.setEnabled(true);
-			}
-			fireADataChanged();
-		}
-
-		@Override
-		public void setPanelEnabled(boolean enabled) {
-			if (!enabled) {
-				dimensionGroup.clearSelection();
-				clearDimensionSelection.setEnabled(false);
-			}
-
-			d1.setEnabled(enabled);
-			d2.setEnabled(enabled);
-			d3.setEnabled(enabled);
-			d4.setEnabled(enabled);
-			odno.setEnabled(enabled);
-			mnogo.setEnabled(enabled);
-			malo.setEnabled(enabled);
-			indi.setEnabled(enabled);
-		}
-
-		public String getDimensionSelection() {
-			ButtonModel bm = dimensionGroup.getSelection();
-			if (bm == null) {
-				return null;
-			}
-			return bm.getActionCommand();
-		}
-
-		public void setDimension(String dimension) {
-			if (dimension == null) {
-				dimensionGroup.clearSelection();
-			} else if (dimension.equals(AData.D1)) {
-				d1.setSelected(true);
-			} else if (dimension.equals(AData.D2)) {
-				d2.setSelected(true);
-			} else if (dimension.equals(AData.D3)) {
-				d3.setSelected(true);
-			} else if (dimension.equals(AData.D4)) {
-				d4.setSelected(true);
-			} else if (dimension.equals(AData.ODNOMERNOST)) {
-				odno.setSelected(true);
-			} else if (dimension.equals(AData.MALOMERNOST)) {
-				malo.setSelected(true);
-			} else if (dimension.equals(AData.MNOGOMERNOST)) {
-				mnogo.setSelected(true);
-			} else if (dimension.equals(AData.INDIVIDUALNOST)) {
-				indi.setSelected(true);
-			}
-
-			if (dimensionGroup.getSelection() != null) {
-				clearDimensionSelection.setEnabled(true);
-			} else {
-				clearDimensionSelection.setEnabled(false);
-			}
 		}
 	}
 
