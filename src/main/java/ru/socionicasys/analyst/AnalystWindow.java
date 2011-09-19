@@ -15,7 +15,6 @@ import java.util.Dictionary;
 import java.util.concurrent.ExecutionException;
 import javax.swing.*;
 import javax.swing.SwingWorker.StateValue;
-import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.*;
 import javax.swing.text.JTextComponent.KeyBinding;
@@ -88,7 +87,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 		//Create the status area.
 		JPanel statusPane = new JPanel(new BorderLayout());
-		status = new StatusLabel(selectionModel);
+		status = new StatusLabel(selectionModel, documentHolder);
 		JProgressBar progress = new JProgressBar(0, 100);
 		progress.setSize(new Dimension(300, 30));
 
@@ -237,52 +236,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		menu.add(exit);
 
 		return menu;
-	}
-
-	/**
-	 * Строка состояния, отображающая подсказки и информацю о текущем выделении в документе.
-	 */
-	private class StatusLabel extends JLabel implements PropertyChangeListener {
-		/**
-		 * Модель выделения, к которой привязана строка состояния.
-		 */
-		private final DocumentSelectionModel selectionModel;
-
-		/**
-		 * Инициализирует строку состояния, связанную с определенной моделью выделения в документе.
-		 *
-		 * @param selectionModel модель выделения, состояние которой будет отображать строка
-		 */
-		private StatusLabel(DocumentSelectionModel selectionModel) {
-			this.selectionModel = selectionModel;
-			this.selectionModel.addPropertyChangeListener(this);
-			updateView();
-		}
-
-		/**
-		 * Отображает изменение свойств выделения, к которой привязана строка состояния, в текст строки.
-		 *
-		 * @param evt параметр не используется
-		 */
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			updateView();
-		}
-
-		/**
-		 * Обновляет текст строки в зависимости от текущего выделения.
-		 */
-		private void updateView() {
-			if (documentHolder.getModel().getLength() == 0) {
-				setText("Откройте сохраненный документ или вставтьте анализируемый текст в центральное окно");
-			} else if (selectionModel.isEmpty()) {
-				setText("Выделите область текста чтобы начать анализ...");
-			} else if (selectionModel.isMarkupEmpty()) {
-				setText("Выберите аспект  и параметры обработки, используя панель справа...");
-			} else {
-				setText(selectionModel.getMarkupData().toString());
-			}
-		}
 	}
 
 	//Add a couple of emacs key bindings for navigation.
