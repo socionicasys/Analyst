@@ -1,5 +1,8 @@
 package ru.socionicasys.analyst;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -23,12 +26,16 @@ public class DocumentSelectionModel {
 
 	private final PropertyChangeSupport propertyChangeSupport;
 
+	private static final Logger logger = LoggerFactory.getLogger(DocumentSelectionModel.class);
+
 	/**
 	 * Инициализирует пустую модель выделения.
 	 */
 	public DocumentSelectionModel() {
+		logger.trace("DocumentSelectionModel(): entering");
 		propertyChangeSupport = new PropertyChangeSupport(this);
 		empty = true;
+		logger.trace("DocumentSelectionModel(): leaving");
 	}
 
 	/**
@@ -221,6 +228,7 @@ public class DocumentSelectionModel {
 	 * @param markupData объект с данными для заполнения выделения. {@code null} очищает выделение.
 	 */
 	public void setMarkupData(AData markupData) {
+		logger.trace("setMarkupData({}): entering", markupData);
 		setInitialized(false);
 		if (markupData == null) {
 			setAspect(null);
@@ -234,6 +242,7 @@ public class DocumentSelectionModel {
 			setComment(markupData.getComment());
 		}
 		setInitialized(true);
+		logger.trace("setMarkupData(): leaving");
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -266,8 +275,10 @@ public class DocumentSelectionModel {
 	 * @param <T> тип данных свойства
 	 */
 	private <T> void updateProperty(String propertyName, T oldValue, T newValue) {
+		logger.trace("updateProperty({}, {}, {}): entering", new Object[]{propertyName, oldValue, newValue});
 		if (oldValue != null || newValue != null) {
 			propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
 		}
+		logger.trace("updateProperty({}, {}, {}): leaving", new Object[]{propertyName, oldValue, newValue});
 	}
 }
