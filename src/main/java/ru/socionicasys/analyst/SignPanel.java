@@ -21,6 +21,13 @@ public class SignPanel extends JPanel implements PropertyChangeListener, ItemLis
 	private final ButtonGroup buttonGroup;
 	private final JButton clearButton;
 
+	/**
+	 * Служит для синхронизации обновлений модель->представление и представление->модель.
+	 * Если это поле равно {@code false}, данные в нем находятся в процессе заполнения, и
+	 * не должны синхронизироваться обратно в модель.
+	 */
+	private boolean viewInitialized;
+
 	public SignPanel(DocumentSelectionModel selectionModel) {
 		this.selectionModel = selectionModel;
 		this.selectionModel.addPropertyChangeListener(this);
@@ -65,6 +72,7 @@ public class SignPanel extends JPanel implements PropertyChangeListener, ItemLis
 		setBorder(new TitledBorder("Знак"));
 
 		updateView();
+		viewInitialized = true;
 	}
 
 	@Deprecated
@@ -99,7 +107,9 @@ public class SignPanel extends JPanel implements PropertyChangeListener, ItemLis
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		viewInitialized = false;
 		updateView();
+		viewInitialized = true;
 	}
 
 	/**
@@ -132,6 +142,10 @@ public class SignPanel extends JPanel implements PropertyChangeListener, ItemLis
 	 */
 	@Override
 	public void itemStateChanged(ItemEvent e) {
+		if (!viewInitialized) {
+			return;
+		}
+		
 		ButtonModel selectedButtonModel = buttonGroup.getSelection();
 		if (selectedButtonModel == null) {
 			selectionModel.setSign(null);

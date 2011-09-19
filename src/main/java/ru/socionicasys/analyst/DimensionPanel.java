@@ -25,6 +25,13 @@ public class DimensionPanel extends JPanel implements PropertyChangeListener, It
 	private final JButton clearButton;
 	private static final Logger logger = LoggerFactory.getLogger(DimensionPanel.class);
 
+	/**
+	 * Служит для синхронизации обновлений модель->представление и представление->модель.
+	 * Если это поле равно {@code false}, данные в нем находятся в процессе заполнения, и
+	 * не должны синхронизироваться обратно в модель.
+	 */
+	private boolean viewInitialized;
+
 	public DimensionPanel(DocumentSelectionModel selectionModel) {
 		this.selectionModel = selectionModel;
 		this.selectionModel.addPropertyChangeListener(this);
@@ -85,6 +92,7 @@ public class DimensionPanel extends JPanel implements PropertyChangeListener, It
 		setBorder(new TitledBorder("Размерность"));
 
 		updateView();
+		viewInitialized = true;
 	}
 
 	@Deprecated
@@ -119,7 +127,9 @@ public class DimensionPanel extends JPanel implements PropertyChangeListener, It
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		viewInitialized = false;
 		updateView();
+		viewInitialized = true;
 	}
 
 	/**
@@ -151,6 +161,10 @@ public class DimensionPanel extends JPanel implements PropertyChangeListener, It
 	 */
 	@Override
 	public void itemStateChanged(ItemEvent e) {
+		if (!viewInitialized) {
+			return;
+		}
+		
 		ButtonModel selectedButtonModel = buttonGroup.getSelection();
 		if (selectedButtonModel == null) {
 			selectionModel.setDimension(null);

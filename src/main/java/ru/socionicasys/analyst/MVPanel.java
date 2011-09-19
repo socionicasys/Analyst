@@ -21,6 +21,13 @@ public class MVPanel extends JPanel implements PropertyChangeListener, ItemListe
 	private final ButtonGroup buttonGroup;
 	private final JButton clearButton;
 
+	/**
+	 * Служит для синхронизации обновлений модель->представление и представление->модель.
+	 * Если это поле равно {@code false}, данные в нем находятся в процессе заполнения, и
+	 * не должны синхронизироваться обратно в модель.
+	 */
+	private boolean viewInitialized;
+
 	public MVPanel(DocumentSelectionModel selectionModel) {
 		this.selectionModel = selectionModel;
 		this.selectionModel.addPropertyChangeListener(this);
@@ -73,6 +80,7 @@ public class MVPanel extends JPanel implements PropertyChangeListener, ItemListe
 		setBorder(new TitledBorder("Ментал/Витал"));
 
 		updateView();
+		viewInitialized = true;
 	}
 
 	@Deprecated
@@ -104,7 +112,9 @@ public class MVPanel extends JPanel implements PropertyChangeListener, ItemListe
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		viewInitialized = false;
 		updateView();
+		viewInitialized = true;
 	}
 
 	/**
@@ -136,6 +146,10 @@ public class MVPanel extends JPanel implements PropertyChangeListener, ItemListe
 	 */
 	@Override
 	public void itemStateChanged(ItemEvent e) {
+		if (!viewInitialized) {
+			return;
+		}
+		
 		ButtonModel selectedButtonModel = buttonGroup.getSelection();
 		if (selectedButtonModel == null) {
 			selectionModel.setMV(null);
