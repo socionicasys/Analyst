@@ -88,8 +88,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 		//Create the status area.
 		JPanel statusPane = new JPanel(new BorderLayout());
-		status =
-			new StatusLabel("Откройте сохраненный документ или вставтьте анализируемый текст в центральное окно");
+		status = new StatusLabel(selectionModel);
 		JProgressBar progress = new JProgressBar(0, 100);
 		progress.setSize(new Dimension(300, 30));
 
@@ -114,7 +113,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		ControlsPane controlsPane = new ControlsPane(textPane, documentHolder, commentField, selectionModel);
 
 		controlsPane.addADataListener(controlsPane);
-		controlsPane.addADataListener(status);
 		navigateTree.addTreeSelectionListener(controlsPane);
 		analysisTree.addTreeSelectionListener(controlsPane);
 		commentField.getCaret().addChangeListener(controlsPane);
@@ -151,7 +149,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		//Start watching for undoable edits and caret changes.
 		documentHolder.addUndoableEditListener(undoManager);
 		undoManager.addActiveUndoManagerListener(controlsPane);
-		textPane.addCaretListener(status);
 
 		pack();
 	}
@@ -242,35 +239,48 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		return menu;
 	}
 
-	//This listens for and reports caret movements.
-	private class StatusLabel extends JLabel implements CaretListener, ADataChangeListener {
-		public StatusLabel(String label) {
-			super(label);
+	/**
+	 * Строка состояния, отображающая подсказки и информацю о текущем выделении в документе.
+	 */
+	private class StatusLabel extends JLabel implements PropertyChangeListener {
+		/**
+		 * Модель выделения, к которой привязана строка состояния.
+		 */
+		private final DocumentSelectionModel selectionModel;
+
+		/**
+		 * Инициализирует строку состояния, связанную с определенной моделью выделения в документе.
+		 *
+		 * @param selectionModel модель выделения, состояние которой будет отображать строка
+		 */
+		private StatusLabel(DocumentSelectionModel selectionModel) {
+			this.selectionModel = selectionModel;
+			this.selectionModel.addPropertyChangeListener(this);
+			updateView();
 		}
 
-		//Might not be invoked from the event dispatch thread.
+		/**
+		 * Отображает изменение свойств выделения, к которой привязана строка состояния, в текст строки.
+		 *
+		 * @param evt параметр не используется
+		 */
 		@Override
-		public void caretUpdate(CaretEvent e) {
-			ADocument document = documentHolder.getModel();
-			ASection section = document.getASectionThatStartsAt(e.getDot());
-			if (textPane.getText().length() <= 0) {
+		public void propertyChange(PropertyChangeEvent evt) {
+			updateView();
+		}
+
+		/**
+		 * Обновляет текст строки в зависимости от текущего выделения.
+		 */
+		private void updateView() {
+			if (documentHolder.getModel().getLength() == 0) {
 				setText("Откройте сохраненный документ или вставтьте анализируемый текст в центральное окно");
-			} else if (section != null) {
-				setText(document.getAData(section).toString());
-			} else if (e.getDot() == e.getMark()) {
+			} else if (selectionModel.isEmpty()) {
 				setText("Выделите область текста чтобы начать анализ...");
-			} else {
+			} else if (selectionModel.isMarkupEmpty()) {
 				setText("Выберите аспект  и параметры обработки, используя панель справа...");
-			}
-		}
-
-		@Override
-		public void aDataChanged(int start, int end, AData data) {
-			if (data != null) {
-				setText(data.toString());
-			}
-			else {
-				setText(" ");
+			} else {
+				setText(selectionModel.getMarkupData().toString());
 			}
 		}
 	}
