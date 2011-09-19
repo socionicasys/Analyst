@@ -26,6 +26,13 @@ public class AspectPanel extends JPanel implements PropertyChangeListener, ItemL
 	private JButton clearAspectSelection;
 	private final DocumentSelectionModel selectionModel;
 
+	/**
+	 * Служит для синхронизации обновлений модель->представление и представление->модель.
+	 * Если это поле равно {@code false}, данные в нем находятся в процессе заполнения, и
+	 * не должны синхронизироваться обратно в модель.
+	 */
+	private boolean viewInitialized;
+
 	public AspectPanel(DocumentSelectionModel selectionModel) {
 		this.selectionModel = selectionModel;
 		this.selectionModel.addPropertyChangeListener(this);
@@ -131,6 +138,7 @@ public class AspectPanel extends JPanel implements PropertyChangeListener, ItemL
 		});
 
 		updateView();
+		viewInitialized = true;
 	}
 
 	private void setSecondAspectForBlock(String firstAspectName) {
@@ -238,7 +246,9 @@ public class AspectPanel extends JPanel implements PropertyChangeListener, ItemL
 	 */
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		viewInitialized = false;
 		updateView();
+		viewInitialized = true;
 	}
 
 	/**
@@ -313,6 +323,10 @@ public class AspectPanel extends JPanel implements PropertyChangeListener, ItemL
 	 */
 	@Override
 	public void itemStateChanged(ItemEvent e) {
+		if (!viewInitialized) {
+			return;
+		}
+		
 		selectionModel.setInitialized(false);
 
 		ButtonModel aspectGroupSelection = aspectGroup.getSelection();
