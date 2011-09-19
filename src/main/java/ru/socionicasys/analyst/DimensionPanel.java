@@ -8,33 +8,20 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Панель размерностей (Ex/Nm/St/Tm/«одно-»/«мало-»/«многомерность»/«индивидуальность»
  */
-public class DimensionPanel extends JPanel implements PropertyChangeListener, ItemListener {
-	private final DocumentSelectionModel selectionModel;
+public final class DimensionPanel extends ActivePanel {
 	private final Map<String, JRadioButton> buttons;
 	private final ButtonGroup buttonGroup;
 	private final JButton clearButton;
 	private static final Logger logger = LoggerFactory.getLogger(DimensionPanel.class);
 
-	/**
-	 * Служит для синхронизации обновлений модель->представление и представление->модель.
-	 * Если это поле равно {@code false}, данные в нем находятся в процессе заполнения, и
-	 * не должны синхронизироваться обратно в модель.
-	 */
-	private boolean viewInitialized;
-
 	public DimensionPanel(DocumentSelectionModel selectionModel) {
-		this.selectionModel = selectionModel;
-		this.selectionModel.addPropertyChangeListener(this);
+		super(selectionModel);
 
 		buttons = new HashMap<String, JRadioButton>(8);
 		buttons.put(AData.D1, new JRadioButton("Ex"));
@@ -92,7 +79,6 @@ public class DimensionPanel extends JPanel implements PropertyChangeListener, It
 		setBorder(new TitledBorder("Размерность"));
 
 		updateView();
-		viewInitialized = true;
 	}
 
 	@Deprecated
@@ -120,22 +106,10 @@ public class DimensionPanel extends JPanel implements PropertyChangeListener, It
 	}
 
 	/**
-	 * Обрабатывает изменение свойств в модели выделения, к которой привязана эта панель.
-	 * Включает/отключает панель и меняет состояние элементов при изменениях в выделении.
-	 *
-	 * @param evt параметр не используется
-	 */
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		viewInitialized = false;
-		updateView();
-		viewInitialized = true;
-	}
-
-	/**
 	 * Обновляет элементы управления панели в соответствии со связанными данными из модели выделения.
 	 */
-	private void updateView() {
+	@Override
+	protected void updateView() {
 		String dimension = selectionModel.getDimension();
 		boolean panelEnabled = !selectionModel.isEmpty() && !selectionModel.isMarkupEmpty();
 		boolean selectionEnabled = panelEnabled && dimension != null;
@@ -154,17 +128,10 @@ public class DimensionPanel extends JPanel implements PropertyChangeListener, It
 	}
 
 	/**
-	 * Обрабатывает изменение в состоянии этой панели и отображает их на модель выделения,
-	 * к которой панель привязана.
-	 *
-	 * @param e параметр не используется
+	 * Обновляет модель в соответствии с измененными в панели данными.
 	 */
 	@Override
-	public void itemStateChanged(ItemEvent e) {
-		if (!viewInitialized) {
-			return;
-		}
-		
+	protected void updateModel() {
 		ButtonModel selectedButtonModel = buttonGroup.getSelection();
 		if (selectedButtonModel == null) {
 			selectionModel.setDimension(null);

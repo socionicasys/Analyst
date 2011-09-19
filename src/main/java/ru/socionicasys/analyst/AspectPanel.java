@@ -7,35 +7,22 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Панель выбора аспекта/блока/перевода.
  */
-public class AspectPanel extends JPanel implements PropertyChangeListener, ItemListener {
+public final class AspectPanel extends ActivePanel {
 	private Map<Aspect, JRadioButton> primaryAspectButtons;
 	private Map<Aspect, JRadioButton> secondaryAspectButtons;
 	private JRadioButton d;
 	private JRadioButton aspect, block, jump;
 	private ButtonGroup aspectGroup, secondAspectGroup, controlGroup;
 	private JButton clearAspectSelection;
-	private final DocumentSelectionModel selectionModel;
-
-	/**
-	 * Служит для синхронизации обновлений модель->представление и представление->модель.
-	 * Если это поле равно {@code false}, данные в нем находятся в процессе заполнения, и
-	 * не должны синхронизироваться обратно в модель.
-	 */
-	private boolean viewInitialized;
 
 	public AspectPanel(DocumentSelectionModel selectionModel) {
-		this.selectionModel = selectionModel;
-		this.selectionModel.addPropertyChangeListener(this);
+		super(selectionModel);
 
 		setMinimumSize(new Dimension(200, 270));
 		setMaximumSize(new Dimension(200, 270));
@@ -138,7 +125,6 @@ public class AspectPanel extends JPanel implements PropertyChangeListener, ItemL
 		});
 
 		updateView();
-		viewInitialized = true;
 	}
 
 	private void setSecondAspectForBlock(String firstAspectName) {
@@ -239,26 +225,10 @@ public class AspectPanel extends JPanel implements PropertyChangeListener, ItemL
 	}
 
 	/**
-	 * Обрабатывает изменение свойств в модели выделения, к которой привязана эта панель.
-	 * Включает/отключает панель и меняет состояние элементов при изменениях в выделении.
-	 *
-	 * @param evt параметр не используется
-	 */
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		viewInitialized = false;
-		updateView();
-		viewInitialized = true;
-	}
-
-	/**
 	 * Обновляет элементы управления панели в соответствии со связанными данными из модели выделения.
 	 */
-	private void updateView() {
-		if (!selectionModel.isInitialized()) {
-			return;
-		}
-		
+	@Override
+	protected void updateView() {
 		boolean panelEnable = !selectionModel.isEmpty();
 
 		for (Aspect buttonAspect : Aspect.values()) {
@@ -316,19 +286,10 @@ public class AspectPanel extends JPanel implements PropertyChangeListener, ItemL
 	}
 
 	/**
-	 * Обрабатывает изменение в состоянии этой панели и отображает их на модель выделения,
-	 * к которой панель привязана.
-	 *
-	 * @param e параметр не используется
+	 * Обновляет модель в соответствии с измененными в панели данными.
 	 */
 	@Override
-	public void itemStateChanged(ItemEvent e) {
-		if (!viewInitialized) {
-			return;
-		}
-		
-		selectionModel.setInitialized(false);
-
+	protected void updateModel() {
 		ButtonModel aspectGroupSelection = aspectGroup.getSelection();
 		if (aspectGroupSelection == null) {
 			selectionModel.setAspect(null);
@@ -360,7 +321,5 @@ public class AspectPanel extends JPanel implements PropertyChangeListener, ItemL
 			}
 		}
 		selectionModel.setModifier(modifier);
-
-		selectionModel.setInitialized(true);
 	}
 }
