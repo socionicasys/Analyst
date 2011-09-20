@@ -17,14 +17,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 /**
  * @author Виктор
  */
-public class ControlsPane extends JToolBar implements ADataChangeListener,
-		TreeSelectionListener, ActiveUndoManagerListener {
+public class ControlsPane extends JToolBar implements TreeSelectionListener, ActiveUndoManagerListener {
 	private final AspectPanel aspectPanel;
 	private final SignPanel signPanel;
 	private final MVPanel mvPanel;
 	private final DimensionPanel dimensionPanel;
 	private final JTextPane textPane;
-	private final List<ADataChangeListener> aDataListeners;
 	private final JTextArea commentField;
 	private final DocumentSelectionModel selectionModel;
 	private final DocumentHolder documentHolder;
@@ -40,7 +38,6 @@ public class ControlsPane extends JToolBar implements ADataChangeListener,
 		this.commentField = commentField;
 		this.selectionModel = selectionModel;
 
-		aDataListeners = new ArrayList<ADataChangeListener>();
 		signPanel = new SignPanel(selectionModel);
 		mvPanel = new MVPanel(selectionModel);
 		dimensionPanel = new DimensionPanel(selectionModel);
@@ -79,8 +76,6 @@ public class ControlsPane extends JToolBar implements ADataChangeListener,
 
 
 	protected void setContols(AData data) {
-		removeADataListener(this);
-
 		if (data != null) {
 			aspectPanel.setAspect(data);
 			dimensionPanel.setDimension(data.getDimension());
@@ -95,54 +90,6 @@ public class ControlsPane extends JToolBar implements ADataChangeListener,
 			mvPanel.setMV(null);
 			signPanel.setSign(null);
 			commentField.setText(null);
-		}
-
-		addADataListener(this);
-	}
-
-	protected void addADataListener(ADataChangeListener l) {
-		aDataListeners.add(l);
-	}
-
-	protected void removeADataListener(ADataChangeListener l) {
-		aDataListeners.remove(l);
-	}
-
-	private void fireADataChanged() {
-		if (aDataListeners.isEmpty()) {
-			return;
-		}
-
-		Caret caret = textPane.getCaret();
-
-		int dot = caret.getDot();
-		int mark = caret.getMark();
-		int begin = Math.min(dot, mark);
-		int end = Math.max(dot, mark);
-
-		AData data = getAData();
-
-		for (int i = aDataListeners.size() - 1; i >= 0; i--) {
-			aDataListeners.get(i).aDataChanged(begin, end, data);
-		}
-	}
-
-	@Override
-	public void aDataChanged(int start, int end, AData data) {
-		ADocument document = documentHolder.getModel();
-		if (data == null && currentASection != null) {
-			document.removeASection(currentASection);
-			currentASection = null;
-		} else if (data != null && currentASection != null) {
-			document.updateASection(currentASection, data);
-		} else if (data != null) {
-			try {
-				currentASection = new ASection(document, start, end);
-				document.addASection(currentASection, data);
-			} catch (BadLocationException e) {
-				logger.error("Invalid position for ASection", e);
-				currentASection = null;
-			}
 		}
 	}
 

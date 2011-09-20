@@ -112,7 +112,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		//Add the control panels.
 		ControlsPane controlsPane = new ControlsPane(textPane, documentHolder, commentField, selectionModel);
 
-		controlsPane.addADataListener(controlsPane);
 		navigateTree.addTreeSelectionListener(controlsPane);
 		analysisTree.addTreeSelectionListener(controlsPane);
 
