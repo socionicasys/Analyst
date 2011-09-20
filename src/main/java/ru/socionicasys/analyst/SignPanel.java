@@ -62,15 +62,6 @@ public final class SignPanel extends ActivePanel {
 	}
 
 	@Deprecated
-	public String getSignSelection() {
-		ButtonModel bm = buttonGroup.getSelection();
-		if (bm == null) {
-			return null;
-		}
-		return bm.getActionCommand();
-	}
-
-	@Deprecated
 	public void setSign(String sign) {
 		if (sign == null) {
 			buttonGroup.clearSelection();

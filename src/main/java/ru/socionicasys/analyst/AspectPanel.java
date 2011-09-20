@@ -153,29 +153,6 @@ public final class AspectPanel extends ActivePanel {
 	}
 
 	@Deprecated
-	public String getAspectSelection() {
-		String res = "";
-		ButtonModel bma = aspectGroup.getSelection();
-		ButtonModel bma2 = secondAspectGroup.getSelection();
-
-		if (bma == null) {
-			return null;
-		}
-
-		res += bma.getActionCommand();
-
-		if (bma2 != null) {
-			if (block.isSelected()) {
-				res += AData.BLOCK_TOKEN + bma2.getActionCommand();
-			}
-			else if (jump.isSelected()) {
-				res += AData.JUMP_TOKEN + bma2.getActionCommand();
-			}
-		}
-		return res;
-	}
-
-	@Deprecated
 	public void setAspect(AData data) {
 		if (data == null) {
 			return;

@@ -70,15 +70,6 @@ public final class MVPanel extends ActivePanel {
 	}
 
 	@Deprecated
-	public String getMVSelection() {
-		ButtonModel bm = buttonGroup.getSelection();
-		if (bm == null) {
-			return null;
-		}
-		return bm.getActionCommand();
-	}
-
-	@Deprecated
 	public void setMV(String mv) {
 		if (mv == null) {
 			buttonGroup.clearSelection();

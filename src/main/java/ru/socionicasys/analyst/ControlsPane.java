@@ -57,24 +57,6 @@ public class ControlsPane extends JToolBar implements TreeSelectionListener, Act
 		add(container);
 	}
 
-	public AData getAData() {
-		AData adata = null;
-		try {
-			adata = AData.parseAData(aspectPanel.getAspectSelection() + AData.SEPARATOR +
-				signPanel.getSignSelection() + AData.SEPARATOR +
-				dimensionPanel.getDimensionSelection() + AData.SEPARATOR +
-				mvPanel.getMVSelection() + AData.SEPARATOR
-			);
-			if (adata != null) {
-				adata.setComment(commentField.getText());
-			}
-		} catch (IllegalArgumentException e) {
-			logger.error("Error in getAData()", e);
-		}
-		return adata;
-	}
-
-
 	protected void setContols(AData data) {
 		if (data != null) {
 			aspectPanel.setAspect(data);

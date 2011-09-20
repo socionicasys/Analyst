@@ -82,15 +82,6 @@ public final class DimensionPanel extends ActivePanel {
 	}
 
 	@Deprecated
-	public String getDimensionSelection() {
-		ButtonModel bm = buttonGroup.getSelection();
-		if (bm == null) {
-			return null;
-		}
-		return bm.getActionCommand();
-	}
-
-	@Deprecated
 	public void setDimension(String dimension) {
 		if (dimension == null) {
 			buttonGroup.clearSelection();
