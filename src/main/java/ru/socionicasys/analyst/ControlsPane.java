@@ -17,7 +17,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 /**
  * @author Виктор
  */
-public class ControlsPane extends JToolBar implements ADataChangeListener, ChangeListener,
+public class ControlsPane extends JToolBar implements ADataChangeListener,
 		TreeSelectionListener, ActiveUndoManagerListener {
 	private final AspectPanel aspectPanel;
 	private final SignPanel signPanel;
@@ -147,14 +147,6 @@ public class ControlsPane extends JToolBar implements ADataChangeListener, Chang
 	}
 
 	@Override
-	public void stateChanged(ChangeEvent e) {
-		// Event from the comment field - just update changes to the document
-		if (aspectPanel.isAspectSelected()) {
-			fireADataChanged();
-		}
-	}
-
-	@Override
 	public void valueChanged(TreeSelectionEvent e) {
 		DefaultMutableTreeNode leafNode = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
 		Object leafObject = leafNode.getUserObject();
@@ -188,12 +180,8 @@ public class ControlsPane extends JToolBar implements ADataChangeListener, Chang
 			textPane.getCaret().setDot(end);
 			textPane.getCaret().moveDot(start);
 
-			commentField.getCaret().removeChangeListener(this);
-
 			AData data = document.getAData(currentASection);
 			setContols(data);
-
-			commentField.getCaret().addChangeListener(this);
 
 			try {
 				viewport.scrollRectToVisible(textPane.modelToView(offset));

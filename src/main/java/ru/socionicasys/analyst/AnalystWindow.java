@@ -73,6 +73,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		commentField.setLineWrap(true);
 		commentField.setWrapStyleWord(true);
 		commentField.setMaximumSize(new Dimension(400, 30));
+		CommentConnector commentConnector = new CommentConnector(selectionModel, commentField);
 
 		JScrollPane scrollPaneForComment = new JScrollPane(commentField);
 		scrollPaneForComment.setMinimumSize(new Dimension(400, 30));
@@ -114,7 +115,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		controlsPane.addADataListener(controlsPane);
 		navigateTree.addTreeSelectionListener(controlsPane);
 		analysisTree.addTreeSelectionListener(controlsPane);
-		commentField.getCaret().addChangeListener(controlsPane);
 
 		JScrollPane scrollPaneControls = new JScrollPane(controlsPane);
 		scrollPaneControls.setMinimumSize(new Dimension(300, 500));
