@@ -30,7 +30,7 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 
 	private final Map<Integer, RawAData> rawData = new HashMap<Integer, RawAData>();
 
-	LegacyHtmlReader(File sourceFile) {
+	public LegacyHtmlReader(File sourceFile) {
 		this.sourceFile = sourceFile;
 	}
 
@@ -85,7 +85,7 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 		Matcher styleMatcher = styleTag.matcher(sourceText);
 		int sourcePosition = 0;
 		int sourceOffset = 0;
-		List<StyledText> styledTextBlocks = new ArrayList<StyledText>();
+		Collection<StyledText> styledTextBlocks = new ArrayList<StyledText>();
 		while (styleMatcher.find()) {
 			String currentTag = styleMatcher.group();
 			int tagLength = currentTag.length();
@@ -110,13 +110,13 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 			sourceOffset += tagLength;
 
 			// Стиль следующего текста в зависимости от текущего тега
-			if (currentTag.equals("<b>")) {
+			if ("<b>".equals(currentTag)) {
 				StyleConstants.setBold(currentStyle, true);
-			} else if (currentTag.equals("</b>")) {
+			} else if ("</b>".equals(currentTag)) {
 				StyleConstants.setBold(currentStyle, false);
-			} else if (currentTag.equals("<i>")) {
+			} else if ("<i>".equals(currentTag)) {
 				StyleConstants.setItalic(currentStyle, true);
-			} else if (currentTag.equals("</i>")) {
+			} else if ("</i>".equals(currentTag)) {
 				StyleConstants.setItalic(currentStyle, false);
 			}
 		}
@@ -241,54 +241,55 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 		int searchIndex = text.indexOf("title=\"protocol\"", 0);
 
 		//limiting ourselves only to the Protocol table
-		text = text.substring(0, text.indexOf("</table", searchIndex));
+		String contentText = text.substring(0, text.indexOf("</table", searchIndex));
 
 		// looking through columns of table "protocol" and retrieving text of the left and right columns
 		while (searchIndex > 0) {
-			searchIndex = text.indexOf(HTML_ROW_OPEN, searchIndex);
+			searchIndex = contentText.indexOf(HTML_ROW_OPEN, searchIndex);
 			String result;
 			if (searchIndex > 0) {
-				result = findTagContent(text, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
+				result = findTagContent(contentText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
 			} else {
 				break;
 			}
 			if (result != null) {
 				leftColumnBuilder.append(result);
 				leftColumnBuilder.append("<br/><br/>"); //adding breaks because there are no breaks on row boundaries
-				searchIndex = text.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
+				searchIndex = contentText.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
 			}
 
 			if (searchIndex > 0) {
-				result = findTagContent(text, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
+				result = findTagContent(contentText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
 			} else {
 				break;
 			}
 			if (result != null) {
 				rightColumnBuilder.append(result);
-				searchIndex = text.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
+				searchIndex = contentText.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
 			}
 		}
 	}
 
-	private String parseLeftColumn(String text) {
-		int openingBracketPos = text.indexOf('[');
-		int closingBracketPos = text.indexOf(']');
-		StringBuilder columnBuilder = new StringBuilder(text);
+	private String parseLeftColumn(String rawColumnText) {
+		String parsedColumnText = rawColumnText;
+		int openingBracketPos = parsedColumnText.indexOf('[');
+		int closingBracketPos = parsedColumnText.indexOf(']');
+		StringBuilder columnBuilder = new StringBuilder(parsedColumnText);
 		while (openingBracketPos >= 0 || closingBracketPos >= 0) {
-			setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS * openingBracketPos / text.length());
+			setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS * openingBracketPos / parsedColumnText.length());
 			int handle;
 			RawAData data;
-			int middleBracketPos = text.indexOf('|');
+			int middleBracketPos = parsedColumnText.indexOf('|');
 			if (openingBracketPos >= 0 && openingBracketPos <= closingBracketPos) {
 				// Открывающий тег [n|
-				handle = Integer.parseInt(text.substring(openingBracketPos + 1, middleBracketPos));
+				handle = Integer.parseInt(parsedColumnText.substring(openingBracketPos + 1, middleBracketPos));
 				columnBuilder.delete(openingBracketPos, middleBracketPos + 1);
 				data = new RawAData();
 				data.setBegin(openingBracketPos);
 				rawData.put(handle, data);
 			} else if (closingBracketPos >= 0) {
 				// Закрывающий тег |n]
-				handle = Integer.parseInt(text.substring(middleBracketPos + 1, closingBracketPos));
+				handle = Integer.parseInt(parsedColumnText.substring(middleBracketPos + 1, closingBracketPos));
 				columnBuilder.delete(middleBracketPos, closingBracketPos + 1);
 				data = rawData.get(handle);
 				if (data != null) {
@@ -297,11 +298,11 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 					logger.warn("Closing tag |{}] without corresponding opening tag", handle);
 				}
 			}
-			text = columnBuilder.toString();
-			openingBracketPos = text.indexOf('[');
-			closingBracketPos = text.indexOf(']');
+			parsedColumnText = columnBuilder.toString();
+			openingBracketPos = parsedColumnText.indexOf('[');
+			closingBracketPos = parsedColumnText.indexOf(']');
 		}
-		return text;
+		return parsedColumnText;
 	}
 
 	private void parseRightColumn(String text) {
