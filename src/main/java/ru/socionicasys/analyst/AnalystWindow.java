@@ -110,10 +110,10 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		splitPaneH.setOneTouchExpandable(true);
 
 		//Add the control panels.
-		ControlsPane controlsPane = new ControlsPane(textPane, documentHolder, commentField, selectionModel);
+		ControlsPane controlsPane = new ControlsPane(documentHolder, commentField, selectionModel);
 
-		navigateTree.addTreeSelectionListener(controlsPane);
-		analysisTree.addTreeSelectionListener(controlsPane);
+		navigateTree.addTreeSelectionListener(selectionConnector);
+		analysisTree.addTreeSelectionListener(selectionConnector);
 
 		JScrollPane scrollPaneControls = new JScrollPane(controlsPane);
 		scrollPaneControls.setMinimumSize(new Dimension(300, 500));

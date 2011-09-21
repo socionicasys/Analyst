@@ -17,26 +17,21 @@ import javax.swing.tree.DefaultMutableTreeNode;
 /**
  * @author Виктор
  */
-public class ControlsPane extends JToolBar implements TreeSelectionListener, ActiveUndoManagerListener {
+public class ControlsPane extends JToolBar implements ActiveUndoManagerListener {
 	private final AspectPanel aspectPanel;
 	private final SignPanel signPanel;
 	private final MVPanel mvPanel;
 	private final DimensionPanel dimensionPanel;
-	private final JTextPane textPane;
 	private final JTextArea commentField;
-	private final DocumentSelectionModel selectionModel;
 	private final DocumentHolder documentHolder;
 	private ASection currentASection;
-	private Object oldTreeObject;
 	private static final Logger logger = LoggerFactory.getLogger(ControlsPane.class);
 
-	public ControlsPane(JTextPane textPane, DocumentHolder documentHolder, JTextArea commentField, DocumentSelectionModel selectionModel) {
+	public ControlsPane(DocumentHolder documentHolder, JTextArea commentField, DocumentSelectionModel selectionModel) {
 		super("Панель разметки", JToolBar.VERTICAL);
 
-		this.textPane = textPane;
 		this.documentHolder = documentHolder;
 		this.commentField = commentField;
-		this.selectionModel = selectionModel;
 
 		signPanel = new SignPanel(selectionModel);
 		mvPanel = new MVPanel(selectionModel);
@@ -72,52 +67,6 @@ public class ControlsPane extends JToolBar implements TreeSelectionListener, Act
 			mvPanel.setMV(null);
 			signPanel.setSign(null);
 			commentField.setText(null);
-		}
-	}
-
-	@Override
-	public void valueChanged(TreeSelectionEvent e) {
-		DefaultMutableTreeNode leafNode = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
-		Object leafObject = leafNode.getUserObject();
-		if (leafObject.equals(oldTreeObject)) {
-			return;
-		}
-
-		oldTreeObject = leafObject;
-
-		int index = 0;
-
-		if (leafObject instanceof EndNodeObject) {
-			index = ((EndNodeObject) leafObject).getOffset();
-		} else {
-			String quote = leafObject.toString();
-			if (quote != null && quote.startsWith("#")) {
-				String indexStr = quote.substring(1, quote.indexOf("::"));
-				index = Integer.parseInt(indexStr);
-			}
-		}
-		//////////////test for text positioning in scroll pane////////////////////////
-		JViewport viewport = (JViewport) textPane.getParent();
-
-		ADocument document = documentHolder.getModel();
-		currentASection = document.getASectionThatStartsAt(index);
-		if (currentASection != null) {
-			int offset = currentASection.getMiddleOffset();
-			int start = currentASection.getStartOffset();
-			int end = currentASection.getEndOffset();
-
-			textPane.getCaret().setDot(end);
-			textPane.getCaret().moveDot(start);
-
-			AData data = document.getAData(currentASection);
-			setContols(data);
-
-			try {
-				viewport.scrollRectToVisible(textPane.modelToView(offset));
-				textPane.grabFocus();
-			} catch (BadLocationException e1) {
-				logger.error("Error setting model to view :: bad location", e1);
-			}
 		}
 	}
 

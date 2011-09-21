@@ -3,9 +3,13 @@ package ru.socionicasys.analyst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -13,7 +17,7 @@ import java.beans.PropertyChangeListener;
  * Отслеживает и синхронизирует изменения в модели выделения для документа, самом документе,
  * и в положении курсора в текстовом поле.
  */
-public class DocumentSelectionConnector implements PropertyChangeListener, CaretListener {
+public class DocumentSelectionConnector implements PropertyChangeListener, CaretListener, TreeSelectionListener {
 	/**
 	 * Текстовое поле, с которым связан коннектор.
 	 */
@@ -124,6 +128,44 @@ public class DocumentSelectionConnector implements PropertyChangeListener, Caret
 			logger.error("Invalid document positions: {}, {}", startOffset, endOffset);
 			logger.error("Exception thrown: ", e);
 			return null;
+		}
+	}
+
+	@Override
+	public void valueChanged(TreeSelectionEvent e) {
+		DefaultMutableTreeNode leafNode = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
+		Object leafObject = leafNode.getUserObject();
+
+		int index = 0;
+
+		if (leafObject instanceof EndNodeObject) {
+			index = ((EndNodeObject) leafObject).getOffset();
+		} else {
+			String quote = leafObject.toString();
+			if (quote != null && quote.startsWith("#")) {
+				String indexStr = quote.substring(1, quote.indexOf("::"));
+				index = Integer.parseInt(indexStr);
+			}
+		}
+		//////////////test for text positioning in scroll pane////////////////////////
+		JViewport viewport = (JViewport) textPane.getParent();
+
+		ADocument document = textPane.getDocument();
+		ASection currentASection = document.getASectionThatStartsAt(index);
+		if (currentASection != null) {
+			int offset = currentASection.getMiddleOffset();
+			int start = currentASection.getStartOffset();
+			int end = currentASection.getEndOffset();
+
+			textPane.getCaret().setDot(end);
+			textPane.getCaret().moveDot(start);
+
+			try {
+				viewport.scrollRectToVisible(textPane.modelToView(offset));
+				textPane.grabFocus();
+			} catch (BadLocationException e1) {
+				logger.error("Error setting model to view :: bad location", e1);
+			}
 		}
 	}
 }
