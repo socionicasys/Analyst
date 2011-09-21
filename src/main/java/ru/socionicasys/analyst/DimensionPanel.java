@@ -81,21 +81,6 @@ public final class DimensionPanel extends ActivePanel {
 		updateView();
 	}
 
-	@Deprecated
-	public void setDimension(String dimension) {
-		if (dimension == null) {
-			buttonGroup.clearSelection();
-		} else if (buttons.containsKey(dimension)) {
-			buttonGroup.setSelected(buttons.get(dimension).getModel(), true);
-		}
-
-		if (buttonGroup.getSelection() != null) {
-			clearButton.setEnabled(true);
-		} else {
-			clearButton.setEnabled(false);
-		}
-	}
-
 	/**
 	 * Обновляет элементы управления панели в соответствии со связанными данными из модели выделения.
 	 */

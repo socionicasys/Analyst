@@ -110,7 +110,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		splitPaneH.setOneTouchExpandable(true);
 
 		//Add the control panels.
-		ControlsPane controlsPane = new ControlsPane(documentHolder, commentField, selectionModel);
+		ControlsPane controlsPane = new ControlsPane(selectionModel);
 
 		navigateTree.addTreeSelectionListener(selectionConnector);
 		analysisTree.addTreeSelectionListener(selectionConnector);
@@ -146,7 +146,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 		//Start watching for undoable edits and caret changes.
 		documentHolder.addUndoableEditListener(undoManager);
-		undoManager.addActiveUndoManagerListener(controlsPane);
 
 		pack();
 	}

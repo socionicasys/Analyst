@@ -61,21 +61,6 @@ public final class SignPanel extends ActivePanel {
 		updateView();
 	}
 
-	@Deprecated
-	public void setSign(String sign) {
-		if (sign == null) {
-			buttonGroup.clearSelection();
-		} else if (buttons.containsKey(sign)) {
-			buttonGroup.setSelected(buttons.get(sign).getModel(), true);
-		}
-
-		if (buttonGroup.getSelection() != null) {
-			clearButton.setEnabled(true);
-		} else {
-			clearButton.setEnabled(false);
-		}
-	}
-
 	/**
 	 * Обновляет элементы управления панели в соответствии со связанными данными из модели выделения.
 	 */

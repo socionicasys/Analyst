@@ -69,18 +69,6 @@ public final class MVPanel extends ActivePanel {
 		updateView();
 	}
 
-	@Deprecated
-	public void setMV(String mv) {
-		if (mv == null) {
-			buttonGroup.clearSelection();
-		} else if (buttons.containsKey(mv)) {
-			buttonGroup.setSelected(buttons.get(mv).getModel(), true);
-		}
-
-		boolean enableClearButton = buttonGroup.getSelection() != null;
-		clearButton.setEnabled(enableClearButton);
-	}
-
 	/**
 	 * Обновляет элементы управления панели в соответствии со связанными данными из модели выделения.
 	 */

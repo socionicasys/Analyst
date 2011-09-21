@@ -148,59 +148,6 @@ public final class AspectPanel extends ActivePanel {
 		}
 	}
 
-	public boolean isAspectSelected() {
-		return aspectGroup.getSelection() != null;
-	}
-
-	@Deprecated
-	public void setAspect(AData data) {
-		if (data == null) {
-			return;
-		}
-		String aspect = data.getAspect();
-
-		if (aspect == null) {
-			aspectGroup.clearSelection();
-			secondAspectGroup.clearSelection();
-			this.aspect.getModel().setSelected(true);
-		} else if (aspect.equals(AData.DOUBT)) {
-			d.getModel().setSelected(true);
-		} else {
-			for (Map.Entry<Aspect, JRadioButton> entry : primaryAspectButtons.entrySet()) {
-				if (entry.getKey().getAbbreviation().equals(aspect)) {
-					entry.getValue().getModel().setSelected(true);
-				}
-			}
-		}
-
-		String modifier = data.getModifier();
-		String secondAspect = data.getSecondAspect();
-
-		if (modifier != null) {
-			if (modifier.equals(AData.BLOCK)) {
-				block.getModel().setSelected(true);
-				setSecondAspectForBlock(aspect);
-			} else if (modifier.equals(AData.JUMP)) {
-				jump.getModel().setSelected(true);
-				setSecondAspectForJump(aspect);
-			}
-
-			if (secondAspect == null) {
-				secondAspectGroup.clearSelection();
-			} else {
-				for (Map.Entry<Aspect, JRadioButton> entry : secondaryAspectButtons.entrySet()) {
-					String buttonAspect = entry.getKey().getAbbreviation();
-					if (buttonAspect.equals(secondAspect)) {
-						JRadioButton button = entry.getValue();
-						button.getModel().setSelected(true);
-					}
-				}
-			}
-		}
-
-		clearAspectSelection.setEnabled(isAspectSelected());
-	}
-
 	/**
 	 * Обновляет элементы управления панели в соответствии со связанными данными из модели выделения.
 	 */
