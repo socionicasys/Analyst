@@ -14,12 +14,16 @@ import java.util.Map;
  * Панель выбора аспекта/блока/перевода.
  */
 public final class AspectPanel extends ActivePanel {
-	private Map<Aspect, JRadioButton> primaryAspectButtons;
-	private Map<Aspect, JRadioButton> secondaryAspectButtons;
-	private JRadioButton d;
-	private JRadioButton aspect, block, jump;
-	private ButtonGroup aspectGroup, secondAspectGroup, controlGroup;
-	private JButton clearAspectSelection;
+	private final Map<Aspect, JRadioButton> primaryAspectButtons;
+	private final Map<Aspect, JRadioButton> secondaryAspectButtons;
+	private final JRadioButton doubt;
+	private final JRadioButton aspect;
+	private final JRadioButton block;
+	private final JRadioButton jump;
+	private final ButtonGroup primaryAspectGroup;
+	private final ButtonGroup secondaryAspectGroup;
+	private final ButtonGroup controlGroup;
+	private final JButton clearButton;
 
 	public AspectPanel(DocumentSelectionModel selectionModel) {
 		super(selectionModel);
@@ -32,13 +36,13 @@ public final class AspectPanel extends ActivePanel {
 		pAspect.setPreferredSize(new Dimension(50, 200));
 		pAspect.setMinimumSize(new Dimension(50, 200));
 
-		aspectGroup = new ButtonGroup();
+		primaryAspectGroup = new ButtonGroup();
 		primaryAspectButtons = new HashMap<Aspect, JRadioButton>();
 		for (Aspect aspect : Aspect.values()) {
 			JRadioButton button = new JRadioButton(aspect.getAbbreviation());
 			button.setActionCommand(aspect.getAbbreviation());
 			button.addItemListener(this);
-			aspectGroup.add(button);
+			primaryAspectGroup.add(button);
 			pAspect.add(button);
 			primaryAspectButtons.put(aspect, button);
 		}
@@ -48,13 +52,13 @@ public final class AspectPanel extends ActivePanel {
 		pAspect2.setPreferredSize(new Dimension(50, 200));
 		pAspect2.setMinimumSize(new Dimension(50, 200));
 
-		secondAspectGroup = new ButtonGroup();
+		secondaryAspectGroup = new ButtonGroup();
 		secondaryAspectButtons = new HashMap<Aspect, JRadioButton>();
 		for (Aspect aspect : Aspect.values()) {
 			JRadioButton button = new JRadioButton(aspect.getAbbreviation());
 			button.setActionCommand(aspect.getAbbreviation());
 			button.addItemListener(this);
-			secondAspectGroup.add(button);
+			secondaryAspectGroup.add(button);
 			pAspect2.add(button);
 			secondaryAspectButtons.put(aspect, button);
 		}
@@ -69,17 +73,17 @@ public final class AspectPanel extends ActivePanel {
 		jump.addItemListener(this);
 		jump.setActionCommand("jump");
 
-		d = new JRadioButton("???");
-		d.getModel().addItemListener(this);
-		d.setActionCommand(AData.DOUBT);
-		aspectGroup.add(d);
+		doubt = new JRadioButton("???");
+		doubt.getModel().addItemListener(this);
+		doubt.setActionCommand(AData.DOUBT);
+		primaryAspectGroup.add(doubt);
 
 		controlGroup = new ButtonGroup();
 		controlGroup.add(aspect);
 		controlGroup.add(block);
 		controlGroup.add(jump);
 
-		clearAspectSelection = new JButton("Очистить");
+		clearButton = new JButton("Очистить");
 
 		Panel pControl = new Panel();
 		pControl.setLayout(new BoxLayout(pControl, BoxLayout.X_AXIS));
@@ -99,9 +103,9 @@ public final class AspectPanel extends ActivePanel {
 		pB.setLayout(new BoxLayout(pB, BoxLayout.Y_AXIS));
 
 		pB.add(new Panel());
-		pB.add(clearAspectSelection);
+		pB.add(clearButton);
 		pB.add(new Panel());
-		pB.add(d);
+		pB.add(doubt);
 		pB.add(new Panel());
 
 		setLayout(new BorderLayout());
@@ -111,15 +115,15 @@ public final class AspectPanel extends ActivePanel {
 
 		setBorder(new TitledBorder("Аспект/Блок"));
 
-		aspectGroup.clearSelection();
-		secondAspectGroup.clearSelection();
+		primaryAspectGroup.clearSelection();
+		secondaryAspectGroup.clearSelection();
 		controlGroup.clearSelection();
 
-		clearAspectSelection.addActionListener(new ActionListener() {
+		clearButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				aspectGroup.clearSelection();
-				secondAspectGroup.clearSelection();
+				primaryAspectGroup.clearSelection();
+				secondaryAspectGroup.clearSelection();
 				controlGroup.setSelected(aspect.getModel(), true);
 			}
 		});
@@ -160,27 +164,27 @@ public final class AspectPanel extends ActivePanel {
 			secondaryAspectButtons.get(buttonAspect).setEnabled(panelEnable);
 		}
 
-		d.setEnabled(panelEnable);
+		doubt.setEnabled(panelEnable);
 		aspect.setEnabled(panelEnable);
 		block.setEnabled(panelEnable);
 		jump.setEnabled(panelEnable);
 
 		boolean markupEnable = panelEnable && !selectionModel.isMarkupEmpty();
-		clearAspectSelection.setEnabled(markupEnable);
+		clearButton.setEnabled(markupEnable);
 		
 		if (!panelEnable) {
-			aspectGroup.clearSelection();
-			secondAspectGroup.clearSelection();
+			primaryAspectGroup.clearSelection();
+			secondaryAspectGroup.clearSelection();
 			controlGroup.clearSelection();
 			return;
 		}
 
 		String firstAspect = selectionModel.getAspect();
 		if (firstAspect == null) {
-			aspectGroup.clearSelection();
+			primaryAspectGroup.clearSelection();
 			aspect.getModel().setSelected(true);
 		} else if (AData.DOUBT.equals(firstAspect)) {
-			d.getModel().setSelected(true);
+			doubt.getModel().setSelected(true);
 			aspect.getModel().setSelected(true);
 		} else {
 			JRadioButton selectedButton = primaryAspectButtons.get(Aspect.byAbbreviation(firstAspect));
@@ -203,7 +207,7 @@ public final class AspectPanel extends ActivePanel {
 
 		String secondAspect = selectionModel.getSecondAspect();
 		if (secondAspect == null) {
-			secondAspectGroup.clearSelection();
+			secondaryAspectGroup.clearSelection();
 		} else {
 			secondaryAspectButtons.get(Aspect.byAbbreviation(secondAspect)).getModel().setSelected(true);
 		}
@@ -214,7 +218,7 @@ public final class AspectPanel extends ActivePanel {
 	 */
 	@Override
 	protected void updateModel() {
-		ButtonModel aspectGroupSelection = aspectGroup.getSelection();
+		ButtonModel aspectGroupSelection = primaryAspectGroup.getSelection();
 		if (aspectGroupSelection == null) {
 			selectionModel.setAspect(null);
 		} else {
@@ -222,7 +226,7 @@ public final class AspectPanel extends ActivePanel {
 			selectionModel.setAspect(firstAspect);
 		}
 
-		ButtonModel secondAspectGroupSelection = secondAspectGroup.getSelection();
+		ButtonModel secondAspectGroupSelection = secondaryAspectGroup.getSelection();
 		if (secondAspectGroupSelection == null) {
 			selectionModel.setSecondAspect(null);
 		} else {
@@ -231,7 +235,7 @@ public final class AspectPanel extends ActivePanel {
 		}
 
 		ButtonModel controlGroupSelection = controlGroup.getSelection();
-		String modifier = "";
+		String modifier;
 		if (controlGroupSelection == null) {
 			modifier = null;
 		} else {
