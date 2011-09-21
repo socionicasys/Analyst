@@ -454,29 +454,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		return choice;
 	}// end save confifmation
 
-	public int docDeleteConfirmation() {
-		int choice = JOptionPane.YES_OPTION;
-		int offset = textPane.getCaret().getMark();
-		int dot = textPane.getCaret().getDot();
-		ADocument document = documentHolder.getModel();
-		if (document.getASectionThatStartsAt(offset) != null) {
-			choice = JOptionPane.showOptionDialog(this,
-				"Вы собираетесь удалить размеченный фрагмент документа\n\nВы действительно хотите удалить фрагмент?",
-				"Подтверждение удаления",
-				JOptionPane.YES_NO_OPTION,
-				JOptionPane.INFORMATION_MESSAGE,
-				null,
-				new Object[]{"Удалить", "Не удалять"},
-				"Не удалять");
-		}
-		if (choice == JOptionPane.YES_OPTION) {
-			document.removeCleanup(Math.min(offset, dot), Math.max(offset, dot));
-		} else {
-			choice = JOptionPane.NO_OPTION;
-		}
-		return choice;
-	}
-
 	public ATree getNavigeTree() {
 		return navigateTree;
 	}
