@@ -7,7 +7,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 /**
@@ -37,7 +37,7 @@ public final class AspectPanel extends ActivePanel {
 		pAspect.setMinimumSize(new Dimension(50, 200));
 
 		primaryAspectGroup = new ButtonGroup();
-		primaryAspectButtons = new HashMap<Aspect, JRadioButton>();
+		primaryAspectButtons = new EnumMap<Aspect, JRadioButton>(Aspect.class);
 		for (Aspect aspect : Aspect.values()) {
 			JRadioButton button = new JRadioButton(aspect.getAbbreviation());
 			button.setActionCommand(aspect.getAbbreviation());
@@ -53,7 +53,7 @@ public final class AspectPanel extends ActivePanel {
 		pAspect2.setMinimumSize(new Dimension(50, 200));
 
 		secondaryAspectGroup = new ButtonGroup();
-		secondaryAspectButtons = new HashMap<Aspect, JRadioButton>();
+		secondaryAspectButtons = new EnumMap<Aspect, JRadioButton>(Aspect.class);
 		for (Aspect aspect : Aspect.values()) {
 			JRadioButton button = new JRadioButton(aspect.getAbbreviation());
 			button.setActionCommand(aspect.getAbbreviation());
