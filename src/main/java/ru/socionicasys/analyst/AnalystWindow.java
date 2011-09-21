@@ -12,7 +12,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.util.Dictionary;
-import java.util.concurrent.ExecutionException;
 import javax.swing.*;
 import javax.swing.SwingWorker.StateValue;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -158,7 +157,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		try {
 			final LegacyHtmlReader worker = new LegacyHtmlReader(file);
 			worker.getPropertyChangeSupport().addPropertyChangeListener("state",
-					new DocumentLoadListener(append));
+					new DocumentLoadListener(append, documentHolder));
 			worker.addPropertyChangeListener(new ProgressWindow(this, "    Идет загрузка файла...   "));
 			worker.execute();
 
@@ -480,14 +479,9 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private void initNewDocument() {
 		ADocument document = documentHolder.getModel();
 		document.initNew();
-		initUndoManager();
 		setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), document.getProperty(Document.TitleProperty)));
 		fileName = "";
 		makeNewDocument = false;
-	}
-
-	private void initUndoManager() {
-		undoManager.discardAllEdits();
 	}
 
 	private class SaveAction extends AbstractAction {
@@ -704,35 +698,4 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		}
 	}
 
-	/**
-	 * Класс, слушающий состояние загрузки документа. Помещает документ в главное окно по окончанию загрузки.
-	 */
-	private final class DocumentLoadListener implements PropertyChangeListener {
-		private final boolean append;
-
-		private DocumentLoadListener(boolean append) {
-			this.append = append;
-		}
-
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			StateValue state = (StateValue) evt.getNewValue();
-			if (state == StateValue.DONE) {
-				try {
-					LegacyHtmlReader worker = (LegacyHtmlReader) evt.getSource();
-					ADocument document = worker.get();
-					if (append) {
-						documentHolder.getModel().appendDocument(document);
-					} else {
-						documentHolder.setModel(document);
-					}
-					initUndoManager();
-				} catch (InterruptedException e) {
-					logger.info("Document loading interrupted", e);
-				} catch (ExecutionException e) {
-					logger.error("Error while loading document", e.getCause());
-				}
-			}
-		}
-	}
 }
