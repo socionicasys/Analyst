@@ -258,82 +258,87 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		JTextComponent.loadKeymap(textPane.getKeymap(), defaultBindings, defaultActions);
 	}
 
-	//Create the edit menu.
+	/**
+	 * Create the edit menu.
+	 * @return edit menu
+	 */
 	private JMenu createEditMenu() {
 		JMenu menu = new JMenu("Редактирование");
 
 		//Undo and redo are actions of our own creation.
-		JMenuItem menuItem = new JMenuItem(new UndoAction(undoManager));
-		KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK);
-		menuItem.setAccelerator(key);
-		menu.add(menuItem);
+		JMenuItem undoMenuItem = new JMenuItem(new UndoAction(undoManager));
+		KeyStroke undoKey = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK);
+		undoMenuItem.setAccelerator(undoKey);
+		menu.add(undoMenuItem);
 
-		menuItem = new JMenuItem(new RedoAction(undoManager));
-		key = KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK);
-		menuItem.setAccelerator(key);
-		menu.add(menuItem);
+		JMenuItem redoMenuItem = new JMenuItem(new RedoAction(undoManager));
+		KeyStroke redoKey = KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK);
+		redoMenuItem.setAccelerator(redoKey);
+		menu.add(redoMenuItem);
 
 		menu.addSeparator();
 
 		//Get the actions and stick them in the menu.
-		Action a = textPane.getAction(DefaultEditorKit.cutAction);
-		a.putValue(Action.NAME, "Вырезать");
-		menuItem = new JMenuItem(a);
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK));
-		menu.add(menuItem);
+		Action cutAction = textPane.getAction(DefaultEditorKit.cutAction);
+		cutAction.putValue(Action.NAME, "Вырезать");
+		JMenuItem cutMenuItem = new JMenuItem(cutAction);
+		cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK));
+		menu.add(cutMenuItem);
 
-		a = textPane.getAction(DefaultEditorKit.copyAction);
-		a.putValue(Action.NAME, "Копировать");
-		menuItem = new JMenuItem(a);
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
-		menu.add(menuItem);
+		Action copyAction = textPane.getAction(DefaultEditorKit.copyAction);
+		copyAction.putValue(Action.NAME, "Копировать");
+		JMenuItem copyMenuItem = new JMenuItem(copyAction);
+		copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
+		menu.add(copyMenuItem);
 
-		a = textPane.getAction(DefaultEditorKit.pasteAction);
-		a.putValue(Action.NAME, "Вставить");
-		menuItem = new JMenuItem(a);
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Event.CTRL_MASK));
-		menu.add(menuItem);
-
-		menu.addSeparator();
-
-		a = textPane.getAction(DefaultEditorKit.selectAllAction);
-		a.putValue(Action.NAME, "Выделить всё");
-		menuItem = new JMenuItem(a);
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK));
-		menu.add(menuItem);
+		Action pasteAction = textPane.getAction(DefaultEditorKit.pasteAction);
+		pasteAction.putValue(Action.NAME, "Вставить");
+		JMenuItem pasteMenuItem = new JMenuItem(pasteAction);
+		pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Event.CTRL_MASK));
+		menu.add(pasteMenuItem);
 
 		menu.addSeparator();
 
-		a = new SearchAction(textPane);
-		menuItem = new JMenuItem(a);
-		menuItem.setAction(a);
-		key = KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK);
-		menuItem.setAccelerator(key);
-		menu.add(menuItem);
+		Action selectAllAction = textPane.getAction(DefaultEditorKit.selectAllAction);
+		selectAllAction.putValue(Action.NAME, "Выделить всё");
+		JMenuItem selectAllMenuItem = new JMenuItem(selectAllAction);
+		selectAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK));
+		menu.add(selectAllMenuItem);
+
+		menu.addSeparator();
+
+		Action searchAction = new SearchAction(textPane);
+		JMenuItem searchMenuItem = new JMenuItem(searchAction);
+		searchMenuItem.setAction(searchAction);
+		KeyStroke searchKey = KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK);
+		searchMenuItem.setAccelerator(searchKey);
+		menu.add(searchMenuItem);
 
 		return menu;
 	}
 
-	//Create the style menu.
-	private JMenu createStyleMenu() {
+	/**
+	 * Create the style menu.
+	 * @return style menu
+	 */
+	private static JMenu createStyleMenu() {
 		JMenu menu = new JMenu("Стиль");
 
-		JMenuItem menuItem = new JMenuItem();
+		Action boldAction = new StyledEditorKit.BoldAction();
+		boldAction.putValue(Action.NAME, "Вопрос");
+		JMenuItem boldMenuItem = new JMenuItem();
+		boldMenuItem.setAction(boldAction);
+		KeyStroke boldKey = KeyStroke.getKeyStroke(KeyEvent.VK_B, Event.CTRL_MASK);
+		boldMenuItem.setAccelerator(boldKey);
+		menu.add(boldMenuItem);
 
-		Action action = new StyledEditorKit.BoldAction();
-		action.putValue(Action.NAME, "Вопрос");
-		menuItem.setAction(action);
-		KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_B, Event.CTRL_MASK);
-		menuItem.setAccelerator(key);
-		menu.add(menuItem);
-
-		action = new StyledEditorKit.ItalicAction();
-		action.putValue(Action.NAME, "Цитата");
-		menuItem = new JMenuItem();
-		menuItem.setAction(action);
-		key = KeyStroke.getKeyStroke(KeyEvent.VK_I, Event.CTRL_MASK);
-		menuItem.setAccelerator(key);
-		menu.add(menuItem);
+		Action italicAction = new StyledEditorKit.ItalicAction();
+		italicAction.putValue(Action.NAME, "Цитата");
+		JMenuItem italicMenuItem = new JMenuItem();
+		italicMenuItem.setAction(italicAction);
+		KeyStroke italicKey = KeyStroke.getKeyStroke(KeyEvent.VK_I, Event.CTRL_MASK);
+		italicMenuItem.setAccelerator(italicKey);
+		menu.add(italicMenuItem);
 
 		return menu;
 	}
