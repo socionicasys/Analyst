@@ -709,19 +709,19 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 				null
 			) == JOptionPane.YES_OPTION) {
 
-				title = titleField.getText();
-				expert = expertField.getText();
-				client = clientField.getText();
-				date = dateField.getText();
-				comment = commentArea.getText();
+				String updatedTitle = titleField.getText();
+				String updatedExpert = expertField.getText();
+				String updatedClient = clientField.getText();
+				String updatedDate = dateField.getText();
+				String updatedComment = commentArea.getText();
 
 				Dictionary<Object, Object> properties = document.getDocumentProperties();
 
-				properties.put(ADocument.TitleProperty, title);
-				properties.put(ADocument.ClientProperty, client);
-				properties.put(ADocument.ExpertProperty, expert);
-				properties.put(ADocument.DateProperty, date);
-				properties.put(ADocument.CommentProperty, comment);
+				properties.put(ADocument.TitleProperty, updatedTitle);
+				properties.put(ADocument.ClientProperty, updatedClient);
+				properties.put(ADocument.ExpertProperty, updatedExpert);
+				properties.put(ADocument.DateProperty, updatedDate);
+				properties.put(ADocument.CommentProperty, updatedComment);
 				document.fireADocumentChanged();
 			}
 		}
