@@ -87,17 +87,16 @@ public class SearchAction extends AbstractAction {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent evt) {
-		if (evt.getActionCommand().equals("Поиск")) {
+	public void actionPerformed(ActionEvent e) {
+		if ("Поиск".equals(e.getActionCommand())) {
 			status.setText("");
 			showSearchDialog();
 		} else {
 			boolean caseSensitive = caseCheckbox.isSelected();
 			boolean forward = true;
-			if (searchDirectionButtons.getSelection().getActionCommand().equals("f")) {
+			if ("f".equals(searchDirectionButtons.getSelection().getActionCommand())) {
 				forward = true;
-			}
-			if (searchDirectionButtons.getSelection().getActionCommand().equals("b")) {
+			} else if ("b".equals(searchDirectionButtons.getSelection().getActionCommand())) {
 				forward = false;
 			}
 
@@ -107,8 +106,8 @@ public class SearchAction extends AbstractAction {
 			try {
 				Document document = textComponent.getDocument();
 				text = document.getText(0, document.getLength());
-			} catch (BadLocationException e) {
-				logger.error("Illegal document position in actionPerformed()", e);
+			} catch (BadLocationException ex) {
+				logger.error("Illegal document position in actionPerformed()", ex);
 			}
 
 			if (forward) {
@@ -150,8 +149,8 @@ public class SearchAction extends AbstractAction {
 					textComponent.getCaret().moveDot(mark);
 					textComponent.requestFocus();
 					status.setText("");
-				} catch (BadLocationException e1) {
-					logger.error("SearchPane: error setting model to view :: bad location", e1);
+				} catch (BadLocationException ex) {
+					logger.error("SearchPane: error setting model to view :: bad location", ex);
 				}
 			} else {
 				status.setText("       ...cтрока не найдена...");
