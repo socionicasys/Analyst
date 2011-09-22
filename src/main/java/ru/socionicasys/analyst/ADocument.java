@@ -268,16 +268,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		int startOffset = aSection.getStartOffset();
 		int endOffset = aSection.getEndOffset();
 
-		// удаляет сегменты с такими же границами
-		Set<ASection> sectionSet = aDataMap.keySet();
-		Iterator<ASection> it = sectionSet.iterator();
-		while (it.hasNext()) {
-			ASection section = it.next();
-			if (section.getStartOffset() == startOffset && section.getEndOffset() == endOffset) {
-				it.remove();
-			}
-		}
-
 		setCharacterAttributes(startOffset, endOffset - startOffset, defaultSectionAttributes, false);
 		aDataMap.put(aSection, data);
 
