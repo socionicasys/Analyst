@@ -350,7 +350,9 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		logger.trace("fireUndoableEditUpdate(): leaving");
 	}
 
-	//===================================================================
+	/**
+	 * Описывает операцию добавления в документ новой секции с разметкой.
+	 */
 	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
 	private class ASectionAdditionEdit extends AbstractUndoableEdit {
 		private final ASection section;
@@ -391,7 +393,9 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		}
 	}
 
-	//===================================================================
+	/**
+	 * Описывает операцию удаления из документа секции с разметкой.
+	 */
 	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
 	private class ASectionDeletionEdit extends AbstractUndoableEdit {
 		private final ASection section;
@@ -431,7 +435,9 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		}
 	}
 
-	//===================================================================
+	/**
+	 * Описывает операцию обновления данных в разметке одной из секций документа.
+	 */
 	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
 	private class ASectionChangeEdit extends AbstractUndoableEdit {
 		private final ASection section;
