@@ -25,11 +25,14 @@ public class ASection implements Comparable<ASection> {
 	 */
 	public ASection(Document sourceDocument, int startOffset, int endOffset)
 			throws BadLocationException {
-		start = sourceDocument.createPosition(startOffset);
-		end = sourceDocument.createPosition(endOffset);
+		start = sourceDocument.createPosition(Math.min(startOffset, endOffset));
+		end = sourceDocument.createPosition(Math.max(startOffset, endOffset));
 	}
 
 	/**
+	 * Возвращает текущее смещение начала интервала в документе.
+	 * Гарантированно {@link #getStartOffset()} <= {@link #getEndOffset()}.
+	 *
 	 * @return текущее смещение начала интервала в документе
 	 */
 	public int getStartOffset() {
@@ -37,6 +40,9 @@ public class ASection implements Comparable<ASection> {
 	}
 
 	/**
+	 * Возвращает текущее смещение конца интервала в документе.
+	 * Гарантированно {@link #getStartOffset()} <= {@link #getEndOffset()}.
+	 *
 	 * @return текущее смещение конца интервала в документе
 	 */
 	public int getEndOffset() {
@@ -58,7 +64,7 @@ public class ASection implements Comparable<ASection> {
 	public boolean containsOffset(int offset) {
 		int startOffset = start.getOffset();
 		int endOffset = end.getOffset();
-		return startOffset < endOffset && offset >= startOffset && offset < endOffset;
+		return offset >= startOffset && offset < endOffset;
 	}
 
 	@Override

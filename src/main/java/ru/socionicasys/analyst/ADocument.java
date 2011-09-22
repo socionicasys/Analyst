@@ -267,20 +267,18 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		startCompoundEdit();
 		int startOffset = aSection.getStartOffset();
 		int endOffset = aSection.getEndOffset();
-		int begin = Math.min(startOffset, endOffset);
-		int length = Math.abs(startOffset - endOffset);
 
 		// удаляет сегменты с такими же границами
 		Set<ASection> sectionSet = aDataMap.keySet();
 		Iterator<ASection> it = sectionSet.iterator();
 		while (it.hasNext()) {
 			ASection section = it.next();
-			if (section.getStartOffset() == begin && section.getEndOffset() == begin + length) {
+			if (section.getStartOffset() == startOffset && section.getEndOffset() == endOffset) {
 				it.remove();
 			}
 		}
 
-		setCharacterAttributes(begin, length, defaultSectionAttributes, false);
+		setCharacterAttributes(startOffset, endOffset - startOffset, defaultSectionAttributes, false);
 		aDataMap.put(aSection, data);
 
 		fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionAdditionEdit(aSection, data)));
