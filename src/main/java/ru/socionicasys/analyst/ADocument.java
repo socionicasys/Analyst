@@ -13,6 +13,7 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.text.*;
 import javax.swing.undo.*;
 
+@SuppressWarnings({"NonSerializableFieldInSerializableClass", "serial"})
 public class ADocument extends DefaultStyledDocument implements DocumentListener {
 	public static final String DEFAULT_TITLE = "Новый документ";
 	// document's properties names
@@ -21,7 +22,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	public static final String ClientProperty = "Типируемый:";
 	public static final String DateProperty = "Дата:";
 	public static final String CommentProperty = "Комментарий:";
-	private static final long serialVersionUID = 4600082566231722109L;
 
 	private Map<ASection, AData> aDataMap;
 	private Collection<ADocumentChangeListener> listeners;
@@ -351,6 +351,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	//===================================================================
+	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
 	private class ASectionAdditionEdit extends AbstractUndoableEdit {
 		private final ASection section;
 		private final AData data;
@@ -391,6 +392,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	//===================================================================
+	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
 	private class ASectionDeletionEdit extends AbstractUndoableEdit {
 		private final ASection section;
 		private final AData data;
@@ -430,6 +432,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	//===================================================================
+	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
 	private class ASectionChangeEdit extends AbstractUndoableEdit {
 		private final ASection section;
 		private final AData oldData;
