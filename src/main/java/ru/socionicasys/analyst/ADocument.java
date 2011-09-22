@@ -356,7 +356,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		private final ASection section;
 		private final AData data;
 
-		public ASectionAdditionEdit(ASection section, AData data) {
+		private ASectionAdditionEdit(ASection section, AData data) {
 			this.section = section;
 			this.data = data;
 		}
@@ -397,7 +397,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		private final ASection section;
 		private final AData data;
 
-		public ASectionDeletionEdit(ASection section, AData data) {
+		private ASectionDeletionEdit(ASection section, AData data) {
 			this.section = section;
 			this.data = data;
 		}
@@ -438,7 +438,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		private final AData oldData;
 		private AData newData;
 
-		public ASectionChangeEdit(ASection section, AData oldData, AData newData) {
+		private ASectionChangeEdit(ASection section, AData oldData, AData newData) {
 			this.section = section;
 			this.oldData = oldData;
 			this.newData = newData;
@@ -477,8 +477,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 		@Override
 		public boolean addEdit(UndoableEdit anEdit) {
-			if ((anEdit instanceof ASectionChangeEdit) && ((ASectionChangeEdit) anEdit).getSection().equals(section)) {
-				newData = ((ASectionChangeEdit) anEdit).getNewData();
+			if (anEdit instanceof ASectionChangeEdit && ((ASectionChangeEdit) anEdit).section.equals(section)) {
+				newData = ((ASectionChangeEdit) anEdit).newData;
 				return true;
 			} else {
 				return super.addEdit(anEdit);
@@ -487,20 +487,12 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 		@Override
 		public boolean replaceEdit(UndoableEdit anEdit) {
-			if ((anEdit instanceof ASectionChangeEdit) && ((ASectionChangeEdit) anEdit).getSection().equals(section)) {
-				newData = ((ASectionChangeEdit) anEdit).getNewData();
+			if (anEdit instanceof ASectionChangeEdit && ((ASectionChangeEdit) anEdit).section.equals(section)) {
+				newData = ((ASectionChangeEdit) anEdit).newData;
 				return true;
 			} else {
 				return super.replaceEdit(anEdit);
 			}
-		}
-
-		public AData getNewData() {
-			return newData;
-		}
-
-		public ASection getSection() {
-			return section;
 		}
 	}
 
@@ -603,11 +595,11 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	public void appendDocument(ADocument anotherDocument) {
 		logger.trace("appendDocument(): entering, anotherDocument={}", anotherDocument);
 		List<ElementSpec> specs = new ArrayList<ElementSpec>();
-		ElementSpec spec = new ElementSpec(new SimpleAttributeSet(), ElementSpec.StartTagType);
-		specs.add(spec);
+		ElementSpec startSpec = new ElementSpec(new SimpleAttributeSet(), ElementSpec.StartTagType);
+		specs.add(startSpec);
 		visitElements(anotherDocument.getDefaultRootElement(), specs, false);
-		spec = new ElementSpec(new SimpleAttributeSet(), ElementSpec.EndTagType);
-		specs.add(spec);
+		ElementSpec endSpec = new ElementSpec(new SimpleAttributeSet(), ElementSpec.EndTagType);
+		specs.add(endSpec);
 
 		ElementSpec[] arr = new ElementSpec[specs.size()];
 		specs.toArray(arr);
