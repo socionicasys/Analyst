@@ -71,7 +71,7 @@ configurations {
 dependencies {
 	compile 'org.slf4j:slf4j-api:1.6.2'
 	compile 'org.swinglabs:swingx-core:1.6.2-2'
-	runtime 'ch.qos.logback:logback-classic:0.9.29'
+	runtime 'ch.qos.logback:logback-classic:0.9.30'
 	jgit 'org.eclipse.jgit:org.eclipse.jgit:1.0.0.201106090707-r'
 }
 
