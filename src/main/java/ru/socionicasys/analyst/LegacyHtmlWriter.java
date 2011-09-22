@@ -425,15 +425,13 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 		setProgress(HEADER_PROGRESS + PREPARATION_PROGRESS + TEXT_PROGRESS + REPORT_PROGRESS);
 
 		// if generating report
-		if (analystWindow.getGenerateReport()) {
-			writer.write(
-				"<br/>" +
-				"<h1> Определение ТИМа </h1>" +
-				"<br/>"
-			);
-			writer.write(analystWindow.getNavigeTree().getReport());
-			writeMissMatchReport(writer);
-		}
+		writer.write(
+			"<br/>" +
+					"<h1> Определение ТИМа </h1>" +
+					"<br/>"
+		);
+		writer.write(analystWindow.getNavigeTree().getReport());
+		writeMissMatchReport(writer);
 
 		writer.write(String.format(
 			"<br/>" +

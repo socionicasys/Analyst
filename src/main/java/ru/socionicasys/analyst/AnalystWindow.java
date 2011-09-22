@@ -33,7 +33,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 	private String fileName = "";
 
-	private boolean generateReport = false;
 	private boolean programExit = false;
 	private boolean makeNewDocument = false;
 
@@ -129,14 +128,12 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		JMenu fileMenu = createFileMenu();
 		JMenu editMenu = createEditMenu();
 		JMenu styleMenu = createStyleMenu();
-		JMenu settingsMenu = createSettingsMenu();
 		JMenu infoMenu = createInfoMenu();
 		JMenuBar mb = new JMenuBar();
 
 		mb.add(fileMenu);
 		mb.add(editMenu);
 		mb.add(styleMenu);
-		mb.add(settingsMenu);
 		mb.add(infoMenu);
 		setJMenuBar(mb);
 
@@ -354,24 +351,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		return menu;
 	}
 
-	private JMenu createSettingsMenu() {
-		JMenu menu = new JMenu("Установки");
-
-		//Settings.
-		final JCheckBox reportCheckbox = new JCheckBox("Генерировать отчет при сохранении");
-		reportCheckbox.setSelected(generateReport);
-		reportCheckbox.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				generateReport = reportCheckbox.isSelected();
-			}
-		});
-
-		menu.add(reportCheckbox);
-
-		return menu;
-	}
-
 	private void onWindowClosing() {
 		programExit = true;
 		int option = saveConfirmation();
@@ -455,10 +434,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 	public ATree getNavigeTree() {
 		return navigateTree;
-	}
-
-	public boolean getGenerateReport() {
-		return generateReport;
 	}
 
 	@Override
