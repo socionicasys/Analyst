@@ -27,7 +27,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	private Collection<ADocumentChangeListener> listeners;
 	public final SimpleAttributeSet defaultStyle;
 	public final SimpleAttributeSet defaultSectionAttributes;
-	public final SimpleAttributeSet defaultSearchHighlightAttributes;
 
 	private CompoundEdit currentCompoundEdit;
 	private int currentCompoundDepth;
@@ -75,8 +74,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		//style of a section with mark-up
 		defaultSectionAttributes = new SimpleAttributeSet();
 		defaultSectionAttributes.addAttribute(StyleConstants.Background, Color.decode("#E0ffff"));
-		defaultSearchHighlightAttributes = new SimpleAttributeSet();
-		defaultSearchHighlightAttributes.addAttribute(StyleConstants.Background, Color.decode("#ff0000"));
 
 		currentCompoundDepth = 0;
 
