@@ -1432,13 +1432,13 @@ public class ATree extends JTree {
 					"<tr>\n" +
 					"	<th width=\"20%\">Переводы <br/>из функции \u25ba<br/>в функцию <br/> \u25bc </th>\n");
 			for (Aspect aspect : Aspect.values()) {
-				reportBuilder.append(String.format("	<th width=\"10%%\"> %s </th>\n", aspect.name()));
+				reportBuilder.append(String.format("	<th width=\"10%%\"> %s </th>\n", aspect.getAbbreviation()));
 			}
 			reportBuilder.append("</tr>\n");
 
 			for (Aspect firstAspect : Aspect.values()) {
 				reportBuilder.append(String.format("<tr>\n	<td style=\"font-weight:bold\"> %s </td>\n",
-						firstAspect.name()));
+						firstAspect.getAbbreviation()));
 				for (Aspect secondAspect : Aspect.values()) {
 					reportBuilder.append("		<td align=\"center\">");
 					if (firstAspect == secondAspect) {

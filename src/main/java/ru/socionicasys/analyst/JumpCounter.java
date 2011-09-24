@@ -65,7 +65,7 @@ public class JumpCounter {
 	}
 
 	public int getJumpCount(Aspect to, Aspect from) {
-		return getJumpCount(to.name(), from.name());
+		return getJumpCount(to.getAbbreviation(), from.getAbbreviation());
 	}
 
 	public boolean isEmpty() {
