@@ -80,34 +80,18 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		matchMissModel = new MatchMissModel();
 		addADocumentChangeListener(matchMissModel);
 
-		//init new Document
-		initNew();
-		logger.trace("ADocument(): leaving");
-	}
-
-	public void initNew() {
-		logger.trace("initNew(): entering");
-		if (aDataMap == null) {
-			aDataMap = new HashMap<ASection, AData>();
-		} else {
-			aDataMap.clear();
-		}
-		try {
-			replace(0, getLength(), "", defaultStyle);
-		} catch (BadLocationException e) {
-			logger.error("Invalid document replace() in initNew()", e);
-		}
+		aDataMap = new HashMap<ASection, AData>();
 
 		putProperty(TitleProperty, DEFAULT_TITLE);
 		putProperty(ExpertProperty, "");
 		putProperty(ClientProperty, "");
-		Date date = new Date();
-		putProperty(DateProperty, date.toLocaleString());
+		Date now = new Date();
+		putProperty(DateProperty, now.toLocaleString());
 		putProperty(CommentProperty, "");
 
 		setCharacterAttributes(0, 1, defaultStyle, true);
 		fireADocumentChanged();
-		logger.trace("initNew(): leaving");
+		logger.trace("ADocument(): leaving");
 	}
 
 	/**

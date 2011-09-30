@@ -453,7 +453,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 	private void initNewDocument() {
 		ADocument document = documentHolder.getModel();
-		document.initNew();
 		setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), document.getProperty(Document.TitleProperty)));
 		fileName = "";
 		makeNewDocument = false;
