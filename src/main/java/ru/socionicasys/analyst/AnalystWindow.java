@@ -382,7 +382,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 					boolean overwrite = false;
 					while (!(cancel || overwrite)) {
 						fileChooser.setDialogTitle("Сохранение документа");
-						int returnVal = fileChooser.showDialog(this, "Сохранить");
+						int returnVal = fileChooser.showSaveDialog(this);
 						if (returnVal == JFileChooser.APPROVE_OPTION) {
 							file = fileChooser.getSelectedFile();
 							fileName = file.getAbsolutePath();
