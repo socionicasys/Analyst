@@ -153,8 +153,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	public void openFile(File file, boolean append) throws FileNotFoundException {
 		try {
 			final LegacyHtmlReader worker = new LegacyHtmlReader(file);
-			worker.getPropertyChangeSupport().addPropertyChangeListener("state",
-					new DocumentLoadListener(append, documentHolder));
+			worker.addPropertyChangeListener(new DocumentLoadListener(append, documentHolder));
 			worker.addPropertyChangeListener(new ProgressWindow(this, "    Идет загрузка файла...   "));
 			worker.execute();
 

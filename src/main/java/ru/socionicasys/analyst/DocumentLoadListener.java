@@ -3,15 +3,13 @@ package ru.socionicasys.analyst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.SwingWorker.StateValue;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.concurrent.ExecutionException;
 
 /**
  * Класс, слушающий состояние загрузки документа. Помещает документ в главное окно по окончанию загрузки.
  */
-public final class DocumentLoadListener implements PropertyChangeListener {
+public final class DocumentLoadListener extends SwingWorkerDoneListener {
 	/**
 	 * Добавлять ли документ после загрузки к уже существующему.
 	 */
@@ -37,22 +35,19 @@ public final class DocumentLoadListener implements PropertyChangeListener {
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		StateValue state = (StateValue) evt.getNewValue();
-		if (state == StateValue.DONE) {
-			try {
-				LegacyHtmlReader worker = (LegacyHtmlReader) evt.getSource();
-				ADocument document = worker.get();
-				if (append) {
-					documentHolder.getModel().appendDocument(document);
-				} else {
-					documentHolder.setModel(document);
-				}
-			} catch (InterruptedException e) {
-				logger.info("Document loading interrupted", e);
-			} catch (ExecutionException e) {
-				logger.error("Error while loading document", e.getCause());
+	protected void swingWorkerDone(PropertyChangeEvent evt) {
+		try {
+			LegacyHtmlReader worker = (LegacyHtmlReader) evt.getSource();
+			ADocument document = worker.get();
+			if (append) {
+				documentHolder.getModel().appendDocument(document);
+			} else {
+				documentHolder.setModel(document);
 			}
+		} catch (InterruptedException e) {
+			logger.info("Document loading interrupted", e);
+		} catch (ExecutionException e) {
+			logger.error("Error while loading document", e.getCause());
 		}
 	}
 }
