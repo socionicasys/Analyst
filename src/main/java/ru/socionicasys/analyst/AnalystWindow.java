@@ -9,17 +9,15 @@ import ru.socionicasys.analyst.undo.UndoAction;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.util.Dictionary;
 import javax.swing.*;
-import javax.swing.SwingWorker.StateValue;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.*;
 import javax.swing.text.JTextComponent.KeyBinding;
 
 @SuppressWarnings("serial")
-public class AnalystWindow extends JFrame implements PropertyChangeListener {
+public class AnalystWindow extends JFrame {
 	private static final String EXTENSION = "htm";
 	private static final Logger logger = LoggerFactory.getLogger(AnalystWindow.class);
 
@@ -403,7 +401,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 						ProgressWindow pw = new ProgressWindow(this, "    Сохранение файла: ");
 						LegacyHtmlWriter iow = new LegacyHtmlWriter(this, document, file);
 						iow.addPropertyChangeListener(pw);
-						iow.addPropertyChangeListener(this);
+						iow.addPropertyChangeListener(new DocumentSaveListener());
 						iow.execute();
 					} catch (Exception e) {
 						logger.error("Error writing document to file" + file.getAbsolutePath(), e);
@@ -424,21 +422,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 	public ATree getNavigeTree() {
 		return navigateTree;
-	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		if ("state".equals(evt.getPropertyName())) {
-			StateValue state = (StateValue) evt.getNewValue();
-			if (state == StateValue.DONE) {
-				if (programExit) {
-					System.exit(0);
-				}
-				if (makeNewDocument) {
-					initNewDocument();
-				}
-			}
-		}
 	}
 
 	private void initNewDocument() {
@@ -495,7 +478,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			ProgressWindow pw = new ProgressWindow(AnalystWindow.this, "    Сохранение файла: ");
 			LegacyHtmlWriter backgroundWriter = new LegacyHtmlWriter(AnalystWindow.this, document, saveFile);
 			backgroundWriter.addPropertyChangeListener(pw);
-			backgroundWriter.addPropertyChangeListener(AnalystWindow.this);
+			backgroundWriter.addPropertyChangeListener(new DocumentSaveListener());
 			backgroundWriter.execute();
 			setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), saveFile.getName()));
 		}
@@ -648,4 +631,19 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		}
 	}
 
+	/**
+	 * Класс, слушающий состояние сохранения документа. Выполняет действия, отложенные до конца сохранения:
+	 * выход из приложения, инициализацию нового докуента.
+	 */
+	private final class DocumentSaveListener extends SwingWorkerDoneListener {
+		@Override
+		protected void swingWorkerDone(PropertyChangeEvent evt) {
+			if (programExit) {
+				System.exit(0);
+			}
+			if (makeNewDocument) {
+				initNewDocument();
+			}
+		}
+	}
 }
