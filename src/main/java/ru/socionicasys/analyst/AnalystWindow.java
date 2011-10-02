@@ -144,23 +144,19 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		pack();
 	}
 
-	public void openFile(String filename, boolean append) throws FileNotFoundException {
+	public void openFile(String filename, boolean append) {
 		openFile(new File(filename), append);
 	}
 
-	public void openFile(File file, boolean append) throws FileNotFoundException {
-		try {
-			final LegacyHtmlReader worker = new LegacyHtmlReader(file);
-			worker.addPropertyChangeListener(new DocumentLoadListener(append, documentHolder));
-			worker.addPropertyChangeListener(new ProgressWindow(this, "    Идет загрузка файла...   "));
-			worker.execute();
+	public void openFile(File file, boolean append) {
+		final LegacyHtmlReader worker = new LegacyHtmlReader(file);
+		worker.addPropertyChangeListener(new DocumentLoadListener(append, documentHolder));
+		worker.addPropertyChangeListener(new ProgressWindow(this, "    Идет загрузка файла...   "));
+		worker.execute();
 
-			textPane.grabFocus();
-			status.setText("");
-			setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), file.getName()));
-		} catch (Exception e) {
-			logger.error("Error loading file {}", file.getAbsolutePath(), e);
-		}
+		textPane.grabFocus();
+		status.setText("");
+		setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), file.getName()));
 	}
 
 	private JTabbedPane createTabPane() {
@@ -515,28 +511,16 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			try {
-				if (!append) {
-					status.setText("Открытие документа...");
-					if (saveConfirmation() == JOptionPane.CANCEL_OPTION) {
-						return;
-					}
+			if (!append) {
+				status.setText("Открытие документа...");
+				if (saveConfirmation() == JOptionPane.CANCEL_OPTION) {
+					return;
 				}
-				fileChooser.setDialogTitle(append ? "Открыть и присоединить документ" : "Открытие документа");
-				int openResult = fileChooser.showDialog(AnalystWindow.this, append ? "Открыть и присоединить" : "Открыть");
-				if (openResult == JFileChooser.APPROVE_OPTION) {
-					openFile(fileChooser.getSelectedFile(), append);
-				}
-			} catch (FileNotFoundException ex) {
-				String fileName = documentHolder.getModel().getAssociatedFile().getAbsolutePath();
-				JOptionPane.showOptionDialog(AnalystWindow.this,
-					String.format("Ошибка открытия файла: %s\n\n%s", fileName, ex.getMessage()),
-					"Ошибка открытия файла",
-					JOptionPane.OK_OPTION,
-					JOptionPane.ERROR_MESSAGE,
-					null,
-					new Object[]{"Закрыть"},
-					null);
+			}
+			fileChooser.setDialogTitle(append ? "Открыть и присоединить документ" : "Открытие документа");
+			int openResult = fileChooser.showDialog(AnalystWindow.this, append ? "Открыть и присоединить" : "Открыть");
+			if (openResult == JFileChooser.APPROVE_OPTION) {
+				openFile(fileChooser.getSelectedFile(), append);
 			}
 		}
 	}

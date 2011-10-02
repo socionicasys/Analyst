@@ -51,11 +51,7 @@ public class Analyst implements Runnable {
 
 		final AnalystWindow analystWindow = new AnalystWindow();
 		if (startupFilename != null) {
-			try {
-				analystWindow.openFile(startupFilename, false);
-			} catch (FileNotFoundException ignored) {
-				// Ошибка уже попала в логи
-			}
+			analystWindow.openFile(startupFilename, false);
 		}
 
 		//Display the window.
