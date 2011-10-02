@@ -128,6 +128,7 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 		Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), FILE_ENCODING));
 		try {
 			writeDocument(writer);
+			document.setAssociatedFile(outputFile);
 		} catch (BadLocationException e) {
 			logger.error("Incorrect document position while saving document", e);
 			throw e;

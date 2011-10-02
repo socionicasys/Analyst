@@ -48,6 +48,8 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 		setProgress(0);
 
 		ADocument document = new ADocument();
+		document.setAssociatedFile(sourceFile);
+		
 		String text = readFromStream();
 		setProgress(FILE_LOAD_PROGRESS);
 

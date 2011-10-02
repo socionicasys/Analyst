@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.io.File;
 import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
@@ -35,6 +36,12 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	 * Информация о соответствиях/несоответствиях ТИМам
 	 */
 	private final MatchMissModel matchMissModel;
+
+	/**
+	 * Файл, с которым связан данный документ, и в который будет по умолчанию происходить сохранение документа
+	 * {@code null}, если документ не привязан к какому-либо файлу.
+	 */
+	private File associatedFile;
 
 	private static final Logger logger = LoggerFactory.getLogger(ADocument.class);
 
@@ -657,5 +664,23 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	 */
 	public MatchMissModel getMatchMissModel() {
 		return matchMissModel;
+	}
+
+	/**
+	 * Возвращает файл, связанный с данным документом.
+	 * 
+	 * @return файл, в который будет по умолчанию происходить сохранение документа
+	 */
+	public File getAssociatedFile() {
+		return associatedFile;
+	}
+
+	/**
+	 * Задает файл, связанный с данным документом.
+	 *
+	 * @param associatedFile файл, в который будет по умолчанию происходить сохранение документа
+	 */
+	public void setAssociatedFile(File associatedFile) {
+		this.associatedFile = associatedFile;
 	}
 }

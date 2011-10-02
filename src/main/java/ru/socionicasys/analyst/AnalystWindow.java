@@ -31,8 +31,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 	private final MatchMissView histogramTree;
 	private final JFileChooser fileChooser;
 
-	private String fileName = "";
-
 	private boolean programExit = false;
 	private boolean makeNewDocument = false;
 
@@ -157,7 +155,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 			worker.addPropertyChangeListener(new ProgressWindow(this, "    Идет загрузка файла...   "));
 			worker.execute();
 
-			fileName = file.getAbsolutePath();
 			textPane.grabFocus();
 			status.setText("");
 			setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), file.getName()));
@@ -375,8 +372,8 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 				new Object[]{"Сохранить", "Не сохранять", "Отмена"},
 				null);
 			if (choice == JOptionPane.YES_OPTION) {
-				File file;
-				if (fileName == null || fileName.length() == 0) {
+				File file = document.getAssociatedFile();
+				if (file == null) {
 					boolean cancel = false;
 					boolean overwrite = false;
 					while (!(cancel || overwrite)) {
@@ -384,7 +381,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 						int returnVal = fileChooser.showSaveDialog(this);
 						if (returnVal == JFileChooser.APPROVE_OPTION) {
 							file = fileChooser.getSelectedFile();
-							fileName = file.getAbsolutePath();
 							if (file.exists()) {
 								Object[] options = {"Да", "Нет"};
 								int option = JOptionPane.showOptionDialog(this,
@@ -406,18 +402,17 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 					}
 				}
 
-				if (fileName != null && fileName.length() > 0) {
+				if (file != null) {
 					try {
-						file = new File(fileName);
 						ProgressWindow pw = new ProgressWindow(this, "    Сохранение файла: ");
 						LegacyHtmlWriter iow = new LegacyHtmlWriter(this, document, file);
 						iow.addPropertyChangeListener(pw);
 						iow.addPropertyChangeListener(this);
 						iow.execute();
 					} catch (Exception e) {
-						logger.error("Error writing document to file" + fileName, e);
+						logger.error("Error writing document to file" + file.getAbsolutePath(), e);
 						JOptionPane.showOptionDialog(this,
-							"Ошибка сохранения файла: " + fileName + "\n\n" + e.getMessage(),
+							"Ошибка сохранения файла: " + file.getAbsolutePath() + "\n\n" + e.getMessage(),
 							"Ошибка сохранения файла",
 							JOptionPane.OK_OPTION,
 							JOptionPane.ERROR_MESSAGE,
@@ -454,7 +449,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 		ADocument newDocument = new ADocument();
 		documentHolder.setModel(newDocument);
 		setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), newDocument.getProperty(Document.TitleProperty)));
-		fileName = "";
 		makeNewDocument = false;
 	}
 
@@ -468,8 +462,8 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			File saveFile;
-			if (saveAs || fileName.isEmpty()) {
+			File saveFile = documentHolder.getModel().getAssociatedFile();
+			if (saveAs || saveFile == null) {
 				// Если у документа еще нет привязки к имени файла, или выбран пункт «Сохранить как…»,
 				// нужно показать диалог сохранения файла
 				fileChooser.setDialogTitle(saveAs ? "Сохранение документа под новым именем" : "Сохранение документа");
@@ -478,11 +472,11 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 					return;
 				}
 
-				fileName = fileChooser.getSelectedFile().getAbsolutePath();
-				if (!fileName.endsWith('.' + EXTENSION)) {
-					fileName += '.' + EXTENSION;
+				String saveFileName = fileChooser.getSelectedFile().getAbsolutePath();
+				if (!saveFileName.endsWith('.' + EXTENSION)) {
+					saveFileName += '.' + EXTENSION;
 				}
-				saveFile = new File(fileName);
+				saveFile = new File(saveFileName);
 
 				// Подтверждение замены файла
 				if (saveFile.exists()) {
@@ -499,9 +493,6 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 						return;
 					}
 				}
-			} else {
-				// Если документ уже связан с именем файла
-				saveFile = new File(fileName);
 			}
 
 			ADocument document = documentHolder.getModel();
@@ -537,6 +528,7 @@ public class AnalystWindow extends JFrame implements PropertyChangeListener {
 					openFile(fileChooser.getSelectedFile(), append);
 				}
 			} catch (FileNotFoundException ex) {
+				String fileName = documentHolder.getModel().getAssociatedFile().getAbsolutePath();
 				JOptionPane.showOptionDialog(AnalystWindow.this,
 					String.format("Ошибка открытия файла: %s\n\n%s", fileName, ex.getMessage()),
 					"Ошибка открытия файла",
