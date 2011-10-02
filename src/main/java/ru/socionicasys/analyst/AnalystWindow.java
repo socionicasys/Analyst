@@ -197,7 +197,7 @@ public class AnalystWindow extends JFrame {
 					break;
 
 				case JOptionPane.NO_OPTION:
-					System.exit(0);
+					dispose();
 					break;
 				}
 			}
@@ -348,7 +348,7 @@ public class AnalystWindow extends JFrame {
 			programExit = false;
 		}
 		else if (option == JOptionPane.NO_OPTION) {
-			System.exit(0);
+			dispose();
 		}
 	}
 
@@ -643,7 +643,7 @@ public class AnalystWindow extends JFrame {
 		@Override
 		protected void swingWorkerDone(PropertyChangeEvent evt) {
 			if (programExit) {
-				System.exit(0);
+				dispose();
 			}
 			if (makeNewDocument) {
 				initNewDocument();
