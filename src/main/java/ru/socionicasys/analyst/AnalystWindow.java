@@ -29,8 +29,8 @@ public class AnalystWindow extends JFrame {
 	private final MatchMissView histogramTree;
 	private final JFileChooser fileChooser;
 
-	private boolean programExit = false;
-	private boolean makeNewDocument = false;
+	private boolean programExit;
+	private boolean makeNewDocument;
 
 	private final ActiveUndoManager undoManager = new ActiveUndoManager();
 
@@ -67,7 +67,7 @@ public class AnalystWindow extends JFrame {
 		commentField.setLineWrap(true);
 		commentField.setWrapStyleWord(true);
 		commentField.setMaximumSize(new Dimension(400, 30));
-		CommentConnector commentConnector = new CommentConnector(selectionModel, commentField);
+		new CommentConnector(selectionModel, commentField);
 
 		JScrollPane scrollPaneForComment = new JScrollPane(commentField);
 		scrollPaneForComment.setMinimumSize(new Dimension(400, 30));
@@ -431,10 +431,11 @@ public class AnalystWindow extends JFrame {
 		makeNewDocument = false;
 	}
 
+	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
 	private class SaveAction extends AbstractAction {
 		private final boolean saveAs;
 
-		public SaveAction(boolean saveAs) {
+		private SaveAction(boolean saveAs) {
 			super(saveAs ? "Сохранить как..." : "Сохранить");
 			this.saveAs = saveAs;
 		}
@@ -452,8 +453,9 @@ public class AnalystWindow extends JFrame {
 				}
 
 				String saveFileName = fileChooser.getSelectedFile().getAbsolutePath();
-				if (!saveFileName.endsWith('.' + EXTENSION)) {
-					saveFileName += '.' + EXTENSION;
+				String suffix = String.format(".%s", EXTENSION);
+				if (!saveFileName.endsWith(suffix)) {
+					saveFileName += suffix;
 				}
 				saveFile = new File(saveFileName);
 
@@ -484,10 +486,11 @@ public class AnalystWindow extends JFrame {
 		}
 	}
 
+	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
 	private class OpenAction extends AbstractAction {
 		private final boolean append;
 
-		public OpenAction(boolean append) {
+		private OpenAction(boolean append) {
 			super(append ? "Открыть и присоединить..." : "Открыть...");
 			this.append = append;
 		}
@@ -511,6 +514,7 @@ public class AnalystWindow extends JFrame {
 	/**
 	 * Отображает окно свойств документа.
 	 */
+	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
 	private final class DocumentPropertiesAction extends AbstractAction {
 		private DocumentPropertiesAction() {
 			super("Свойства документа");
