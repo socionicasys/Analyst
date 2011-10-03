@@ -398,9 +398,8 @@ public class AnalystWindow extends JFrame {
 
 				if (file != null) {
 					try {
-						ProgressWindow pw = new ProgressWindow(this, "    Сохранение файла: ");
 						LegacyHtmlWriter iow = new LegacyHtmlWriter(this, document, file);
-						iow.addPropertyChangeListener(pw);
+						iow.addPropertyChangeListener(new ProgressWindow(this, "    Сохранение файла: "));
 						iow.addPropertyChangeListener(new DocumentSaveListener());
 						iow.execute();
 					} catch (Exception e) {
@@ -477,9 +476,8 @@ public class AnalystWindow extends JFrame {
 			}
 
 			ADocument document = documentHolder.getModel();
-			ProgressWindow pw = new ProgressWindow(AnalystWindow.this, "    Сохранение файла: ");
 			LegacyHtmlWriter backgroundWriter = new LegacyHtmlWriter(AnalystWindow.this, document, saveFile);
-			backgroundWriter.addPropertyChangeListener(pw);
+			backgroundWriter.addPropertyChangeListener(new ProgressWindow(AnalystWindow.this, "    Сохранение файла: "));
 			backgroundWriter.addPropertyChangeListener(new DocumentSaveListener());
 			backgroundWriter.execute();
 			setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), saveFile.getName()));

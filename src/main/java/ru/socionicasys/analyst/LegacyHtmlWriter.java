@@ -117,7 +117,7 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 		}
 	}
 
-	LegacyHtmlWriter(AnalystWindow analystWindow, ADocument document, File outputFile) {
+	public LegacyHtmlWriter(AnalystWindow analystWindow, ADocument document, File outputFile) {
 		this.document = document;
 		this.outputFile = outputFile;
 		this.analystWindow = analystWindow;

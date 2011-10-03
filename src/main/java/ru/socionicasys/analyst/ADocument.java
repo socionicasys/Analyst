@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.io.File;
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
@@ -48,7 +49,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	/**
 	 * Сравнивает две ASection исходя из их близости к определенному положению в документе.
 	 */
-	private static final class SectionDistanceComparator implements Comparator<ASection> {
+	private static final class SectionDistanceComparator implements Comparator<ASection>, Serializable {
 		private final int targetPosition;
 
 		/**
