@@ -103,6 +103,8 @@ task syncLibs(type: Sync) {
 
 task debug
 
+task release(dependsOn: build)
+
 task wrapper(type: Wrapper) {
 	gradleVersion = '1.0-milestone-4'
 }
