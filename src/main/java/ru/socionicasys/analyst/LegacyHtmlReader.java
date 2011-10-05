@@ -46,6 +46,7 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 			logger.error("IO error while loading document", e);
 			throw e;
 		} finally {
+			logger.debug("doInBackground(): loading finished");
 			logger.trace("doInBackground(): leaving");
 		}
 	}
@@ -291,7 +292,7 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 			if (openingBracketPos >= 0 && openingBracketPos <= closingBracketPos) {
 				// Открывающий тег [n|
 				handle = Integer.parseInt(parsedColumnText.substring(openingBracketPos + 1, middleBracketPos));
-				logger.debug("parseLeftColumn(): opening tag [{}| found", handle);
+				logger.trace("parseLeftColumn(): opening tag [{}| found", handle);
 				columnBuilder.delete(openingBracketPos, middleBracketPos + 1);
 				data = new RawAData();
 				data.setBegin(openingBracketPos);
@@ -299,7 +300,7 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 			} else if (closingBracketPos >= 0) {
 				// Закрывающий тег |n]
 				handle = Integer.parseInt(parsedColumnText.substring(middleBracketPos + 1, closingBracketPos));
-				logger.debug("parseLeftColumn(): closing tag |{}] found", handle);
+				logger.trace("parseLeftColumn(): closing tag |{}] found", handle);
 				columnBuilder.delete(middleBracketPos, closingBracketPos + 1);
 				data = rawData.get(handle);
 				if (data != null) {
