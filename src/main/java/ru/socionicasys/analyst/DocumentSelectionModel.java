@@ -232,6 +232,12 @@ public class DocumentSelectionModel {
 		setInitialized(false);
 		if (markupData == null) {
 			setAspect(null);
+			setSecondAspect(null);
+			setModifier(null);
+			setSign(null);
+			setMV(null);
+			setDimension(null);
+			setComment(null);
 		} else {
 			setAspect(markupData.getAspect());
 			setSecondAspect(markupData.getSecondAspect());
