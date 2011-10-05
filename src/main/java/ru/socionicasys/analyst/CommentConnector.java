@@ -67,7 +67,9 @@ public class CommentConnector implements DocumentListener, PropertyChangeListene
 	 * Обновляет модель по данным из текстового поля с комментарием.
 	 */
 	private void updateModel() {
+		logger.trace("updateModel(): entering");
 		if (!viewInitialized) {
+			logger.trace("updateModel(): leaving");
 			return;
 		}
 
@@ -77,11 +79,14 @@ public class CommentConnector implements DocumentListener, PropertyChangeListene
 		} catch (BadLocationException e) {
 			logger.error("updateModel(): invalid document localtion", e);
 		}
+		logger.trace("updateModel(): leaving");
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		logger.trace("propertyChange({}): entering", evt);
 		if (!selectionModel.isInitialized()) {
+			logger.trace("propertyChange({}): leaving", evt);
 			return;
 		}
 
@@ -94,5 +99,6 @@ public class CommentConnector implements DocumentListener, PropertyChangeListene
 			textComponent.setText("");
 		}
 		viewInitialized = true;
+		logger.trace("propertyChange({}): leaving", evt);
 	}
 }
