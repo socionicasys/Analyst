@@ -68,16 +68,15 @@ public class CommentConnector implements DocumentListener, PropertyChangeListene
 	 */
 	private void updateModel() {
 		logger.trace("updateModel(): entering");
-		if (!viewInitialized) {
-			logger.trace("updateModel(): leaving");
-			return;
-		}
 
 		try {
 			Document document = textComponent.getDocument();
+			viewInitialized = false;
 			selectionModel.setComment(document.getText(0, document.getLength()));
 		} catch (BadLocationException e) {
 			logger.error("updateModel(): invalid document localtion", e);
+		} finally {
+			viewInitialized = true;
 		}
 		logger.trace("updateModel(): leaving");
 	}
@@ -85,20 +84,18 @@ public class CommentConnector implements DocumentListener, PropertyChangeListene
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		logger.trace("propertyChange({}): entering", evt);
-		if (!selectionModel.isInitialized()) {
+		if (!selectionModel.isInitialized() || !viewInitialized) {
 			logger.trace("propertyChange({}): leaving", evt);
 			return;
 		}
 
-		viewInitialized = false;
 		boolean commentEnabled = !selectionModel.isEmpty() && !selectionModel.isMarkupEmpty();
-		textComponent.setEnabled(commentEnabled);
+		textComponent.setEditable(commentEnabled);
 		if (commentEnabled) {
 			textComponent.setText(selectionModel.getComment());
 		} else {
 			textComponent.setText("");
 		}
-		viewInitialized = true;
 		logger.trace("propertyChange({}): leaving", evt);
 	}
 }
