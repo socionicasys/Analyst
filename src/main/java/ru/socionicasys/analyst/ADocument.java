@@ -633,8 +633,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	 * @param includeRoot добавлять ли в описание теги открытия/закрытия начального элемента
 	 */
 	private static void visitElements(Element element, List<ElementSpec> specs, boolean includeRoot) {
-		logger.trace("visitElements(): entering, element={}, specs={}, includeRoot={}",
-				new Object[]{element, specs, includeRoot});
+		logger.trace("visitElements(): entering, element={}, includeRoot={}", element, includeRoot);
 		if (element.isLeaf()) {
 			try {
 				String elementText = element.getDocument().getText(element.getStartOffset(),
@@ -642,7 +641,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 				specs.add(new ElementSpec(element.getAttributes(), ElementSpec.ContentType,
 						elementText.toCharArray(), 0, elementText.length()));
 			} catch (BadLocationException e) {
-				logger.error("Error while traversing document");
+				logger.error("Error while traversing document", e);
 			}
 		}
 		else {
