@@ -140,6 +140,8 @@ public class AnalystWindow extends JFrame {
 		documentHolder.addUndoableEditListener(undoManager);
 
 		pack();
+
+		textPane.requestFocusInWindow();
 	}
 
 	public void openFile(String filename, boolean append) {
