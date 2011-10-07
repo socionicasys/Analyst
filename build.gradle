@@ -19,7 +19,7 @@ buildscript {
 	}
 }
 
-version = '1.1-beta-2'
+version = '1.1-beta-3'
 group = 'ru.socionicasys'
 mainClassName = 'ru.socionicasys.analyst.Analyst'
 sourceCompatibility = '1.6'
