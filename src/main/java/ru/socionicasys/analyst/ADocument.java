@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.io.File;
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
@@ -94,7 +95,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		putProperty(ExpertProperty, "");
 		putProperty(ClientProperty, "");
 		Date now = new Date();
-		putProperty(DateProperty, now.toLocaleString());
+		DateFormat dateFormat = DateFormat.getDateInstance();
+		putProperty(DateProperty, dateFormat.format(now));
 		putProperty(CommentProperty, "");
 
 		setCharacterAttributes(0, 1, defaultStyle, true);
