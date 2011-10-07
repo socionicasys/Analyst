@@ -7,13 +7,53 @@ import ru.socionicasys.analyst.types.Sociotype;
 
 import java.util.*;
 
+/**
+ * Содержит в себе код сверки социотипа и набора данных из пометок.
+ */
 public final class SocionicsType {
 	private SocionicsType() {
 	}
 
+	/**
+	 * Проверяет, соответствует ли данный ТИМ конкретным отметкам.
+	 *
+	 * @param type ТИМ
+	 * @param aspect аспект отметки
+	 * @param secondAspect второй аспект (для блока)
+	 * @param sign знак
+	 * @param dimension размерность
+	 * @param mv ментальность/витальность
+	 * @return соответствует ли ТИМ
+	 */
 	public static boolean matches(Sociotype type, String aspect, String secondAspect, String sign, String dimension, String mv) {
 		if (aspect == null) {
 			return false;
+		}
+
+		Collection<Predicate> predicates = createPredicates(aspect, secondAspect, sign, dimension, mv);
+
+		for (Predicate predicate : predicates) {
+			if (!predicate.check(type)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+
+	/**
+	 * Преобразует набор отметок в список предикатов.
+	 *
+	 * @param aspect аспект отметки
+	 * @param secondAspect второй аспект (для блока)
+	 * @param sign знак
+	 * @param dimension размерность
+	 * @param mv ментальность/витальность
+	 * @return список предикатов
+	 */
+	public static Collection<Predicate> createPredicates(String aspect, String secondAspect, String sign, String dimension, String mv) {
+		if (aspect == null) {
+			return Collections.emptyList();
 		}
 
 		Aspect baseAspect = Aspect.byAbbreviation(aspect);
@@ -75,11 +115,6 @@ public final class SocionicsType {
 			predicates.add(mvPredicate);
 		}
 
-		for (Predicate predicate : predicates) {
-			if (!predicate.check(type)) {
-				return false;
-			}
-		}
-		return true;
+		return predicates;
 	}
 }
