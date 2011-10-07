@@ -19,6 +19,8 @@ import javax.swing.text.JTextComponent.KeyBinding;
 @SuppressWarnings("serial")
 public class AnalystWindow extends JFrame {
 	private static final String EXTENSION = "htm";
+	private static final String WINDOW_TITLE_FORMAT = "%s - %s";
+
 	private static final Logger logger = LoggerFactory.getLogger(AnalystWindow.class);
 
 	private final DocumentHolder documentHolder;
@@ -35,7 +37,7 @@ public class AnalystWindow extends JFrame {
 	private final ActiveUndoManager undoManager = new ActiveUndoManager();
 
 	public AnalystWindow() {
-		super(String.format("%s - %s", VersionInfo.getApplicationName(), ADocument.DEFAULT_TITLE));
+		super(String.format(WINDOW_TITLE_FORMAT, VersionInfo.getApplicationName(), ADocument.DEFAULT_TITLE));
 
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
@@ -156,7 +158,7 @@ public class AnalystWindow extends JFrame {
 
 		textPane.grabFocus();
 		status.setText("");
-		setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), file.getName()));
+		setTitle(String.format(WINDOW_TITLE_FORMAT, VersionInfo.getApplicationName(), file.getName()));
 	}
 
 	private JTabbedPane createTabPane() {
@@ -184,6 +186,11 @@ public class AnalystWindow extends JFrame {
 				case JOptionPane.NO_OPTION:
 					initNewDocument();
 					break;
+
+				case JOptionPane.CANCEL_OPTION:
+				default:
+					// Save confirmation was cancelled, do nothing
+					break;
 				}
 			}
 		});
@@ -194,12 +201,20 @@ public class AnalystWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				programExit = true;
 				switch (saveConfirmation()) {
+				case JOptionPane.YES_OPTION:
+					// Save before exit was chosed. Do nothing: save in handled by saveConfirmation()
+					// and exit after save in handled by DocumentSaveListener.
+					break;
+				
 				case JOptionPane.CANCEL_OPTION:
 					programExit = false;
 					break;
 
 				case JOptionPane.NO_OPTION:
 					dispose();
+					break;
+
+				default:
 					break;
 				}
 			}
@@ -428,12 +443,12 @@ public class AnalystWindow extends JFrame {
 	private void initNewDocument() {
 		ADocument newDocument = new ADocument();
 		documentHolder.setModel(newDocument);
-		setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), newDocument.getProperty(Document.TitleProperty)));
+		setTitle(String.format(WINDOW_TITLE_FORMAT, VersionInfo.getApplicationName(), newDocument.getProperty(Document.TitleProperty)));
 		makeNewDocument = false;
 	}
 
 	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
-	private class SaveAction extends AbstractAction {
+	private final class SaveAction extends AbstractAction {
 		private final boolean saveAs;
 
 		private SaveAction(boolean saveAs) {
@@ -482,12 +497,12 @@ public class AnalystWindow extends JFrame {
 			backgroundWriter.addPropertyChangeListener(new ProgressWindow(AnalystWindow.this, "    Сохранение файла: "));
 			backgroundWriter.addPropertyChangeListener(new DocumentSaveListener());
 			backgroundWriter.execute();
-			setTitle(String.format("%s - %s", VersionInfo.getApplicationName(), saveFile.getName()));
+			setTitle(String.format(WINDOW_TITLE_FORMAT, VersionInfo.getApplicationName(), saveFile.getName()));
 		}
 	}
 
 	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
-	private class OpenAction extends AbstractAction {
+	private final class OpenAction extends AbstractAction {
 		private final boolean append;
 
 		private OpenAction(boolean append) {
