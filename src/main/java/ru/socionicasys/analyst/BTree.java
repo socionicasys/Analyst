@@ -17,6 +17,8 @@ import javax.swing.tree.*;
  * @author Виктор
  */
 public class BTree extends JTree implements ADocumentChangeListener {
+	private static final int MAX_PRESENTATION_CHARS = 100;
+
 	private static final Logger logger = LoggerFactory.getLogger(BTree.class);
 
 	private final DefaultMutableTreeNode rootNode;
@@ -73,7 +75,7 @@ public class BTree extends JTree implements ADocumentChangeListener {
 			for (Entry<ASection, AData> dataEntry : document.getADataMap().entrySet()) {
 				int sectionOffset = dataEntry.getKey().getStartOffset();
 				int sectionLength = Math.abs(dataEntry.getKey().getEndOffset() - sectionOffset);
-				int quoteLength = Math.min(sectionLength, ATree.MAX_PRESENTATION_CHARS);
+				int quoteLength = Math.min(sectionLength, MAX_PRESENTATION_CHARS);
 
 				AData data = dataEntry.getValue();
 
