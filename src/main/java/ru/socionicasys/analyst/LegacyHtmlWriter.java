@@ -11,7 +11,6 @@ import javax.swing.*;
 import javax.swing.text.*;
 
 public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
-	private static final String FILE_ENCODING = "UTF-8";
 	private static final Logger logger = LoggerFactory.getLogger(LegacyHtmlWriter.class);
 
 	private static final int HEADER_PROGRESS = 20;
@@ -129,7 +128,8 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 
 	@Override
 	protected Void doInBackground() throws BadLocationException, IOException {
-		Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), FILE_ENCODING));
+		Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile),
+				LegacyHtmlFormat.FILE_ENCODING));
 		try {
 			writeDocument(writer);
 			document.setAssociatedFile(outputFile);
@@ -164,7 +164,7 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 			"	</style>\n" +
 			"</head> \n" +
 			"<body> \n",
-			FILE_ENCODING,
+			LegacyHtmlFormat.FILE_ENCODING,
 			document.getProperty(Document.TitleProperty)
 		));
 
@@ -196,16 +196,16 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 			"	<td>%s </td>\n" +
 			"</tr>\n" +
 			"</table >\n",
-			ADocument.TitleProperty1,
+			LegacyHtmlFormat.TITLE_PROPERTY_LABEL,
 			document.getProperty(Document.TitleProperty),
-			ADocument.ClientProperty,
-			document.getProperty(ADocument.ClientProperty),
-			ADocument.ExpertProperty,
-			document.getProperty(ADocument.ExpertProperty),
-			ADocument.DateProperty,
-			document.getProperty(ADocument.DateProperty),
-			ADocument.CommentProperty,
-			document.getProperty(ADocument.CommentProperty)
+			LegacyHtmlFormat.CLIENT_PROPERTY_LABEL,
+			document.getProperty(ADocument.CLIENT_PROPERTY),
+			LegacyHtmlFormat.EXPERT_PROPERTY_LABEL,
+			document.getProperty(ADocument.EXPERT_PROPERTY),
+			LegacyHtmlFormat.DATE_PROPERTY_LABEL,
+			document.getProperty(ADocument.DATE_PROPERTY),
+			LegacyHtmlFormat.COMMENT_PROPERTY_LABEL,
+			document.getProperty(ADocument.COMMENT_PROPERTY)
 		));
 
 		//  writing the color legend

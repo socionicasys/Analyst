@@ -11,7 +11,6 @@ import javax.swing.*;
 import javax.swing.text.*;
 
 public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
-	private static final String FILE_ENCODING = "UTF-8";
 	private static final Logger logger = LoggerFactory.getLogger(LegacyHtmlReader.class);
 
 	private static final int FILE_LOAD_PROGRESS = 20;
@@ -171,7 +170,8 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 
 	@SuppressWarnings("OverlyBroadThrowsClause")
 	private String readFromStream() throws IOException {
-		Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile), FILE_ENCODING));
+		Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(sourceFile),
+				LegacyHtmlFormat.FILE_ENCODING));
 		try {
 			boolean finished = false;
 			char[] buf = new char[BUFFER_SIZE];
@@ -230,16 +230,16 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 			//обработка заголовка
 			propertyValue = HTML_BR_PATTERN.matcher(propertyValue).replaceAll("\n");
 
-			if (ADocument.TitleProperty1.equals(propertyName)) {
+			if (LegacyHtmlFormat.TITLE_PROPERTY_LABEL.equals(propertyName)) {
 				documentProperties.put(Document.TitleProperty, propertyValue);
-			} else if (ADocument.ExpertProperty.equals(propertyName)) {
-				documentProperties.put(ADocument.ExpertProperty, propertyValue);
-			} else if (ADocument.ClientProperty.equals(propertyName)) {
-				documentProperties.put(ADocument.ClientProperty, propertyValue);
-			} else if (ADocument.DateProperty.equals(propertyName)) {
-				documentProperties.put(ADocument.DateProperty, propertyValue);
-			} else if (ADocument.CommentProperty.equals(propertyName)) {
-				documentProperties.put(ADocument.CommentProperty, propertyValue);
+			} else if (LegacyHtmlFormat.EXPERT_PROPERTY_LABEL.equals(propertyName)) {
+				documentProperties.put(ADocument.EXPERT_PROPERTY, propertyValue);
+			} else if (LegacyHtmlFormat.CLIENT_PROPERTY_LABEL.equals(propertyName)) {
+				documentProperties.put(ADocument.CLIENT_PROPERTY, propertyValue);
+			} else if (LegacyHtmlFormat.DATE_PROPERTY_LABEL.equals(propertyName)) {
+				documentProperties.put(ADocument.DATE_PROPERTY, propertyValue);
+			} else if (LegacyHtmlFormat.COMMENT_PROPERTY_LABEL.equals(propertyName)) {
+				documentProperties.put(ADocument.COMMENT_PROPERTY, propertyValue);
 			}
 		}
 		return documentProperties;

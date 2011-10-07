@@ -20,11 +20,10 @@ import javax.swing.undo.*;
 public class ADocument extends DefaultStyledDocument implements DocumentListener {
 	public static final String DEFAULT_TITLE = "Новый документ";
 	// document's properties names
-	public static final String TitleProperty1 = "Документ:";
-	public static final String ExpertProperty = "Эксперт:";
-	public static final String ClientProperty = "Типируемый:";
-	public static final String DateProperty = "Дата:";
-	public static final String CommentProperty = "Комментарий:";
+	public static final String EXPERT_PROPERTY = "expert";
+	public static final String CLIENT_PROPERTY = "client";
+	public static final String DATE_PROPERTY = "date";
+	public static final String COMMENT_PROPERTY = "comment";
 
 	private Map<ASection, AData> aDataMap;
 	private Collection<ADocumentChangeListener> listeners;
@@ -78,7 +77,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 		//style of general text
 		defaultStyle = new SimpleAttributeSet();
-		defaultStyle.addAttribute(StyleConstants.FontSize, Integer.valueOf(16));
+		defaultStyle.addAttribute(StyleConstants.FontSize, 16);
 		defaultStyle.addAttribute(StyleConstants.Background, Color.white);
 		//style of a section with mark-up
 		defaultSectionAttributes = new SimpleAttributeSet();
@@ -92,12 +91,12 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		aDataMap = new HashMap<ASection, AData>();
 
 		putProperty(TitleProperty, DEFAULT_TITLE);
-		putProperty(ExpertProperty, "");
-		putProperty(ClientProperty, "");
+		putProperty(EXPERT_PROPERTY, "");
+		putProperty(CLIENT_PROPERTY, "");
 		Date now = new Date();
 		DateFormat dateFormat = DateFormat.getDateInstance();
-		putProperty(DateProperty, dateFormat.format(now));
-		putProperty(CommentProperty, "");
+		putProperty(DATE_PROPERTY, dateFormat.format(now));
+		putProperty(COMMENT_PROPERTY, "");
 
 		setCharacterAttributes(0, 1, defaultStyle, true);
 		fireADocumentChanged();
@@ -619,10 +618,10 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			}
 		}
 
-		StringBuilder builder = new StringBuilder(getProperty(ExpertProperty).toString());
+		StringBuilder builder = new StringBuilder(getProperty(EXPERT_PROPERTY).toString());
 		builder.append("; ");
-		builder.append(anotherDocument.getProperty(ExpertProperty));
-		getDocumentProperties().put(ExpertProperty, builder.toString());
+		builder.append(anotherDocument.getProperty(EXPERT_PROPERTY));
+		getDocumentProperties().put(EXPERT_PROPERTY, builder.toString());
 
 		fireADocumentChanged();
 		logger.trace("appendDocument(): leaving");

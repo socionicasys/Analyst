@@ -18,7 +18,6 @@ import javax.swing.text.JTextComponent.KeyBinding;
 
 @SuppressWarnings("serial")
 public class AnalystWindow extends JFrame {
-	private static final String EXTENSION = "htm";
 	private static final String WINDOW_TITLE_FORMAT = "%s - %s";
 
 	private static final Logger logger = LoggerFactory.getLogger(AnalystWindow.class);
@@ -54,7 +53,8 @@ public class AnalystWindow extends JFrame {
 		textPane = new TextPane(documentHolder);
 
 		fileChooser = new JFileChooser();
-		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Файлы ." + EXTENSION, EXTENSION));
+		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(String.format("Файлы .%s",
+				LegacyHtmlFormat.EXTENSION), LegacyHtmlFormat.EXTENSION));
 
 		DocumentSelectionModel selectionModel = new DocumentSelectionModel();
 		DocumentSelectionConnector selectionConnector = new DocumentSelectionConnector(textPane, selectionModel);
@@ -469,7 +469,7 @@ public class AnalystWindow extends JFrame {
 				}
 
 				String saveFileName = fileChooser.getSelectedFile().getAbsolutePath();
-				String suffix = String.format(".%s", EXTENSION);
+				String suffix = String.format(".%s", LegacyHtmlFormat.EXTENSION);
 				if (!saveFileName.endsWith(suffix)) {
 					saveFileName += suffix;
 				}
@@ -595,10 +595,10 @@ public class AnalystWindow extends JFrame {
 
 			ADocument document = documentHolder.getModel();
 			String title = (String) document.getProperty(Document.TitleProperty);
-			String expert = (String) document.getProperty(ADocument.ExpertProperty);
-			String client = (String) document.getProperty(ADocument.ClientProperty);
-			String date = (String) document.getProperty(ADocument.DateProperty);
-			String comment = (String) document.getProperty(ADocument.CommentProperty);
+			String expert = (String) document.getProperty(ADocument.EXPERT_PROPERTY);
+			String client = (String) document.getProperty(ADocument.CLIENT_PROPERTY);
+			String date = (String) document.getProperty(ADocument.DATE_PROPERTY);
+			String comment = (String) document.getProperty(ADocument.COMMENT_PROPERTY);
 
 			panel.add(pt);
 			panel.add(pe);
@@ -641,10 +641,10 @@ public class AnalystWindow extends JFrame {
 				Dictionary<Object, Object> properties = document.getDocumentProperties();
 
 				properties.put(ADocument.TitleProperty, updatedTitle);
-				properties.put(ADocument.ClientProperty, updatedClient);
-				properties.put(ADocument.ExpertProperty, updatedExpert);
-				properties.put(ADocument.DateProperty, updatedDate);
-				properties.put(ADocument.CommentProperty, updatedComment);
+				properties.put(ADocument.CLIENT_PROPERTY, updatedClient);
+				properties.put(ADocument.EXPERT_PROPERTY, updatedExpert);
+				properties.put(ADocument.DATE_PROPERTY, updatedDate);
+				properties.put(ADocument.COMMENT_PROPERTY, updatedComment);
 				document.fireADocumentChanged();
 			}
 		}
