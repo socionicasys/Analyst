@@ -34,7 +34,7 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 		ITALIC_END
 	}
 
-	private static final class DocumentFlowEvent implements Comparable<DocumentFlowEvent> {
+	private static final class DocumentFlowEvent {
 		private final EventType type;
 		private final int offset;
 		private final int sectionNo;
@@ -68,13 +68,17 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 		public int getSectionNo() {
 			return sectionNo;
 		}
+	}
 
+	/**
+	 * Делает возможной сортировку массива из {@link DocumentFlowEvent}-ов.
+	 * Сравнение происходит только по позиции (offset).
+	 */
+	@SuppressWarnings("serial")
+	private static final class DocumentFlowEventComparator implements Comparator<DocumentFlowEvent>, Serializable {
 		@Override
-		public int compareTo(DocumentFlowEvent o) {
-			// Реализация интерфейса java.lang.Comparable<T>
-			// Делает возможной сортировку массива из DocumentFlowEvent-ов
-			// Сравнение происходит только по позиции (offset)
-			return offset - o.getOffset();
+		public int compare(DocumentFlowEvent o1, DocumentFlowEvent o2) {
+			return Integer.valueOf(o1.getOffset()).compareTo(o2.getOffset());
 		}
 	}
 
@@ -320,7 +324,7 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 					EventType.LINE_BREAK, lb, null, null, 0));
 			}
 		}
-		Collections.sort(flowEvents);
+		Collections.sort(flowEvents, new DocumentFlowEventComparator());
 
 		if (!flowEvents.isEmpty() && (flowEvents.get(flowEvents.size() - 1).getType() != EventType.NEW_ROW)) {
 			flowEvents.add(new DocumentFlowEvent(
