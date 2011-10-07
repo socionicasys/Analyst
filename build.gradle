@@ -82,6 +82,11 @@ jar {
 	manifest = sharedManifest
 }
 
+javadoc {
+	options.encoding = 'UTF-8'
+	options.showAll()
+}
+
 task jarDependencies(type: Jar, dependsOn: compileJava) {
 	classifier = 'deps'
 	destinationDir = distsDir
