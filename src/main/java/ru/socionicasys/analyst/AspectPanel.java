@@ -169,12 +169,10 @@ public final class AspectPanel extends ActivePanel {
 
 		doubt.setEnabled(panelEnable);
 		aspect.setEnabled(panelEnable);
-		block.setEnabled(panelEnable);
-		jump.setEnabled(panelEnable);
 
 		boolean markupEnable = panelEnable && !selectionModel.isMarkupEmpty();
 		clearButton.setEnabled(markupEnable);
-		
+
 		String firstAspect = selectionModel.getAspect();
 		if (firstAspect == null) {
 			primaryAspectGroup.clearSelection();
@@ -184,6 +182,10 @@ public final class AspectPanel extends ActivePanel {
 			JRadioButton selectedButton = primaryAspectButtons.get(Aspect.byAbbreviation(firstAspect));
 			selectedButton.getModel().setSelected(true);
 		}
+
+		boolean blockOrJumpEnable = markupEnable && !AData.DOUBT.equals(firstAspect);
+		block.setEnabled(blockOrJumpEnable);
+		jump.setEnabled(blockOrJumpEnable);
 
 		String modifier = selectionModel.getModifier();
 		if (AData.BLOCK.equals(modifier)) {
