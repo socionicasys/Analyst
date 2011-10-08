@@ -2,6 +2,7 @@ package ru.socionicasys.analyst;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.socionicasys.analyst.predicates.DimensionPredicate;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Панель размерностей (Ex/Nm/St/Tm/«одно-»/«мало-»/«многомерность»/«индивидуальность»
+ * Панель размерностей (Ex/Nr/St/Tm/«одно-»/«мало-»/«многомерность»/«индивидуальность»
  */
 public final class DimensionPanel extends ActivePanel {
 	private final Map<String, JRadioButton> buttons;
@@ -24,10 +25,10 @@ public final class DimensionPanel extends ActivePanel {
 		super(selectionModel);
 
 		buttons = new HashMap<String, JRadioButton>(8);
-		buttons.put(AData.D1, new JRadioButton("Ex"));
-		buttons.put(AData.D2, new JRadioButton("Nm"));
-		buttons.put(AData.D3, new JRadioButton("St"));
-		buttons.put(AData.D4, new JRadioButton("Tm"));
+		buttons.put(AData.D1, new JRadioButton(DimensionPredicate.getDimensionName(1)));
+		buttons.put(AData.D2, new JRadioButton(DimensionPredicate.getDimensionName(2)));
+		buttons.put(AData.D3, new JRadioButton(DimensionPredicate.getDimensionName(3)));
+		buttons.put(AData.D4, new JRadioButton(DimensionPredicate.getDimensionName(4)));
 		buttons.put(AData.ODNOMERNOST, new JRadioButton("Одномерность"));
 		buttons.put(AData.MALOMERNOST, new JRadioButton("Маломерность"));
 		buttons.put(AData.MNOGOMERNOST, new JRadioButton("Многомерность"));
