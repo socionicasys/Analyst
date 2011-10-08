@@ -28,8 +28,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	public static final SimpleAttributeSet DEFAULT_STYLE;
 	public static final SimpleAttributeSet DEFAULT_SECTION_STYLE;
 
-	private Map<ASection, AData> aDataMap;
-	private Collection<ADocumentChangeListener> listeners;
+	private final Map<ASection, AData> aDataMap;
+	private final Collection<ADocumentChangeListener> listeners;
 
 	private CompoundEdit currentCompoundEdit;
 	private int currentCompoundDepth;
@@ -92,6 +92,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		addADocumentChangeListener(matchMissModel);
 
 		aDataMap = new HashMap<ASection, AData>();
+
+		listeners = new ArrayList<ADocumentChangeListener>();
 
 		putProperty(TitleProperty, DEFAULT_TITLE);
 		putProperty(EXPERT_PROPERTY, "");
@@ -275,24 +277,15 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	public void addADocumentChangeListener(ADocumentChangeListener listener) {
-		if (listeners == null) {
-			listeners = new ArrayList<ADocumentChangeListener>();
-		}
 		listeners.add(listener);
 	}
 
 	public void removeADocumentChangeListener(ADocumentChangeListener listener) {
-		if (listeners != null) {
-			listeners.remove(listener);
-		}
+		listeners.remove(listener);
 	}
 
 	public void fireADocumentChanged() {
 		logger.trace("fireADocumentChanged(): entering");
-		if (listeners == null) {
-			logger.trace("fireADocumentChanged(): leaving, no listeners to notify");
-			return;
-		}
 		for (ADocumentChangeListener listener : listeners) {
 			listener.aDocumentChanged(this);
 		}
