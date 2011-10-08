@@ -80,23 +80,18 @@ public class BTree extends JTree implements ADocumentChangeListener {
 				AData data = dataEntry.getValue();
 
 				String aspect = data.getAspect();
-				String secondAspect = data.getSecondAspect();
-				String modifier = data.getModifier();
-				String dimension = data.getDimension();
-				String sign = data.getSign();
-				String mv = data.getMV();
 				String quote = document.getText(sectionOffset, quoteLength);
 
-				if (aspect == null || aspect.equals(AData.DOUBT)) {
+				if (aspect == null || AData.DOUBT.equals(aspect)) {
 					continue;
 				}
-				if (modifier != null && modifier.equals(AData.JUMP)) {
+				if (AData.JUMP.equals(data.getModifier())) {
 					continue;
 				}
 
 				for (Sociotype sociotype : Sociotype.values()) {
 					MutableTreeNode quoteNode = new DefaultMutableTreeNode(
-						new EndNodeObject(sectionOffset, "..." + quote + "..."), false);
+						new EndNodeObject(sectionOffset, String.format("...%s...", quote)), false);
 					if (SocionicsType.matches(sociotype, data)) {
 						matchNodes.get(sociotype).add(quoteNode);
 					} else {
