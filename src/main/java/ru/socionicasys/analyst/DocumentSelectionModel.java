@@ -12,7 +12,6 @@ import java.beans.PropertyChangeSupport;
  */
 @SuppressWarnings("NestedAssignment")
 public class DocumentSelectionModel {
-	private boolean empty;
 	private boolean initialized;
 	private int startOffset;
 	private int endOffset;
@@ -34,7 +33,6 @@ public class DocumentSelectionModel {
 	public DocumentSelectionModel() {
 		logger.trace("DocumentSelectionModel(): entering");
 		propertyChangeSupport = new PropertyChangeSupport(this);
-		empty = true;
 		logger.trace("DocumentSelectionModel(): leaving");
 	}
 
@@ -42,14 +40,7 @@ public class DocumentSelectionModel {
 	 * @return пусто ли выделение
 	 */
 	public boolean isEmpty() {
-		return empty;
-	}
-
-	/**
-	 * @param empty пусто ли выделение
-	 */
-	public void setEmpty(boolean empty) {
-		updateProperty("empty", this.empty, this.empty = empty);
+		return startOffset == endOffset;
 	}
 
 	/**

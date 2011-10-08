@@ -97,11 +97,10 @@ public class DocumentSelectionConnector implements PropertyChangeListener, Caret
 
 		ASection currentSection = getCurrentSection(startOffset, endOffset);
 		if (currentSection == null) {
-			selectionModel.setEmpty(true);
+			selectionModel.setMarkupData(null);
 		} else {
 			ADocument document = textPane.getDocument();
 			AData currentMarkupData = document.getAData(currentSection);
-			selectionModel.setEmpty(false);
 			selectionModel.setMarkupData(currentMarkupData);
 		}
 
