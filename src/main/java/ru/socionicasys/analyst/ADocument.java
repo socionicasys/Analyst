@@ -351,7 +351,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	 * Описывает операцию добавления в документ новой секции с разметкой.
 	 */
 	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
-	private class ASectionAdditionEdit extends AbstractUndoableEdit {
+	private final class ASectionAdditionEdit extends AbstractUndoableEdit {
 		private final ASection section;
 		private final AData data;
 
@@ -394,7 +394,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	 * Описывает операцию удаления из документа секции с разметкой.
 	 */
 	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
-	private class ASectionDeletionEdit extends AbstractUndoableEdit {
+	private final class ASectionDeletionEdit extends AbstractUndoableEdit {
 		private final ASection section;
 		private final AData data;
 
@@ -436,7 +436,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	 * Описывает операцию обновления данных в разметке одной из секций документа.
 	 */
 	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
-	private class ASectionChangeEdit extends AbstractUndoableEdit {
+	private final class ASectionChangeEdit extends AbstractUndoableEdit {
 		private final ASection section;
 		private final AData oldData;
 		private AData newData;
