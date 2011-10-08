@@ -110,6 +110,17 @@ public class DocumentSelectionModel {
 	 */
 	public void setAspect(String aspect) {
 		updateProperty("aspect", this.aspect, this.aspect = aspect);
+		if (aspect == null) {
+			setSecondAspect(null);
+			setModifier(null);
+			setSign(null);
+			setMV(null);
+			setDimension(null);
+			setComment(null);
+		} else if (AData.DOUBT.equals(aspect)) {
+			setSecondAspect(null);
+			setModifier(null);
+		}
 	}
 
 	/**
@@ -232,12 +243,6 @@ public class DocumentSelectionModel {
 		setInitialized(false);
 		if (markupData == null) {
 			setAspect(null);
-			setSecondAspect(null);
-			setModifier(null);
-			setSign(null);
-			setMV(null);
-			setDimension(null);
-			setComment(null);
 		} else {
 			setAspect(markupData.getAspect());
 			setSecondAspect(markupData.getSecondAspect());

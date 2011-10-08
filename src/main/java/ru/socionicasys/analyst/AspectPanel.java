@@ -175,20 +175,11 @@ public final class AspectPanel extends ActivePanel {
 		boolean markupEnable = panelEnable && !selectionModel.isMarkupEmpty();
 		clearButton.setEnabled(markupEnable);
 		
-		if (!panelEnable) {
-			primaryAspectGroup.clearSelection();
-			secondaryAspectGroup.clearSelection();
-			controlGroup.clearSelection();
-			return;
-		}
-
 		String firstAspect = selectionModel.getAspect();
 		if (firstAspect == null) {
 			primaryAspectGroup.clearSelection();
-			aspect.getModel().setSelected(true);
 		} else if (AData.DOUBT.equals(firstAspect)) {
 			doubt.getModel().setSelected(true);
-			aspect.getModel().setSelected(true);
 		} else {
 			JRadioButton selectedButton = primaryAspectButtons.get(Aspect.byAbbreviation(firstAspect));
 			selectedButton.getModel().setSelected(true);
@@ -221,14 +212,6 @@ public final class AspectPanel extends ActivePanel {
 	 */
 	@Override
 	protected void updateModel() {
-		ButtonModel aspectGroupSelection = primaryAspectGroup.getSelection();
-		if (aspectGroupSelection == null) {
-			selectionModel.setAspect(null);
-		} else {
-			String firstAspect = aspectGroupSelection.getActionCommand();
-			selectionModel.setAspect(firstAspect);
-		}
-
 		ButtonModel secondAspectGroupSelection = secondaryAspectGroup.getSelection();
 		if (secondAspectGroupSelection == null) {
 			selectionModel.setSecondAspect(null);
@@ -252,5 +235,13 @@ public final class AspectPanel extends ActivePanel {
 			}
 		}
 		selectionModel.setModifier(modifier);
+
+		ButtonModel aspectGroupSelection = primaryAspectGroup.getSelection();
+		if (aspectGroupSelection == null) {
+			selectionModel.setAspect(null);
+		} else {
+			String firstAspect = aspectGroupSelection.getActionCommand();
+			selectionModel.setAspect(firstAspect);
+		}
 	}
 }
