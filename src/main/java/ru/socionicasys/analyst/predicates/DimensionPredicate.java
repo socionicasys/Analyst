@@ -28,13 +28,13 @@ public class DimensionPredicate implements Predicate {
 		this.aspect = aspect;
 	}
 
-	@Override
-	public boolean check(Sociotype sociotype) {
-		return sociotype.getFunctionByAspect(aspect).getDimension() >= dimension;
-	}
-
-	@Override
-	public String toString() {
+	/**
+	 * Возвращает название размерности по числовому значению размерности.
+	 *
+	 * @param dimension размерность, от 1 до 4
+	 * @return название размерности
+	 */
+	public static String getDimensionName(int dimension) {
 		switch (dimension) {
 		case 1:
 			return "Ex";
@@ -45,8 +45,18 @@ public class DimensionPredicate implements Predicate {
 		case 4:
 			return "Tm";
 		default:
-			return "";
+			throw new IllegalArgumentException("Invalid dimension");
 		}
+	}
+
+	@Override
+	public boolean check(Sociotype sociotype) {
+		return sociotype.getFunctionByAspect(aspect).getDimension() >= dimension;
+	}
+
+	@Override
+	public String toString() {
+		return getDimensionName(dimension);
 	}
 
 	@Override
