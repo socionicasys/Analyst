@@ -18,19 +18,15 @@ public final class SocionicsType {
 	 * Проверяет, соответствует ли данный ТИМ конкретным отметкам.
 	 *
 	 * @param type ТИМ
-	 * @param aspect аспект отметки
-	 * @param secondAspect второй аспект (для блока)
-	 * @param sign знак
-	 * @param dimension размерность
-	 * @param mv ментальность/витальность
-	 * @return соответствует ли ТИМ
+	 * @param data данные из отметки
+	 * @return соответствует ли ТИМ отметке
 	 */
-	public static boolean matches(Sociotype type, String aspect, String secondAspect, String sign, String dimension, String mv) {
-		if (aspect == null) {
+	public static boolean matches(Sociotype type, AData data) {
+		if (data.getAspect() == null) {
 			return false;
 		}
 
-		Collection<Predicate> predicates = createPredicates(aspect, secondAspect, sign, dimension, mv);
+		Collection<Predicate> predicates = createPredicates(data);
 
 		for (Predicate predicate : predicates) {
 			if (!predicate.check(type)) {
@@ -44,14 +40,11 @@ public final class SocionicsType {
 	/**
 	 * Преобразует набор отметок в список предикатов.
 	 *
-	 * @param aspect аспект отметки
-	 * @param secondAspect второй аспект (для блока)
-	 * @param sign знак
-	 * @param dimension размерность
-	 * @param mv ментальность/витальность
-	 * @return список предикатов
+	 * @param data данные из отметки
+	 * @return список предикатов для отметки
 	 */
-	public static Collection<Predicate> createPredicates(String aspect, String secondAspect, String sign, String dimension, String mv) {
+	public static Collection<Predicate> createPredicates(AData data) {
+		String aspect = data.getAspect();
 		if (aspect == null) {
 			return Collections.emptyList();
 		}
@@ -59,22 +52,25 @@ public final class SocionicsType {
 		Aspect baseAspect = Aspect.byAbbreviation(aspect);
 		Collection<Predicate> predicates = new ArrayList<Predicate>();
 
-		if (secondAspect != null) {
+		String secondAspect = data.getSecondAspect();
+		if (secondAspect != null && AData.BLOCK.equals(data.getModifier())) {
 			predicates.add(new BlockPredicate(baseAspect, Aspect.byAbbreviation(secondAspect)));
 		}
 
+		String sign = data.getSign();
 		if (sign != null) {
-			Sign theSign;
+			Sign convertedSign;
 			if (sign.equals(AData.PLUS)) {
-				theSign = Sign.PLUS;
+				convertedSign = Sign.PLUS;
 			} else if (sign.equals(AData.MINUS)) {
-				theSign = Sign.MINUS;
+				convertedSign = Sign.MINUS;
 			} else {
 				throw new IllegalArgumentException("Illegal sign in SocionicsType.matches()");
 			}
-			predicates.add(new SignPredicate(baseAspect, theSign));
+			predicates.add(new SignPredicate(baseAspect, convertedSign));
 		}
 
+		String dimension = data.getDimension();
 		if (dimension != null) {
 			Predicate dimensionPredicate;
 			if (dimension.equals(AData.D1)) {
@@ -99,6 +95,7 @@ public final class SocionicsType {
 			predicates.add(dimensionPredicate);
 		}
 
+		String mv = data.getMV();
 		if (mv != null) {
 			Predicate mvPredicate;
 			if (mv.equals(AData.MENTAL)) {

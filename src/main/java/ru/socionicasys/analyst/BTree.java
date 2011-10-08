@@ -97,7 +97,7 @@ public class BTree extends JTree implements ADocumentChangeListener {
 				for (Sociotype sociotype : Sociotype.values()) {
 					MutableTreeNode quoteNode = new DefaultMutableTreeNode(
 						new EndNodeObject(sectionOffset, "..." + quote + "..."), false);
-					if (SocionicsType.matches(sociotype, aspect, secondAspect, sign, dimension, mv)) {
+					if (SocionicsType.matches(sociotype, data)) {
 						matchNodes.get(sociotype).add(quoteNode);
 					} else {
 						missNodes.get(sociotype).add(quoteNode);

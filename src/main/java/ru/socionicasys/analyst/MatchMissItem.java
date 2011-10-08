@@ -33,8 +33,7 @@ public class MatchMissItem {
 	 * @param data блок соционических пометок
 	 */
 	public void addData(AData data) {
-		if (SocionicsType.matches(sociotype, data.getAspect(), data.getSecondAspect(), data.getSign(),
-				data.getDimension(), data.getMV())) {
+		if (SocionicsType.matches(sociotype, data)) {
 			matchCount++;
 		} else {
 			missCount++;
