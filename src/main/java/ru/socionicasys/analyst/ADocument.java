@@ -225,12 +225,16 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 		startCompoundEdit();
 
-		AData data = aDataMap.get(section);
-		aDataMap.remove(section);
+		AData data = aDataMap.remove(section);
 
 		int startOffset = section.getStartOffset();
 		int endOffset = section.getEndOffset();
 		setCharacterAttributes(startOffset, endOffset - startOffset, defaultStyle, false);
+		for (ASection otherSection : aDataMap.keySet()) {
+			int otherStartOffset = otherSection.getStartOffset();
+			int otherLength = otherSection.getEndOffset() - otherStartOffset;
+			setCharacterAttributes(otherStartOffset, otherLength, defaultSectionAttributes, false);
+		}
 
 		fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionDeletionEdit(section, data)));
 		fireADocumentChanged();
