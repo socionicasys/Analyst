@@ -25,10 +25,11 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	public static final String DATE_PROPERTY = "date";
 	public static final String COMMENT_PROPERTY = "comment";
 
+	public static final SimpleAttributeSet DEFAULT_STYLE;
+	public static final SimpleAttributeSet DEFAULT_SECTION_STYLE;
+
 	private Map<ASection, AData> aDataMap;
 	private Collection<ADocumentChangeListener> listeners;
-	public final SimpleAttributeSet defaultStyle;
-	public final SimpleAttributeSet defaultSectionAttributes;
 
 	private CompoundEdit currentCompoundEdit;
 	private int currentCompoundDepth;
@@ -45,6 +46,16 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	private File associatedFile;
 
 	private static final Logger logger = LoggerFactory.getLogger(ADocument.class);
+
+	static {
+		//style of general text
+		DEFAULT_STYLE = new SimpleAttributeSet();
+		DEFAULT_STYLE.addAttribute(StyleConstants.FontSize, 16);
+		DEFAULT_STYLE.addAttribute(StyleConstants.Background, Color.white);
+		//style of a section with mark-up
+		DEFAULT_SECTION_STYLE = new SimpleAttributeSet();
+		DEFAULT_SECTION_STYLE.addAttribute(StyleConstants.Background, Color.decode("#E0ffff"));
+	}
 
 	/**
 	 * Сравнивает две ASection исходя из их близости к определенному положению в документе.
@@ -75,14 +86,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		logger.trace("ADocument(): entering");
 		addDocumentListener(this);
 
-		//style of general text
-		defaultStyle = new SimpleAttributeSet();
-		defaultStyle.addAttribute(StyleConstants.FontSize, 16);
-		defaultStyle.addAttribute(StyleConstants.Background, Color.white);
-		//style of a section with mark-up
-		defaultSectionAttributes = new SimpleAttributeSet();
-		defaultSectionAttributes.addAttribute(StyleConstants.Background, Color.decode("#E0ffff"));
-
 		currentCompoundDepth = 0;
 
 		matchMissModel = new MatchMissModel();
@@ -98,7 +101,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		putProperty(DATE_PROPERTY, dateFormat.format(now));
 		putProperty(COMMENT_PROPERTY, "");
 
-		setCharacterAttributes(0, 1, defaultStyle, true);
+		setCharacterAttributes(0, 1, DEFAULT_STYLE, true);
 		fireADocumentChanged();
 		logger.trace("ADocument(): leaving");
 	}
@@ -169,7 +172,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 		aDataMap.putAll(tempMap);
 
-		super.insertUpdate(chng, defaultStyle);
+		super.insertUpdate(chng, DEFAULT_STYLE);
 		logger.trace("insertUpdate(): leaving");
 	}
 
@@ -229,11 +232,11 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 		int startOffset = section.getStartOffset();
 		int endOffset = section.getEndOffset();
-		setCharacterAttributes(startOffset, endOffset - startOffset, defaultStyle, false);
+		setCharacterAttributes(startOffset, endOffset - startOffset, DEFAULT_STYLE, false);
 		for (ASection otherSection : aDataMap.keySet()) {
 			int otherStartOffset = otherSection.getStartOffset();
 			int otherLength = otherSection.getEndOffset() - otherStartOffset;
-			setCharacterAttributes(otherStartOffset, otherLength, defaultSectionAttributes, false);
+			setCharacterAttributes(otherStartOffset, otherLength, DEFAULT_SECTION_STYLE, false);
 		}
 
 		fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionDeletionEdit(section, data)));
@@ -262,7 +265,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		int startOffset = aSection.getStartOffset();
 		int endOffset = aSection.getEndOffset();
 
-		setCharacterAttributes(startOffset, endOffset - startOffset, defaultSectionAttributes, false);
+		setCharacterAttributes(startOffset, endOffset - startOffset, DEFAULT_SECTION_STYLE, false);
 		aDataMap.put(aSection, data);
 
 		fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionAdditionEdit(aSection, data)));
@@ -558,7 +561,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		// inserting plain text
 		try {
 			String text = fragment.getText();
-			insertString(position, text, defaultStyle);
+			insertString(position, text, DEFAULT_STYLE);
 		} catch (BadLocationException e) {
 			logger.error("Invalid document position {} for pasting text", position, e);
 			logger.trace("pasteADocFragment(): leaving");

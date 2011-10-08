@@ -87,7 +87,7 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 		setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS + RIGHT_COLUMN_PROGRESS);
 
 		// Обрабатываем стили в уже прочитанном тексте
-		SimpleAttributeSet currentStyle = new SimpleAttributeSet(document.defaultStyle);
+		SimpleAttributeSet currentStyle = new SimpleAttributeSet(ADocument.DEFAULT_STYLE);
 		Pattern styleTag = Pattern.compile("</?[bi]>");
 		String sourceText = leftColumn;
 		Matcher styleMatcher = styleTag.matcher(sourceText);
@@ -158,7 +158,7 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 			try {
 				ASection section = new ASection(document, begin, end);
 				document.getADataMap().put(section, data);
-				document.setCharacterAttributes(begin, end - begin, document.defaultSectionAttributes, false);
+				document.setCharacterAttributes(begin, end - begin, ADocument.DEFAULT_SECTION_STYLE, false);
 			} catch (BadLocationException e) {
 				logger.error("Invalid position for ASection", e);
 			}
