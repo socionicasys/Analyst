@@ -143,11 +143,14 @@ public final class AspectPanel extends ActivePanel {
 	}
 
 	private void setSecondAspectForJump(String firstAspect) {
-		if (firstAspect != null) {
-			for (Map.Entry<Aspect, JRadioButton> entry : secondaryAspectButtons.entrySet()) {
-				JRadioButton button = entry.getValue();
+		boolean enableSecondAspect = firstAspect != null && !AData.DOUBT.equals(firstAspect);
+		for (Map.Entry<Aspect, JRadioButton> entry : secondaryAspectButtons.entrySet()) {
+			JRadioButton button = entry.getValue();
+			if (enableSecondAspect) {
 				String buttonAspect = entry.getKey().getAbbreviation();
 				button.setEnabled(!buttonAspect.equals(firstAspect));
+			} else {
+				button.setEnabled(false);
 			}
 		}
 	}
