@@ -104,7 +104,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		putProperty(COMMENT_PROPERTY, "");
 
 		setCharacterAttributes(0, 1, DEFAULT_STYLE, true);
-		fireADocumentChanged();
 		logger.trace("ADocument(): leaving");
 	}
 
