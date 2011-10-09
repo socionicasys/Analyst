@@ -6,6 +6,8 @@ import ru.socionicasys.analyst.util.HashUtil;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AData implements Serializable {
 	private static final long serialVersionUID = -7524659842673948203L;
@@ -49,6 +51,14 @@ public class AData implements Serializable {
 	public static final String SUPERID = "Супер-Ид";
 	public static final String SUPEREGO = "Супер-Эго";
 	private static final List<String> VALID_MVS = Arrays.asList(MENTAL, VITAL, SUPERID, SUPEREGO);
+
+	private static final Pattern parsePattern = buildParsePattern();
+	private static final int ASPECT_GROUP = 1;
+	private static final int MODIFIER_GROUP = 2;
+	private static final int SECOND_ASPECT_GROUP = 3;
+	private static final int SIGN_GROUP = 4;
+	private static final int DIMENSION_GROUP = 5;
+	private static final int MV_GROUP = 6;
 
 	private final String secondAspect;
 	private final String modifier;
@@ -155,101 +165,29 @@ public class AData implements Serializable {
 
 	public static AData parseAData(String s) {
 		if (s == null) {
-			return null;
+			throw new NullPointerException();
 		}
 
-		String sa = null;
-		String mod = null;
+		Matcher dataMatcher = parsePattern.matcher(s);
+		if (!dataMatcher.matches()) {
+			throw new IllegalArgumentException(String.format("Invalid markup data '%s'", s));
+		}
+		
+		String aspect = dataMatcher.group(ASPECT_GROUP);
+		String modifierToken = dataMatcher.group(MODIFIER_GROUP);
+		String secondAspect = dataMatcher.group(SECOND_ASPECT_GROUP);
+		String sign = dataMatcher.group(SIGN_GROUP);
+		String dimension = dataMatcher.group(DIMENSION_GROUP);
+		String mv = dataMatcher.group(MV_GROUP);
 
-		//detecting aspect
-		if (s.contains(BLOCK_TOKEN)) {
-			int index1 = s.indexOf(BLOCK_TOKEN) + BLOCK_TOKEN.length();
-			int index2 = s.indexOf(SEPARATOR);
-			String a2 = s.substring(index1, index2);
-			if (VALID_ASPECTS.contains(a2)) {
-				sa = a2;
-				s = s.replace(BLOCK_TOKEN + a2, "");
-				mod = BLOCK;
-			}
-		} else if (s.contains(JUMP_TOKEN)) {
-			int index1 = s.indexOf(JUMP_TOKEN) + JUMP_TOKEN.length();
-			int index2 = s.indexOf(SEPARATOR);
-			String a2 = s.substring(index1, index2);
-			if (VALID_ASPECTS.contains(a2)) {
-				sa = a2;
-				s = s.replace(JUMP_TOKEN + a2, "");
-				mod = JUMP;
-			}
+		String modifier = null;
+		if (BLOCK_TOKEN.equals(modifierToken)) {
+			modifier = BLOCK;
+		} else if (JUMP_TOKEN.equals(modifierToken)) {
+			modifier = JUMP;
 		}
 
-		String aspect = null;
-		if (s.contains(L)) {
-			aspect = L;
-		} else if (s.contains(P)) {
-			aspect = P;
-		} else if (s.contains(R)) {
-			aspect = R;
-		} else if (s.contains(E)) {
-			aspect = E;
-		} else if (s.contains(S)) {
-			aspect = S;
-		} else if (s.contains(F)) {
-			aspect = F;
-		} else if (s.contains(T)) {
-			aspect = T;
-		} else if (s.contains(I)) {
-			aspect = I;
-		}
-
-		if (s.contains(DOUBT)) {
-			aspect = DOUBT;
-		}
-
-		if (aspect == null) {
-			return null;
-		}
-
-		//detecting mental\vital
-		String mv = null;
-		if (s.contains(MENTAL)) {
-			mv = MENTAL;
-		} else if (s.contains(VITAL)) {
-			mv = VITAL;
-		} else if (s.contains(SUPEREGO)) {
-			mv = SUPEREGO;
-		} else if (s.contains(SUPERID)) {
-			mv = SUPERID;
-		}
-
-		//detecting dimension
-		String dimension = null;
-		if (s.contains(D1)) {
-			dimension = D1;
-		} else if (s.contains(D2)) {
-			dimension = D2;
-		} else if (s.contains(D3)) {
-			dimension = D3;
-		} else if (s.contains(D4)) {
-			dimension = D4;
-		} else if (s.contains(MALOMERNOST)) {
-			dimension = MALOMERNOST;
-		} else if (s.contains(MNOGOMERNOST)) {
-			dimension = MNOGOMERNOST;
-		} else if (s.contains(ODNOMERNOST)) {
-			dimension = ODNOMERNOST;
-		} else if (s.contains(INDIVIDUALNOST)) {
-			dimension = INDIVIDUALNOST;
-		}
-
-		//detecting sign
-		String sign = null;
-		if (s.contains(PLUS)) {
-			sign = PLUS;
-		} else if (s.contains(MINUS)) {
-			sign = MINUS;
-		}
-
-		return new AData(aspect, sa, sign, dimension, mv, mod, null);
+		return new AData(aspect, secondAspect, sign, dimension, mv, modifier, null);
 	}
 
 	@Override
@@ -282,5 +220,43 @@ public class AData implements Serializable {
 		hashUtil.hash(mv);
 		hashUtil.hash(comment);
 		return hashUtil.getComputedHash();
+	}
+
+	/**
+	 * Формирует регулярное выражение для разбора строк в экземпляр {@code AData}.
+	 *
+	 * @return сформированное регулярное выражение
+	 */
+	private static Pattern buildParsePattern() {
+		StringBuilder patternBuilder = new StringBuilder(" *(");
+		patternBuilder.append(joinRegexValues(VALID_ASPECTS));
+		patternBuilder.append('|').append(DOUBT).append(')');
+
+		patternBuilder.append("(?:([").append(BLOCK_TOKEN).append(JUMP_TOKEN).append("])");
+		patternBuilder.append('(').append(joinRegexValues(VALID_ASPECTS)).append("))?;");
+
+		patternBuilder.append("(?:(").append(joinRegexValues(VALID_SIGNS)).append(");)?");
+
+		patternBuilder.append("(?:(").append(joinRegexValues(VALID_DIMENSIONS)).append(");)?");
+
+		patternBuilder.append('(').append(joinRegexValues(VALID_MVS)).append(")?");
+
+		return Pattern.compile(patternBuilder.toString());
+	}
+
+	/**
+	 * Объединяет варианты из массива в строку, разделенную символами |
+	 * для создания регулярного выражения.
+	 *
+	 * @param values массив значений
+	 * @return строка из значений через |
+	 */
+	private static String joinRegexValues(List<String> values) {
+		StringBuilder join = new StringBuilder();
+		for (String value : values) {
+			join.append(value).append('|');
+		}
+		join.deleteCharAt(join.length() - 1);
+		return join.toString();
 	}
 }

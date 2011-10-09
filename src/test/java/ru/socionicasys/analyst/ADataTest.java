@@ -11,15 +11,19 @@ public class ADataTest {
 	}
 
 	@Test
-	public void testParseInvalidAspect() throws Exception {
-		AData data = AData.parseAData("ЖЭ;");
-		Assert.assertNull(data);
+	public void testParseWhitespace() {
+		AData data = AData.parseAData(" ЧЛ;");
+		Assert.assertEquals(data, new AData(AData.P, null, null, null, null, null, null));
 	}
 
-	@Test
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void testParseInvalidAspect() throws Exception {
+		AData.parseAData("ЖЭ;");
+	}
+
+	@Test(expectedExceptions = IllegalArgumentException.class)
 	public void testParseInvalidAddition() throws Exception {
-		AData data = AData.parseAData("БЭ;Многодумность;");
-		Assert.assertEquals(data, new AData(AData.R, null, null, null, null, null, null));
+		AData.parseAData("БЭ;Многодумность;");
 	}
 
 	@Test
