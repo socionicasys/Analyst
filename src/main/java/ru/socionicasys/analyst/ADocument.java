@@ -86,14 +86,14 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		logger.trace("ADocument(): entering");
 		addDocumentListener(this);
 
+		listeners = new ArrayList<ADocumentChangeListener>();
+
 		currentCompoundDepth = 0;
 
 		matchMissModel = new MatchMissModel();
 		addADocumentChangeListener(matchMissModel);
 
 		aDataMap = new HashMap<ASection, AData>();
-
-		listeners = new ArrayList<ADocumentChangeListener>();
 
 		putProperty(TitleProperty, DEFAULT_TITLE);
 		putProperty(EXPERT_PROPERTY, "");
