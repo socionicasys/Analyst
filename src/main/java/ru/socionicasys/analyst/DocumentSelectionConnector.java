@@ -3,12 +3,12 @@ package ru.socionicasys.analyst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Caret;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -146,25 +146,13 @@ public class DocumentSelectionConnector implements PropertyChangeListener, Caret
 				index = Integer.parseInt(indexStr);
 			}
 		}
-		//////////////test for text positioning in scroll pane////////////////////////
-		JViewport viewport = (JViewport) textPane.getParent();
 
 		ADocument document = textPane.getDocument();
 		ASection currentASection = document.getASectionThatStartsAt(index);
 		if (currentASection != null) {
-			int offset = currentASection.getMiddleOffset();
-			int start = currentASection.getStartOffset();
-			int end = currentASection.getEndOffset();
-
-			textPane.getCaret().setDot(end);
-			textPane.getCaret().moveDot(start);
-
-			try {
-				viewport.scrollRectToVisible(textPane.modelToView(offset));
-				textPane.grabFocus();
-			} catch (BadLocationException e1) {
-				logger.error("Error setting model to view :: bad location", e1);
-			}
+			Caret caret = textPane.getCaret();
+			caret.setDot(currentASection.getStartOffset());
+			caret.moveDot(currentASection.getEndOffset());
 		}
 	}
 }
