@@ -217,10 +217,7 @@ public class DocumentSelectionModel {
 			return null;
 		}
 
-		AData markupData = new AData(aspect, sign, dimension, mv, comment);
-		markupData.setSecondAspect(secondAspect);
-		markupData.setModifier(modifier);
-		markupData.setComment(comment);
+		AData markupData = new AData(aspect, secondAspect, sign, dimension, mv, modifier, comment);
 		return markupData;
 	}
 

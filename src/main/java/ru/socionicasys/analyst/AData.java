@@ -9,6 +9,7 @@ import java.util.List;
 
 public class AData implements Serializable {
 	private static final long serialVersionUID = -7524659842673948203L;
+
 	public static final String L = "БЛ";
 	public static final String P = "ЧЛ";
 	public static final String R = "БЭ";
@@ -17,18 +18,21 @@ public class AData implements Serializable {
 	public static final String F = "ЧС";
 	public static final String T = "БИ";
 	public static final String I = "ЧИ";
+	private static final List<String> VALID_ASPECTS = Arrays.asList(L, P, R, E, S, F, T, I);
 
 	public static final String DOUBT = "Фрагмент требует уточнения";
 
 	public static final String BLOCK = "БЛОК";
-	public static final String BLOCK_TOKEN = "~";
 	public static final String JUMP = "ПЕРЕВОД";
-	public static final String JUMP_TOKEN = ">";
-	public static final String SEPARATOR = ";";
+	private static final List<String> VALID_MODIFIERS = Arrays.asList(BLOCK, JUMP);
+
+	private static final String BLOCK_TOKEN = "~";
+	private static final String JUMP_TOKEN = ">";
+	private static final String SEPARATOR = ";";
 
 	public static final String PLUS = "ПЛЮС";
 	public static final String MINUS = "МИНУС";
-	public static final List<String> VALID_SIGNS = Arrays.asList(PLUS, MINUS);
+	private static final List<String> VALID_SIGNS = Arrays.asList(PLUS, MINUS);
 
 	public static final String D1 = "Размерность ОПЫТ";
 	public static final String D2 = "Размерность НОРМА";
@@ -38,30 +42,34 @@ public class AData implements Serializable {
 	public static final String INDIVIDUALNOST = "Индивидуальность";
 	public static final String MALOMERNOST = "Маломерность";
 	public static final String MNOGOMERNOST = "Многомерность";
-	public static final List<String> VALID_DIMENSIONS = Arrays.asList(D1, D2, D3, D4, MALOMERNOST, MNOGOMERNOST, ODNOMERNOST, INDIVIDUALNOST);
+	private static final List<String> VALID_DIMENSIONS = Arrays.asList(D1, D2, D3, D4, MALOMERNOST, MNOGOMERNOST, ODNOMERNOST, INDIVIDUALNOST);
 
 	public static final String MENTAL = "Ментал";
 	public static final String VITAL = "Витал";
 	public static final String SUPERID = "Супер-Ид";
 	public static final String SUPEREGO = "Супер-Эго";
-	public static final List<String> VALID_MVS = Arrays.asList(MENTAL, VITAL, SUPERID, SUPEREGO);
+	private static final List<String> VALID_MVS = Arrays.asList(MENTAL, VITAL, SUPERID, SUPEREGO);
 
-	private String secondAspect;
-	private String modifier;
+	private final String secondAspect;
+	private final String modifier;
 	private final String aspect;
 	private final String sign;
 	private final String mv;
 	private final String dimension;
 	private String comment;
 
-	public AData(String aspect, String sign, String dimension, String mv, String comment) {
-		if (aspect == null) {
-			throw new IllegalArgumentException("Aspect cannot be null");
-		}
-		if (!(isValidAspect(aspect) || aspect.equals(DOUBT))) {
+	public AData(String aspect, String secondAspect, String sign, String dimension, String mv, String modifier, String comment) {
+		if (VALID_ASPECTS.contains(aspect) || DOUBT.equals(aspect)) {
+			this.aspect = aspect;
+		} else {
 			throw new IllegalArgumentException(String.format("Invalid aspect value (%s)", aspect));
 		}
-		this.aspect = aspect;
+
+		if (secondAspect == null || VALID_ASPECTS.contains(secondAspect)) {
+			this.secondAspect = secondAspect;
+		} else {
+			throw new IllegalArgumentException();
+		}
 
 		if (sign == null || VALID_SIGNS.contains(sign)) {
 			this.sign = sign;
@@ -81,37 +89,21 @@ public class AData implements Serializable {
 			throw new IllegalArgumentException();
 		}
 
-		this.comment = comment;
-	}
-
-	private static boolean isValidAspect(String s) {
-		if (s == null) {
-			return false;
+		if (modifier == null || VALID_MODIFIERS.contains(modifier)) {
+			this.modifier = modifier;
+		} else {
+			throw new IllegalArgumentException();
 		}
-		return s.equals(L)
-			|| s.equals(P)
-			|| s.equals(R)
-			|| s.equals(E)
-			|| s.equals(S)
-			|| s.equals(F)
-			|| s.equals(T)
-			|| s.equals(I);
+
+		this.comment = comment;
 	}
 
 	public String getAspect() {
 		return aspect;
 	}
 
-	public void setModifier(String modifier) {
-		this.modifier = modifier;
-	}
-
 	public String getModifier() {
 		return modifier;
-	}
-
-	public void setSecondAspect(String secondAspect) {
-		this.secondAspect = secondAspect;
 	}
 
 	public String getSecondAspect() {
@@ -141,9 +133,9 @@ public class AData implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder(aspect);
-		if (modifier != null && modifier.equals(BLOCK)) {
+		if (BLOCK.equals(modifier)) {
 			builder.append(BLOCK_TOKEN).append(secondAspect).append(SEPARATOR);
-		} else if (modifier != null && modifier.equals(JUMP)) {
+		} else if (JUMP.equals(modifier)) {
 			builder.append(JUMP_TOKEN).append(secondAspect).append(SEPARATOR);
 		} else {
 			builder.append(SEPARATOR);
@@ -174,7 +166,7 @@ public class AData implements Serializable {
 			int index1 = s.indexOf(BLOCK_TOKEN) + BLOCK_TOKEN.length();
 			int index2 = s.indexOf(SEPARATOR);
 			String a2 = s.substring(index1, index2);
-			if (isValidAspect(a2)) {
+			if (VALID_ASPECTS.contains(a2)) {
 				sa = a2;
 				s = s.replace(BLOCK_TOKEN + a2, "");
 				mod = BLOCK;
@@ -183,7 +175,7 @@ public class AData implements Serializable {
 			int index1 = s.indexOf(JUMP_TOKEN) + JUMP_TOKEN.length();
 			int index2 = s.indexOf(SEPARATOR);
 			String a2 = s.substring(index1, index2);
-			if (isValidAspect(a2)) {
+			if (VALID_ASPECTS.contains(a2)) {
 				sa = a2;
 				s = s.replace(JUMP_TOKEN + a2, "");
 				mod = JUMP;
@@ -257,14 +249,7 @@ public class AData implements Serializable {
 			sign = MINUS;
 		}
 
-		AData data = new AData(aspect, sign, dimension, mv, null);
-
-		if (Arrays.asList(BLOCK, JUMP).contains(mod) && AData.isValidAspect(sa)) {
-			data.modifier = mod;
-			data.secondAspect = sa;
-		}
-
-		return data;
+		return new AData(aspect, sa, sign, dimension, mv, mod, null);
 	}
 
 	@Override
