@@ -132,27 +132,35 @@ public class DocumentSelectionConnector implements PropertyChangeListener, Caret
 
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		DefaultMutableTreeNode leafNode = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
-		Object leafObject = leafNode.getUserObject();
+		logger.trace("valueChanged({}): entering", e);
 
-		int index = 0;
-
-		if (leafObject instanceof EndNodeObject) {
-			index = ((EndNodeObject) leafObject).getOffset();
-		} else {
-			String quote = leafObject.toString();
-			if (quote != null && quote.startsWith("#")) {
-				String indexStr = quote.substring(1, quote.indexOf("::"));
-				index = Integer.parseInt(indexStr);
-			}
+		Object leaf = e.getPath().getLastPathComponent();
+		if (!(leaf instanceof DefaultMutableTreeNode)) {
+			logger.warn("Unexpected node type detected, {}", leaf);
+			logger.trace("valueChanged({}): leaving", e);
+			return;
 		}
+		DefaultMutableTreeNode leafNode = (DefaultMutableTreeNode) leaf;
+
+		Object leafObject = leafNode.getUserObject();
+		if (!(leafObject instanceof EndNodeObject)) {
+			logger.debug("Leaf object {} is not an EndNodeObject, skipping navigation", leafObject);
+			logger.trace("valueChanged({}): leaving", e);
+			return;
+		}
+		EndNodeObject endNodeObject = (EndNodeObject) leafObject;
+		int index = endNodeObject.getOffset();
+		logger.trace("Leaf object {} initiated navigation to offset {}", endNodeObject, index);
 
 		ADocument document = textPane.getDocument();
 		ASection currentASection = document.getASectionThatStartsAt(index);
-		if (currentASection != null) {
+		if (currentASection == null) {
+			logger.warn("No section at offset {}, but it was supposed to be there, skipping navigation", index);
+		} else {
 			Caret caret = textPane.getCaret();
 			caret.setDot(currentASection.getStartOffset());
 			caret.moveDot(currentASection.getEndOffset());
 		}
+		logger.trace("valueChanged({}): leaving", e);
 	}
 }
