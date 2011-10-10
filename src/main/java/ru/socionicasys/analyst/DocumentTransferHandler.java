@@ -7,7 +7,10 @@ import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 
 /**
  * Реализует взаимодействие документа {@link ADocument} в {@link TextPane} с буфером обмена и/или DnD.
@@ -44,20 +47,39 @@ public class DocumentTransferHandler extends TransferHandler {
 			return false;
 		}
 
-		if (!support.isDataFlavorSupported(ADocumentFragment.getNativeFlavor())) {
+		DataFlavor nativeFlavor = ADocumentFragment.getNativeFlavor();
+		if (!support.isDataFlavorSupported(nativeFlavor)) {
 			logger.debug("importData(): ADocumentFragment flavor not supported, delegating to parent");
 			return parentTransferHandler != null && parentTransferHandler.importData(support);
 		}
 
 		logger.debug("importData(): inserting ADocumentFragment");
+		ADocumentFragment fragment;
+		try {
+			fragment = (ADocumentFragment) support.getTransferable().getTransferData(nativeFlavor);
+		} catch (UnsupportedFlavorException e) {
+			logger.error("Unexpectedly unsupported native data flavour", e);
+			return false;
+		} catch (IOException e) {
+			logger.error("I/O error while making data transfer");
+			return false;
+		}
+
 		Component sourceComponent = support.getComponent();
 		assert sourceComponent instanceof TextPane :
 				"ADocumentFragment insertion is only supported for TextPane instances";
 		TextPane textPane = (TextPane) sourceComponent;
-		JTextComponent.DropLocation dropLocation = (JTextComponent.DropLocation) support.getDropLocation();
 		ADocument document = textPane.getDocument();
-		ADocumentFragment fragment = (ADocumentFragment) support.getTransferable();
-		document.pasteADocFragment(dropLocation.getIndex(), fragment);
+
+		int insertPosition;
+		if (support.isDrop()) {
+			JTextComponent.DropLocation dropLocation = (JTextComponent.DropLocation) support.getDropLocation();
+			insertPosition = dropLocation.getIndex();
+		} else {
+			insertPosition = textPane.getCaretPosition();
+		}
+
+		document.pasteADocFragment(insertPosition, fragment);
 		return true;
 	}
 
