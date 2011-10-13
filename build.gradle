@@ -15,7 +15,7 @@ buildscript {
 	}
 
 	dependencies {
-		classpath 'org.eclipse.jgit:org.eclipse.jgit:1.0.0.201106090707-r'
+		classpath 'org.eclipse.jgit:org.eclipse.jgit:1.1.0.201109151100-r'
 	}
 }
 
@@ -72,7 +72,7 @@ dependencies {
 	compile 'org.slf4j:slf4j-api:1.6.2'
 	runtime 'ch.qos.logback:logback-classic:0.9.30'
 	testCompile 'org.testng:testng:6.2.1'
-	jgit 'org.eclipse.jgit:org.eclipse.jgit:1.0.0.201106090707-r'
+	jgit 'org.eclipse.jgit:org.eclipse.jgit:1.1.0.201109151100-r'
 }
 
 def sharedManifest = manifest {
