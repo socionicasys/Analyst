@@ -52,6 +52,7 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		DEFAULT_STYLE = new SimpleAttributeSet();
 		DEFAULT_STYLE.addAttribute(StyleConstants.FontSize, 16);
 		DEFAULT_STYLE.addAttribute(StyleConstants.Background, Color.white);
+		DEFAULT_STYLE.addAttribute(StyleConstants.FontFamily, Font.SANS_SERIF);
 		//style of a section with mark-up
 		DEFAULT_SECTION_STYLE = new SimpleAttributeSet();
 		DEFAULT_SECTION_STYLE.addAttribute(StyleConstants.Background, Color.decode("#E0ffff"));
@@ -589,18 +590,15 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	 */
 	public void appendDocument(ADocument anotherDocument) {
 		logger.trace("appendDocument(): entering, anotherDocument={}", anotherDocument);
-		List<ElementSpec> specs = new ArrayList<ElementSpec>();
-		ElementSpec startSpec = new ElementSpec(new SimpleAttributeSet(), ElementSpec.StartTagType);
-		specs.add(startSpec);
-		visitElements(anotherDocument.getDefaultRootElement(), specs, false);
-		ElementSpec endSpec = new ElementSpec(new SimpleAttributeSet(), ElementSpec.EndTagType);
-		specs.add(endSpec);
+		List<ElementSpec> specsList = new ArrayList<ElementSpec>();
+		specsList.add(new ElementSpec(DEFAULT_STYLE, ElementSpec.EndTagType));
+		visitElements(anotherDocument.getDefaultRootElement(), specsList, false);
 
-		ElementSpec[] arr = new ElementSpec[specs.size()];
-		specs.toArray(arr);
+		ElementSpec[] specs = new ElementSpec[specsList.size()];
+		specsList.toArray(specs);
 		int documentLength = getLength();
 		try {
-			insert(documentLength, arr);
+			insert(documentLength, specs);
 		} catch (BadLocationException e) {
 			logger.error("Error while appending to document");
 		}
