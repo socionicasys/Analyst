@@ -321,11 +321,10 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		logger.trace("endCompoundEdit(): entering. Edit level {}, ({})", currentCompoundDepth,
 				currentCompoundEdit.getPresentationName());
 		currentCompoundDepth--;
-		if (currentCompoundDepth > 0) {
-			return;
+		if (currentCompoundDepth == 0) {
+			currentCompoundEdit.end();
+			super.fireUndoableEditUpdate(new UndoableEditEvent(this, currentCompoundEdit));
 		}
-		currentCompoundEdit.end();
-		super.fireUndoableEditUpdate(new UndoableEditEvent(this, currentCompoundEdit));
 		logger.trace("endCompoundEdit(): leaving");
 	}
 
