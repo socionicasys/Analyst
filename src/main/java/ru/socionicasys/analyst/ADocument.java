@@ -11,14 +11,12 @@ import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.text.*;
 import javax.swing.undo.*;
 
 @SuppressWarnings({"NonSerializableFieldInSerializableClass", "serial"})
-public class ADocument extends DefaultStyledDocument implements DocumentListener {
+public class ADocument extends DefaultStyledDocument {
 	public static final String DEFAULT_TITLE = "Новый документ";
 	// document's properties names
 	public static final String EXPERT_PROPERTY = "expert";
@@ -89,7 +87,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 	public ADocument() {
 		logger.trace("ADocument(): entering");
-		addDocumentListener(this);
 
 		listeners = new ArrayList<ADocumentChangeListener>();
 
@@ -150,10 +147,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	@Override
-	public void changedUpdate(DocumentEvent e) {
-	}
-
-	@Override
 	protected void insertUpdate(DefaultDocumentEvent chng, AttributeSet attr) {
 		logger.trace("insertUpdate(): entering, chng={}, attr={}", chng, attr);
 		//if insert is on the section end - do not extend the section to the inserted text
@@ -194,10 +187,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		fireADocumentChanged();
 		endCompoundEdit();
 		logger.trace("removeUpdate(): leaving");
-	}
-
-	@Override
-	public void removeUpdate(DocumentEvent e) {
 	}
 
 	public void removeCleanup(int start, int end) {
@@ -334,10 +323,6 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			listener.aDocumentChanged(this);
 		}
 		logger.trace("fireADocumentChanged(): leaving");
-	}
-
-	@Override
-	public void insertUpdate(DocumentEvent e) {
 	}
 
 	public Map<ASection, AData> getADataMap() {
