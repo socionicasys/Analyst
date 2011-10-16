@@ -156,7 +156,7 @@ public class AnalystWindow extends JFrame {
 		worker.addPropertyChangeListener(new ProgressWindow(this, "    Идет загрузка файла...   "));
 		worker.execute();
 
-		textPane.grabFocus();
+		textPane.requestFocusInWindow();
 		status.setText("");
 		setTitle(String.format(WINDOW_TITLE_FORMAT, VersionInfo.getApplicationName(), file.getName()));
 	}
