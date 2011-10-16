@@ -67,6 +67,16 @@ public class ASection implements Comparable<ASection> {
 		return offset >= startOffset && offset < endOffset;
 	}
 
+	/**
+	 * Возвращает {@code true} если интервал пересекается с заданным в параметре интервалом
+	 *
+	 * @param otherSection интервал, пересечение с которым нужно проверить
+	 * @return пересекаются ли интервалы
+	 */
+	public boolean intersects(ASection otherSection) {
+		return getStartOffset() <= otherSection.getEndOffset() && otherSection.getStartOffset() <= getEndOffset();
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof ASection)) {

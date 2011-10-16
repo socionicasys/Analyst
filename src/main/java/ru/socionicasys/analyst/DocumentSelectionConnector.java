@@ -70,7 +70,7 @@ public class DocumentSelectionConnector implements PropertyChangeListener, Caret
 			}
 		} else if (newMarkup == null) {
 			// Удаление старой отметки
-			document.removeASection(currentSection);
+			document.removeSection(currentSection);
 		} else if (!newMarkup.equals(oldMarkup)) {
 			// Обновление данных в существующей отметке
 			document.updateASection(currentSection, newMarkup);

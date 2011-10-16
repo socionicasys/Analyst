@@ -213,9 +213,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			}
 		}
 
-		for (ASection section : toRemove) {
-			removeASection(section);
-		}
+		removeSections(toRemove);
+		
 		if (foundCollapsed) {
 			fireADocumentChanged();
 		}
@@ -226,30 +225,71 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 		return aDataMap.get(section);
 	}
 
-	public void removeASection(ASection section) {
-		logger.trace("removeASection(): entering, section={}", section);
-		if (section == null) {
-			return;
-		}
-
+	/**
+	 * Удаляет из документа заданный набор отметок.
+	 *
+	 * @param sections набор интервалов, для которых нужно удалить отметки.
+	 */
+	public void removeSections(Collection<ASection> sections) {
+		logger.trace("removeSections({}): entering", sections);
 		startCompoundEdit();
 
-		AData data = aDataMap.remove(section);
-
-		int startOffset = section.getStartOffset();
-		int endOffset = section.getEndOffset();
-		setCharacterAttributes(startOffset, endOffset - startOffset, DEFAULT_STYLE, false);
-		for (ASection otherSection : aDataMap.keySet()) {
-			int otherStartOffset = otherSection.getStartOffset();
-			int otherLength = otherSection.getEndOffset() - otherStartOffset;
-			setCharacterAttributes(otherStartOffset, otherLength, DEFAULT_SECTION_STYLE, false);
+		Map<ASection, AData> removedDataMap = new HashMap<ASection, AData>(sections.size());
+		for (ASection section : sections) {
+			removedDataMap.put(section, aDataMap.remove(section));
 		}
 
-		fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionDeletionEdit(section, data)));
+		for (ASection section : removedDataMap.keySet()) {
+			drawSection(section, false);
+		}
+		for (ASection section : aDataMap.keySet()) {
+			boolean intersectsRemoved = false;
+			for (ASection removedSection : removedDataMap.keySet()) {
+				if (section.intersects(removedSection)) {
+					intersectsRemoved = true;
+					break;
+				}
+			}
+
+			if (intersectsRemoved) {
+				drawSection(section, true);
+			}
+		}
+
+		for (Entry<ASection, AData> removedEntry : removedDataMap.entrySet()) {
+			ASection removedSection = removedEntry.getKey();
+			AData removedData = removedEntry.getValue();
+			fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionDeletionEdit(removedSection, removedData)));
+		}
+
 		fireADocumentChanged();
 
 		endCompoundEdit();
-		logger.trace("removeASection(): leaving");
+		logger.trace("removeSections({}): leaving", sections);
+	}
+
+	/**
+	 * Удаляет из документа заданный интервал и его разметку.
+	 *
+	 * @param section интервал, разметку которого нужно удалить
+	 */
+	public void removeSection(ASection section) {
+		logger.trace("removeSection({}): entering", section);
+		removeSections(Collections.singletonList(section));
+		logger.trace("removeSection({}): leaving", section);
+	}
+
+	/**
+	 * Маркирует интервал выделением внутри документа.
+	 *
+	 * @param section интервал, который нужно отрисовать
+	 * @param active является ли интервал активной пометкой ({@code true}) или обычным текстом ({@code false})
+	 */
+	private void drawSection(ASection section, boolean active) {
+		int startOffset = section.getStartOffset();
+		int length = section.getEndOffset() - startOffset;
+		SimpleAttributeSet sectionStyle = active ? DEFAULT_SECTION_STYLE : DEFAULT_STYLE;
+		setCharacterAttributes(startOffset, length, sectionStyle, false);
 	}
 
 	public void updateASection(ASection aSection, AData data) {
