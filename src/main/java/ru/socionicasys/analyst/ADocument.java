@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.UndoableEditEvent;
@@ -33,6 +34,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 	private CompoundEdit currentCompoundEdit;
 	private int currentCompoundDepth;
+
+	private static final Pattern EXPERTS_SEPARATOR_PATTER = Pattern.compile(" *; *");
 
 	/**
 	 * Информация о соответствиях/несоответствиях ТИМам
@@ -616,9 +619,19 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 			}
 		}
 
-		StringBuilder builder = new StringBuilder(getProperty(EXPERT_PROPERTY).toString());
-		builder.append("; ");
-		builder.append(anotherDocument.getProperty(EXPERT_PROPERTY));
+		String expertList = (String) getProperty(EXPERT_PROPERTY);
+		String anotherExpertList = (String) anotherDocument.getProperty(EXPERT_PROPERTY);
+		Set<String> experts = new LinkedHashSet<String>();
+		Collections.addAll(experts, EXPERTS_SEPARATOR_PATTER.split(expertList));
+		Collections.addAll(experts, EXPERTS_SEPARATOR_PATTER.split(anotherExpertList));
+
+		StringBuilder builder = new StringBuilder();
+		for (String expertName : experts) {
+			if (builder.length() == 0) {
+				builder.append("; ");
+			}
+			builder.append(expertName);
+		}
 		getDocumentProperties().put(EXPERT_PROPERTY, builder.toString());
 
 		fireADocumentChanged();
