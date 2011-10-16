@@ -152,7 +152,7 @@ public class AnalystWindow extends JFrame {
 
 	public void openFile(File file, boolean append) {
 		final LegacyHtmlReader worker = new LegacyHtmlReader(file);
-		worker.addPropertyChangeListener(new DocumentLoadListener(append, documentHolder));
+		worker.addPropertyChangeListener(new DocumentLoadListener(documentHolder, append, textPane.getCaretPosition()));
 		worker.addPropertyChangeListener(new ProgressWindow(this, "    Идет загрузка файла...   "));
 		worker.execute();
 
@@ -506,7 +506,7 @@ public class AnalystWindow extends JFrame {
 		private final boolean append;
 
 		private OpenAction(boolean append) {
-			super(append ? "Открыть и присоединить..." : "Открыть...");
+			super(append ? "Вставить из файла..." : "Открыть...");
 			this.append = append;
 		}
 
@@ -518,8 +518,8 @@ public class AnalystWindow extends JFrame {
 					return;
 				}
 			}
-			fileChooser.setDialogTitle(append ? "Открыть и присоединить документ" : "Открытие документа");
-			int openResult = fileChooser.showDialog(AnalystWindow.this, append ? "Открыть и присоединить" : "Открыть");
+			fileChooser.setDialogTitle(append ? "Вставка документа" : "Открытие документа");
+			int openResult = fileChooser.showDialog(AnalystWindow.this, append ? "Вставить" : "Открыть");
 			if (openResult == JFileChooser.APPROVE_OPTION) {
 				openFile(fileChooser.getSelectedFile(), append);
 			}

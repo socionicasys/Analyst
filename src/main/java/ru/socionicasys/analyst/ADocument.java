@@ -586,29 +586,30 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 
 	/**
 	 * Добавляет содержимое из документа anotherDocument в конец данного документа.
+	 * 
 	 * @param anotherDocument документ, содержимое которого нужно добавить.
+	 * @param appendOffset смещение, по коорому нужно вставить содержимое {@code anotherDocument}.
 	 */
-	public void appendDocument(ADocument anotherDocument) {
-		logger.trace("appendDocument(): entering, anotherDocument={}", anotherDocument);
+	public void appendDocument(ADocument anotherDocument, int appendOffset) {
+		logger.trace("appendDocument({}, {}): entering", anotherDocument, appendOffset);
 		List<ElementSpec> specsList = new ArrayList<ElementSpec>();
 		specsList.add(new ElementSpec(DEFAULT_STYLE, ElementSpec.EndTagType));
 		visitElements(anotherDocument.getDefaultRootElement(), specsList, false);
 
-		ElementSpec[] specs = new ElementSpec[specsList.size()];
-		specsList.toArray(specs);
-		int documentLength = getLength();
 		try {
-			insert(documentLength, specs);
+			ElementSpec[] specs = new ElementSpec[specsList.size()];
+			specsList.toArray(specs);
+			insert(appendOffset, specs);
 		} catch (BadLocationException e) {
-			logger.error("Error while appending to document");
+			logger.error("Error while appending to document", e);
 		}
 
 		for (Entry<ASection, AData> entry : anotherDocument.aDataMap.entrySet()) {
-			ASection sourceSection = entry.getKey();
 			try {
+				ASection sourceSection = entry.getKey();
 				ASection destinationSection = new ASection(this,
-						sourceSection.getStartOffset() + documentLength,
-						sourceSection.getEndOffset() + documentLength);
+						sourceSection.getStartOffset() + appendOffset,
+						sourceSection.getEndOffset() + appendOffset);
 				aDataMap.put(destinationSection, entry.getValue());
 			} catch (BadLocationException e) {
 				logger.error("Invalid position for ASection", e);
@@ -625,7 +626,8 @@ public class ADocument extends DefaultStyledDocument implements DocumentListener
 	}
 
 	/**
-	 * Проходится по элементу и всем его дочерним элементам, собирая всю информацию в список ElementSpec-ов.
+	 * Проходится по элементу и всем его дочерним элементам, собирая всю информацию в список {@link ElementSpec}-ов.
+	 * 
 	 * @param element элемент, с которого начинается обход
 	 * @param specs список, в который будут добавлены описания элементов
 	 * @param includeRoot добавлять ли в описание теги открытия/закрытия начального элемента

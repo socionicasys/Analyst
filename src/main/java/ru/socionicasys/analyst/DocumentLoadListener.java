@@ -17,6 +17,11 @@ public final class DocumentLoadListener extends SwingWorkerDoneListener {
 	private final boolean append;
 
 	/**
+	 * Смещение, по которому нужно добавить текст в существующий документ в случае {@code append = true}.
+	 */
+	private final int appendOffset;
+
+	/**
 	 * Контейнер с документом, в который нужно поместить новый после окончания загрузки.
 	 */
 	private final DocumentHolder documentHolder;
@@ -27,12 +32,14 @@ public final class DocumentLoadListener extends SwingWorkerDoneListener {
 	 * Создает объект, который может наблюдать за процессом загрузки документа фоновым потоком
 	 * {@link LegacyHtmlReader} и добавит загруженный документ в заданный контейнер по окончанию.
 	 *
-	 * @param append добавлять ли новый документ в конец уже существующего вместо полной замены
 	 * @param documentHolder контейнер для загруженного документа
+	 * @param append добавлять ли новый документ в конец уже существующего вместо полной замены
+	 * @param appendOffset Смещение, по которому нужно добавить текст в существующий документ
 	 */
-	public DocumentLoadListener(boolean append, DocumentHolder documentHolder) {
-		this.append = append;
+	public DocumentLoadListener(DocumentHolder documentHolder, boolean append, int appendOffset) {
 		this.documentHolder = documentHolder;
+		this.append = append;
+		this.appendOffset = appendOffset;
 	}
 
 	@Override
@@ -41,7 +48,7 @@ public final class DocumentLoadListener extends SwingWorkerDoneListener {
 			LegacyHtmlReader worker = (LegacyHtmlReader) evt.getSource();
 			ADocument document = worker.get();
 			if (append) {
-				documentHolder.getModel().appendDocument(document);
+				documentHolder.getModel().appendDocument(document, appendOffset);
 			} else {
 				documentHolder.setModel(document);
 			}
