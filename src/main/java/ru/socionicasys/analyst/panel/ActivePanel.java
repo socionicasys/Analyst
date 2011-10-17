@@ -1,4 +1,6 @@
-package ru.socionicasys.analyst;
+package ru.socionicasys.analyst.panel;
+
+import ru.socionicasys.analyst.DocumentSelectionModel;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;

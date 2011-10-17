@@ -1,5 +1,7 @@
-package ru.socionicasys.analyst;
+package ru.socionicasys.analyst.panel;
 
+import ru.socionicasys.analyst.AData;
+import ru.socionicasys.analyst.DocumentSelectionModel;
 import ru.socionicasys.analyst.types.Aspect;
 
 import javax.swing.*;

@@ -1,4 +1,7 @@
-package ru.socionicasys.analyst;
+package ru.socionicasys.analyst.panel;
+
+import ru.socionicasys.analyst.AData;
+import ru.socionicasys.analyst.DocumentSelectionModel;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -9,21 +12,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Панель «Витал/Ментал/Суперид/Суперэго».
+ * Панель знака («Плюс»/«Минус»).
  */
-public final class MVPanel extends ActivePanel {
+public final class SignPanel extends ActivePanel {
 	private final Map<String, JRadioButton> buttons;
 	private final ButtonGroup buttonGroup;
 	private final JButton clearButton;
 
-	public MVPanel(DocumentSelectionModel selectionModel) {
+	public SignPanel(DocumentSelectionModel selectionModel) {
 		super(selectionModel);
 
-		buttons = new HashMap<String, JRadioButton>(4);
-		buttons.put(AData.VITAL, new JRadioButton("Витал"));
-		buttons.put(AData.MENTAL, new JRadioButton("Ментал"));
-		buttons.put(AData.SUPERID, new JRadioButton("Супер-ИД"));
-		buttons.put(AData.SUPEREGO, new JRadioButton("Супер-ЭГО"));
+		buttons = new HashMap<String, JRadioButton>(2);
+		buttons.put(AData.PLUS, new JRadioButton("+"));
+		buttons.put(AData.MINUS, new JRadioButton("-"));
 
 		buttonGroup = new ButtonGroup();
 		for (Map.Entry<String, JRadioButton> entry : buttons.entrySet()) {
@@ -42,29 +43,23 @@ public final class MVPanel extends ActivePanel {
 			}
 		});
 
-		Panel pp1 = new Panel();
-		Panel pp2 = new Panel();
 		Panel pp = new Panel();
-		pp.setMinimumSize(new Dimension(200, 120));
-		setMinimumSize(new Dimension(200, 120));
-		setMaximumSize(new Dimension(200, 120));
+		pp.setMaximumSize(new Dimension(100, 50));
+		pp.setPreferredSize(new Dimension(100, 50));
 
-		pp1.setLayout(new BoxLayout(pp1, BoxLayout.Y_AXIS));
-		pp2.setLayout(new BoxLayout(pp2, BoxLayout.Y_AXIS));
-		pp1.add(buttons.get(AData.VITAL));
-		pp1.add(buttons.get(AData.MENTAL));
-		pp2.add(buttons.get(AData.SUPERID));
-		pp2.add(buttons.get(AData.SUPEREGO));
-		pp.setLayout(new BoxLayout(pp, BoxLayout.X_AXIS));
+		setMinimumSize(new Dimension(200, 80));
+		setPreferredSize(new Dimension(200, 80));
+		setMaximumSize(new Dimension(200, 80));
 
-		pp.add(pp1);
-		pp.add(pp2);
+		pp.setLayout(new BoxLayout(pp, BoxLayout.Y_AXIS));
+		pp.add(buttons.get(AData.PLUS));
+		pp.add(buttons.get(AData.MINUS));
 
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
 		add(pp);
 		add(clearButton);
-		setBorder(new TitledBorder("Ментал/Витал"));
+		setBorder(new TitledBorder("Знак"));
 
 		updateView();
 	}
@@ -74,9 +69,9 @@ public final class MVPanel extends ActivePanel {
 	 */
 	@Override
 	protected void updateView() {
-		String mv = selectionModel.getMV();
+		String sign = selectionModel.getSign();
 		boolean panelEnabled = !selectionModel.isEmpty() && !selectionModel.isMarkupEmpty();
-		boolean selectionEnabled = panelEnabled && mv != null;
+		boolean selectionEnabled = panelEnabled && sign != null;
 
 		for (JRadioButton button : buttons.values()) {
 			button.setEnabled(panelEnabled);
@@ -84,11 +79,12 @@ public final class MVPanel extends ActivePanel {
 		clearButton.setEnabled(selectionEnabled);
 
 		if (selectionEnabled) {
-			JRadioButton selectedButton = buttons.get(mv);
+			JRadioButton selectedButton = buttons.get(sign);
 			buttonGroup.setSelected(selectedButton.getModel(), true);
 		} else {
 			buttonGroup.clearSelection();
 		}
+
 	}
 
 	/**
@@ -98,9 +94,9 @@ public final class MVPanel extends ActivePanel {
 	protected void updateModel() {
 		ButtonModel selectedButtonModel = buttonGroup.getSelection();
 		if (selectedButtonModel == null) {
-			selectionModel.setMV(null);
+			selectionModel.setSign(null);
 		} else {
-			selectionModel.setMV(selectedButtonModel.getActionCommand());
+			selectionModel.setSign(selectedButtonModel.getActionCommand());
 		}
 	}
 }
