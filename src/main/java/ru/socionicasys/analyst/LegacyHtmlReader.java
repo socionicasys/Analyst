@@ -156,11 +156,11 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 			int begin = rawAData.getBegin();
 			int end = rawAData.getEnd();
 			try {
-				ASection section = new ASection(document, begin, end);
+				DocumentSection section = new DocumentSection(document, begin, end);
 				document.getADataMap().put(section, data);
 				document.setCharacterAttributes(begin, end - begin, ADocument.DEFAULT_SECTION_STYLE, false);
 			} catch (BadLocationException e) {
-				logger.error("Invalid position for ASection", e);
+				logger.error("Invalid position for DocumentSection", e);
 			}
 		}
 		document.fireADocumentChanged();

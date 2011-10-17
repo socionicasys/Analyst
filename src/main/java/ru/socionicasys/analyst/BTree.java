@@ -72,7 +72,7 @@ public class BTree extends JTree implements ADocumentChangeListener {
 		//Analyze document structure and update tree nodes
 		try {
 			removeAllChildren();
-			for (Entry<ASection, AData> dataEntry : document.getADataMap().entrySet()) {
+			for (Entry<DocumentSection, AData> dataEntry : document.getADataMap().entrySet()) {
 				int sectionOffset = dataEntry.getKey().getStartOffset();
 				int sectionLength = Math.abs(dataEntry.getKey().getEndOffset() - sectionOffset);
 				int quoteLength = Math.min(sectionLength, MAX_PRESENTATION_CHARS);

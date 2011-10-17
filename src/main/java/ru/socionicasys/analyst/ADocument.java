@@ -27,7 +27,7 @@ public class ADocument extends DefaultStyledDocument {
 	public static final SimpleAttributeSet DEFAULT_STYLE;
 	public static final SimpleAttributeSet DEFAULT_SECTION_STYLE;
 
-	private final Map<ASection, AData> aDataMap;
+	private final Map<DocumentSection, AData> aDataMap;
 	private final Collection<ADocumentChangeListener> listeners;
 
 	private CompoundEdit currentCompoundEdit;
@@ -61,9 +61,9 @@ public class ADocument extends DefaultStyledDocument {
 	}
 
 	/**
-	 * Сравнивает две ASection исходя из их близости к определенному положению в документе.
+	 * Сравнивает две {@link DocumentSection} исходя из их близости к определенному положению в документе.
 	 */
-	private static final class SectionDistanceComparator implements Comparator<ASection>, Serializable {
+	private static final class SectionDistanceComparator implements Comparator<DocumentSection>, Serializable {
 		private final int targetPosition;
 
 		/**
@@ -75,7 +75,7 @@ public class ADocument extends DefaultStyledDocument {
 		}
 
 		@Override
-		public int compare(ASection o1, ASection o2) {
+		public int compare(DocumentSection o1, DocumentSection o2) {
 			int midDistance1 = Math.abs(targetPosition - o1.getMiddleOffset());
 			int midDistance2 = Math.abs(targetPosition - o2.getMiddleOffset());
 			if (midDistance1 != midDistance2) {
@@ -95,7 +95,7 @@ public class ADocument extends DefaultStyledDocument {
 		matchMissModel = new MatchMissModel();
 		addADocumentChangeListener(matchMissModel);
 
-		aDataMap = new HashMap<ASection, AData>();
+		aDataMap = new HashMap<DocumentSection, AData>();
 
 		putProperty(TitleProperty, DEFAULT_TITLE);
 		putProperty(EXPERT_PROPERTY, "");
@@ -110,39 +110,47 @@ public class ADocument extends DefaultStyledDocument {
 	}
 
 	/**
-	 * Находит блок (ASection), который содержит заданную позицию. Если таких блоков несколько, выбирается тот,
-	 * центральная часть которого лежит ближе всего к этой позиции. Среди блоков, центры которых лежат на одном
-	 * расстоянии, выбирается блок максимальной вложенности.
+	 * Находит блок ({@link DocumentSection}), который содержит заданную позицию. Если таких блоков несколько,
+	 * выбирается тот, центральная часть которого лежит ближе всего к этой позиции. Среди блоков, центры которых лежат
+	 * на одном расстоянии, выбирается блок максимальной вложенности.
+	 *
 	 * @param pos позиция в документе, для которой нужно найти блок
 	 * @return блок, содержащий заданную позицию, или null, если такого нет
 	 */
-	public ASection getASection(int pos) {
-		logger.trace("getASection(): entering, pos={}", pos);
-		Collection<ASection> results = new ArrayList<ASection>();
-		for (ASection as : aDataMap.keySet()) {
-			if (as.containsOffset(pos)) {
-				results.add(as);
+	public DocumentSection getSection(int pos) {
+		logger.trace("getSection({}): entering", pos);
+		Collection<DocumentSection> results = new ArrayList<DocumentSection>();
+		for (DocumentSection section : aDataMap.keySet()) {
+			if (section.containsOffset(pos)) {
+				results.add(section);
 			}
 		}
 		if (results.isEmpty()) {
-			logger.trace("getASection(): leaving, no section found");
+			logger.trace("getSection({}): leaving, no section found", pos);
 			return null;
 		}
 
-		ASection matchingSection = Collections.min(results, new SectionDistanceComparator(pos));
-		logger.trace("getASection(): leaving, found ASection {}", matchingSection);
+		DocumentSection matchingSection = Collections.min(results, new SectionDistanceComparator(pos));
+		logger.trace("getSection({}): leaving, found DocumentSection {}", pos, matchingSection);
 		return matchingSection;
 	}
 
-	public ASection getASectionThatStartsAt(int startOffset) {
-		logger.trace("getASectionThatStartsAt(): entering, startOffset={}", startOffset);
-		for (ASection section : aDataMap.keySet()) {
+	/**
+	 * Возвращает интервал в документе, содержащий пометку и начинающийся в заданной позиции.
+	 *
+	 * @param startOffset начало интервала, который нужно найти
+	 * @return интервал документа с отметками, начинающийся в заданной позиции,
+	 * {@code null} если такого интервала нет
+	 */
+	public DocumentSection getSectionThatStartsAt(int startOffset) {
+		logger.trace("getSectionThatStartsAt({}): entering", startOffset);
+		for (DocumentSection section : aDataMap.keySet()) {
 			if (section.getStartOffset() == startOffset) {
-				logger.trace("getASectionThatStartsAt(): leaving, found ASection {}", section);
+				logger.trace("getSectionThatStartsAt({}): leaving, found DocumentSection {}", startOffset, section);
 				return section;
 			}
 		}
-		logger.trace("getASectionThatStartsAt(): leaving, no section found");
+		logger.trace("getSectionThatStartsAt({}): leaving, no section found", startOffset);
 		return null;
 	}
 
@@ -153,18 +161,18 @@ public class ADocument extends DefaultStyledDocument {
 		int offset = chng.getOffset();
 		int length = chng.getLength();
 
-		Iterator<ASection> sectionIterator = aDataMap.keySet().iterator();
-		Map<ASection, AData> tempMap = new HashMap<ASection, AData>();
+		Iterator<DocumentSection> sectionIterator = aDataMap.keySet().iterator();
+		Map<DocumentSection, AData> tempMap = new HashMap<DocumentSection, AData>();
 		while (sectionIterator.hasNext()) {
-			ASection sect = sectionIterator.next();
+			DocumentSection sect = sectionIterator.next();
 			if (sect.getEndOffset() == offset + length) {
 				int start = sect.getStartOffset();
 				AData aData = aDataMap.get(sect);
 				sectionIterator.remove();
 				try {
-					tempMap.put(new ASection(this, start, offset), aData);
+					tempMap.put(new DocumentSection(this, start, offset), aData);
 				} catch (BadLocationException e) {
-					logger.error("Invalid position for ASection", e);
+					logger.error("Invalid position for DocumentSection", e);
 				}
 			}
 		}
@@ -193,8 +201,8 @@ public class ADocument extends DefaultStyledDocument {
 		logger.trace("removeCleanup(): entering, start={}, end={}", start, end);
 		// проверяет не нужно ли удалить схлопнувшиеся сегменты
 		boolean foundCollapsed = false;
-		Collection<ASection> toRemove = new ArrayList<ASection>();
-		for (ASection sect : aDataMap.keySet()) {
+		Collection<DocumentSection> toRemove = new ArrayList<DocumentSection>();
+		for (DocumentSection sect : aDataMap.keySet()) {
 			if (sect.getStartOffset() > start && sect.getStartOffset() <= end &&
 				sect.getEndOffset() > start && sect.getEndOffset() <= end) {
 				toRemove.add(sect);
@@ -210,7 +218,7 @@ public class ADocument extends DefaultStyledDocument {
 		logger.trace("removeCleanup(): leaving");
 	}
 
-	public AData getAData(ASection section) {
+	public AData getAData(DocumentSection section) {
 		return aDataMap.get(section);
 	}
 
@@ -219,21 +227,21 @@ public class ADocument extends DefaultStyledDocument {
 	 *
 	 * @param sections набор интервалов, для которых нужно удалить отметки.
 	 */
-	public void removeSections(Collection<ASection> sections) {
+	public void removeSections(Collection<DocumentSection> sections) {
 		logger.trace("removeSections({}): entering", sections);
 		startCompoundEdit();
 
-		Map<ASection, AData> removedDataMap = new HashMap<ASection, AData>(sections.size());
-		for (ASection section : sections) {
+		Map<DocumentSection, AData> removedDataMap = new HashMap<DocumentSection, AData>(sections.size());
+		for (DocumentSection section : sections) {
 			removedDataMap.put(section, aDataMap.remove(section));
 		}
 
-		for (ASection section : removedDataMap.keySet()) {
+		for (DocumentSection section : removedDataMap.keySet()) {
 			drawSection(section, false);
 		}
-		for (ASection section : aDataMap.keySet()) {
+		for (DocumentSection section : aDataMap.keySet()) {
 			boolean intersectsRemoved = false;
-			for (ASection removedSection : removedDataMap.keySet()) {
+			for (DocumentSection removedSection : removedDataMap.keySet()) {
 				if (section.intersects(removedSection)) {
 					intersectsRemoved = true;
 					break;
@@ -245,10 +253,10 @@ public class ADocument extends DefaultStyledDocument {
 			}
 		}
 
-		for (Entry<ASection, AData> removedEntry : removedDataMap.entrySet()) {
-			ASection removedSection = removedEntry.getKey();
+		for (Entry<DocumentSection, AData> removedEntry : removedDataMap.entrySet()) {
+			DocumentSection removedSection = removedEntry.getKey();
 			AData removedData = removedEntry.getValue();
-			fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionDeletionEdit(removedSection, removedData)));
+			fireUndoableEditUpdate(new UndoableEditEvent(this, new SectionDeletionEdit(removedSection, removedData)));
 		}
 
 		fireADocumentChanged();
@@ -262,7 +270,7 @@ public class ADocument extends DefaultStyledDocument {
 	 *
 	 * @param section интервал, разметку которого нужно удалить
 	 */
-	public void removeSection(ASection section) {
+	public void removeSection(DocumentSection section) {
 		logger.trace("removeSection({}): entering", section);
 		removeSections(Collections.singletonList(section));
 		logger.trace("removeSection({}): leaving", section);
@@ -274,39 +282,39 @@ public class ADocument extends DefaultStyledDocument {
 	 * @param section интервал, который нужно отрисовать
 	 * @param active является ли интервал активной пометкой ({@code true}) или обычным текстом ({@code false})
 	 */
-	private void drawSection(ASection section, boolean active) {
+	private void drawSection(DocumentSection section, boolean active) {
 		int startOffset = section.getStartOffset();
 		int length = section.getEndOffset() - startOffset;
 		SimpleAttributeSet sectionStyle = active ? DEFAULT_SECTION_STYLE : DEFAULT_STYLE;
 		setCharacterAttributes(startOffset, length, sectionStyle, false);
 	}
 
-	public void updateASection(ASection aSection, AData data) {
-		logger.trace("updateASection(): entering, aSection={}, data={}", aSection, data);
+	public void updateSection(DocumentSection section, AData data) {
+		logger.trace("updateSection(): entering, section={}, data={}", section, data);
 		startCompoundEdit();
-		AData oldData = aDataMap.get(aSection);
-		aDataMap.remove(aSection);
-		aDataMap.put(aSection, data);
+		AData oldData = aDataMap.get(section);
+		aDataMap.remove(section);
+		aDataMap.put(section, data);
 
-		fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionChangeEdit(aSection, oldData, data)));
+		fireUndoableEditUpdate(new UndoableEditEvent(this, new SectionChangeEdit(section, oldData, data)));
 		fireADocumentChanged();
 		endCompoundEdit();
-		logger.trace("updateASection(): leaving");
+		logger.trace("updateSection(): leaving");
 	}
 
-	public void addASection(ASection aSection, AData data) {
-		logger.trace("addASection(): entering, aSection={}, data={}", aSection, data);
+	public void addSection(DocumentSection section, AData data) {
+		logger.trace("addSection(): entering, section={}, data={}", section, data);
 		startCompoundEdit();
-		int startOffset = aSection.getStartOffset();
-		int endOffset = aSection.getEndOffset();
+		int startOffset = section.getStartOffset();
+		int endOffset = section.getEndOffset();
 
 		setCharacterAttributes(startOffset, endOffset - startOffset, DEFAULT_SECTION_STYLE, false);
-		aDataMap.put(aSection, data);
+		aDataMap.put(section, data);
 
-		fireUndoableEditUpdate(new UndoableEditEvent(this, new ASectionAdditionEdit(aSection, data)));
+		fireUndoableEditUpdate(new UndoableEditEvent(this, new SectionAdditionEdit(section, data)));
 		fireADocumentChanged();
 		endCompoundEdit();
-		logger.trace("addASection(): leaving");
+		logger.trace("addSection(): leaving");
 	}
 
 	public void addADocumentChangeListener(ADocumentChangeListener listener) {
@@ -325,7 +333,7 @@ public class ADocument extends DefaultStyledDocument {
 		logger.trace("fireADocumentChanged(): leaving");
 	}
 
-	public Map<ASection, AData> getADataMap() {
+	public Map<DocumentSection, AData> getADataMap() {
 		return aDataMap;
 	}
 
@@ -372,11 +380,11 @@ public class ADocument extends DefaultStyledDocument {
 	 * Описывает операцию добавления в документ новой секции с разметкой.
 	 */
 	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
-	private final class ASectionAdditionEdit extends AbstractUndoableEdit {
-		private final ASection section;
+	private final class SectionAdditionEdit extends AbstractUndoableEdit {
+		private final DocumentSection section;
 		private final AData data;
 
-		private ASectionAdditionEdit(ASection section, AData data) {
+		private SectionAdditionEdit(DocumentSection section, AData data) {
 			this.section = section;
 			this.data = data;
 		}
@@ -415,11 +423,11 @@ public class ADocument extends DefaultStyledDocument {
 	 * Описывает операцию удаления из документа секции с разметкой.
 	 */
 	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
-	private final class ASectionDeletionEdit extends AbstractUndoableEdit {
-		private final ASection section;
+	private final class SectionDeletionEdit extends AbstractUndoableEdit {
+		private final DocumentSection section;
 		private final AData data;
 
-		private ASectionDeletionEdit(ASection section, AData data) {
+		private SectionDeletionEdit(DocumentSection section, AData data) {
 			this.section = section;
 			this.data = data;
 		}
@@ -457,12 +465,12 @@ public class ADocument extends DefaultStyledDocument {
 	 * Описывает операцию обновления данных в разметке одной из секций документа.
 	 */
 	@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
-	private final class ASectionChangeEdit extends AbstractUndoableEdit {
-		private final ASection section;
+	private final class SectionChangeEdit extends AbstractUndoableEdit {
+		private final DocumentSection section;
 		private final AData oldData;
 		private AData newData;
 
-		private ASectionChangeEdit(ASection section, AData oldData, AData newData) {
+		private SectionChangeEdit(DocumentSection section, AData oldData, AData newData) {
 			this.section = section;
 			this.oldData = oldData;
 			this.newData = newData;
@@ -501,8 +509,8 @@ public class ADocument extends DefaultStyledDocument {
 
 		@Override
 		public boolean addEdit(UndoableEdit anEdit) {
-			if (anEdit instanceof ASectionChangeEdit && ((ASectionChangeEdit) anEdit).section.equals(section)) {
-				newData = ((ASectionChangeEdit) anEdit).newData;
+			if (anEdit instanceof SectionChangeEdit && ((SectionChangeEdit) anEdit).section.equals(section)) {
+				newData = ((SectionChangeEdit) anEdit).newData;
 				return true;
 			} else {
 				return super.addEdit(anEdit);
@@ -511,8 +519,8 @@ public class ADocument extends DefaultStyledDocument {
 
 		@Override
 		public boolean replaceEdit(UndoableEdit anEdit) {
-			if (anEdit instanceof ASectionChangeEdit && ((ASectionChangeEdit) anEdit).section.equals(section)) {
-				newData = ((ASectionChangeEdit) anEdit).newData;
+			if (anEdit instanceof SectionChangeEdit && ((SectionChangeEdit) anEdit).section.equals(section)) {
+				newData = ((SectionChangeEdit) anEdit).newData;
 				return true;
 			} else {
 				return super.replaceEdit(anEdit);
@@ -549,7 +557,7 @@ public class ADocument extends DefaultStyledDocument {
 
 			//putting AData to a HashMap
 			if (aDataMap != null) {
-				for (Entry<ASection, AData> dataEntry : aDataMap.entrySet()) {
+				for (Entry<DocumentSection, AData> dataEntry : aDataMap.entrySet()) {
 					int secSt = dataEntry.getKey().getStartOffset();
 					int secEnd = dataEntry.getKey().getEndOffset();
 
@@ -603,10 +611,10 @@ public class ADocument extends DefaultStyledDocument {
 			FixedDocumentSection section = entry.getKey();
 			AData data = entry.getValue();
 			try {
-				ASection aSection = new ASection(this, position + section.getStart(), position + section.getEnd());
-				aDataMap.put(aSection, data);
+				DocumentSection documentSection = new DocumentSection(this, position + section.getStart(), position + section.getEnd());
+				aDataMap.put(documentSection, data);
 			} catch (BadLocationException e) {
-				logger.error("Invalid position for ASection", e);
+				logger.error("Invalid position for DocumentSection", e);
 			}
 		}
 		logger.trace("pasteADocFragment(): leaving");
@@ -632,15 +640,15 @@ public class ADocument extends DefaultStyledDocument {
 			logger.error("Error while appending to document", e);
 		}
 
-		for (Entry<ASection, AData> entry : anotherDocument.aDataMap.entrySet()) {
+		for (Entry<DocumentSection, AData> entry : anotherDocument.aDataMap.entrySet()) {
 			try {
-				ASection sourceSection = entry.getKey();
-				ASection destinationSection = new ASection(this,
+				DocumentSection sourceSection = entry.getKey();
+				DocumentSection destinationSection = new DocumentSection(this,
 						sourceSection.getStartOffset() + appendOffset,
 						sourceSection.getEndOffset() + appendOffset);
 				aDataMap.put(destinationSection, entry.getValue());
 			} catch (BadLocationException e) {
-				logger.error("Invalid position for ASection", e);
+				logger.error("Invalid position for DocumentSection", e);
 			}
 		}
 

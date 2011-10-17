@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Представляет собой жестко фиксированный интервал текста, то есть интервал, который,
- * в отличие от {@link ASection}, не привязан к какому-либо документу и не отслеживает
+ * в отличие от {@link DocumentSection}, не привязан к какому-либо документу и не отслеживает
  * сдвиги текста в нем.
  */
 public class FixedDocumentSection implements Serializable {

@@ -121,7 +121,7 @@ public class ATree extends JTree {
 		try {
 			removeAllChildren();
 			clearPredicateCounts();
-			for (Entry<ASection, AData> entry : document.getADataMap().entrySet()) {
+			for (Entry<DocumentSection, AData> entry : document.getADataMap().entrySet()) {
 				int sectionOffset = entry.getKey().getStartOffset();
 				int sectionLength = Math.abs(entry.getKey().getEndOffset() - sectionOffset);
 				int quoteLength = Math.min(sectionLength, MAX_PRESENTATION_CHARS);

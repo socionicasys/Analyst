@@ -37,7 +37,7 @@ public class BlockNavigationFilter extends NavigationFilter {
 	public void setDot(FilterBypass fb, int dot, Position.Bias bias) {
 		logger.debug("setDot: dot = {}", dot);
 		backupDotActive = false;
-		ASection currentSection = documentHolder.getModel().getASection(dot);
+		DocumentSection currentSection = documentHolder.getModel().getSection(dot);
 		if (currentSection == null) {
 			logger.debug("setDot: no section here, keep dot where it is");
 			super.setDot(fb, dot, bias);

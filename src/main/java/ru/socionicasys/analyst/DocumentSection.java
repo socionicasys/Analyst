@@ -11,8 +11,15 @@ import javax.swing.text.Position;
  * Автоматически отслеживает изменения в документе и корректирует положение
  * своей начальной и конечной позиции.
  */
-public class ASection implements Comparable<ASection> {
+public class DocumentSection implements Comparable<DocumentSection> {
+	/**
+	 * Позиция начала интервала. Привязана к документу.
+	 */
 	private final Position start;
+
+	/**
+	 * Позиция конца интервала. Привязана к документу.
+	 */
 	private final Position end;
 
 	/**
@@ -23,7 +30,7 @@ public class ASection implements Comparable<ASection> {
 	 * @param endOffset конечное смещение интервала
 	 * @throws BadLocationException когда начальное/конечное смещения находятся вне границ документа
 	 */
-	public ASection(Document sourceDocument, int startOffset, int endOffset)
+	public DocumentSection(Document sourceDocument, int startOffset, int endOffset)
 			throws BadLocationException {
 		start = sourceDocument.createPosition(Math.min(startOffset, endOffset));
 		end = sourceDocument.createPosition(Math.max(startOffset, endOffset));
@@ -31,7 +38,7 @@ public class ASection implements Comparable<ASection> {
 
 	/**
 	 * Возвращает текущее смещение начала интервала в документе.
-	 * Гарантированно {@link #getStartOffset()} <= {@link #getEndOffset()}.
+	 * Гарантированно {@code getStartOffset()} <= {@link #getEndOffset()}.
 	 *
 	 * @return текущее смещение начала интервала в документе
 	 */
@@ -41,7 +48,7 @@ public class ASection implements Comparable<ASection> {
 
 	/**
 	 * Возвращает текущее смещение конца интервала в документе.
-	 * Гарантированно {@link #getStartOffset()} <= {@link #getEndOffset()}.
+	 * Гарантированно {@link #getStartOffset()} <= {@code getEndOffset()}.
 	 *
 	 * @return текущее смещение конца интервала в документе
 	 */
@@ -73,16 +80,16 @@ public class ASection implements Comparable<ASection> {
 	 * @param otherSection интервал, пересечение с которым нужно проверить
 	 * @return пересекаются ли интервалы
 	 */
-	public boolean intersects(ASection otherSection) {
+	public boolean intersects(DocumentSection otherSection) {
 		return getStartOffset() <= otherSection.getEndOffset() && otherSection.getStartOffset() <= getEndOffset();
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof ASection)) {
+		if (!(obj instanceof DocumentSection)) {
 			return false;
 		}
-		ASection otherSection = (ASection) obj;
+		DocumentSection otherSection = (DocumentSection) obj;
 		return getStartOffset() == otherSection.getStartOffset()
 				&& getEndOffset() == otherSection.getEndOffset();
 	}
@@ -96,12 +103,12 @@ public class ASection implements Comparable<ASection> {
 	}
 
 	@Override
-	public int compareTo(ASection o) {
+	public int compareTo(DocumentSection o) {
 		return getStartOffset() - o.getStartOffset();
 	}
 
 	@Override
 	public String toString() {
-		return String.format("ASection{start=%s, end=%s}", start, end);
+		return String.format("DocumentSection{start=%s, end=%s}", start, end);
 	}
 }

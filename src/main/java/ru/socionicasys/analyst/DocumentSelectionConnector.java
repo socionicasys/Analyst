@@ -55,7 +55,8 @@ public class DocumentSelectionConnector implements PropertyChangeListener, Caret
 			return;
 		}
 
-		ASection currentSection = getCurrentSection(selectionModel.getStartOffset(), selectionModel.getEndOffset());
+		DocumentSection currentSection =
+				getCurrentSection(selectionModel.getStartOffset(), selectionModel.getEndOffset());
 		if (currentSection == null) {
 			return;
 		}
@@ -66,14 +67,14 @@ public class DocumentSelectionConnector implements PropertyChangeListener, Caret
 		if (oldMarkup == null) {
 			if (newMarkup != null) {
 				// Новая отметка в документе
-				document.addASection(currentSection, newMarkup);
+				document.addSection(currentSection, newMarkup);
 			}
 		} else if (newMarkup == null) {
 			// Удаление старой отметки
 			document.removeSection(currentSection);
 		} else if (!newMarkup.equals(oldMarkup)) {
 			// Обновление данных в существующей отметке
-			document.updateASection(currentSection, newMarkup);
+			document.updateSection(currentSection, newMarkup);
 		}
 	}
 
@@ -95,7 +96,7 @@ public class DocumentSelectionConnector implements PropertyChangeListener, Caret
 		selectionModel.setStartOffset(startOffset);
 		selectionModel.setEndOffset(endOffset);
 
-		ASection currentSection = getCurrentSection(startOffset, endOffset);
+		DocumentSection currentSection = getCurrentSection(startOffset, endOffset);
 		if (currentSection == null) {
 			selectionModel.setMarkupData(null);
 		} else {
@@ -115,14 +116,14 @@ public class DocumentSelectionConnector implements PropertyChangeListener, Caret
 	 * @param endOffset позиция конца выделения
 	 * @return выделенный в документе интервал
 	 */
-	private ASection getCurrentSection(int startOffset, int endOffset) {
+	private DocumentSection getCurrentSection(int startOffset, int endOffset) {
 		if (startOffset == endOffset) {
 			return null;
 		}
 		
 		ADocument document = textPane.getDocument();
 		try {
-			return new ASection(document, startOffset, endOffset);
+			return new DocumentSection(document, startOffset, endOffset);
 		} catch (BadLocationException e) {
 			logger.error("Invalid document positions: {}, {}", startOffset, endOffset);
 			logger.error("Exception thrown: ", e);
@@ -153,13 +154,13 @@ public class DocumentSelectionConnector implements PropertyChangeListener, Caret
 		logger.trace("Leaf object {} initiated navigation to offset {}", endNodeObject, index);
 
 		ADocument document = textPane.getDocument();
-		ASection currentASection = document.getASectionThatStartsAt(index);
-		if (currentASection == null) {
+		DocumentSection currentDocumentSection = document.getSectionThatStartsAt(index);
+		if (currentDocumentSection == null) {
 			logger.warn("No section at offset {}, but it was supposed to be there, skipping navigation", index);
 		} else {
 			Caret caret = textPane.getCaret();
-			caret.setDot(currentASection.getStartOffset());
-			caret.moveDot(currentASection.getEndOffset());
+			caret.setDot(currentDocumentSection.getStartOffset());
+			caret.moveDot(currentDocumentSection.getEndOffset());
 		}
 		logger.trace("valueChanged({}): leaving", e);
 	}

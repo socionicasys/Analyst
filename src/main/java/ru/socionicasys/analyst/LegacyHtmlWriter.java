@@ -258,10 +258,10 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 			}
 		}
 
-		List<ASection> sections = new ArrayList<ASection>(document.getADataMap().keySet());
+		List<DocumentSection> sections = new ArrayList<DocumentSection>(document.getADataMap().keySet());
 		Collections.sort(sections);
 		for (int i = 0; i < sections.size(); i++) {
-			ASection section = sections.get(i);
+			DocumentSection section = sections.get(i);
 			AData data = document.getADataMap().get(section);
 			flowEvents.add(new DocumentFlowEvent(
 				EventType.SECTION_START,
