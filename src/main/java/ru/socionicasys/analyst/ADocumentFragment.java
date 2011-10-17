@@ -19,8 +19,8 @@ public class ADocumentFragment implements Transferable, Serializable {
 	private static DataFlavor nativeFlavor;
 
 	private final String text;
-	private final Map<DocSection, AttributeSet> styleMap;
-	private final Map<DocSection, AData> aDataMap;
+	private final Map<FixedDocumentSection, AttributeSet> styleMap;
+	private final Map<FixedDocumentSection, AData> aDataMap;
 
 	/**
 	 * Создает представление фрагмента документа без пометок.
@@ -28,8 +28,8 @@ public class ADocumentFragment implements Transferable, Serializable {
 	 */
 	public ADocumentFragment(String text) {
 		this.text = text;
-		styleMap = new HashMap<DocSection, AttributeSet>();
-		aDataMap = new HashMap<DocSection, AData>();
+		styleMap = new HashMap<FixedDocumentSection, AttributeSet>();
+		aDataMap = new HashMap<FixedDocumentSection, AData>();
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class ADocumentFragment implements Transferable, Serializable {
 	 * @param styleMap стили фрагмента
 	 * @param aDataMap пометки фрагмента
 	 */
-	public ADocumentFragment(String text, Map<DocSection, AttributeSet> styleMap, Map<DocSection, AData> aDataMap) {
+	public ADocumentFragment(String text, Map<FixedDocumentSection, AttributeSet> styleMap, Map<FixedDocumentSection, AData> aDataMap) {
 		this(text);
 		this.styleMap.putAll(styleMap);
 		this.aDataMap.putAll(aDataMap);
@@ -54,14 +54,14 @@ public class ADocumentFragment implements Transferable, Serializable {
 	/**
 	 * @return стили фрагмента
 	 */
-	public Map<DocSection, AttributeSet> getStyleMap() {
+	public Map<FixedDocumentSection, AttributeSet> getStyleMap() {
 		return Collections.unmodifiableMap(styleMap);
 	}
 
 	/**
 	 * @return пометки фрагмента
 	 */
-	public Map<DocSection, AData> getADataMap() {
+	public Map<FixedDocumentSection, AData> getADataMap() {
 		return Collections.unmodifiableMap(aDataMap);
 	}
 

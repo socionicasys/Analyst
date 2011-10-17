@@ -524,8 +524,8 @@ public class ADocument extends DefaultStyledDocument {
 		logger.trace("getADocFragment(): entering, offset={}, length={}", offset, length);
 		int selectionEnd = offset + length;
 		String text;
-		Map<DocSection, AttributeSet> styleMap = new HashMap<DocSection, AttributeSet>();
-		Map<DocSection, AData> docMap = new HashMap<DocSection, AData>();
+		Map<FixedDocumentSection, AttributeSet> styleMap = new HashMap<FixedDocumentSection, AttributeSet>();
+		Map<FixedDocumentSection, AData> docMap = new HashMap<FixedDocumentSection, AData>();
 
 		try {
 			text = getText(offset, length);
@@ -540,7 +540,7 @@ public class ADocument extends DefaultStyledDocument {
 					currentSet = attributeSet;
 				}
 				if (!attributeSet.isEqual(currentSet) || i == selectionEnd) {
-					styleMap.put(new DocSection(styleRunStart - offset, i - offset),
+					styleMap.put(new FixedDocumentSection(styleRunStart - offset, i - offset),
 						new SimpleAttributeSet(currentSet));
 					currentSet = attributeSet;
 					styleRunStart = i;
@@ -554,16 +554,16 @@ public class ADocument extends DefaultStyledDocument {
 					int secEnd = dataEntry.getKey().getEndOffset();
 
 					if (secSt >= offset && secEnd <= selectionEnd) {
-						docMap.put(new DocSection(secSt - offset, secEnd - offset), dataEntry.getValue());
+						docMap.put(new FixedDocumentSection(secSt - offset, secEnd - offset), dataEntry.getValue());
 					}
 					if (secSt < offset && secEnd > selectionEnd) {
-						docMap.put(new DocSection(0, length), dataEntry.getValue());
+						docMap.put(new FixedDocumentSection(0, length), dataEntry.getValue());
 					}
 					if (secSt < offset && secEnd < selectionEnd && secEnd > offset) {
-						docMap.put(new DocSection(0, secEnd - offset), dataEntry.getValue());
+						docMap.put(new FixedDocumentSection(0, secEnd - offset), dataEntry.getValue());
 					}
 					if (secSt > offset && secSt < selectionEnd && secEnd > selectionEnd) {
-						docMap.put(new DocSection(secSt - offset, length), dataEntry.getValue());
+						docMap.put(new FixedDocumentSection(secSt - offset, length), dataEntry.getValue());
 					}
 				}
 			}
@@ -590,17 +590,17 @@ public class ADocument extends DefaultStyledDocument {
 		}
 
 		// inserting styles
-		Map<DocSection, AttributeSet> styleMap = fragment.getStyleMap();
-		for (Entry<DocSection, AttributeSet> entry : styleMap.entrySet()) {
-			DocSection section = entry.getKey();
+		Map<FixedDocumentSection, AttributeSet> styleMap = fragment.getStyleMap();
+		for (Entry<FixedDocumentSection, AttributeSet> entry : styleMap.entrySet()) {
+			FixedDocumentSection section = entry.getKey();
 			AttributeSet style = entry.getValue();
 			setCharacterAttributes(position + section.getStart(), section.getLength(), style, true);
 		}
 
 		// inserting AData
-		Map<DocSection, AData> fragMap = fragment.getADataMap();
-		for (Entry<DocSection, AData> entry : fragMap.entrySet()) {
-			DocSection section = entry.getKey();
+		Map<FixedDocumentSection, AData> fragMap = fragment.getADataMap();
+		for (Entry<FixedDocumentSection, AData> entry : fragMap.entrySet()) {
+			FixedDocumentSection section = entry.getKey();
 			AData data = entry.getValue();
 			try {
 				ASection aSection = new ASection(this, position + section.getStart(), position + section.getEnd());
