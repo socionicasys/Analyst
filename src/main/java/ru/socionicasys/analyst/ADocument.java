@@ -532,7 +532,7 @@ public class ADocument extends DefaultStyledDocument {
 		logger.trace("getADocFragment(): entering, offset={}, length={}", offset, length);
 		int selectionEnd = offset + length;
 		String text;
-		Map<FixedDocumentSection, AttributeSet> styleMap = new HashMap<FixedDocumentSection, AttributeSet>();
+		Map<FixedDocumentSection, SimpleAttributeSet> styleMap = new HashMap<FixedDocumentSection, SimpleAttributeSet>();
 		Map<FixedDocumentSection, AData> docMap = new HashMap<FixedDocumentSection, AData>();
 
 		try {
@@ -598,8 +598,8 @@ public class ADocument extends DefaultStyledDocument {
 		}
 
 		// inserting styles
-		Map<FixedDocumentSection, AttributeSet> styleMap = fragment.getStyleMap();
-		for (Entry<FixedDocumentSection, AttributeSet> entry : styleMap.entrySet()) {
+		Map<FixedDocumentSection, SimpleAttributeSet> styleMap = fragment.getStyleMap();
+		for (Entry<FixedDocumentSection, SimpleAttributeSet> entry : styleMap.entrySet()) {
 			FixedDocumentSection section = entry.getKey();
 			AttributeSet style = entry.getValue();
 			setCharacterAttributes(position + section.getStart(), section.getLength(), style, true);

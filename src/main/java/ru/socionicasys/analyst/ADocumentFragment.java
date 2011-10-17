@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.text.AttributeSet;
+import javax.swing.text.SimpleAttributeSet;
 
 /**
  * Представление части документа для буфера обмена.
@@ -19,7 +19,7 @@ public class ADocumentFragment implements Transferable, Serializable {
 	private static DataFlavor nativeFlavor;
 
 	private final String text;
-	private final Map<FixedDocumentSection, AttributeSet> styleMap;
+	private final Map<FixedDocumentSection, SimpleAttributeSet> styleMap;
 	private final Map<FixedDocumentSection, AData> aDataMap;
 
 	/**
@@ -28,7 +28,7 @@ public class ADocumentFragment implements Transferable, Serializable {
 	 */
 	public ADocumentFragment(String text) {
 		this.text = text;
-		styleMap = new HashMap<FixedDocumentSection, AttributeSet>();
+		styleMap = new HashMap<FixedDocumentSection, SimpleAttributeSet>();
 		aDataMap = new HashMap<FixedDocumentSection, AData>();
 	}
 
@@ -38,7 +38,8 @@ public class ADocumentFragment implements Transferable, Serializable {
 	 * @param styleMap стили фрагмента
 	 * @param aDataMap пометки фрагмента
 	 */
-	public ADocumentFragment(String text, Map<FixedDocumentSection, AttributeSet> styleMap, Map<FixedDocumentSection, AData> aDataMap) {
+	public ADocumentFragment(String text, Map<FixedDocumentSection, SimpleAttributeSet> styleMap,
+			Map<FixedDocumentSection, AData> aDataMap) {
 		this(text);
 		this.styleMap.putAll(styleMap);
 		this.aDataMap.putAll(aDataMap);
@@ -54,7 +55,7 @@ public class ADocumentFragment implements Transferable, Serializable {
 	/**
 	 * @return стили фрагмента
 	 */
-	public Map<FixedDocumentSection, AttributeSet> getStyleMap() {
+	public Map<FixedDocumentSection, SimpleAttributeSet> getStyleMap() {
 		return Collections.unmodifiableMap(styleMap);
 	}
 
