@@ -115,4 +115,59 @@ public class ADataTest {
 		AData data = AData.parseAData("ЧЭ>БС;ПЛЮС;Одномерность;Ментал");
 		Assert.assertEquals(data, new AData(AData.E, AData.S, AData.PLUS, AData.ODNOMERNOST, AData.MENTAL, AData.JUMP, null));
 	}
+
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void testInvalidAspect() throws Exception {
+		new AData("ЗЛ", null, null, null, null, null, null);
+	}
+
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void testInvalidSecondAspect() throws Exception {
+		new AData(AData.L, "РС", null, null, null, null, null);
+	}
+
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void testInvalidSign() throws Exception {
+		new AData(AData.L, AData.F, "*", null, null, null, null);
+	}
+
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void testInvalidDimention() throws Exception {
+		new AData(AData.L, AData.F, null, "Разномерность", null, null, null);
+	}
+
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void testInvalidMV() throws Exception {
+		new AData(AData.L, AData.F, null, null, "Супер-Эгоизм", null, null);
+	}
+
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void testInvalidModifier() throws Exception {
+		new AData(AData.L, AData.F, null, null, null, "КУСОК", null);
+	}
+
+	@Test
+	public void testCreation() throws Exception {
+		String comment = "Комментарий";
+		AData data = new AData(AData.P, AData.S, AData.PLUS, AData.D3, AData.MENTAL, AData.BLOCK, comment);
+		Assert.assertEquals(data.getAspect(), AData.P);
+		Assert.assertEquals(data.getSecondAspect(), AData.S);
+		Assert.assertEquals(data.getSign(), AData.PLUS);
+		Assert.assertEquals(data.getDimension(), AData.D3);
+		Assert.assertEquals(data.getMV(), AData.MENTAL);
+		Assert.assertEquals(data.getModifier(), AData.BLOCK);
+		Assert.assertEquals(data.getComment(), comment);
+		
+		String newComment = "Новый комментарий";
+		data.setComment(newComment);
+		Assert.assertEquals(data.getComment(), newComment);
+	}
+
+	@SuppressWarnings({"EqualsBetweenInconvertibleTypes", "LiteralAsArgToStringEquals"})
+	@Test
+	public void testEquals() throws Exception {
+		AData data = new AData(AData.R, null, null, null, null, null, null);
+		Assert.assertTrue(data.equals(data));
+		Assert.assertFalse(data.equals("Строка"));
+	}
 }
