@@ -11,7 +11,7 @@ apply plugin: 'sonar'
 buildscript {
 	repositories {
 		mavenCentral()
-		mavenRepo urls: 'http://download.eclipse.org/jgit/maven'
+		mavenRepo url: 'http://download.eclipse.org/jgit/maven'
 	}
 
 	dependencies {
@@ -61,7 +61,7 @@ gradle.taskGraph.whenReady { taskGraph ->
 
 repositories {
 	mavenCentral()
-	mavenRepo urls: 'http://download.eclipse.org/jgit/maven'
+	mavenRepo url: 'http://download.eclipse.org/jgit/maven'
 }
 
 configurations {
@@ -114,7 +114,7 @@ task debug
 task release(dependsOn: build)
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '1.0-milestone-4'
+	gradleVersion = '1.0-milestone-5-20111010041823+0200'
 }
 
 idea {
@@ -129,10 +129,11 @@ idea {
 }
 
 sonar {
-	def format = new SimpleDateFormat('yyyy-MM-dd')
-	projectDependencies = project.configurations.runtime.resolve()
-	projectProperty 'sonar.sourceEncoding', 'UTF-8'
-	projectProperty 'sonar.projectDate', format.format(gitCommitDate)
+	def dateFormat = new SimpleDateFormat('yyyy-MM-dd')
+	project {
+		sourceEncoding = 'UTF-8'
+		date = dateFormat.format(gitCommitDate)
+	}
 }
 
-sonar.dependsOn(debug, classes)
+sonarAnalyze.dependsOn debug, classes
