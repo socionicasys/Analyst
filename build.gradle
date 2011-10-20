@@ -66,6 +66,7 @@ repositories {
 
 configurations {
 	jgit
+	jacoco
 }
 
 dependencies {
@@ -73,6 +74,7 @@ dependencies {
 	runtime 'ch.qos.logback:logback-classic:0.9.30'
 	testCompile 'org.testng:testng:6.2.1'
 	jgit 'org.eclipse.jgit:org.eclipse.jgit:1.1.0.201109151100-r'
+	jacoco 'org.jacoco:org.jacoco.agent:0.5.3.201107060350:runtime'
 }
 
 def sharedManifest = manifest {
@@ -88,7 +90,10 @@ javadoc {
 	options.showAll()
 }
 
-test.useTestNG()
+test {
+	useTestNG()
+	jvmArgs "-javaagent:$configurations.jacoco.asPath=destfile=$buildDir/jacoco.exec,includes=ru.socionicasys.analyst.*"
+}
 
 task jarDependencies(type: Jar, dependsOn: compileJava) {
 	classifier = 'deps'
@@ -133,7 +138,11 @@ sonar {
 	project {
 		sourceEncoding = 'UTF-8'
 		date = dateFormat.format(gitCommitDate)
+		withProjectProperties { props ->
+			props['sonar.core.codeCoveragePlugin'] = 'jacoco'
+			props['sonar.jacoco.reportPath'] = "$buildDir/jacoco.exec" as String
+		}
 	}
 }
 
-sonarAnalyze.dependsOn debug, classes
+sonarAnalyze.dependsOn debug, classes, test
