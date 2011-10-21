@@ -137,7 +137,10 @@ sonar {
 	def dateFormat = new SimpleDateFormat('yyyy-MM-dd')
 	project {
 		sourceEncoding = 'UTF-8'
-		date = dateFormat.format(gitCommitDate)
+		if ((gitCommitDate..new Date()).size() > 1) {
+			// If commit date is not today
+			date = dateFormat.format(gitCommitDate)
+		}
 		withProjectProperties { props ->
 			props['sonar.core.codeCoveragePlugin'] = 'jacoco'
 			props['sonar.jacoco.reportPath'] = "$buildDir/jacoco.exec" as String
