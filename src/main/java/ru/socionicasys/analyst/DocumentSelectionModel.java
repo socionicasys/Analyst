@@ -216,9 +216,7 @@ public class DocumentSelectionModel {
 		if (isMarkupEmpty()) {
 			return null;
 		}
-
-		AData markupData = new AData(aspect, secondAspect, sign, dimension, mv, modifier, comment);
-		return markupData;
+		return new AData(aspect, secondAspect, sign, dimension, mv, modifier, comment);
 	}
 
 	/**
