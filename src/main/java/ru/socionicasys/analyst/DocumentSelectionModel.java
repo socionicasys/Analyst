@@ -33,6 +33,7 @@ public class DocumentSelectionModel {
 	public DocumentSelectionModel() {
 		logger.trace("DocumentSelectionModel(): entering");
 		propertyChangeSupport = new PropertyChangeSupport(this);
+		comment = "";
 		logger.trace("DocumentSelectionModel(): leaving");
 	}
 
@@ -107,7 +108,7 @@ public class DocumentSelectionModel {
 			setSign(null);
 			setMV(null);
 			setDimension(null);
-			setComment(null);
+			setComment("");
 		} else if (AData.DOUBT.equals(aspect)) {
 			setSecondAspect(null);
 			setModifier(null);

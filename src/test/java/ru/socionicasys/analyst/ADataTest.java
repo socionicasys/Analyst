@@ -163,6 +163,14 @@ public class ADataTest {
 		Assert.assertEquals(data.getComment(), newComment);
 	}
 
+	@Test
+	public void testNullComment() throws Exception {
+		AData data = new AData(AData.P, null, null, null, null, null, null);
+		Assert.assertEquals(data.getComment(), "");
+		data.setComment(null);
+		Assert.assertEquals(data.getComment(), "");
+	}
+
 	@SuppressWarnings({"EqualsBetweenInconvertibleTypes", "LiteralAsArgToStringEquals"})
 	@Test
 	public void testEquals() throws Exception {
