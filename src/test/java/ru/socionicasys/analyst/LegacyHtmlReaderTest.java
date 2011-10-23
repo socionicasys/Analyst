@@ -17,14 +17,8 @@ public class LegacyHtmlReaderTest {
 		File tempFile = File.createTempFile("nonexistant", ".htm");
 		assertTrue(tempFile.delete());
 		assertFalse(tempFile.exists());
-		
-		LegacyHtmlReader reader = new LegacyHtmlReader(tempFile);
-		reader.execute();
-		try {
-			reader.get();
-		} catch (ExecutionException e) {
-			throw e.getCause();
-		}
+
+		throwNestedException(new LegacyHtmlReader(tempFile));
 	}
 
 	@Test(expectedExceptions = StringIndexOutOfBoundsException.class)
@@ -32,7 +26,16 @@ public class LegacyHtmlReaderTest {
 		URL invalidFileUrl = getClass().getResource("LegacyHtmlReader/empty.htm");
 		File invalidFile = new File(invalidFileUrl.toURI());
 
-		LegacyHtmlReader reader = new LegacyHtmlReader(invalidFile);
+		throwNestedException(new LegacyHtmlReader(invalidFile));
+	}
+
+	/**
+	 * Ожидает загрузки документа и выбрасывает исключение, полученное при загрузке.
+	 *
+	 * @param reader загрузчик документа
+	 * @throws Throwable исключение, возникшее при загрузке документа
+	 */
+	private static void throwNestedException(LegacyHtmlReader reader) throws Throwable {
 		reader.execute();
 		try {
 			reader.get();
