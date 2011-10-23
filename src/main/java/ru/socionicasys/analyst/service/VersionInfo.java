@@ -7,6 +7,9 @@ public class VersionInfo {
 	private static final String APPLICATION_NAME = "Информационный анализ";
 	private static final String VERSION = VersionInfo.class.getPackage().getSpecificationVersion();
 
+	private VersionInfo() {
+	}
+
 	/**
 	 * @return Имя приложения
 	 */

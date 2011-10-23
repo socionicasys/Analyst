@@ -9,6 +9,9 @@ public class ServiceContainer {
 	private static final ResourceBundle RESOURCE_BUNDLE =
 			ResourceBundle.getBundle("ru.socionicasys.analyst.messages");
 
+	private ServiceContainer() {
+	}
+
 	/**
 	 * Возвращает основное хранилище ресурсов для приложения.
 	 *
