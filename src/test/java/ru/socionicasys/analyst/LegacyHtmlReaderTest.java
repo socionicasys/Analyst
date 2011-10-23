@@ -56,52 +56,52 @@ public class LegacyHtmlReaderTest {
 
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 11, 21)),
-				new AData(AData.P, null, null, null, null, null, " "));
+				new AData(AData.P, null, null, null, null, null, ""));
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 27, 38)),
-				new AData(AData.L, AData.F, null, null, null, AData.BLOCK, " "));
+				new AData(AData.L, AData.F, null, null, null, AData.BLOCK, ""));
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 39, 46)),
-				new AData(AData.P, null, null, null, null, null, " Снова ЧЛ?"));
+				new AData(AData.P, null, null, null, null, null, "Снова ЧЛ?"));
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 58, 73)),
-				new AData(AData.F, AData.S, null, null, null, AData.JUMP, " "));
+				new AData(AData.F, AData.S, null, null, null, AData.JUMP, ""));
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 86, 115)),
-				new AData(AData.S, null, AData.MINUS, null, null, null, " "));
+				new AData(AData.S, null, AData.MINUS, null, null, null, ""));
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 166, 176)),
-				new AData(AData.I, null, null, AData.MALOMERNOST, null, null, " "));
+				new AData(AData.I, null, null, AData.MALOMERNOST, null, null, ""));
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 239, 242)),
-				new AData(AData.L, null, AData.PLUS, null, AData.VITAL, null, " "));
+				new AData(AData.L, null, AData.PLUS, null, AData.VITAL, null, ""));
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 273, 295)),
-				new AData(AData.DOUBT, null, null, null, null, null, " Непонятная фундаментальная ошибка"));
+				new AData(AData.DOUBT, null, null, null, null, null, "Непонятная фундаментальная ошибка"));
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 467, 515)),
-				new AData(AData.R, null, AData.MINUS, AData.D1, AData.SUPERID, null, " еще комментарий"));
+				new AData(AData.R, null, AData.MINUS, AData.D1, AData.SUPERID, null, "еще комментарий"));
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 658, 673)),
-				new AData(AData.F, null, null, AData.MNOGOMERNOST, null, null, " "));
+				new AData(AData.F, null, null, AData.MNOGOMERNOST, null, null, ""));
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 864, 875)),
-				new AData(AData.E, null, null, AData.INDIVIDUALNOST, null, null, " "));
+				new AData(AData.E, null, null, AData.INDIVIDUALNOST, null, null, ""));
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 965, 973)),
-				new AData(AData.R, null, null, AData.D2, null, null, " "));
+				new AData(AData.R, null, null, AData.D2, null, null, ""));
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 1081, 1118)),
-				new AData(AData.S, null, null, AData.D4, null, null, " "));
+				new AData(AData.S, null, null, AData.D4, null, null, ""));
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 1256, 1283)),
-				new AData(AData.F, AData.L, AData.PLUS, AData.MNOGOMERNOST, AData.VITAL, AData.BLOCK, " "));
+				new AData(AData.F, AData.L, AData.PLUS, AData.MNOGOMERNOST, AData.VITAL, AData.BLOCK, ""));
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 1371, 1389)),
-				new AData(AData.R, AData.P, null, null, null, AData.JUMP, " "));
+				new AData(AData.R, AData.P, null, null, null, AData.JUMP, ""));
 		assertEquals(
 				dataMap.get(new DocumentSection(document, 1510, 1515)),
-				new AData(AData.I, AData.T, null, null, null, AData.JUMP, " "));
+				new AData(AData.I, AData.T, null, null, null, AData.JUMP, ""));
 	}
 
 	/**

@@ -28,6 +28,12 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 	private static final int LEFT_COLUMN_TAG_OPENING_GROUP = 1;
 	private static final int LEFT_COLUMN_TAG_CLOSING_GROUP = 2;
 
+	// Регулярное выражение для поиска тегов вида {n:пометки типировщика}комментарий типиврощика
+	private static final Pattern RIGHT_COLUMN_TAG_PATTERN = Pattern.compile("\\{(\\d+):([^}]*)\\}([^{]*)");
+	private static final int RIGHT_COLUMN_TAG_ID_GROUP = 1;
+	private static final int RIGHT_COLUMN_TAG_MARKUP_GROUP = 2;
+	private static final int RIGHT_COLUMN_TAG_COMMENT_GROUP = 3;
+
 	private static final int BUFFER_SIZE = 1024;
 
 	private final File sourceFile;
@@ -321,51 +327,42 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 		return tagMatcher.replaceAll("");
 	}
 
+	/**
+	 * Разбирает текст правой колонки протокола. Найденные пометки и комментарии
+	 * собирает в карте {@link #rawData}.
+	 *
+	 * @param text текст правой колонки
+	 */
 	private void parseRightColumn(String text) {
-		int openingBracePos = text.indexOf('{');
-		// processing the right column's content
-		while (openingBracePos >= 0) {
-			setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS +
-				RIGHT_COLUMN_PROGRESS * openingBracePos / text.length());
+		Matcher tagMatcher = RIGHT_COLUMN_TAG_PATTERN.matcher(text);
+		while (tagMatcher.find()) {
 			// Обрабатываем теги вида:
 			// {n:пометки типировщика} комментарий
-			int middleBracePos = text.indexOf(':', openingBracePos);
-			if (middleBracePos < 0) {
-				logger.warn("Incorrect right column tag format, missing ':'");
-				openingBracePos = text.indexOf('{', openingBracePos + 1);
-				continue;
-			}
-			int handle;
+			setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS +
+				RIGHT_COLUMN_PROGRESS * tagMatcher.start() / text.length());
+
+			String id = tagMatcher.group(RIGHT_COLUMN_TAG_ID_GROUP);
+
+			int tagNumber;
 			try {
-				handle = Integer.parseInt(text.substring(openingBracePos + 1, middleBracePos));
+				tagNumber = Integer.parseInt(id);
 			} catch (NumberFormatException e) {
 				logger.warn("Incorrect right column tag format, missing mark number", e);
-				openingBracePos = text.indexOf('{', openingBracePos + 1);
 				continue;
 			}
 
-			int closingBracePos = text.indexOf('}', openingBracePos);
-			openingBracePos = text.indexOf('{', openingBracePos + 1);
-			if (closingBracePos < 0) {
-				logger.warn("Incorrect right column tag format, missing '}'");
-				continue;
-			}
-
-			RawAData data = rawData.get(handle);
+			RawAData data = rawData.get(tagNumber);
 			if (data == null) {
-				logger.warn("Incorrect mark number in right column tag: {}", handle);
+				logger.warn("Incorrect mark number in right column tag: {}", tagNumber);
 				continue;
 			}
 
-			String aDataString = text.substring(middleBracePos + 1, closingBracePos);
-			data.setAData(aDataString);
+			String markup = tagMatcher.group(RIGHT_COLUMN_TAG_MARKUP_GROUP);
+			data.setAData(markup);
 
-			// В комментарий попадает текст от конца текущего тега '}' до начала следующего '{'
-			String comment = ' ' + text.substring(closingBracePos + 1,
-				openingBracePos >= 0 ? openingBracePos : text.length() - 1).trim();
-
+			String comment = tagMatcher.group(RIGHT_COLUMN_TAG_COMMENT_GROUP).trim();
 			// removing last line break which was added when saving
-			while (comment.lastIndexOf('\n') == comment.length() - 1) {
+			while (comment.endsWith("\n")) {
 				comment = comment.substring(0, comment.length() - 1);
 			}
 			data.setComment(comment);
