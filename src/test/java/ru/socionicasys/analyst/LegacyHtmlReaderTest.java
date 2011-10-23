@@ -23,9 +23,24 @@ public class LegacyHtmlReaderTest {
 
 	@Test(expectedExceptions = StringIndexOutOfBoundsException.class)
 	public void testLoadEmpty() throws Throwable {
-		URL invalidFileUrl = getClass().getResource("LegacyHtmlReader/empty.htm");
-		File invalidFile = new File(invalidFileUrl.toURI());
+		checkInvalidTestFile("empty.htm");
+	}
 
+	@Test(expectedExceptions = StringIndexOutOfBoundsException.class)
+	public void testLoadInvalidProperties() throws Throwable {
+		checkInvalidTestFile("invalid-properties.htm");
+	}
+
+	/**
+	 * Загружает тестовый файл с некорректной разметкой и выбрасывает исключение,
+	 * возникшее во время загрузки.
+	 *
+	 * @param fileName имя тестового файла (без имени пакета)
+	 * @throws Throwable исключение, возникшее при загрузке документа
+	 */
+	private void checkInvalidTestFile(String fileName) throws Throwable {
+		URL invalidFileUrl = getClass().getResource(String.format("LegacyHtmlReader/%s", fileName));
+		File invalidFile = new File(invalidFileUrl.toURI());
 		throwNestedException(new LegacyHtmlReader(invalidFile));
 	}
 
