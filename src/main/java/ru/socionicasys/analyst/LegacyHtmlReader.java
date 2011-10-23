@@ -255,25 +255,25 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 		// looking through columns of table "protocol" and retrieving text of the left and right columns
 		while (searchIndex > 0) {
 			searchIndex = contentText.indexOf(HTML_ROW_OPEN, searchIndex);
-			String result;
-			if (searchIndex > 0) {
-				result = findTagContent(contentText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
-			} else {
+			if (searchIndex <= 0) {
 				break;
-			}
-			if (result != null) {
-				leftColumnBuilder.append(result);
-				leftColumnBuilder.append("<br/><br/>"); //adding breaks because there are no breaks on row boundaries
-				searchIndex = contentText.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
 			}
 
-			if (searchIndex > 0) {
-				result = findTagContent(contentText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
-			} else {
+			String leftText = findTagContent(contentText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
+			if (leftText == null) {
 				break;
 			}
-			if (result != null) {
-				rightColumnBuilder.append(result);
+			leftColumnBuilder.append(leftText);
+			leftColumnBuilder.append("<br/><br/>"); //adding breaks because there are no breaks on row boundaries
+			
+			searchIndex = contentText.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
+			if (searchIndex <= 0) {
+				break;
+			}
+
+			String rightText = findTagContent(contentText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
+			if (rightText != null) {
+				rightColumnBuilder.append(rightText);
 				searchIndex = contentText.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
 			}
 		}
