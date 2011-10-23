@@ -1,4 +1,4 @@
-package ru.socionicasys.analyst;
+package ru.socionicasys.analyst.service;
 
 /**
  * Информация о имени/версии/билде.

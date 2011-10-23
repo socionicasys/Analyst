@@ -2,6 +2,7 @@ package ru.socionicasys.analyst;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.socionicasys.analyst.service.VersionInfo;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
