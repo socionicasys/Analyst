@@ -1,7 +1,10 @@
 package ru.socionicasys.analyst.types;
 
+import ru.socionicasys.analyst.service.ServiceContainer;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static ru.socionicasys.analyst.types.Aspect.P;
 import static ru.socionicasys.analyst.types.Aspect.L;
@@ -16,22 +19,22 @@ import static ru.socionicasys.analyst.types.Aspect.T;
  * Описывает модель А отдельного ТИМа.
  */
 public enum Sociotype {
-	ILE ("ИЛЭ", "дон кихот",      Sign.PLUS,  I, L, F, R, S, E, T, P),
-	SEI ("СЭИ", "дюма",           Sign.PLUS,  S, E, T, P, I, L, F, R),
-	ESE ("ЭСЭ", "гюго",           Sign.MINUS, E, S, P, T, L, I, R, F),
-	LII ("ЛИИ", "робеспьер",      Sign.MINUS, L, I, R, F, E, S, P, T),
-	EIE ("ЭИЭ", "гамлет",         Sign.PLUS,  E, T, P, S, L, F, R, I),
-	LSI ("ЛСИ", "максим горький", Sign.PLUS,  L, F, R, I, E, T, P, S),
-	SLE ("СЛЭ", "жуков",          Sign.MINUS, F, L, I, R, T, E, S, P),
-	IEI ("ИЭИ", "есенин",         Sign.MINUS, T, E, S, P, F, L, I, R),
-	SEE ("СЭЭ", "наполеон",       Sign.PLUS,  F, R, I, L, T, P, S, E),
-	ILI ("ИЛИ", "бальзак",        Sign.PLUS,  T, P, S, E, F, R, I, L),
-	LIE ("ЛИЭ", "джек лондон",    Sign.MINUS, P, T, E, S, R, F, L, I),
-	ESI ("ЭСИ", "драйзер",        Sign.MINUS, R, F, L, I, P, T, E, S),
-	LSE ("ЛСЭ", "штирлиц",        Sign.PLUS,  P, S, E, T, R, I, L, F),
-	EII ("ЭИИ", "достоевский",    Sign.PLUS,  R, I, L, F, P, S, E, T),
-	IEE ("ИЭЭ", "гексли",         Sign.MINUS, I, R, F, L, S, P, T, E),
-	SLI ("СЛИ", "габен",          Sign.MINUS, S, P, T, E, I, R, F, L);
+	ILE (Sign.PLUS,  I, L, F, R, S, E, T, P),
+	SEI (Sign.PLUS,  S, E, T, P, I, L, F, R),
+	ESE (Sign.MINUS, E, S, P, T, L, I, R, F),
+	LII (Sign.MINUS, L, I, R, F, E, S, P, T),
+	EIE (Sign.PLUS,  E, T, P, S, L, F, R, I),
+	LSI (Sign.PLUS,  L, F, R, I, E, T, P, S),
+	SLE (Sign.MINUS, F, L, I, R, T, E, S, P),
+	IEI (Sign.MINUS, T, E, S, P, F, L, I, R),
+	SEE (Sign.PLUS,  F, R, I, L, T, P, S, E),
+	ILI (Sign.PLUS,  T, P, S, E, F, R, I, L),
+	LIE (Sign.MINUS, P, T, E, S, R, F, L, I),
+	ESI (Sign.MINUS, R, F, L, I, P, T, E, S),
+	LSE (Sign.PLUS,  P, S, E, T, R, I, L, F),
+	EII (Sign.PLUS,  R, I, L, F, P, S, E, T),
+	IEE (Sign.MINUS, I, R, F, L, S, P, T, E),
+	SLI (Sign.MINUS, S, P, T, E, I, R, F, L);
 
 	/**
 	 * Набор функций модели.
@@ -48,10 +51,17 @@ public enum Sociotype {
 	 */
 	private final String nickname;
 
-	private Sociotype(String abbreviation, String nickname, Sign firstSign, Aspect... aspects) {
-		this.abbreviation = abbreviation;
-		this.nickname = nickname;
-		this.functions = new ArrayList<Function>();
+	Sociotype(Sign firstSign, Aspect... aspects) {
+		ResourceBundle bundle = ServiceContainer.getResourceBundle();
+
+		String sociotypeKey = String.format("%s.%s", getClass().getName(), name());
+		String abbreviationKey = String.format("%s.abbreviation", sociotypeKey);
+		String nicknameKey = String.format("%s.nickname", sociotypeKey);
+
+		abbreviation = bundle.getString(abbreviationKey);
+		nickname = bundle.getString(nicknameKey);
+		functions = new ArrayList<Function>();
+
 		initializeFunctions(firstSign, aspects);
 	}
 
