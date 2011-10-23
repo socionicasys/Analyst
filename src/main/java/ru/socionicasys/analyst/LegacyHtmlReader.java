@@ -22,6 +22,11 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 	private static final String HTML_ROW_OPEN = "<tr>";
 	private static final Pattern HTML_BR_PATTERN = Pattern.compile("<br/>", Pattern.LITERAL);
 	private static final Pattern LINEBREAK_PATTERN = Pattern.compile("\n", Pattern.LITERAL);
+	
+	// Регулярное выражение для поиска тегов вида [n| и |n]
+	private static final Pattern LEFT_COLUMN_TAG_PATTERN = Pattern.compile("(?:\\[(\\d+)\\|)|(?:\\|(\\d+)\\])");
+	private static final int LEFT_COLUMN_TAG_OPENING_GROUP = 1;
+	private static final int LEFT_COLUMN_TAG_CLOSING_GROUP = 2;
 
 	private static final int BUFFER_SIZE = 1024;
 
@@ -279,41 +284,41 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 		}
 	}
 
+	/**
+	 * Разбирает текст левой колонки в таблице протокола. Заносит найденные теги в карту
+	 * {@link #rawData}, возвращает текст левой колонки с удаленными тегами.
+	 *
+	 * @param rawColumnText исходный текст колонки
+	 * @return текст без тегов
+	 */
 	private String parseLeftColumn(String rawColumnText) {
-		String parsedColumnText = rawColumnText;
-		int openingBracketPos = parsedColumnText.indexOf('[');
-		int closingBracketPos = parsedColumnText.indexOf(']');
-		StringBuilder columnBuilder = new StringBuilder(parsedColumnText);
-		while (openingBracketPos >= 0 || closingBracketPos >= 0) {
-			setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS * openingBracketPos / parsedColumnText.length());
-			int handle;
-			RawAData data;
-			int middleBracketPos = parsedColumnText.indexOf('|');
-			if (openingBracketPos >= 0 && openingBracketPos <= closingBracketPos) {
+		Matcher tagMatcher = LEFT_COLUMN_TAG_PATTERN.matcher(rawColumnText);
+		int offset = 0;
+		while (tagMatcher.find()) {
+			setProgress(FILE_LOAD_PROGRESS + LEFT_COLUMN_PROGRESS * tagMatcher.start() / rawColumnText.length());
+			String openingTagNumber = tagMatcher.group(LEFT_COLUMN_TAG_OPENING_GROUP);
+			String closingTagNumber = tagMatcher.group(LEFT_COLUMN_TAG_CLOSING_GROUP);
+			if (openingTagNumber != null) {
 				// Открывающий тег [n|
-				handle = Integer.parseInt(parsedColumnText.substring(openingBracketPos + 1, middleBracketPos));
-				logger.trace("parseLeftColumn(): opening tag [{}| found", handle);
-				columnBuilder.delete(openingBracketPos, middleBracketPos + 1);
-				data = new RawAData();
-				data.setBegin(openingBracketPos);
-				rawData.put(handle, data);
-			} else if (closingBracketPos >= 0) {
+				int tagNumber = Integer.parseInt(openingTagNumber);
+				logger.trace("parseLeftColumn(): opening tag [{}| found", tagNumber);
+				RawAData data = new RawAData();
+				data.setBegin(tagMatcher.start() - offset);
+				rawData.put(tagNumber, data);
+			} else if (closingTagNumber != null) {
 				// Закрывающий тег |n]
-				handle = Integer.parseInt(parsedColumnText.substring(middleBracketPos + 1, closingBracketPos));
-				logger.trace("parseLeftColumn(): closing tag |{}] found", handle);
-				columnBuilder.delete(middleBracketPos, closingBracketPos + 1);
-				data = rawData.get(handle);
+				int tagNumber = Integer.parseInt(closingTagNumber);
+				logger.trace("parseLeftColumn(): closing tag |{}] found", tagNumber);
+				RawAData data = rawData.get(tagNumber);
 				if (data != null) {
-					data.setEnd(middleBracketPos);
+					data.setEnd(tagMatcher.start() - offset);
 				} else {
-					logger.warn("Closing tag |{}] without corresponding opening tag", handle);
+					logger.warn("Closing tag |{}] without corresponding opening tag", tagNumber);
 				}
 			}
-			parsedColumnText = columnBuilder.toString();
-			openingBracketPos = parsedColumnText.indexOf('[');
-			closingBracketPos = parsedColumnText.indexOf(']');
+			offset += tagMatcher.end() - tagMatcher.start();
 		}
-		return parsedColumnText;
+		return tagMatcher.replaceAll("");
 	}
 
 	private void parseRightColumn(String text) {
