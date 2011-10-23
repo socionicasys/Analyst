@@ -1,25 +1,31 @@
 package ru.socionicasys.analyst.types;
 
+import ru.socionicasys.analyst.service.ServiceContainer;
+
+import java.util.ResourceBundle;
+
 /**
  * Описывает информацию об отдельном аспекте.
  */
 public enum Aspect {
-	P ("ЧЛ"),
-	L ("БЛ"),
-	F ("ЧС"),
-	S ("БС"),
-	E ("ЧЭ"),
-	R ("БЭ"),
-	I ("ЧИ"),
-	T ("БИ");
+	P,
+	L,
+	F,
+	S,
+	E,
+	R,
+	I,
+	T;
 
 	/**
 	 * Название (аббревиатура) аспекта.
 	 */
 	private final String abbreviation;
 
-	private Aspect(String abbreviation) {
-		this.abbreviation = abbreviation;
+	Aspect() {
+		ResourceBundle bundle = ServiceContainer.getResourceBundle();
+		String aspectKey = String.format("%s.%s", getClass().getName(), name());
+		abbreviation = bundle.getString(aspectKey);
 	}
 
 	public String getAbbreviation() {
