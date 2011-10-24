@@ -165,7 +165,7 @@ public class AData implements Serializable {
 
 	public static AData parseAData(String s) {
 		if (s == null) {
-			throw new NullPointerException();
+			throw new IllegalArgumentException("Parse string cannot be null");
 		}
 
 		Matcher dataMatcher = parsePattern.matcher(s);

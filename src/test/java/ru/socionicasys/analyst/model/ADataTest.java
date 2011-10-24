@@ -4,6 +4,11 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class ADataTest {
+	@Test(expectedExceptions = IllegalArgumentException.class)
+	public void testParseNull() throws Exception {
+		AData.parseAData(null);
+	}
+
 	@Test
 	public void testParseAspect() {
 		AData data = AData.parseAData("ЧЛ;");
