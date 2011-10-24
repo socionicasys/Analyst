@@ -1,4 +1,4 @@
-package ru.socionicasys.analyst;
+package ru.socionicasys.analyst.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

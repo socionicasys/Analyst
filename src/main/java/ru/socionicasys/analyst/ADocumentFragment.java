@@ -1,5 +1,7 @@
 package ru.socionicasys.analyst;
 
+import ru.socionicasys.analyst.model.AData;
+
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;

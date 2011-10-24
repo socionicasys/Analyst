@@ -1,4 +1,4 @@
-package ru.socionicasys.analyst;
+package ru.socionicasys.analyst.model;
 
 import ru.socionicasys.analyst.util.EqualsUtil;
 import ru.socionicasys.analyst.util.HashUtil;

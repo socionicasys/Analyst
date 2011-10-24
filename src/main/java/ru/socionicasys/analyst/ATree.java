@@ -2,6 +2,7 @@ package ru.socionicasys.analyst;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.socionicasys.analyst.model.AData;
 import ru.socionicasys.analyst.predicates.*;
 import ru.socionicasys.analyst.types.Aspect;
 import ru.socionicasys.analyst.types.Sign;

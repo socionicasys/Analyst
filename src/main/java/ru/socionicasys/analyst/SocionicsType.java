@@ -1,5 +1,6 @@
 package ru.socionicasys.analyst;
 
+import ru.socionicasys.analyst.model.AData;
 import ru.socionicasys.analyst.predicates.*;
 import ru.socionicasys.analyst.types.Aspect;
 import ru.socionicasys.analyst.types.Sign;

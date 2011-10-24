@@ -2,6 +2,7 @@ package ru.socionicasys.analyst;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.socionicasys.analyst.model.DocumentSelectionModel;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;

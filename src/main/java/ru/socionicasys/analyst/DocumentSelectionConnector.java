@@ -2,6 +2,8 @@ package ru.socionicasys.analyst;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.socionicasys.analyst.model.AData;
+import ru.socionicasys.analyst.model.DocumentSelectionModel;
 
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;

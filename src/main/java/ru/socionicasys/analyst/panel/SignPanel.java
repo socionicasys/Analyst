@@ -1,7 +1,7 @@
 package ru.socionicasys.analyst.panel;
 
-import ru.socionicasys.analyst.AData;
-import ru.socionicasys.analyst.DocumentSelectionModel;
+import ru.socionicasys.analyst.model.AData;
+import ru.socionicasys.analyst.model.DocumentSelectionModel;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

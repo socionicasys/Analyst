@@ -1,5 +1,6 @@
 package ru.socionicasys.analyst;
 
+import ru.socionicasys.analyst.model.AData;
 import ru.socionicasys.analyst.types.Sociotype;
 
 import java.util.EnumMap;

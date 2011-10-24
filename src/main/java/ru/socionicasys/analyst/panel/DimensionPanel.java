@@ -2,8 +2,8 @@ package ru.socionicasys.analyst.panel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.socionicasys.analyst.AData;
-import ru.socionicasys.analyst.DocumentSelectionModel;
+import ru.socionicasys.analyst.model.AData;
+import ru.socionicasys.analyst.model.DocumentSelectionModel;
 import ru.socionicasys.analyst.predicates.DimensionPredicate;
 
 import javax.swing.*;

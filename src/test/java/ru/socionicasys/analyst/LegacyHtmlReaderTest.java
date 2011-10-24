@@ -1,6 +1,7 @@
 package ru.socionicasys.analyst;
 
 import org.testng.annotations.Test;
+import ru.socionicasys.analyst.model.AData;
 
 import java.io.File;
 import java.io.FileNotFoundException;

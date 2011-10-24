@@ -1,4 +1,4 @@
-package ru.socionicasys.analyst;
+package ru.socionicasys.analyst.model;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;

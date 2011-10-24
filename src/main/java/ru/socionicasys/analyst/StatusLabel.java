@@ -1,5 +1,7 @@
 package ru.socionicasys.analyst;
 
+import ru.socionicasys.analyst.model.DocumentSelectionModel;
+
 import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

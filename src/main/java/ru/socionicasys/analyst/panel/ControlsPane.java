@@ -1,6 +1,6 @@
 package ru.socionicasys.analyst.panel;
 
-import ru.socionicasys.analyst.DocumentSelectionModel;
+import ru.socionicasys.analyst.model.DocumentSelectionModel;
 
 import javax.swing.*;
 import java.awt.*;
