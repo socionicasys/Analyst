@@ -3,7 +3,7 @@ package ru.socionicasys.analyst.service;
 /**
  * Информация о имени/версии/билде.
  */
-public class VersionInfo {
+public final class VersionInfo {
 	private static final String APPLICATION_NAME = "Информационный анализ";
 	private static final String VERSION = VersionInfo.class.getPackage().getSpecificationVersion();
 

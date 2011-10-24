@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 /**
  * Класс, хранящий статические экземпляры глобальных сервисов.
  */
-public class ServiceContainer {
+public final class ServiceContainer {
 	private static final ResourceBundle RESOURCE_BUNDLE =
 			ResourceBundle.getBundle("ru.socionicasys.analyst.messages");
 
