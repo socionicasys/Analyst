@@ -17,12 +17,17 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 	private static final int LEFT_COLUMN_PROGRESS = 50;
 	private static final int RIGHT_COLUMN_PROGRESS = 25;
 
-	private static final String HTML_CELL_OPEN = "<td>";
-	private static final String HTML_CELL_CLOSE = "</td>";
-	private static final String HTML_ROW_OPEN = "<tr>";
 	private static final Pattern HTML_BR_PATTERN = Pattern.compile("<br/>", Pattern.LITERAL);
 	private static final Pattern LINEBREAK_PATTERN = Pattern.compile("\n", Pattern.LITERAL);
+
+	// Строка таблицы со свойствами документа или таблицы протокола
+	private static final Pattern TABLE_ROW_PATTERN =
+			Pattern.compile("<tr>\\s*<td>\\s*(.*?)\\s*</td>\\s*<td>\\s*(.*?)\\s*</td>\\s*</tr>", Pattern.DOTALL);
+	private static final int TABLE_ROW_CELL_1_GROUP = 1;
+	private static final int TABLE_ROW_CELL_2_GROUP = 2;
 	
+	private static final Map<String, String> PROPERTY_LABEL_2_KEY_MAP = buildPropertyLabel2KeyMap();
+
 	// Регулярное выражение для поиска тегов вида [n| и |n]
 	private static final Pattern LEFT_COLUMN_TAG_PATTERN = Pattern.compile("(?:\\[(\\d+)\\|)|(?:\\|(\\d+)\\])");
 	private static final int LEFT_COLUMN_TAG_OPENING_GROUP = 1;
@@ -201,92 +206,73 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 		}
 	}
 
+	/**
+	 * @return карту, сопоставляющую метки свойсвт документа в htm-файле именам свойств в {@link ADocument}.
+	 */
+	private static Map<String, String> buildPropertyLabel2KeyMap() {
+		Map<String, String> label2KeyMap = new HashMap<String, String>();
+		label2KeyMap.put(LegacyHtmlFormat.TITLE_PROPERTY_LABEL, Document.TitleProperty);
+		label2KeyMap.put(LegacyHtmlFormat.EXPERT_PROPERTY_LABEL, ADocument.EXPERT_PROPERTY);
+		label2KeyMap.put(LegacyHtmlFormat.CLIENT_PROPERTY_LABEL, ADocument.CLIENT_PROPERTY);
+		label2KeyMap.put(LegacyHtmlFormat.DATE_PROPERTY_LABEL, ADocument.DATE_PROPERTY);
+		label2KeyMap.put(LegacyHtmlFormat.COMMENT_PROPERTY_LABEL, ADocument.COMMENT_PROPERTY);
+		return Collections.unmodifiableMap(label2KeyMap);
+	}
+
+	/**
+	 * Разбирает таблицу со свойствами документа, возвращает карту свойств.
+	 *
+	 * @param text текст документа
+	 * @return карта свойств документа
+	 */
 	private static Map<String, String> parseDocumentProperties(String text) {
 		// looking for the table "header"
 		int tableStart = text.indexOf("title=\"header\"", 0);
 		String leftHeaderText = text.substring(tableStart, text.indexOf("</table", tableStart));
 
 		// looking through columns of table "header" and retreiving text of the left and right columns
-		int searchIndex = leftHeaderText.indexOf(HTML_ROW_OPEN, 0);
 		Map<String, String> documentProperties = new HashMap<String, String>();
-		while (searchIndex > 0) {
-			searchIndex = leftHeaderText.indexOf(HTML_ROW_OPEN, searchIndex);
-			String headerResult;
-			if (searchIndex > 0) {
-				headerResult = findTagContent(leftHeaderText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
-			} else {
-				break;
-			}
-			String propertyName;
-			if (headerResult != null) {
-				propertyName = headerResult.trim();
-				searchIndex = leftHeaderText.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
-			} else {
-				break;
-			}
-
-			if (searchIndex > 0) {
-				headerResult = findTagContent(leftHeaderText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
-			} else {
-				break;
-			}
-			String propertyValue;
-			if (headerResult != null) {
-				propertyValue = headerResult.trim();
-				searchIndex = leftHeaderText.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
-			} else {
-				break;
-			}
+		Matcher matcher = TABLE_ROW_PATTERN.matcher(leftHeaderText);
+		while (matcher.find()) {
+			String propertyLabel = matcher.group(TABLE_ROW_CELL_1_GROUP);
+			String propertyValue = matcher.group(TABLE_ROW_CELL_2_GROUP);
 
 			//обработка заголовка
 			propertyValue = HTML_BR_PATTERN.matcher(propertyValue).replaceAll("\n");
 
-			if (LegacyHtmlFormat.TITLE_PROPERTY_LABEL.equals(propertyName)) {
-				documentProperties.put(Document.TitleProperty, propertyValue);
-			} else if (LegacyHtmlFormat.EXPERT_PROPERTY_LABEL.equals(propertyName)) {
-				documentProperties.put(ADocument.EXPERT_PROPERTY, propertyValue);
-			} else if (LegacyHtmlFormat.CLIENT_PROPERTY_LABEL.equals(propertyName)) {
-				documentProperties.put(ADocument.CLIENT_PROPERTY, propertyValue);
-			} else if (LegacyHtmlFormat.DATE_PROPERTY_LABEL.equals(propertyName)) {
-				documentProperties.put(ADocument.DATE_PROPERTY, propertyValue);
-			} else if (LegacyHtmlFormat.COMMENT_PROPERTY_LABEL.equals(propertyName)) {
-				documentProperties.put(ADocument.COMMENT_PROPERTY, propertyValue);
+			if (PROPERTY_LABEL_2_KEY_MAP.containsKey(propertyLabel)) {
+				String propertyName = PROPERTY_LABEL_2_KEY_MAP.get(propertyLabel);
+				documentProperties.put(propertyName, propertyValue);
+			} else {
+				logger.warn("Unknown document property '{}'='{}'", propertyLabel, propertyValue);
 			}
 		}
 		return documentProperties;
 	}
 
+	/**
+	 * Разбирает текст основной таблицы протокола, выделяет из нее тексты левой и правой колонок.
+	 *
+	 * @param text исходный текст документа
+	 * @param leftColumnBuilder буфер для текста левой колонки
+	 * @param rightColumnBuilder буфер для текста правой колонки
+	 */
 	private static void splitTextColumns(String text, StringBuilder leftColumnBuilder, StringBuilder rightColumnBuilder) {
 		// looking for the table "protocol"
 		int searchIndex = text.indexOf("title=\"protocol\"", 0);
 
 		//limiting ourselves only to the Protocol table
-		String contentText = text.substring(0, text.indexOf("</table", searchIndex));
+		String contentText = text.substring(searchIndex, text.indexOf("</table", searchIndex));
 
 		// looking through columns of table "protocol" and retrieving text of the left and right columns
-		while (searchIndex > 0) {
-			searchIndex = contentText.indexOf(HTML_ROW_OPEN, searchIndex);
-			if (searchIndex <= 0) {
-				break;
-			}
-
-			String leftText = findTagContent(contentText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
-			if (leftText == null) {
-				break;
-			}
+		Matcher matcher = TABLE_ROW_PATTERN.matcher(contentText);
+		while (matcher.find()) {
+			String leftText = matcher.group(TABLE_ROW_CELL_1_GROUP);
 			leftColumnBuilder.append(leftText);
 			leftColumnBuilder.append("<br/><br/>"); //adding breaks because there are no breaks on row boundaries
 			
-			searchIndex = contentText.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
-			if (searchIndex <= 0) {
-				break;
-			}
-
-			String rightText = findTagContent(contentText, HTML_CELL_OPEN, HTML_CELL_CLOSE, searchIndex);
-			if (rightText != null) {
-				rightColumnBuilder.append(rightText);
-				searchIndex = contentText.indexOf(HTML_CELL_CLOSE, searchIndex) + HTML_CELL_CLOSE.length();
-			}
+			String rightText = matcher.group(TABLE_ROW_CELL_2_GROUP);
+			rightColumnBuilder.append(rightText);
 		}
 	}
 
@@ -367,16 +353,5 @@ public class LegacyHtmlReader extends SwingWorker<ADocument, Void> {
 			}
 			data.setComment(comment);
 		}
-	}
-
-	private static String findTagContent(final String text, final String startToken, final String endToken,
-			final int fromIndex) {
-		int startIndex = text.indexOf(startToken, fromIndex);
-		int endIndex = text.indexOf(endToken, startIndex);
-
-		if (startIndex >= 0 && endIndex > 0 && endIndex > startIndex) {
-			return text.substring(startIndex + startToken.length(), endIndex);
-		}
-		return null;
 	}
 }
