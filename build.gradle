@@ -119,7 +119,7 @@ task debug
 task release(dependsOn: build)
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '1.0-milestone-5-20111021001058+0200'
+	gradleVersion = '1.0-milestone-5'
 }
 
 idea {
