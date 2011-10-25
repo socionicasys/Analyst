@@ -141,6 +141,7 @@ sonar {
 			// If commit date is not today
 			date = dateFormat.format(gitCommitDate)
 		}
+		testReportPath = file("$testReportDir/junitreports")
 		withProjectProperties { props ->
 			props['sonar.core.codeCoveragePlugin'] = 'jacoco'
 			props['sonar.jacoco.reportPath'] = "$buildDir/jacoco.exec" as String
