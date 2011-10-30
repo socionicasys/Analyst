@@ -41,7 +41,7 @@ public class MatchMissItemTest {
 	public void testEmptyMatch() throws Exception {
 		assertEquals(item.getMatchCount(), 0);
 		assertEquals(item.getMissCount(), 0);
-		assertEquals(item.getMatchCoefficient(), 0f, DELTA);
+		assertEquals(item.getMatchCoefficient(), Float.POSITIVE_INFINITY);
 	}
 
 	@Test
@@ -51,7 +51,7 @@ public class MatchMissItemTest {
 		item.reset();
 		assertEquals(item.getMatchCount(), 0);
 		assertEquals(item.getMissCount(), 0);
-		assertEquals(item.getMatchCoefficient(), 0f, DELTA);
+		assertEquals(item.getMatchCoefficient(), Float.POSITIVE_INFINITY);
 	}
 
 	@Test

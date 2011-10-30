@@ -17,6 +17,7 @@ public class MatchMissModel implements ADocumentChangeListener {
 		for (Sociotype sociotype : Sociotype.values()) {
 			matchMissMap.put(sociotype, new MatchMissItem(sociotype));
 		}
+		scaleMatchCoefficients();
 	}
 
 	@Override
@@ -41,6 +42,13 @@ public class MatchMissModel implements ADocumentChangeListener {
 			}
 		}
 
+		scaleMatchCoefficients();
+	}
+
+	/**
+	 * Масштабирует коеффициенты соответствия каждого ТИМа так, чтобы максимальный был равен 1.
+	 */
+	private void scaleMatchCoefficients() {
 		boolean exactMatchFound = false;
 		float maxCoefficient = 0.0f;
 		for (MatchMissItem matchMissItem : matchMissMap.values()) {

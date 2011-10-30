@@ -18,6 +18,7 @@ public class MatchMissItem {
 	 */
 	public MatchMissItem(Sociotype sociotype) {
 		this.sociotype = sociotype;
+		matchCoefficient = Float.POSITIVE_INFINITY;
 	}
 
 	/**
@@ -26,7 +27,7 @@ public class MatchMissItem {
 	public void reset() {
 		matchCount = 0;
 		missCount = 0;
-		matchCoefficient = 0.0f;
+		matchCoefficient = Float.POSITIVE_INFINITY;
 	}
 
 	/**
