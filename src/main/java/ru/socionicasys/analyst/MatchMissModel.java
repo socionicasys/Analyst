@@ -49,16 +49,10 @@ public class MatchMissModel implements ADocumentChangeListener {
 	 * Масштабирует коеффициенты соответствия каждого ТИМа так, чтобы максимальный был равен 1.
 	 */
 	private void scaleMatchCoefficients() {
-		boolean exactMatchFound = false;
 		float maxCoefficient = 0.0f;
 		for (MatchMissItem matchMissItem : matchMissMap.values()) {
-			if (matchMissItem.getMissCount() == 0) {
-				exactMatchFound = true;
-				maxCoefficient = Float.POSITIVE_INFINITY;
-				break;
-			}
-			if (maxCoefficient < matchMissItem.getMatchCoefficient()) {
-				maxCoefficient = matchMissItem.getMatchCoefficient();
+			if (maxCoefficient < matchMissItem.getRawCoefficient()) {
+				maxCoefficient = matchMissItem.getRawCoefficient();
 			}
 		}
 
@@ -66,13 +60,9 @@ public class MatchMissModel implements ADocumentChangeListener {
 			return;
 		}
 
+		float scale = Float.isInfinite(maxCoefficient) ? 0f : 1f / maxCoefficient;
 		for (MatchMissItem matchMissItem : matchMissMap.values()) {
-			float currentCoefficient = matchMissItem.getMatchCoefficient();
-			if (exactMatchFound) {
-				matchMissItem.setMatchCoefficient(Float.isInfinite(currentCoefficient) ? 1.0f : 0.0f);
-			} else {
-				matchMissItem.setMatchCoefficient(currentCoefficient / maxCoefficient);
-			}
+			matchMissItem.setScale(scale);
 		}
 	}
 

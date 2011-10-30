@@ -519,7 +519,7 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 					sociotype,
 					matchMissItem.getMatchCount(),
 					matchMissItem.getMissCount(),
-					100.0f * matchMissItem.getMatchCoefficient()
+					100.0f * matchMissItem.getScaledCoefficient()
 				));
 			}
 			writer.write("</table>");

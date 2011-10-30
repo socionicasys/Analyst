@@ -47,7 +47,7 @@ public class MatchMissModelTest {
 			MatchMissItem item = model.get(sociotype);
 			assertEquals(item.getMatchCount(), 0);
 			assertEquals(item.getMissCount(), 0);
-			assertEquals(item.getMatchCoefficient(), 1f, DELTA);
+			assertEquals(item.getScaledCoefficient(), 1f, DELTA);
 		}
 	}
 
@@ -63,7 +63,7 @@ public class MatchMissModelTest {
 			MatchMissItem item = model.get(sociotype);
 			assertEquals(item.getMatchCount(), 0);
 			assertEquals(item.getMissCount(), 0);
-			assertEquals(item.getMatchCoefficient(), 1f, DELTA);
+			assertEquals(item.getScaledCoefficient(), 1f, DELTA);
 		}
 	}
 
@@ -81,7 +81,7 @@ public class MatchMissModelTest {
 			MatchMissItem item = model.get(sociotype);
 			assertEquals(item.getMatchCount(), 1);
 			assertEquals(item.getMissCount(), 0);
-			assertEquals(item.getMatchCoefficient(), 1f, DELTA);
+			assertEquals(item.getScaledCoefficient(), 1f, DELTA);
 		}
 	}
 
@@ -99,13 +99,13 @@ public class MatchMissModelTest {
 			MatchMissItem item = model.get(sociotype);
 			assertEquals(item.getMatchCount(), 1);
 			assertEquals(item.getMissCount(), 0);
-			assertEquals(item.getMatchCoefficient(), 1f, DELTA);
+			assertEquals(item.getScaledCoefficient(), 1f, DELTA);
 		}
 		for (Sociotype sociotype : Arrays.asList(EIE, EII, ESE, ESI, IEE, IEI, SEE, SEI)) {
 			MatchMissItem item = model.get(sociotype);
 			assertEquals(item.getMatchCount(), 0);
 			assertEquals(item.getMissCount(), 1);
-			assertEquals(item.getMatchCoefficient(), 0f, DELTA);
+			assertEquals(item.getScaledCoefficient(), 0f, DELTA);
 		}
 	}
 
@@ -127,19 +127,19 @@ public class MatchMissModelTest {
 			MatchMissItem item = model.get(sociotype);
 			assertEquals(item.getMatchCount(), 2);
 			assertEquals(item.getMissCount(), 0);
-			assertEquals(item.getMatchCoefficient(), 1f, DELTA);
+			assertEquals(item.getScaledCoefficient(), 1f, DELTA);
 		}
 		for (Sociotype sociotype : Arrays.asList(LIE, LSI, ILI, SLE, EIE, IEI, SEE, ESI)) {
 			MatchMissItem item = model.get(sociotype);
 			assertEquals(item.getMatchCount(), 1);
 			assertEquals(item.getMissCount(), 1);
-			assertEquals(item.getMatchCoefficient(), 0f, DELTA);
+			assertEquals(item.getScaledCoefficient(), 0f, DELTA);
 		}
 		for (Sociotype sociotype : Arrays.asList(EII, ESE, IEE, SEI)) {
 			MatchMissItem item = model.get(sociotype);
 			assertEquals(item.getMatchCount(), 0);
 			assertEquals(item.getMissCount(), 2);
-			assertEquals(item.getMatchCoefficient(), 0f, DELTA);
+			assertEquals(item.getScaledCoefficient(), 0f, DELTA);
 		}
 	}
 
@@ -164,13 +164,13 @@ public class MatchMissModelTest {
 			MatchMissItem item = model.get(sociotype);
 			assertEquals(item.getMatchCount(), 2);
 			assertEquals(item.getMissCount(), 1);
-			assertEquals(item.getMatchCoefficient(), 1f, DELTA);
+			assertEquals(item.getScaledCoefficient(), 1f, DELTA);
 		}
 		for (Sociotype sociotype : Arrays.asList(LII, LSE, ILE, SLI, EIE, IEI, SEE, ESI)) {
 			MatchMissItem item = model.get(sociotype);
 			assertEquals(item.getMatchCount(), 1);
 			assertEquals(item.getMissCount(), 2);
-			assertEquals(item.getMatchCoefficient(), 0.25f, DELTA);
+			assertEquals(item.getScaledCoefficient(), 0.25f, DELTA);
 		}
 	}
 }

@@ -41,7 +41,7 @@ public class MatchMissItemTest {
 	public void testEmptyMatch() throws Exception {
 		assertEquals(item.getMatchCount(), 0);
 		assertEquals(item.getMissCount(), 0);
-		assertEquals(item.getMatchCoefficient(), Float.POSITIVE_INFINITY);
+		assertEquals(item.getRawCoefficient(), Float.POSITIVE_INFINITY);
 	}
 
 	@Test
@@ -51,7 +51,7 @@ public class MatchMissItemTest {
 		item.reset();
 		assertEquals(item.getMatchCount(), 0);
 		assertEquals(item.getMissCount(), 0);
-		assertEquals(item.getMatchCoefficient(), Float.POSITIVE_INFINITY);
+		assertEquals(item.getRawCoefficient(), Float.POSITIVE_INFINITY);
 	}
 
 	@Test
@@ -59,7 +59,7 @@ public class MatchMissItemTest {
 		item.addData(matchingData);
 		assertEquals(item.getMatchCount(), 1);
 		assertEquals(item.getMissCount(), 0);
-		assertEquals(item.getMatchCoefficient(), Float.POSITIVE_INFINITY, DELTA);
+		assertEquals(item.getRawCoefficient(), Float.POSITIVE_INFINITY, DELTA);
 	}
 
 	@Test
@@ -67,7 +67,7 @@ public class MatchMissItemTest {
 		item.addData(nonMatchingData);
 		assertEquals(item.getMatchCount(), 0);
 		assertEquals(item.getMissCount(), 1);
-		assertEquals(item.getMatchCoefficient(), 0f, DELTA);
+		assertEquals(item.getRawCoefficient(), 0f, DELTA);
 	}
 
 	@Test
@@ -76,6 +76,35 @@ public class MatchMissItemTest {
 		item.addData(nonMatchingData);
 		assertEquals(item.getMatchCount(), 1);
 		assertEquals(item.getMissCount(), 1);
-		assertEquals(item.getMatchCoefficient(), 1.0f, DELTA);
+		assertEquals(item.getRawCoefficient(), 1.0f, DELTA);
+	}
+
+	@Test
+	public void testInitialScale() throws Exception {
+		item.setScale(10.0f);
+		assertEquals(item.getScaledCoefficient(), Float.POSITIVE_INFINITY);
+	}
+
+	@Test
+	public void testScale() throws Exception {
+		item.addData(matchingData);
+		item.addData(nonMatchingData);
+		item.setScale(10.0f);
+		assertEquals(item.getScaledCoefficient(), 10.0f, DELTA);
+	}
+
+	@Test
+	public void testZeroScaleMatch() throws Exception {
+		item.addData(matchingData);
+		item.setScale(0.0f);
+		assertEquals(item.getScaledCoefficient(), 1.0f, DELTA);
+	}
+
+	@Test
+	public void testZeroScaleMiss() throws Exception {
+		item.addData(matchingData);
+		item.addData(nonMatchingData);
+		item.setScale(0.0f);
+		assertEquals(item.getScaledCoefficient(), 0.0f, DELTA);
 	}
 }
