@@ -1,1 +1,2 @@
-src/test/resources/ru/socionicasys/analyst/LegacyHtmlReader/valid.htm -crlf
+src/test/resources/ru/socionicasys/analyst/LegacyHtmlReader/*.htm -crlf
+src/test/resources/ru/socionicasys/analyst/LegacyHtmlWriter/*.htm -crlf
