@@ -62,7 +62,6 @@ gradle.taskGraph.whenReady { taskGraph ->
 repositories {
 	mavenCentral()
 	mavenRepo url: 'http://download.eclipse.org/jgit/maven'
-	mavenRepo url: 'http://jmockit.googlecode.com/svn/maven-repo'
 }
 
 configurations {
@@ -74,7 +73,7 @@ dependencies {
 	compile 'org.slf4j:slf4j-api:1.6.3'
 	runtime 'ch.qos.logback:logback-classic:0.9.30'
 	testCompile 'org.testng:testng:6.2.1'
-	testCompile 'mockit:jmockit:0.999.10'
+	testCompile 'com.googlecode.jmockit:jmockit:0.999.11'
 	jgit 'org.eclipse.jgit:org.eclipse.jgit:1.1.0.201109151100-r'
 	jacoco 'org.jacoco:org.jacoco.agent:0.5.3.201107060350:runtime'
 }
