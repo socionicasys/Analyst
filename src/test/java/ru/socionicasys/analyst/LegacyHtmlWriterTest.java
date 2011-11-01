@@ -56,6 +56,25 @@ public class LegacyHtmlWriterTest {
 		checkFilesEqual(tempFile, "empty.htm");
 	}
 
+	@Test
+	public void testDocumentProperties() throws Exception {
+		File tempFile = File.createTempFile("properties", ".htm");
+		tempFile.deleteOnExit();
+
+		ADocument document = new ADocument();
+		Dictionary<Object,Object> documentProperties = document.getDocumentProperties();
+		documentProperties.put(ADocument.TitleProperty, "Тестовый документ");
+		documentProperties.put(ADocument.CLIENT_PROPERTY, "Несуществующий типируемый");
+		documentProperties.put(ADocument.EXPERT_PROPERTY, "Типировщик-автомат");
+		documentProperties.put(ADocument.DATE_PROPERTY, "01.11.2011");
+		documentProperties.put(ADocument.COMMENT_PROPERTY, "Комментарии также тестируются");
+		LegacyHtmlWriter writer = new LegacyHtmlWriter(analystWindow, document, tempFile);
+		writer.execute();
+		writer.get();
+
+		checkFilesEqual(tempFile, "properties.htm");
+	}
+
 	/**
 	 * Проверяет, что содержимое файла соответствует внутреннему ресурсу с заданным именем.
 	 *
