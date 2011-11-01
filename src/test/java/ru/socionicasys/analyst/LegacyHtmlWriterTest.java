@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import ru.socionicasys.analyst.service.VersionInfo;
 
 import java.io.*;
+import java.util.Dictionary;
 import java.util.Locale;
 
 import static org.testng.Assert.assertEquals;
@@ -41,7 +42,14 @@ public class LegacyHtmlWriterTest {
 		File tempFile = File.createTempFile("empty", ".htm");
 		tempFile.deleteOnExit();
 
-		LegacyHtmlWriter writer = new LegacyHtmlWriter(analystWindow, new ADocument(), tempFile);
+		ADocument document = new ADocument();
+		Dictionary<Object,Object> documentProperties = document.getDocumentProperties();
+		documentProperties.put(ADocument.TitleProperty, "");
+		documentProperties.put(ADocument.CLIENT_PROPERTY, "");
+		documentProperties.put(ADocument.EXPERT_PROPERTY, "");
+		documentProperties.put(ADocument.DATE_PROPERTY, "");
+		documentProperties.put(ADocument.COMMENT_PROPERTY, "");
+		LegacyHtmlWriter writer = new LegacyHtmlWriter(analystWindow, document, tempFile);
 		writer.execute();
 		writer.get();
 		
