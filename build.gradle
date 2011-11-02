@@ -70,8 +70,8 @@ configurations {
 }
 
 dependencies {
-	compile 'org.slf4j:slf4j-api:1.6.3'
-	runtime 'ch.qos.logback:logback-classic:0.9.30'
+	compile 'org.slf4j:slf4j-api:1.6.4'
+	runtime 'ch.qos.logback:logback-classic:1.0.0'
 	testCompile 'org.testng:testng:6.2.1'
 	testCompile 'com.googlecode.jmockit:jmockit:0.999.11'
 	jgit 'org.eclipse.jgit:org.eclipse.jgit:1.1.0.201109151100-r'
