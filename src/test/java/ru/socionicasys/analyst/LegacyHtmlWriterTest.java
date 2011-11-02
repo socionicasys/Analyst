@@ -43,12 +43,7 @@ public class LegacyHtmlWriterTest {
 		tempFile.deleteOnExit();
 
 		ADocument document = new ADocument();
-		Dictionary<Object,Object> documentProperties = document.getDocumentProperties();
-		documentProperties.put(ADocument.TitleProperty, "");
-		documentProperties.put(ADocument.CLIENT_PROPERTY, "");
-		documentProperties.put(ADocument.EXPERT_PROPERTY, "");
-		documentProperties.put(ADocument.DATE_PROPERTY, "");
-		documentProperties.put(ADocument.COMMENT_PROPERTY, "");
+		resetProperties(document);
 		LegacyHtmlWriter writer = new LegacyHtmlWriter(analystWindow, document, tempFile);
 		writer.execute();
 		writer.get();
@@ -73,6 +68,35 @@ public class LegacyHtmlWriterTest {
 		writer.get();
 
 		checkFilesEqual(tempFile, "properties.htm");
+	}
+
+	@Test
+	public void testMarkuplessDocument() throws Exception {
+		File tempFile = File.createTempFile("markupless", ".htm");
+		tempFile.deleteOnExit();
+
+		ADocument document = new ADocument();
+		resetProperties(document);
+		document.insertString(0, "Документ без разметки, только текст", ADocument.DEFAULT_STYLE);
+		LegacyHtmlWriter writer = new LegacyHtmlWriter(analystWindow, document, tempFile);
+		writer.execute();
+		writer.get();
+
+		checkFilesEqual(tempFile, "markupless.htm");
+	}
+
+	/**
+	 * Clears document properties.
+	 *
+	 * @param document source document
+	 */
+	private static void resetProperties(ADocument document) {
+		Dictionary<Object,Object> documentProperties = document.getDocumentProperties();
+		documentProperties.put(ADocument.TitleProperty, "");
+		documentProperties.put(ADocument.CLIENT_PROPERTY, "");
+		documentProperties.put(ADocument.EXPERT_PROPERTY, "");
+		documentProperties.put(ADocument.DATE_PROPERTY, "");
+		documentProperties.put(ADocument.COMMENT_PROPERTY, "");
 	}
 
 	/**
