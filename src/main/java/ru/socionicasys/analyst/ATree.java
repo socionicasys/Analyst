@@ -276,19 +276,19 @@ public class ATree extends JTree {
 		DefaultMutableTreeNode dimensionMnogoNode = new DefaultMutableTreeNode(HIGH_DIMENSION_LABEL);
  		dimensionsNode.add(dimensionMnogoNode);
 		for (Aspect aspect : ASPECTS) {
-			appendEndTreeNode(dimensionMnogoNode, aspect.getAbbreviation(), new LowDimensionPredicate(aspect));
+			appendEndTreeNode(dimensionMnogoNode, aspect.getAbbreviation(), new HighDimensionPredicate(aspect));
 		}
 
 		DefaultMutableTreeNode dimensionOdnoNode = new DefaultMutableTreeNode(DIMENSION1_LABEL);
 		dimensionsNode.add(dimensionOdnoNode);
 		for (Aspect aspect : ASPECTS) {
-			appendEndTreeNode(dimensionOdnoNode, aspect.getAbbreviation(), new LowDimensionPredicate(aspect));
+			appendEndTreeNode(dimensionOdnoNode, aspect.getAbbreviation(), new Dimension1Predicate(aspect));
 		}
 
 		DefaultMutableTreeNode dimensionIndiNode = new DefaultMutableTreeNode(INDIVIDUALITY_LABEL);
 		dimensionsNode.add(dimensionIndiNode);
 		for (Aspect aspect : ASPECTS) {
-			appendEndTreeNode(dimensionIndiNode, aspect.getAbbreviation(), new LowDimensionPredicate(aspect));
+			appendEndTreeNode(dimensionIndiNode, aspect.getAbbreviation(), new IndividualityPredicate(aspect));
 		}
 
 
