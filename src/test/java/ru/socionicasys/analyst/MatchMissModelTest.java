@@ -79,7 +79,7 @@ public class MatchMissModelTest {
 		model.aDocumentChanged(document);
 		for (Sociotype sociotype : Sociotype.values()) {
 			MatchMissItem item = model.get(sociotype);
-			assertEquals(item.getMatchCount(), 1);
+			assertEquals(item.getMatchCount(), 0);
 			assertEquals(item.getMissCount(), 0);
 			assertEquals(item.getScaledCoefficient(), 1f, DELTA);
 		}

@@ -19,16 +19,10 @@ public final class SocionicsType {
 	 * Проверяет, соответствует ли данный ТИМ конкретным отметкам.
 	 *
 	 * @param type ТИМ
-	 * @param data данные из отметки
+	 * @param predicates список предикотов из текстовой отметки
 	 * @return соответствует ли ТИМ отметке
 	 */
-	public static boolean matches(Sociotype type, AData data) {
-		if (data.getAspect() == null) {
-			return false;
-		}
-
-		Collection<Predicate> predicates = createPredicates(data);
-
+	public static boolean matches(Sociotype type, Collection<Predicate> predicates) {
 		for (Predicate predicate : predicates) {
 			if (!predicate.check(type)) {
 				return false;

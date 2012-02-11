@@ -1,7 +1,9 @@
 package ru.socionicasys.analyst;
 
-import ru.socionicasys.analyst.model.AData;
+import ru.socionicasys.analyst.predicates.Predicate;
 import ru.socionicasys.analyst.types.Sociotype;
+
+import java.util.Collection;
 
 /**
  * Совпадения/несовпадения отдельного ТИМа.
@@ -49,10 +51,10 @@ public class MatchMissItem {
 	/**
 	 * Обновляет счетчики соответствиями из нового блока.
 	 *
-	 * @param data блок соционических пометок
+	 * @param predicates список предикатов из одного блока текстовых отметок
 	 */
-	public void addData(AData data) {
-		if (SocionicsType.matches(sociotype, data)) {
+	public void addData(Collection<Predicate> predicates) {
+		if (SocionicsType.matches(sociotype, predicates)) {
 			matchCount++;
 		} else {
 			missCount++;

@@ -3,9 +3,11 @@ package ru.socionicasys.analyst;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.socionicasys.analyst.model.AData;
+import ru.socionicasys.analyst.predicates.Predicate;
 import ru.socionicasys.analyst.types.Sociotype;
 
 import java.awt.*;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -56,7 +58,6 @@ public class BTree extends JTree implements ADocumentChangeListener {
 		return nodesMap;
 	}
 
-
 	private void updateTree(ADocument document) {
 		if (document == null) {
 			return;
@@ -74,26 +75,28 @@ public class BTree extends JTree implements ADocumentChangeListener {
 		try {
 			removeAllChildren();
 			for (Entry<DocumentSection, AData> dataEntry : document.getADataMap().entrySet()) {
-				int sectionOffset = dataEntry.getKey().getStartOffset();
-				int sectionLength = Math.abs(dataEntry.getKey().getEndOffset() - sectionOffset);
-				int quoteLength = Math.min(sectionLength, MAX_PRESENTATION_CHARS);
-
 				AData data = dataEntry.getValue();
-
 				String aspect = data.getAspect();
-				String quote = document.getText(sectionOffset, quoteLength);
 
 				if (aspect == null || AData.DOUBT.equals(aspect)) {
 					continue;
 				}
-				if (AData.JUMP.equals(data.getModifier())) {
+
+				Collection<Predicate> predicates = SocionicsType.createPredicates(data);
+				if (predicates.isEmpty()) {
 					continue;
 				}
 
+				int sectionOffset = dataEntry.getKey().getStartOffset();
+				int sectionLength = Math.abs(dataEntry.getKey().getEndOffset() - sectionOffset);
+				int quoteLength = Math.min(sectionLength, MAX_PRESENTATION_CHARS);
+				String quote = document.getText(sectionOffset, quoteLength);
+
 				for (Sociotype sociotype : Sociotype.values()) {
 					MutableTreeNode quoteNode = new DefaultMutableTreeNode(
-						new EndNodeObject(sectionOffset, String.format("...%s...", quote)), false);
-					if (SocionicsType.matches(sociotype, data)) {
+							new EndNodeObject(sectionOffset, String.format("...%s...", quote)), false);
+
+					if (SocionicsType.matches(sociotype, predicates)) {
 						matchNodes.get(sociotype).add(quoteNode);
 					} else {
 						missNodes.get(sociotype).add(quoteNode);

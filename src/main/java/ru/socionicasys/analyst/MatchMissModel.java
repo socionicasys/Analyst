@@ -1,8 +1,10 @@
 package ru.socionicasys.analyst;
 
 import ru.socionicasys.analyst.model.AData;
+import ru.socionicasys.analyst.predicates.Predicate;
 import ru.socionicasys.analyst.types.Sociotype;
 
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -28,17 +30,18 @@ public class MatchMissModel implements ADocumentChangeListener {
 
 		for (AData data : document.getADataMap().values()) {
 			String aspect = data.getAspect();
-			String modifier = data.getModifier();
 
 			if (aspect == null || AData.DOUBT.equals(aspect)) {
 				continue;
 			}
-			if (AData.JUMP.equals(modifier)) {
+
+			Collection<Predicate> predicates = SocionicsType.createPredicates(data);
+			if (predicates.isEmpty()) {
 				continue;
 			}
 
 			for (MatchMissItem matchMissItem : matchMissMap.values()) {
-				matchMissItem.addData(data);
+				matchMissItem.addData(predicates);
 			}
 		}
 

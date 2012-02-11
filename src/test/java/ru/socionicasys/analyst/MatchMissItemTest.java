@@ -3,8 +3,15 @@ package ru.socionicasys.analyst;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import ru.socionicasys.analyst.model.AData;
+import ru.socionicasys.analyst.predicates.BlockPredicate;
+import ru.socionicasys.analyst.predicates.LowDimensionPredicate;
+import ru.socionicasys.analyst.predicates.Predicate;
+import ru.socionicasys.analyst.predicates.VitalPredicate;
+import ru.socionicasys.analyst.types.Aspect;
 import ru.socionicasys.analyst.types.Sociotype;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static org.testng.Assert.assertEquals;
 
@@ -17,19 +24,24 @@ public class MatchMissItemTest {
 	/**
 	 * A markup data which matches {@link #item}
 	 */
-	private AData matchingData;
+	private Collection<Predicate> matchingPredicates;
 
 	/**
 	 * A markup data which doesn't match {@link #item}
 	 */
-	private AData nonMatchingData;
+	private Collection<Predicate> nonMatchingPredicates;
 
 	private static final float DELTA = 0.0001f;
 
 	@BeforeClass
 	public void setUpData() throws Exception {
-		matchingData = new AData(AData.I, null, null, AData.MALOMERNOST, AData.VITAL, null, null);
-		nonMatchingData = new AData(AData.R, AData.F, null, AData.MALOMERNOST, null, AData.BLOCK, null);
+		matchingPredicates = new ArrayList<Predicate>();
+		matchingPredicates.add(new LowDimensionPredicate(Aspect.I));
+		matchingPredicates.add(new VitalPredicate(Aspect.I));
+
+		nonMatchingPredicates = new ArrayList<Predicate>();
+		nonMatchingPredicates.add(new LowDimensionPredicate(Aspect.R));
+		nonMatchingPredicates.add(new BlockPredicate(Aspect.R, Aspect.F));
 	}
 
 	@BeforeMethod
@@ -46,8 +58,8 @@ public class MatchMissItemTest {
 
 	@Test
 	public void testReset() throws Exception {
-		item.addData(matchingData);
-		item.addData(nonMatchingData);
+		item.addData(matchingPredicates);
+		item.addData(nonMatchingPredicates);
 		item.reset();
 		assertEquals(item.getMatchCount(), 0);
 		assertEquals(item.getMissCount(), 0);
@@ -56,7 +68,7 @@ public class MatchMissItemTest {
 
 	@Test
 	public void testMatch() throws Exception {
-		item.addData(matchingData);
+		item.addData(matchingPredicates);
 		assertEquals(item.getMatchCount(), 1);
 		assertEquals(item.getMissCount(), 0);
 		assertEquals(item.getRawCoefficient(), Float.POSITIVE_INFINITY, DELTA);
@@ -64,7 +76,7 @@ public class MatchMissItemTest {
 
 	@Test
 	public void testMiss() throws Exception {
-		item.addData(nonMatchingData);
+		item.addData(nonMatchingPredicates);
 		assertEquals(item.getMatchCount(), 0);
 		assertEquals(item.getMissCount(), 1);
 		assertEquals(item.getRawCoefficient(), 0f, DELTA);
@@ -72,8 +84,8 @@ public class MatchMissItemTest {
 
 	@Test
 	public void testMatchAndMiss() throws Exception {
-		item.addData(matchingData);
-		item.addData(nonMatchingData);
+		item.addData(matchingPredicates);
+		item.addData(nonMatchingPredicates);
 		assertEquals(item.getMatchCount(), 1);
 		assertEquals(item.getMissCount(), 1);
 		assertEquals(item.getRawCoefficient(), 1.0f, DELTA);
@@ -87,23 +99,23 @@ public class MatchMissItemTest {
 
 	@Test
 	public void testScale() throws Exception {
-		item.addData(matchingData);
-		item.addData(nonMatchingData);
+		item.addData(matchingPredicates);
+		item.addData(nonMatchingPredicates);
 		item.setScale(10.0f);
 		assertEquals(item.getScaledCoefficient(), 10.0f, DELTA);
 	}
 
 	@Test
 	public void testZeroScaleMatch() throws Exception {
-		item.addData(matchingData);
+		item.addData(matchingPredicates);
 		item.setScale(0.0f);
 		assertEquals(item.getScaledCoefficient(), 1.0f, DELTA);
 	}
 
 	@Test
 	public void testZeroScaleMiss() throws Exception {
-		item.addData(matchingData);
-		item.addData(nonMatchingData);
+		item.addData(matchingPredicates);
+		item.addData(nonMatchingPredicates);
 		item.setScale(0.0f);
 		assertEquals(item.getScaledCoefficient(), 0.0f, DELTA);
 	}
