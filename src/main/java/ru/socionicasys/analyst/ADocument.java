@@ -198,24 +198,24 @@ public class ADocument extends DefaultStyledDocument {
 		logger.trace("removeUpdate(): leaving");
 	}
 
+	/**
+	 * Проверяет не нужно ли удалить схлопнувшиеся сегменты при удалении фрагмента текста.
+	 *
+	 * @param start начало удаленного фрагмента
+	 * @param end конец удаленного фрагмента
+	 */
 	private void removeCleanup(int start, int end) {
 		logger.trace("removeCleanup(): entering, start={}, end={}", start, end);
-		// проверяет не нужно ли удалить схлопнувшиеся сегменты
-		boolean foundCollapsed = false;
+
 		Collection<DocumentSection> toRemove = new ArrayList<DocumentSection>();
 		for (DocumentSection sect : aDataMap.keySet()) {
-			if (sect.getStartOffset() > start && sect.getStartOffset() <= end &&
-				sect.getEndOffset() > start && sect.getEndOffset() <= end) {
+			if (sect.getStartOffset() >= start && sect.getStartOffset() <= end &&
+					sect.getEndOffset() >= start && sect.getEndOffset() <= end) {
 				toRemove.add(sect);
-				foundCollapsed = true;
 			}
 		}
-
 		removeSections(toRemove);
 		
-		if (foundCollapsed) {
-			fireADocumentChanged();
-		}
 		logger.trace("removeCleanup(): leaving");
 	}
 
