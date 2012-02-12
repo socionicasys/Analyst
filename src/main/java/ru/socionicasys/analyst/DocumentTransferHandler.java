@@ -139,7 +139,6 @@ public class DocumentTransferHandler extends TransferHandler {
 			logger.debug("exportDone(): removing document fragment ({}, {}) after MOVE action",
 					selectionStart, selectionEnd);
 			document.remove(selectionStart, selectionEnd - selectionStart);
-			document.removeCleanup(selectionStart, selectionEnd);
 		} catch (BadLocationException e) {
 			logger.error("exportDone(): invalid document position", e);
 		} finally {

@@ -198,7 +198,7 @@ public class ADocument extends DefaultStyledDocument {
 		logger.trace("removeUpdate(): leaving");
 	}
 
-	public void removeCleanup(int start, int end) {
+	private void removeCleanup(int start, int end) {
 		logger.trace("removeCleanup(): entering, start={}, end={}", start, end);
 		// проверяет не нужно ли удалить схлопнувшиеся сегменты
 		boolean foundCollapsed = false;
