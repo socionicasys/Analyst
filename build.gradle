@@ -19,7 +19,7 @@ buildscript {
 	}
 }
 
-version = '2.0-beta-6'
+version = '2.0-beta-7'
 group = 'ru.socionicasys'
 mainClassName = 'ru.socionicasys.analyst.Analyst'
 sourceCompatibility = '1.6'
@@ -119,7 +119,7 @@ task syncLibs(type: Sync) {
 
 task debug
 
-task release(dependsOn: build)
+task release(dependsOn: [build, distZip, jarDependencies])
 
 task wrapper(type: Wrapper) {
 	gradleVersion = '1.0-milestone-7'
