@@ -17,7 +17,6 @@ import java.util.Dictionary;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.*;
-import javax.swing.text.JTextComponent.KeyBinding;
 
 @SuppressWarnings("serial")
 public class AnalystWindow extends JFrame {
@@ -138,9 +137,6 @@ public class AnalystWindow extends JFrame {
 		mb.add(infoMenu);
 		setJMenuBar(mb);
 
-		//Add some key bindings.
-		addBindings();
-
 		//Start watching for undoable edits and caret changes.
 		documentHolder.addUndoableEditListener(undoManager);
 
@@ -240,28 +236,6 @@ public class AnalystWindow extends JFrame {
 		menu.add(exit);
 
 		return menu;
-	}
-
-	//Add a couple of emacs key bindings for navigation.
-	private void addBindings() {
-		final KeyBinding[] defaultBindings = {
-			new KeyBinding(
-				KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK),
-				DefaultEditorKit.copyAction),
-			new KeyBinding(
-				KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK),
-				DefaultEditorKit.pasteAction),
-			new KeyBinding(
-				KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK),
-				DefaultEditorKit.cutAction),
-		};
-		final Action[] defaultActions = {
-			textPane.getAction(DefaultEditorKit.copyAction),
-			textPane.getAction(DefaultEditorKit.pasteAction),
-			textPane.getAction(DefaultEditorKit.cutAction),
-		};
-
-		JTextComponent.loadKeymap(textPane.getKeymap(), defaultBindings, defaultActions);
 	}
 
 	/**
