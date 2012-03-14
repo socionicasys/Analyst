@@ -36,9 +36,9 @@ def logCommand = git.log();
 def commitIterator = logCommand.call().iterator();
 if (commitIterator.hasNext()) {
 	def commit = commitIterator.next()
-	project.gitFullRevision = commit.name;
-	project.gitAbbrevRevision = objectReader.abbreviate(commit).name();
-	project.gitCommitDate = commit.authorIdent.when;
+	ext.gitFullRevision = commit.name
+	ext.gitAbbrevRevision = objectReader.abbreviate(commit).name()
+	ext.gitCommitDate = commit.authorIdent.when
 }
 
 // По-умолчанию запускается release-конфигурация. Если среди тасков есть debug,
@@ -53,7 +53,7 @@ gradle.taskGraph.whenReady { taskGraph ->
 
 	if (!taskGraph.hasTask(':release')) {
 		version += '-SNAPSHOT'
-		if (project.hasProperty('gitAbbrevRevision')) {
+		if (ext.has('gitAbbrevRevision')) {
 			version += '-' + gitAbbrevRevision;
 		}
 	}
@@ -122,7 +122,7 @@ task debug
 task release(dependsOn: [build, distZip, jarDependencies])
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '1.0-milestone-8a'
+	gradleVersion = '1.0-milestone-9'
 }
 
 idea {
@@ -140,7 +140,7 @@ sonar {
 	def dateFormat = new SimpleDateFormat('yyyy-MM-dd')
 	project {
 		sourceEncoding = 'UTF-8'
-		if ((gitCommitDate..new Date()).size() > 1) {
+		if (ext.has('gitCommitDate') && (gitCommitDate..new Date()).size() > 1) {
 			// If commit date is not today
 			date = dateFormat.format(gitCommitDate)
 		}
