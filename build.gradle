@@ -120,7 +120,7 @@ task debug
 task release(dependsOn: [build, distZip, jarDependencies])
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '1.0-rc-1'
+	gradleVersion = '1.0-rc-2'
 }
 
 idea {
