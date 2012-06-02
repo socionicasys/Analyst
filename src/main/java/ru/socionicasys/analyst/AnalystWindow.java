@@ -23,6 +23,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.Dictionary;
+import java.util.concurrent.ExecutionException;
 
 @SuppressWarnings("serial")
 public class AnalystWindow extends JFrame {
@@ -397,22 +398,10 @@ public class AnalystWindow extends JFrame {
 				}
 
 				if (file != null) {
-					try {
-						LegacyHtmlWriter iow = new LegacyHtmlWriter(this, document, file);
-						iow.addPropertyChangeListener(new ProgressWindow(this, "    Сохранение файла: "));
-						iow.addPropertyChangeListener(new DocumentSaveListener());
-						iow.execute();
-					} catch (Exception e) {
-						logger.error("Error writing document to file" + file.getAbsolutePath(), e);
-						JOptionPane.showOptionDialog(this,
-							"Ошибка сохранения файла: " + file.getAbsolutePath() + "\n\n" + e.getMessage(),
-							"Ошибка сохранения файла",
-							JOptionPane.DEFAULT_OPTION,
-							JOptionPane.ERROR_MESSAGE,
-							null,
-							new Object[]{"Закрыть"},
-							null);
-					}
+					LegacyHtmlWriter iow = new LegacyHtmlWriter(this, document, file);
+					iow.addPropertyChangeListener(new ProgressWindow(this, "    Сохранение файла: "));
+					iow.addPropertyChangeListener(new DocumentSaveListener());
+					iow.execute();
 				}
 			}
 		}
@@ -640,11 +629,27 @@ public class AnalystWindow extends JFrame {
 	private final class DocumentSaveListener extends SwingWorkerDoneListener<LegacyHtmlWriter> {
 		@Override
 		protected void swingWorkerDone(LegacyHtmlWriter worker) {
-			if (programExit) {
-				dispose();
-			}
-			if (makeNewDocument) {
-				initNewDocument();
+			try {
+				worker.get();
+				if (programExit) {
+					dispose();
+				}
+				if (makeNewDocument) {
+					initNewDocument();
+				}
+			} catch (InterruptedException e) {
+				logger.info("Document loading interrupted", e);
+			} catch (ExecutionException e) {
+				Throwable cause = e.getCause();
+				logger.error("Error writing document to file", cause);
+				JOptionPane.showOptionDialog(null,
+					"Ошибка сохранения файла:\n\n" + cause.getMessage(),
+					"Ошибка сохранения файла",
+					JOptionPane.DEFAULT_OPTION,
+					JOptionPane.ERROR_MESSAGE,
+					null,
+					new Object[]{"Закрыть"},
+					null);
 			}
 		}
 	}
