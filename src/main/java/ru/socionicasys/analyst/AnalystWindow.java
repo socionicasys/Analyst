@@ -247,12 +247,12 @@ public class AnalystWindow extends JFrame {
 
 		//Undo and redo are actions of our own creation.
 		JMenuItem undoMenuItem = new JMenuItem(new UndoAction(undoManager));
-		KeyStroke undoKey = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK);
+		KeyStroke undoKey = KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK);
 		undoMenuItem.setAccelerator(undoKey);
 		menu.add(undoMenuItem);
 
 		JMenuItem redoMenuItem = new JMenuItem(new RedoAction(undoManager));
-		KeyStroke redoKey = KeyStroke.getKeyStroke(KeyEvent.VK_Y, Event.CTRL_MASK);
+		KeyStroke redoKey = KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK);
 		redoMenuItem.setAccelerator(redoKey);
 		menu.add(redoMenuItem);
 
@@ -262,19 +262,19 @@ public class AnalystWindow extends JFrame {
 		Action cutAction = textPane.getAction(DefaultEditorKit.cutAction);
 		cutAction.putValue(Action.NAME, "Вырезать");
 		JMenuItem cutMenuItem = new JMenuItem(cutAction);
-		cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, Event.CTRL_MASK));
+		cutMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
 		menu.add(cutMenuItem);
 
 		Action copyAction = textPane.getAction(DefaultEditorKit.copyAction);
 		copyAction.putValue(Action.NAME, "Копировать");
 		JMenuItem copyMenuItem = new JMenuItem(copyAction);
-		copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, Event.CTRL_MASK));
+		copyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK));
 		menu.add(copyMenuItem);
 
 		Action pasteAction = textPane.getAction(DefaultEditorKit.pasteAction);
 		pasteAction.putValue(Action.NAME, "Вставить");
 		JMenuItem pasteMenuItem = new JMenuItem(pasteAction);
-		pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, Event.CTRL_MASK));
+		pasteMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));
 		menu.add(pasteMenuItem);
 
 		menu.addSeparator();
@@ -282,7 +282,7 @@ public class AnalystWindow extends JFrame {
 		Action selectAllAction = textPane.getAction(DefaultEditorKit.selectAllAction);
 		selectAllAction.putValue(Action.NAME, "Выделить всё");
 		JMenuItem selectAllMenuItem = new JMenuItem(selectAllAction);
-		selectAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK));
+		selectAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
 		menu.add(selectAllMenuItem);
 
 		menu.addSeparator();
@@ -290,7 +290,7 @@ public class AnalystWindow extends JFrame {
 		Action searchAction = new SearchAction(textPane);
 		JMenuItem searchMenuItem = new JMenuItem(searchAction);
 		searchMenuItem.setAction(searchAction);
-		KeyStroke searchKey = KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK);
+		KeyStroke searchKey = KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_MASK);
 		searchMenuItem.setAccelerator(searchKey);
 		menu.add(searchMenuItem);
 
@@ -308,7 +308,7 @@ public class AnalystWindow extends JFrame {
 		boldAction.putValue(Action.NAME, "Вопрос");
 		JMenuItem boldMenuItem = new JMenuItem();
 		boldMenuItem.setAction(boldAction);
-		KeyStroke boldKey = KeyStroke.getKeyStroke(KeyEvent.VK_B, Event.CTRL_MASK);
+		KeyStroke boldKey = KeyStroke.getKeyStroke(KeyEvent.VK_B, InputEvent.CTRL_MASK);
 		boldMenuItem.setAccelerator(boldKey);
 		menu.add(boldMenuItem);
 
@@ -316,7 +316,7 @@ public class AnalystWindow extends JFrame {
 		italicAction.putValue(Action.NAME, "Цитата");
 		JMenuItem italicMenuItem = new JMenuItem();
 		italicMenuItem.setAction(italicAction);
-		KeyStroke italicKey = KeyStroke.getKeyStroke(KeyEvent.VK_I, Event.CTRL_MASK);
+		KeyStroke italicKey = KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_MASK);
 		italicMenuItem.setAccelerator(italicKey);
 		menu.add(italicMenuItem);
 
@@ -401,7 +401,7 @@ public class AnalystWindow extends JFrame {
 						JOptionPane.showOptionDialog(this,
 							"Ошибка сохранения файла: " + file.getAbsolutePath() + "\n\n" + e.getMessage(),
 							"Ошибка сохранения файла",
-							JOptionPane.OK_OPTION,
+							JOptionPane.DEFAULT_OPTION,
 							JOptionPane.ERROR_MESSAGE,
 							null,
 							new Object[]{"Закрыть"},
