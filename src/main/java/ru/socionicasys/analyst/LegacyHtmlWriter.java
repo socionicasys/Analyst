@@ -130,9 +130,10 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 
 	@Override
 	protected Void doInBackground() throws BadLocationException, IOException {
-		Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile),
-				LegacyHtmlFormat.FILE_ENCODING));
+		Writer writer = null;
 		try {
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile),
+					LegacyHtmlFormat.FILE_ENCODING));
 			writeDocument(writer);
 			document.setAssociatedFile(outputFile);
 		} catch (BadLocationException e) {
@@ -142,7 +143,9 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 			logger.error("IO error while saving document", e);
 			throw e;
 		} finally {
-			writer.close();
+			if (writer != null) {
+				writer.close();
+			}
 		}
 
 		return null;
