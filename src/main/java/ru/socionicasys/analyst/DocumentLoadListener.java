@@ -4,13 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import java.beans.PropertyChangeEvent;
 import java.util.concurrent.ExecutionException;
 
 /**
  * Класс, слушающий состояние загрузки документа. Помещает документ в главное окно по окончанию загрузки.
  */
-public final class DocumentLoadListener extends SwingWorkerDoneListener {
+public final class DocumentLoadListener extends SwingWorkerDoneListener<LegacyHtmlReader> {
 	/**
 	 * Добавлять ли документ после загрузки к уже существующему.
 	 */
@@ -43,9 +42,8 @@ public final class DocumentLoadListener extends SwingWorkerDoneListener {
 	}
 
 	@Override
-	protected void swingWorkerDone(PropertyChangeEvent evt) {
+	protected void swingWorkerDone(LegacyHtmlReader worker) {
 		try {
-			LegacyHtmlReader worker = (LegacyHtmlReader) evt.getSource();
 			ADocument document = worker.get();
 			if (append) {
 				documentHolder.getModel().appendDocument(document, appendOffset);
@@ -60,7 +58,7 @@ public final class DocumentLoadListener extends SwingWorkerDoneListener {
 			JOptionPane.showOptionDialog(null,
 					String.format("Ошибка открытия файла:\n%s", cause.getMessage()),
 					"Ошибка открытия файла",
-					JOptionPane.OK_OPTION,
+					JOptionPane.DEFAULT_OPTION,
 					JOptionPane.ERROR_MESSAGE,
 					null,
 					new Object[]{"Закрыть"},

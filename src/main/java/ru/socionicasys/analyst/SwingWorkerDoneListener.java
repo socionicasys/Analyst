@@ -6,24 +6,25 @@ import java.beans.PropertyChangeListener;
 
 /**
  * Абстрактный класс, выполняющий действие по окончанию работы {@link SwingWorker}.
+ *
+ * @param <T> тип-наследник {@link SwingWorker}, к которому привязан слушатель
  */
-public abstract class SwingWorkerDoneListener implements PropertyChangeListener {
+public abstract class SwingWorkerDoneListener<T extends SwingWorker<?,?>> implements PropertyChangeListener {
+
+	private static final String STATE_PROPERTY_NAME = "state";
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if ("state".equals(evt.getPropertyName())) {
-			SwingWorker.StateValue state = (SwingWorker.StateValue) evt.getNewValue();
-			if (state == SwingWorker.StateValue.DONE) {
-				swingWorkerDone(evt);
-			}
+		if (STATE_PROPERTY_NAME.equals(evt.getPropertyName()) && evt.getNewValue() == SwingWorker.StateValue.DONE) {
+			swingWorkerDone((T) evt.getSource());
 		}
 	}
 
 	/**
 	 * Метод вызывается по окончанию работы {@link SwingWorker}.
 	 *
-	 * @param evt событие, связанное с окончанием работы {@code SwingWorker}.
-	 * {@code evt.getPropertyName()} при вызове метода равно {@code "state"},
-	 * {@code evt.getNewValue()} равно {@code SwingWorker.StateValue.DONE}.
+	 * @param worker экземпляр {@link SwingWorker}, который вызывал событие
 	 */
-	protected abstract void swingWorkerDone(PropertyChangeEvent evt);
+	protected abstract void swingWorkerDone(T worker);
 }

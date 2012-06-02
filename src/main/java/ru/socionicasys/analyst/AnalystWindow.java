@@ -9,14 +9,20 @@ import ru.socionicasys.analyst.undo.ActiveUndoManager;
 import ru.socionicasys.analyst.undo.RedoAction;
 import ru.socionicasys.analyst.undo.UndoAction;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.io.*;
-import java.util.Dictionary;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.text.*;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.Document;
+import javax.swing.text.StyledEditorKit;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.util.Dictionary;
 
 @SuppressWarnings("serial")
 public class AnalystWindow extends JFrame {
@@ -631,9 +637,9 @@ public class AnalystWindow extends JFrame {
 	 * Класс, слушающий состояние сохранения документа. Выполняет действия, отложенные до конца сохранения:
 	 * выход из приложения, инициализацию нового докуента.
 	 */
-	private final class DocumentSaveListener extends SwingWorkerDoneListener {
+	private final class DocumentSaveListener extends SwingWorkerDoneListener<LegacyHtmlWriter> {
 		@Override
-		protected void swingWorkerDone(PropertyChangeEvent evt) {
+		protected void swingWorkerDone(LegacyHtmlWriter worker) {
 			if (programExit) {
 				dispose();
 			}
