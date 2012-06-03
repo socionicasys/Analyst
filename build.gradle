@@ -28,17 +28,19 @@ def compileOptions = [compileJava, compileTestJava].options
 compileOptions*.encoding = 'UTF-8'
 
 // Получение информации о текущей ревизии Git
-def builder = new RepositoryBuilder();
-def repository = builder.readEnvironment().findGitDir().build();
-def objectReader = repository.newObjectReader();
-def git = new Git(repository);
-def logCommand = git.log();
-def commitIterator = logCommand.call().iterator();
-if (commitIterator.hasNext()) {
-	def commit = commitIterator.next()
-	ext.gitFullRevision = commit.name
-	ext.gitAbbrevRevision = objectReader.abbreviate(commit).name()
-	ext.gitCommitDate = commit.authorIdent.when
+def builder = new RepositoryBuilder().readEnvironment().findGitDir();
+if (builder.getGitDir() != null) {
+    def repository = builder.build();
+    def objectReader = repository.newObjectReader();
+    def git = new Git(repository);
+    def logCommand = git.log();
+    def commitIterator = logCommand.call().iterator();
+    if (commitIterator.hasNext()) {
+        def commit = commitIterator.next()
+        ext.gitFullRevision = commit.name
+        ext.gitAbbrevRevision = objectReader.abbreviate(commit).name()
+        ext.gitCommitDate = commit.authorIdent.when
+    }
 }
 
 // По-умолчанию запускается release-конфигурация. Если среди тасков есть debug,
