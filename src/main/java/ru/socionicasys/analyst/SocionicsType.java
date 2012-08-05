@@ -22,14 +22,20 @@ public final class SocionicsType {
 	 * @param predicates список предикотов из текстовой отметки
 	 * @return соответствует ли ТИМ отметке
 	 */
-	public static boolean matches(Sociotype type, Collection<Predicate> predicates) {
+	public static CheckResult matches(Sociotype type, Collection<Predicate> predicates) {
+		boolean successFound = false;
 		for (Predicate predicate : predicates) {
-			if (!predicate.check(type)) {
-				return false;
+			switch (predicate.check(type)) {
+			case FAIL:
+				return CheckResult.FAIL;
+			case IGNORE:
+				break;
+			case SUCCESS:
+				successFound = true;
+				break;
 			}
 		}
-		
-		return true;
+		return successFound ? CheckResult.SUCCESS : CheckResult.IGNORE;
 	}
 
 	/**

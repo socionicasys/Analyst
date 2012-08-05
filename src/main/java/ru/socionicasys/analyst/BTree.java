@@ -96,10 +96,15 @@ public class BTree extends JTree implements ADocumentChangeListener {
 					MutableTreeNode quoteNode = new DefaultMutableTreeNode(
 							new EndNodeObject(sectionOffset, String.format("...%s...", quote)), false);
 
-					if (SocionicsType.matches(sociotype, predicates)) {
+					switch (SocionicsType.matches(sociotype, predicates)) {
+					case SUCCESS:
 						matchNodes.get(sociotype).add(quoteNode);
-					} else {
+						break;
+					case FAIL:
 						missNodes.get(sociotype).add(quoteNode);
+						break;
+					case IGNORE:
+						break;
 					}
 				}
 			}

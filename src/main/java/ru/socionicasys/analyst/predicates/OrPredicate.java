@@ -11,12 +11,19 @@ public class OrPredicate extends CompositePredicate {
 	}
 
 	@Override
-	public boolean check(Sociotype sociotype) {
+	public CheckResult check(Sociotype sociotype) {
+		boolean failFound = false;
 		for (Predicate predicate : getChildren()) {
-			if (predicate.check(sociotype)) {
-				return true;
+			switch (predicate.check(sociotype)) {
+			case FAIL:
+				failFound = true;
+				break;
+			case IGNORE:
+				break;
+			case SUCCESS:
+				return CheckResult.SUCCESS;
 			}
 		}
-		return false;
+		return failFound ? CheckResult.FAIL : CheckResult.IGNORE;
 	}
 }

@@ -8,8 +8,6 @@ import ru.socionicasys.analyst.types.Sociotype;
 public interface Predicate {
 	/**
 	 * Проверяет, удовлетворяет ли заданный ТИМ предикату.
-	 * @param sociotype ТИМ
-	 * @return true если ТИМ удовлетворяет предикату
 	 */
-	boolean check(Sociotype sociotype);
+	CheckResult check(Sociotype sociotype);
 }

@@ -38,9 +38,9 @@ public class PositionPredicate implements Predicate {
 	}
 
 	@Override
-	public boolean check(Sociotype sociotype) {
+	public CheckResult check(Sociotype sociotype) {
 		int functionPosition = sociotype.getFunctionByAspect(aspect).getPosition();
-		return positions.contains(functionPosition);
+		return CheckResult.fromBoolean(positions.contains(functionPosition));
 	}
 
 	@Override

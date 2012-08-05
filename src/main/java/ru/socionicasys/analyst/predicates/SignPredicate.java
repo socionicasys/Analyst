@@ -27,9 +27,9 @@ public class SignPredicate implements Predicate {
 	}
 
 	@Override
-	public boolean check(Sociotype sociotype) {
+	public CheckResult check(Sociotype sociotype) {
 		Sign actualSign = sociotype.getFunctionByAspect(aspect).getSign();
-		return sign == Sign.PLUS || actualSign == Sign.MINUS;
+		return CheckResult.fromBoolean(sign == Sign.PLUS || actualSign == Sign.MINUS);
 	}
 
 	@Override

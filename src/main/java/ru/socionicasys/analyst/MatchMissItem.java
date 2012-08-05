@@ -54,10 +54,15 @@ public class MatchMissItem {
 	 * @param predicates список предикатов из одного блока текстовых отметок
 	 */
 	public void addData(Collection<Predicate> predicates) {
-		if (SocionicsType.matches(sociotype, predicates)) {
+		switch (SocionicsType.matches(sociotype, predicates)) {
+		case SUCCESS:
 			matchCount++;
-		} else {
+			break;
+		case FAIL:
 			missCount++;
+			break;
+		case IGNORE:
+			break;
 		}
 	}
 

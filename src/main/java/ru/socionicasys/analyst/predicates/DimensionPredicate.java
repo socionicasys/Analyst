@@ -50,8 +50,8 @@ public class DimensionPredicate implements Predicate {
 	}
 
 	@Override
-	public boolean check(Sociotype sociotype) {
-		return sociotype.getFunctionByAspect(aspect).getDimension() >= dimension;
+	public CheckResult check(Sociotype sociotype) {
+		return CheckResult.fromBoolean(sociotype.getFunctionByAspect(aspect).getDimension() >= dimension);
 	}
 
 	@Override

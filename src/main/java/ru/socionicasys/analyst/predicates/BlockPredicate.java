@@ -25,12 +25,12 @@ public class BlockPredicate implements Predicate {
 	}
 
 	@Override
-	public boolean check(Sociotype sociotype) {
+	public CheckResult check(Sociotype sociotype) {
 		int sourcePosition = sociotype.getFunctionByAspect(sourceAspect).getPosition();
 		int destinationPosition = sociotype.getFunctionByAspect(destinationAspect).getPosition();
 		int minPosition = Math.min(sourcePosition, destinationPosition);
 		// Функции находятся в одном блоке, если их индексы отличаются на 1 и меньший из них — нечетный
-		return Math.abs(sourcePosition - destinationPosition) == 1 && minPosition % 2 != 0;
+		return CheckResult.fromBoolean(Math.abs(sourcePosition - destinationPosition) == 1 && minPosition % 2 != 0);
 	}
 
 	@Override
