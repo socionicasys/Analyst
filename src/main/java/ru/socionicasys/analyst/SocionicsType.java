@@ -45,17 +45,24 @@ public final class SocionicsType {
 	 * @return список предикатов для отметки
 	 */
 	public static Collection<Predicate> createPredicates(AData data) {
-		String aspect = data.getAspect();
-		if (aspect == null) {
+		String aspectCode = data.getAspect();
+		if (aspectCode == null) {
 			return Collections.emptyList();
 		}
 
-		Aspect baseAspect = Aspect.byAbbreviation(aspect);
+		Aspect baseAspect = Aspect.byAbbreviation(aspectCode);
 		Collection<Predicate> predicates = new ArrayList<Predicate>();
 
-		String secondAspect = data.getSecondAspect();
-		if (secondAspect != null && AData.BLOCK.equals(data.getModifier())) {
-			predicates.add(new BlockPredicate(baseAspect, Aspect.byAbbreviation(secondAspect)));
+		String secondAspectCode = data.getSecondAspect();
+		if (secondAspectCode != null) {
+			String modifier = data.getModifier();
+			Aspect toAspect = Aspect.byAbbreviation(secondAspectCode);
+			if (AData.BLOCK.equals(modifier)) {
+				predicates.add(new BlockPredicate(baseAspect, toAspect));
+			}
+			else if (AData.JUMP.equals(modifier)) {
+				predicates.add(new JumpPredicate(baseAspect, toAspect));
+			}
 		}
 
 		String sign = data.getSign();

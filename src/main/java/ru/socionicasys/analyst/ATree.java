@@ -52,14 +52,13 @@ public class ATree extends JTree {
 	private final DocumentHolder documentHolder;
 	private final DefaultMutableTreeNode rootNode;
 	private final DefaultTreeModel treeModel;
-	private final JumpCounter jumpCounter;
+	private boolean jumpsFound;
 	private TreePath path;
 
 	private final Map<DefaultMutableTreeNode, Predicate> nodePredicateMap;
 	private final Map<Predicate, Integer> predicateCounts;
 
 	private final DefaultMutableTreeNode doubtNode = new EndTreeNode(DOUBT_LABEL);
-	private final DefaultMutableTreeNode jumpNode = new EndTreeNode(JUMPS_LABEL);
 
 	public ATree(DocumentHolder documentHolder) {
 		this.documentHolder = documentHolder;
@@ -73,7 +72,6 @@ public class ATree extends JTree {
 			}
 		});
 
-		jumpCounter = new JumpCounter();
 		predicateCounts = new HashMap<Predicate, Integer>();
 		nodePredicateMap = new HashMap<DefaultMutableTreeNode, Predicate>();
 
@@ -86,6 +84,7 @@ public class ATree extends JTree {
 	}
 
 	private void clearPredicateCounts() {
+		jumpsFound = false;
 		for (Aspect aspect : ASPECTS) {
 			for (Sign sign : Sign.values()) {
 				predicateCounts.put(new SignPredicate(aspect, sign), 0);
@@ -103,6 +102,7 @@ public class ATree extends JTree {
 			predicateCounts.put(new MentalPredicate(aspect), 0);
 			for (Aspect secondAspect : ASPECTS) {
 				predicateCounts.put(new BlockPredicate(aspect, secondAspect), 0);
+				predicateCounts.put(new JumpPredicate(aspect, secondAspect), 0);
 			}
 		}
 	}
@@ -140,9 +140,7 @@ public class ATree extends JTree {
 				}
 
 				if (AData.JUMP.equals(data.getModifier())) {
-					jumpNode.add(new DefaultMutableTreeNode(new EndNodeObject(sectionOffset,
-							String.format(" Перевод %s -> %s", aspect, secondAspect)), false));
-					jumpCounter.addJump(secondAspect, aspect);
+					jumpsFound = true;
 				}
 
 				Collection<Predicate> predicates = SocionicsType.createPredicates(data);
@@ -180,9 +178,6 @@ public class ATree extends JTree {
 		}
 
 		doubtNode.removeAllChildren();
-		jumpNode.removeAllChildren();
-
-		jumpCounter.clear();
 	}
 
 	public JScrollPane getContainer() {
@@ -194,7 +189,7 @@ public class ATree extends JTree {
 	/**
 	 * Создает вершину, прикрепляет ее к родительской, и связывает с заданным предикатом.
 	 * Метка вершины соответствует ее предикату.
-	 * 
+	 *
 	 * @param parent родительская вершина
 	 * @param predicate предикат, с которым будет связана новая вершина
 	 */
@@ -313,9 +308,19 @@ public class ATree extends JTree {
 			}
 		}
 
+		DefaultMutableTreeNode jumpNode = new DefaultMutableTreeNode(JUMPS_LABEL);
+		rootNode.add(jumpNode);
+		for (Aspect fromAspect : ASPECTS) {
+			for (Aspect toAspect : ASPECTS) {
+				if (toAspect == fromAspect) {
+					continue;
+				}
+				String jumpLabel = String.format("%s -> %s", fromAspect, toAspect);
+				appendEndTreeNode(jumpNode, jumpLabel, new JumpPredicate(fromAspect, toAspect));
+			}
+		}
 
 		rootNode.add(doubtNode);
-		rootNode.add(jumpNode);
 	}
 
 	public String getReport() {
@@ -405,7 +410,7 @@ public class ATree extends JTree {
 		reportBuilder.append(HTML_TABLE_CLOSE);
 
 		//Переводы
-		if (!jumpCounter.isEmpty()) {
+		if (jumpsFound) {
 			reportBuilder.append("<br/>" +
 					"<h2> Переводы управления </h2>" +
 					"Это наблюдаемый перевод ответа из одного аспекта в другой. <br/>" +
@@ -420,15 +425,15 @@ public class ATree extends JTree {
 			}
 			reportBuilder.append(HTML_ROW_CLOSE);
 
-			for (Aspect firstAspect : ASPECTS) {
+			for (Aspect toAspect : ASPECTS) {
 				reportBuilder.append(String.format("<tr>\n	<td style=\"font-weight:bold\"> %s </td>\n",
-						firstAspect.getAbbreviation()));
-				for (Aspect secondAspect : ASPECTS) {
+						toAspect.getAbbreviation()));
+				for (Aspect fromAspect : ASPECTS) {
 					reportBuilder.append(HTML_CELL_OPEN);
-					if (firstAspect == secondAspect) {
+					if (toAspect == fromAspect) {
 						reportBuilder.append('X');
 					} else {
-						reportBuilder.append(jumpCounter.getJumpCount(firstAspect, secondAspect));
+						reportBuilder.append(predicateCounts.get(new JumpPredicate(fromAspect, toAspect)));
 					}
 					reportBuilder.append(HTML_CELL_CLOSE);
 				}
@@ -438,7 +443,7 @@ public class ATree extends JTree {
 		}
 		return reportBuilder.toString();
 	}
-	
+
 	private static void createReportRow(StringBuilder reportBuilder, String header) {
 		reportBuilder.append(HTML_ROW_OPEN);
 		reportBuilder.append(HTML_CELL_OPEN_STRONG);
