@@ -44,7 +44,7 @@ public class ATree extends JTree implements
 				DefaultMutableTreeNode aspectLSignMinusNode= new EndTreeNode(" - ");
 			DefaultMutableTreeNode aspectLDimensionNode= new DefaultMutableTreeNode("Размерности");
 				DefaultMutableTreeNode aspectLDimensionD1Node= new EndTreeNode("Ex");
-				DefaultMutableTreeNode aspectLDimensionD2Node= new EndTreeNode("Nm");
+				DefaultMutableTreeNode aspectLDimensionD2Node= new EndTreeNode("Nr");
 				DefaultMutableTreeNode aspectLDimensionD3Node= new EndTreeNode("St");
 				DefaultMutableTreeNode aspectLDimensionD4Node= new EndTreeNode("Tm");
 				DefaultMutableTreeNode aspectLDimensionOdnomernostNode= new EndTreeNode("Одномерность");
@@ -61,7 +61,7 @@ public class ATree extends JTree implements
 					DefaultMutableTreeNode aspectPSignMinusNode= new EndTreeNode(" - ");
 				DefaultMutableTreeNode aspectPDimensionNode= new DefaultMutableTreeNode("Размерности");
 					DefaultMutableTreeNode aspectPDimensionD1Node= new EndTreeNode("Ex");
-					DefaultMutableTreeNode aspectPDimensionD2Node= new EndTreeNode("Nm");
+					DefaultMutableTreeNode aspectPDimensionD2Node= new EndTreeNode("Nr");
 					DefaultMutableTreeNode aspectPDimensionD3Node= new EndTreeNode("St");
 					DefaultMutableTreeNode aspectPDimensionD4Node= new EndTreeNode("Tm");
 					DefaultMutableTreeNode aspectPDimensionOdnomernostNode= new EndTreeNode("Одномерность");
@@ -78,7 +78,7 @@ public class ATree extends JTree implements
 						DefaultMutableTreeNode aspectRSignMinusNode= new EndTreeNode(" - ");
 					DefaultMutableTreeNode aspectRDimensionNode= new DefaultMutableTreeNode("Размерности");
 						DefaultMutableTreeNode aspectRDimensionD1Node= new EndTreeNode("Ex");
-						DefaultMutableTreeNode aspectRDimensionD2Node= new EndTreeNode("Nm");
+						DefaultMutableTreeNode aspectRDimensionD2Node= new EndTreeNode("Nr");
 						DefaultMutableTreeNode aspectRDimensionD3Node= new EndTreeNode("St");
 						DefaultMutableTreeNode aspectRDimensionD4Node= new EndTreeNode("Tm");
 						DefaultMutableTreeNode aspectRDimensionOdnomernostNode= new EndTreeNode("Одномерность");
@@ -95,7 +95,7 @@ public class ATree extends JTree implements
 							DefaultMutableTreeNode aspectESignMinusNode= new EndTreeNode(" - ");
 						DefaultMutableTreeNode aspectEDimensionNode= new DefaultMutableTreeNode("Размерности");
 							DefaultMutableTreeNode aspectEDimensionD1Node= new EndTreeNode("Ex");
-							DefaultMutableTreeNode aspectEDimensionD2Node= new EndTreeNode("Nm");
+							DefaultMutableTreeNode aspectEDimensionD2Node= new EndTreeNode("Nr");
 							DefaultMutableTreeNode aspectEDimensionD3Node= new EndTreeNode("St");
 							DefaultMutableTreeNode aspectEDimensionD4Node= new EndTreeNode("Tm");
 							DefaultMutableTreeNode aspectEDimensionOdnomernostNode= new EndTreeNode("Одномерность");
@@ -112,7 +112,7 @@ public class ATree extends JTree implements
 								DefaultMutableTreeNode aspectSSignMinusNode= new EndTreeNode(" - ");
 							DefaultMutableTreeNode aspectSDimensionNode= new DefaultMutableTreeNode("Размерности");
 								DefaultMutableTreeNode aspectSDimensionD1Node= new EndTreeNode("Ex");
-								DefaultMutableTreeNode aspectSDimensionD2Node= new EndTreeNode("Nm");
+								DefaultMutableTreeNode aspectSDimensionD2Node= new EndTreeNode("Nr");
 								DefaultMutableTreeNode aspectSDimensionD3Node= new EndTreeNode("St");
 								DefaultMutableTreeNode aspectSDimensionD4Node= new EndTreeNode("Tm");
 								DefaultMutableTreeNode aspectSDimensionOdnomernostNode= new EndTreeNode("Одномерность");
@@ -129,7 +129,7 @@ public class ATree extends JTree implements
 									DefaultMutableTreeNode aspectFSignMinusNode= new EndTreeNode(" - ");
 								DefaultMutableTreeNode aspectFDimensionNode= new DefaultMutableTreeNode("Размерности");
 									DefaultMutableTreeNode aspectFDimensionD1Node= new EndTreeNode("Ex");
-									DefaultMutableTreeNode aspectFDimensionD2Node= new EndTreeNode("Nm");
+									DefaultMutableTreeNode aspectFDimensionD2Node= new EndTreeNode("Nr");
 									DefaultMutableTreeNode aspectFDimensionD3Node= new EndTreeNode("St");
 									DefaultMutableTreeNode aspectFDimensionD4Node= new EndTreeNode("Tm");
 									DefaultMutableTreeNode aspectFDimensionOdnomernostNode= new EndTreeNode("Одномерность");
@@ -146,7 +146,7 @@ public class ATree extends JTree implements
 										DefaultMutableTreeNode aspectTSignMinusNode= new EndTreeNode(" - ");
 									DefaultMutableTreeNode aspectTDimensionNode= new DefaultMutableTreeNode("Размерности");
 										DefaultMutableTreeNode aspectTDimensionD1Node= new EndTreeNode("Ex");
-										DefaultMutableTreeNode aspectTDimensionD2Node= new EndTreeNode("Nm");
+										DefaultMutableTreeNode aspectTDimensionD2Node= new EndTreeNode("Nr");
 										DefaultMutableTreeNode aspectTDimensionD3Node= new EndTreeNode("St");
 										DefaultMutableTreeNode aspectTDimensionD4Node= new EndTreeNode("Tm");
 										DefaultMutableTreeNode aspectTDimensionOdnomernostNode= new EndTreeNode("Одномерность");
@@ -163,7 +163,7 @@ public class ATree extends JTree implements
 											DefaultMutableTreeNode aspectISignMinusNode= new EndTreeNode(" - ");
 										DefaultMutableTreeNode aspectIDimensionNode= new DefaultMutableTreeNode("Размерности");
 											DefaultMutableTreeNode aspectIDimensionD1Node= new EndTreeNode("Ex");
-											DefaultMutableTreeNode aspectIDimensionD2Node= new EndTreeNode("Nm");
+											DefaultMutableTreeNode aspectIDimensionD2Node= new EndTreeNode("Nr");
 											DefaultMutableTreeNode aspectIDimensionD3Node= new EndTreeNode("St");
 											DefaultMutableTreeNode aspectIDimensionD4Node= new EndTreeNode("Tm");
 											DefaultMutableTreeNode aspectIDimensionOdnomernostNode= new EndTreeNode("Одномерность");
@@ -1490,7 +1490,7 @@ report =
 		"		<td align=\"center\" >" + aspectIDimensionD1Node.getChildCount()+ " </td>"  + "\n" +
 		"</tr>" 														+ "\n"  +		
 		"<tr>" 															+ "\n" +		
-		"	<td style=\"font-weight:bold\"> Nm 					</td>"	+ "\n" +			
+		"	<td style=\"font-weight:bold\"> Nr 					</td>"	+ "\n" +			
 		"		<td align=\"center\" >" + aspectLDimensionD2Node.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectPDimensionD2Node.getChildCount()+ " </td>"  + "\n" +
 		"		<td align=\"center\" >" + aspectRDimensionD2Node.getChildCount()+ " </td>"  + "\n" +

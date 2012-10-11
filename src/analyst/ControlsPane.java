@@ -740,7 +740,7 @@ public class ControlsPane extends JToolBar  implements 	CaretListener,
         public DimensionPanel (){
         super();	
         d1 = new JRadioButton("Ex");		d1.setActionCommand(AData.D1);
-        d2 = new JRadioButton("Nm");		d2.setActionCommand(AData.D2);
+        d2 = new JRadioButton("Nr");		d2.setActionCommand(AData.D2);
         d3 = new JRadioButton("St");		d3.setActionCommand(AData.D3);
         d4 = new JRadioButton("Tm");		d4.setActionCommand(AData.D4);
         odno = new JRadioButton("Одномерность");		odno.setActionCommand(AData.ODNOMERNOST);
