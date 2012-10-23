@@ -273,10 +273,10 @@ public class DocumentSelectionModel {
 	 * @param <T> тип данных свойства
 	 */
 	private <T> void updateProperty(String propertyName, T oldValue, T newValue) {
-		logger.trace("updateProperty({}, {}, {}): entering", new Object[]{propertyName, oldValue, newValue});
+		logger.trace("updateProperty({}, {}, {}): entering", propertyName, oldValue, newValue);
 		if (oldValue != null || newValue != null) {
 			propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
 		}
-		logger.trace("updateProperty({}, {}, {}): leaving", new Object[]{propertyName, oldValue, newValue});
+		logger.trace("updateProperty({}, {}, {}): leaving", propertyName, oldValue, newValue);
 	}
 }
