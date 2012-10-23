@@ -268,21 +268,24 @@ public class LegacyHtmlWriter extends SwingWorker<Void, Void> {
 		for (int i = 0; i < sections.size(); i++) {
 			DocumentSection section = sections.get(i);
 			AData data = document.getADataMap().get(section);
-			flowEvents.add(new DocumentFlowEvent(
-				EventType.SECTION_START,
-				section.getStartOffset(),
-				getHTMLStyleForAData(data),
-				String.format("{%d: %s} %s\n", i + 1, data.toString(), data.getComment()),
-				i + 1)
-			);
-			flowEvents.add(new DocumentFlowEvent(
-				EventType.SECTION_END,
-				section.getEndOffset(),
-				getHTMLStyleForAData(data),
-				data.getComment(),
-				i + 1)
-			);
+			if (data.isValid()) {
+				flowEvents.add(new DocumentFlowEvent(
+					EventType.SECTION_START,
+					section.getStartOffset(),
+					getHTMLStyleForAData(data),
+					String.format("{%d: %s} %s\n", i + 1, data.toString(), data.getComment()),
+					i + 1)
+				);
+				flowEvents.add(new DocumentFlowEvent(
+					EventType.SECTION_END,
+					section.getEndOffset(),
+					getHTMLStyleForAData(data),
+					data.getComment(),
+					i + 1)
+				);
+			}
 		}
+
 		Element rootElem = document.getDefaultRootElement();
 		MutableAttributeSet boldAttribute = new SimpleAttributeSet();
 		StyleConstants.setBold(boldAttribute, true);

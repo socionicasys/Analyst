@@ -52,7 +52,7 @@ public class AData implements Serializable {
 	public static final String SUPEREGO = "Супер-Эго";
 	private static final List<String> VALID_MVS = Arrays.asList(MENTAL, VITAL, SUPERID, SUPEREGO);
 
-	private static final Pattern parsePattern = buildParsePattern();
+	private static final Pattern PARSE_PATTERN = buildParsePattern();
 	private static final int ASPECT_GROUP = 1;
 	private static final int MODIFIER_GROUP = 2;
 	private static final int SECOND_ASPECT_GROUP = 3;
@@ -69,42 +69,12 @@ public class AData implements Serializable {
 	private String comment;
 
 	public AData(String aspect, String secondAspect, String sign, String dimension, String mv, String modifier, String comment) {
-		if (VALID_ASPECTS.contains(aspect) || DOUBT.equals(aspect)) {
-			this.aspect = aspect;
-		} else {
-			throw new IllegalArgumentException(String.format("Invalid aspect value (%s)", aspect));
-		}
-
-		if (secondAspect == null || VALID_ASPECTS.contains(secondAspect)) {
-			this.secondAspect = secondAspect;
-		} else {
-			throw new IllegalArgumentException();
-		}
-
-		if (sign == null || VALID_SIGNS.contains(sign)) {
-			this.sign = sign;
-		} else {
-			throw new IllegalArgumentException();
-		}
-
-		if (dimension == null || VALID_DIMENSIONS.contains(dimension)) {
-			this.dimension = dimension;
-		} else {
-			throw new IllegalArgumentException();
-		}
-
-		if (mv == null || VALID_MVS.contains(mv)) {
-			this.mv = mv;
-		} else {
-			throw new IllegalArgumentException();
-		}
-
-		if (modifier == null || VALID_MODIFIERS.contains(modifier)) {
-			this.modifier = modifier;
-		} else {
-			throw new IllegalArgumentException();
-		}
-
+		this.aspect = aspect;
+		this.secondAspect = secondAspect;
+		this.sign = sign;
+		this.dimension = dimension;
+		this.mv = mv;
+		this.modifier = modifier;
 		setComment(comment);
 	}
 
@@ -140,8 +110,48 @@ public class AData implements Serializable {
 		return comment;
 	}
 
+	/**
+	 * @return {@code true} когда данные в отметке находятся в законченном состоянии.
+	 */
+	@SuppressWarnings("RedundantIfStatement")
+	public boolean isValid() {
+		if (!DOUBT.equals(aspect) && !VALID_ASPECTS.contains(aspect)) {
+			return false;
+		}
+
+		if (secondAspect != null && !VALID_ASPECTS.contains(secondAspect)) {
+			return false;
+		}
+
+		if (sign != null && !VALID_SIGNS.contains(sign)) {
+			return false;
+		}
+
+		if (dimension != null && !VALID_DIMENSIONS.contains(dimension)) {
+			return false;
+		}
+
+		if (mv != null && !VALID_MVS.contains(mv)) {
+			return false;
+		}
+
+		if (modifier != null && !VALID_MODIFIERS.contains(modifier)) {
+			return false;
+		}
+
+		if (modifier != null && secondAspect == null) {
+			return false;
+		}
+
+		return true;
+	}
+
 	@Override
 	public String toString() {
+		if (!isValid()) {
+			return "(неполная отметка)";
+		}
+
 		StringBuilder builder = new StringBuilder(aspect);
 		if (BLOCK.equals(modifier)) {
 			builder.append(BLOCK_TOKEN).append(secondAspect).append(SEPARATOR);
@@ -168,11 +178,11 @@ public class AData implements Serializable {
 			throw new IllegalArgumentException("Parse string cannot be null");
 		}
 
-		Matcher dataMatcher = parsePattern.matcher(s);
+		Matcher dataMatcher = PARSE_PATTERN.matcher(s);
 		if (!dataMatcher.matches()) {
 			throw new IllegalArgumentException(String.format("Invalid markup data '%s'", s));
 		}
-		
+
 		String aspect = dataMatcher.group(ASPECT_GROUP);
 		String modifierToken = dataMatcher.group(MODIFIER_GROUP);
 		String secondAspect = dataMatcher.group(SECOND_ASPECT_GROUP);
