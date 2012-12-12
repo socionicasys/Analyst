@@ -73,11 +73,11 @@ configurations {
 
 dependencies {
 	compile 'org.slf4j:slf4j-api:1.7.2'
-	runtime 'ch.qos.logback:logback-classic:1.0.7'
+	runtime 'ch.qos.logback:logback-classic:1.0.9'
 	testCompile 'org.testng:testng:6.8'
 	testCompile 'com.googlecode.jmockit:jmockit:0.999.18'
 	jgit 'org.eclipse.jgit:org.eclipse.jgit:2.1.0.201209190230-r'
-	jacoco 'org.jacoco:org.jacoco.agent:0.5.10.201208310627:runtime'
+	jacoco 'org.jacoco:org.jacoco.agent:0.6.0.201210061924:runtime'
 }
 
 def sharedManifest = manifest {
