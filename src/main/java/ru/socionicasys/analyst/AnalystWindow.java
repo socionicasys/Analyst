@@ -232,6 +232,15 @@ public class AnalystWindow extends JFrame {
 		JMenuItem load = new JMenuItem(new OpenAction(false));
 		JMenuItem append = new JMenuItem(new OpenAction(true));
 
+		KeyStroke saveKey = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK);
+		save.setAccelerator(saveKey);
+
+		KeyStroke saveAsKey = KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK);
+		saveAs.setAccelerator(saveAsKey);
+
+		KeyStroke loadKey = KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK);
+		load.setAccelerator(loadKey);
+
 		menu.add(newDocumnet);
 		menu.addSeparator();
 		menu.add(load);
