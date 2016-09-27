@@ -70,33 +70,40 @@ public class CommentConnector implements DocumentListener, PropertyChangeListene
 	private void updateModel() {
 		logger.trace("updateModel(): entering");
 
-		try {
-			Document document = textComponent.getDocument();
-			viewInitialized = false;
-			selectionModel.setComment(document.getText(0, document.getLength()));
-		} catch (BadLocationException e) {
-			logger.error("updateModel(): invalid document localtion", e);
-		} finally {
-			viewInitialized = true;
+		if (selectionModel.isInitialized() && viewInitialized) {
+			try {
+				viewInitialized = false;
+				Document document = textComponent.getDocument();
+				selectionModel.setComment(document.getText(0, document.getLength()));
+			} catch (BadLocationException e) {
+				logger.error("updateModel(): invalid document location", e);
+			} finally {
+				viewInitialized = true;
+			}
 		}
+
 		logger.trace("updateModel(): leaving");
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		logger.trace("propertyChange({}): entering", evt);
-		if (!selectionModel.isInitialized() || !viewInitialized) {
-			logger.trace("propertyChange({}): leaving", evt);
-			return;
+
+		if (selectionModel.isInitialized() && viewInitialized) {
+			try {
+				viewInitialized = false;
+				boolean commentEnabled = !selectionModel.isEmpty() && !selectionModel.isMarkupEmpty();
+				textComponent.setEditable(commentEnabled);
+				if (commentEnabled) {
+					textComponent.setText(selectionModel.getComment());
+				} else {
+					textComponent.setText("");
+				}
+			} finally {
+				viewInitialized = true;
+			}
 		}
 
-		boolean commentEnabled = !selectionModel.isEmpty() && !selectionModel.isMarkupEmpty();
-		textComponent.setEditable(commentEnabled);
-		if (commentEnabled) {
-			textComponent.setText(selectionModel.getComment());
-		} else {
-			textComponent.setText("");
-		}
 		logger.trace("propertyChange({}): leaving", evt);
 	}
 }
