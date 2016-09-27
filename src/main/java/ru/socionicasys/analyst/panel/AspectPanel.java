@@ -30,8 +30,7 @@ public final class AspectPanel extends ActivePanel {
 	public AspectPanel(DocumentSelectionModel selectionModel) {
 		super(selectionModel);
 
-		setMinimumSize(new Dimension(200, 270));
-		setMaximumSize(new Dimension(200, 270));
+		setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 
 		Panel pAspect = new Panel();
 		pAspect.setLayout(new BoxLayout(pAspect, BoxLayout.Y_AXIS));

@@ -47,9 +47,7 @@ public final class SignPanel extends ActivePanel {
 		pp.setMaximumSize(new Dimension(100, 50));
 		pp.setPreferredSize(new Dimension(100, 50));
 
-		setMinimumSize(new Dimension(200, 80));
-		setPreferredSize(new Dimension(200, 80));
-		setMaximumSize(new Dimension(200, 80));
+		setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 
 		pp.setLayout(new BoxLayout(pp, BoxLayout.Y_AXIS));
 		pp.add(buttons.get(AData.PLUS));

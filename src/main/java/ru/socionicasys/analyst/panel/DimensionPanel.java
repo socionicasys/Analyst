@@ -61,8 +61,7 @@ public final class DimensionPanel extends ActivePanel {
 		p1.setLayout(new BoxLayout(p1, BoxLayout.Y_AXIS));
 		p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
 
-		setMinimumSize(new Dimension(200, 170));
-		setMaximumSize(new Dimension(200, 170));
+		setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 
 		p1.add(buttons.get(AData.D1));
 		p1.add(buttons.get(AData.D2));

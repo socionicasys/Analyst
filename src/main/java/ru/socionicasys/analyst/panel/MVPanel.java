@@ -49,8 +49,7 @@ public final class MVPanel extends ActivePanel {
 		Panel pp2 = new Panel();
 		Panel pp = new Panel();
 		pp.setMinimumSize(new Dimension(200, 120));
-		setMinimumSize(new Dimension(200, 120));
-		setMaximumSize(new Dimension(200, 120));
+		setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 
 		pp1.setLayout(new BoxLayout(pp1, BoxLayout.Y_AXIS));
 		pp2.setLayout(new BoxLayout(pp2, BoxLayout.Y_AXIS));

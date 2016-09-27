@@ -18,7 +18,7 @@ public class ControlsPane extends JToolBar {
 		AspectPanel aspectPanel = new AspectPanel(selectionModel);
 
 		JPanel container = new JPanel();
-		container.setMinimumSize(new Dimension(200, 500));
+		//container.setMinimumSize(new Dimension(200, 500));
 		JScrollPane scrl = new JScrollPane(container);
 
 		scrl.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
