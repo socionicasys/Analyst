@@ -8,6 +8,7 @@ import ru.socionicasys.analyst.service.VersionInfo;
 import ru.socionicasys.analyst.undo.ActiveUndoManager;
 import ru.socionicasys.analyst.undo.RedoAction;
 import ru.socionicasys.analyst.undo.UndoAction;
+import ru.socionicasys.analyst.NiceTextArea;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -518,16 +519,11 @@ public class AnalystWindow extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JTextArea titleField = new JTextArea(1, 30);
-			titleField.setLineWrap(true);
-			JTextArea expertField = new JTextArea(4, 30);
-			expertField.setLineWrap(true);
-			JTextArea clientField = new JTextArea(1, 30);
-			clientField.setLineWrap(true);
-			JTextArea dateField = new JTextArea(1, 30);
-			dateField.setLineWrap(true);
-			JTextArea commentArea = new JTextArea(5, 30);
-			commentArea.setLineWrap(true);
+			NiceTextArea titleField = new NiceTextArea(1, 30);
+			NiceTextArea expertField = new NiceTextArea(4, 30);
+			NiceTextArea clientField = new NiceTextArea(1, 30);
+			NiceTextArea dateField = new NiceTextArea(1, 30);
+			NiceTextArea commentArea = new NiceTextArea(5, 30);
 
 			JLabel lt = new JLabel("Название:");
 			lt.setPreferredSize(new Dimension(100, 40));
@@ -588,19 +584,19 @@ public class AnalystWindow extends JFrame {
 			panel.add(ppc);
 
 			if (title != null) {
-				titleField.setText(title);
+				titleField.setTextAndDiscardAllEdits(title);
 			}
 			if (expert != null) {
-				expertField.setText(expert);
+				expertField.setTextAndDiscardAllEdits(expert);
 			}
 			if (client != null) {
-				clientField.setText(client);
+				clientField.setTextAndDiscardAllEdits(client);
 			}
 			if (date != null) {
-				dateField.setText(date);
+				dateField.setTextAndDiscardAllEdits(date);
 			}
 			if (comment != null) {
-				commentArea.setText(comment);
+				commentArea.setTextAndDiscardAllEdits(comment);
 			}
 
 			if (JOptionPane.showOptionDialog(AnalystWindow.this,
