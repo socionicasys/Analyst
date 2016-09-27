@@ -10,6 +10,7 @@ import ru.socionicasys.analyst.undo.RedoAction;
 import ru.socionicasys.analyst.undo.UndoAction;
 import ru.socionicasys.analyst.NiceTextArea;
 
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.DefaultEditorKit;
@@ -25,6 +26,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.Dictionary;
 import java.util.concurrent.ExecutionException;
+import java.util.prefs.*;
 
 @SuppressWarnings("serial")
 public class AnalystWindow extends JFrame {
@@ -38,7 +40,7 @@ public class AnalystWindow extends JFrame {
 	private final ATree navigateTree;
 	private final BTree analysisTree;
 	private final MatchMissView histogramTree;
-	private final JFileChooser fileChooser;
+	private final FileChooser fileChooser;
 
 	private boolean programExit;
 	private boolean makeNewDocument;
@@ -62,7 +64,7 @@ public class AnalystWindow extends JFrame {
 		documentHolder = new DocumentHolder(new ADocument());
 		textPane = new TextPane(documentHolder);
 
-		fileChooser = new JFileChooser();
+		fileChooser = new FileChooser();
 		fileChooser.addChoosableFileFilter(new FileNameExtensionFilter(String.format("Файлы .%s",
 				LegacyHtmlFormat.EXTENSION), LegacyHtmlFormat.EXTENSION));
 
@@ -166,6 +168,7 @@ public class AnalystWindow extends JFrame {
 		textPane.requestFocusInWindow();
 		status.setText("");
 		setTitle(String.format(WINDOW_TITLE_FORMAT, VersionInfo.getApplicationName(), file.getName()));
+		fileChooser.setMruPath(file.getAbsolutePath());
 	}
 
 	private JTabbedPane createTabPane() {
@@ -384,7 +387,7 @@ public class AnalystWindow extends JFrame {
 					while (!(cancel || overwrite)) {
 						fileChooser.setDialogTitle("Сохранение документа");
 						int returnVal = fileChooser.showSaveDialog(this);
-						if (returnVal == JFileChooser.APPROVE_OPTION) {
+						if (returnVal == FileChooser.APPROVE_OPTION) {
 							file = fileChooser.getSelectedFile();
 							if (file.exists()) {
 								Object[] options = {"Да", "Нет"};
@@ -401,7 +404,7 @@ public class AnalystWindow extends JFrame {
 							else {
 								cancel = true;
 							}
-						} else if (returnVal == JFileChooser.CANCEL_OPTION) {
+						} else if (returnVal == FileChooser.CANCEL_OPTION) {
 							cancel = true;
 						}
 					}
@@ -446,7 +449,7 @@ public class AnalystWindow extends JFrame {
 				// нужно показать диалог сохранения файла
 				fileChooser.setDialogTitle(saveAs ? "Сохранение документа под новым именем" : "Сохранение документа");
 				int saveResult = fileChooser.showDialog(AnalystWindow.this, saveAs ? "Сохранить как..." : "Сохранить");
-				if (saveResult != JFileChooser.APPROVE_OPTION) {
+				if (saveResult != FileChooser.APPROVE_OPTION) {
 					return;
 				}
 
@@ -480,6 +483,8 @@ public class AnalystWindow extends JFrame {
 			backgroundWriter.addPropertyChangeListener(new DocumentSaveListener());
 			backgroundWriter.execute();
 			setTitle(String.format(WINDOW_TITLE_FORMAT, VersionInfo.getApplicationName(), saveFile.getName()));
+
+			fileChooser.setMruPath(saveFile.getAbsolutePath());
 		}
 	}
 
@@ -502,7 +507,7 @@ public class AnalystWindow extends JFrame {
 			}
 			fileChooser.setDialogTitle(append ? "Вставка документа" : "Открытие документа");
 			int openResult = fileChooser.showDialog(AnalystWindow.this, append ? "Вставить" : "Открыть");
-			if (openResult == JFileChooser.APPROVE_OPTION) {
+			if (openResult == FileChooser.APPROVE_OPTION) {
 				openFile(fileChooser.getSelectedFile(), append);
 			}
 		}
@@ -656,6 +661,43 @@ public class AnalystWindow extends JFrame {
 					new Object[]{"Закрыть"},
 					null);
 			}
+		}
+	}
+
+
+	private final class FileChooser extends JFileChooser {
+
+		private static final String P_MRU_FILE = "mru_file";
+
+		public FileChooser() {
+			super();
+			resyncMruPath();
+		}
+
+		private Preferences getPreferences() {
+			return Preferences.userNodeForPackage(FileChooser.class);
+		}
+
+		public String getMruPath() {
+			return getPreferences().get(P_MRU_FILE, "");
+		}
+
+		private void putMruPath(String p) {
+			getPreferences().put(P_MRU_FILE, p);
+		}
+
+		private void resyncMruPath() {
+			setCurrentDirectory(new File(getMruPath()));
+		}
+
+		public void setMruPath(String p) {
+			putMruPath(p);
+			resyncMruPath();
+		}
+
+		public void approveSelection() {
+			super.approveSelection();
+			putMruPath(getSelectedFile().getAbsolutePath());
 		}
 	}
 }
