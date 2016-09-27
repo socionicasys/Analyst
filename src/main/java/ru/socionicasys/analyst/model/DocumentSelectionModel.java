@@ -225,9 +225,8 @@ public class DocumentSelectionModel {
 	 *
 	 * @param markupData объект с данными для заполнения выделения. {@code null} очищает выделение.
 	 */
-	public void setMarkupData(AData markupData) {
-		logger.trace("setMarkupData({}): entering", markupData);
-		setInitialized(false);
+	public void setMarkupData_(AData markupData) {
+		logger.trace("setMarkupData_({}): entering", markupData);
 		if (markupData == null) {
 			setAspect(null);
 		} else {
@@ -239,8 +238,7 @@ public class DocumentSelectionModel {
 			setDimension(markupData.getDimension());
 			setComment(markupData.getComment());
 		}
-		setInitialized(true);
-		logger.trace("setMarkupData(): leaving");
+		logger.trace("setMarkupData_(): leaving");
 	}
 
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -274,9 +272,28 @@ public class DocumentSelectionModel {
 	 */
 	private <T> void updateProperty(String propertyName, T oldValue, T newValue) {
 		logger.trace("updateProperty({}, {}, {}): entering", propertyName, oldValue, newValue);
-		if (oldValue != null || newValue != null) {
+
+		do {
+			if (oldValue == null)
+				break;
+
+			if (newValue == null)
+				break;
+
+			if (!isInitialized())
+				break;
+
+			if (oldValue == newValue)
+				break;
+
+			if (oldValue.equals(newValue))
+				break;
+
+			logger.trace("firing property change({}, {}, {})", propertyName, oldValue, newValue);
 			propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
-		}
+
+		} while (false);
+
 		logger.trace("updateProperty({}, {}, {}): leaving", propertyName, oldValue, newValue);
 	}
 }
