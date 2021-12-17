@@ -45,11 +45,8 @@ public final class MVPanel extends ActivePanel {
 			}
 		});
 
-		Panel pp1 = new Panel();
-		Panel pp2 = new Panel();
-		Panel pp = new Panel();
-		pp.setMinimumSize(new Dimension(200, 120));
-		setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+		JPanel pp1 = new JPanel();
+		JPanel pp2 = new JPanel();
 
 		pp1.setLayout(new BoxLayout(pp1, BoxLayout.Y_AXIS));
 		pp2.setLayout(new BoxLayout(pp2, BoxLayout.Y_AXIS));
@@ -57,15 +54,9 @@ public final class MVPanel extends ActivePanel {
 		pp1.add(buttons.get(AData.MENTAL));
 		pp2.add(buttons.get(AData.SUPERID));
 		pp2.add(buttons.get(AData.SUPEREGO));
-		pp.setLayout(new BoxLayout(pp, BoxLayout.X_AXIS));
 
-		pp.add(pp1);
-		pp.add(pp2);
+		buildLayoutType1(pp1, pp2, clearButton);
 
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-		add(pp);
-		add(clearButton);
 		setBorder(new TitledBorder("Ментал/Витал"));
 
 		updateView();

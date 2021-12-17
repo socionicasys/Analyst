@@ -3,6 +3,7 @@ package ru.socionicasys.analyst.panel;
 import ru.socionicasys.analyst.model.DocumentSelectionModel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
@@ -79,4 +80,43 @@ public abstract class ActivePanel extends JPanel implements PropertyChangeListen
 	 * Обновляет модель в соответствии с измененными в панели данными.
 	 */
 	protected abstract void updateModel();
+
+	/**
+	 * Формирует layout следюущего вида:
+	 * +-------------+
+	 * |+-----+-----+|
+	 * || pp1 | pp2 ||
+	 * |+-----+-----+|
+	 * +-------------+
+	 * | clearButton |
+	 * +-------------+
+	 */
+	protected void buildLayoutType1(JPanel pp1, JPanel pp2, JButton clearButton) {
+		JPanel contentPanel = new JPanel();
+		JPanel clearButtonPanel = new JPanel();
+
+		contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.X_AXIS));
+		clearButtonPanel.setLayout(new BoxLayout(clearButtonPanel, BoxLayout.X_AXIS));
+
+		if (pp1 != null)
+			contentPanel.add(pp1);
+		if (pp2 != null)
+			contentPanel.add(pp2);
+		contentPanel.add(Box.createHorizontalGlue());
+		clearButtonPanel.add(Box.createHorizontalGlue());
+		clearButtonPanel.add(clearButton);
+
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		add(contentPanel);
+		add(clearButtonPanel);
+		//setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+
+		if (false) {
+			pp1.setBorder(BorderFactory.createLineBorder(Color.green));
+			pp2.setBorder(BorderFactory.createLineBorder(Color.green));
+			contentPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+			clearButtonPanel.setBorder(BorderFactory.createLineBorder(Color.blue));
+		}
+	}
+
 }

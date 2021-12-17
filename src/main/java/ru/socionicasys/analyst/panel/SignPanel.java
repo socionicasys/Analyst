@@ -23,8 +23,8 @@ public final class SignPanel extends ActivePanel {
 		super(selectionModel);
 
 		buttons = new HashMap<String, JRadioButton>(2);
-		buttons.put(AData.PLUS, new JRadioButton("+"));
-		buttons.put(AData.MINUS, new JRadioButton("-"));
+		buttons.put(AData.PLUS, new JRadioButton("Плюс"));
+		buttons.put(AData.MINUS, new JRadioButton("Минус"));
 
 		buttonGroup = new ButtonGroup();
 		for (Map.Entry<String, JRadioButton> entry : buttons.entrySet()) {
@@ -43,20 +43,17 @@ public final class SignPanel extends ActivePanel {
 			}
 		});
 
-		Panel pp = new Panel();
-		pp.setMaximumSize(new Dimension(100, 50));
-		pp.setPreferredSize(new Dimension(100, 50));
+		JPanel p1 = new JPanel();
+		JPanel p2 = new JPanel();
 
-		setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+		p1.setLayout(new BoxLayout(p1, BoxLayout.Y_AXIS));
+		p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
 
-		pp.setLayout(new BoxLayout(pp, BoxLayout.Y_AXIS));
-		pp.add(buttons.get(AData.PLUS));
-		pp.add(buttons.get(AData.MINUS));
+		p1.add(buttons.get(AData.PLUS));
+		p2.add(buttons.get(AData.MINUS));
 
-		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		buildLayoutType1(p1, p2, clearButton);
 
-		add(pp);
-		add(clearButton);
 		setBorder(new TitledBorder("Знак"));
 
 		updateView();

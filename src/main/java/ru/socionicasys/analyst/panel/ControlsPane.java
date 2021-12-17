@@ -28,6 +28,8 @@ public class ControlsPane extends JToolBar {
 		container.add(signPanel);
 		container.add(dimensionPanel);
 		container.add(mvPanel);
+		container.add(Box.createVerticalGlue());
 		add(container);
+		add(Box.createVerticalGlue());
 	}
 }

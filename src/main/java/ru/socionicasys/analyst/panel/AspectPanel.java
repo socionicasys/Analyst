@@ -30,12 +30,8 @@ public final class AspectPanel extends ActivePanel {
 	public AspectPanel(DocumentSelectionModel selectionModel) {
 		super(selectionModel);
 
-		setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-
-		Panel pAspect = new Panel();
+		JPanel pAspect = new JPanel();
 		pAspect.setLayout(new BoxLayout(pAspect, BoxLayout.Y_AXIS));
-		pAspect.setPreferredSize(new Dimension(50, 200));
-		pAspect.setMinimumSize(new Dimension(50, 200));
 
 		primaryAspectGroup = new ButtonGroup();
 		primaryAspectButtons = new EnumMap<Aspect, JRadioButton>(Aspect.class);
@@ -48,10 +44,8 @@ public final class AspectPanel extends ActivePanel {
 			primaryAspectButtons.put(aspect, button);
 		}
 
-		Panel pAspect2 = new Panel();
+		JPanel pAspect2 = new JPanel();
 		pAspect2.setLayout(new BoxLayout(pAspect2, BoxLayout.Y_AXIS));
-		pAspect2.setPreferredSize(new Dimension(50, 200));
-		pAspect2.setMinimumSize(new Dimension(50, 200));
 
 		secondaryAspectGroup = new ButtonGroup();
 		secondaryAspectButtons = new EnumMap<Aspect, JRadioButton>(Aspect.class);
@@ -86,33 +80,36 @@ public final class AspectPanel extends ActivePanel {
 
 		clearButton = new JButton("Очистить");
 
-		Panel pControl = new Panel();
+		JPanel pAspect3 = new JPanel();
+		pAspect3.setLayout(new BoxLayout(pAspect3, BoxLayout.Y_AXIS));
+		pAspect3.add(doubt);
+		pAspect3.add(clearButton);
+
+		pAspect.setAlignmentY(0.0f);
+		pAspect2.setAlignmentY(0.0f);
+		pAspect3.setAlignmentY(0.0f);
+
+		/*pAspect.setBorder(BorderFactory.createLineBorder(Color.green));
+		pAspect2.setBorder(BorderFactory.createLineBorder(Color.green));
+		pAspect3.setBorder(BorderFactory.createLineBorder(Color.green));*/
+
+		JPanel pControl = new JPanel();
 		pControl.setLayout(new BoxLayout(pControl, BoxLayout.X_AXIS));
-		pControl.setPreferredSize(new Dimension(50, 40));
-		pControl.setMinimumSize(new Dimension(50, 40));
 		pControl.add(aspect);
 		pControl.add(block);
 		pControl.add(jump);
+		pControl.add(Box.createHorizontalGlue());
 
-		Panel pA = new Panel();
-		pA.setLayout(new BoxLayout(pA, BoxLayout.X_AXIS));
+		JPanel pInner = new JPanel();
+		pInner.setLayout(new BoxLayout(pInner, BoxLayout.X_AXIS));
+		pInner.add(pAspect);
+		pInner.add(pAspect2);
+		pInner.add(pAspect3);
+		pInner.add(Box.createHorizontalGlue());
 
-		pA.add(pAspect);
-		pA.add(pAspect2);
-
-		Panel pB = new Panel();
-		pB.setLayout(new BoxLayout(pB, BoxLayout.Y_AXIS));
-
-		pB.add(new Panel());
-		pB.add(clearButton);
-		pB.add(new Panel());
-		pB.add(doubt);
-		pB.add(new Panel());
-
-		setLayout(new BorderLayout());
-		add(pControl, BorderLayout.NORTH);
-		add(pA, BorderLayout.WEST);
-		add(pB, BorderLayout.EAST);
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		add(pControl);
+		add(pInner);
 
 		setBorder(new TitledBorder("Аспект/Блок"));
 

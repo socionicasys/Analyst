@@ -53,15 +53,11 @@ public final class DimensionPanel extends ActivePanel {
 			}
 		});
 
-		Panel p = new Panel();
-		Panel p1 = new Panel();
-		Panel p2 = new Panel();
+		JPanel p1 = new JPanel();
+		JPanel p2 = new JPanel();
 
-		p.setLayout(new BoxLayout(p, BoxLayout.X_AXIS));
 		p1.setLayout(new BoxLayout(p1, BoxLayout.Y_AXIS));
 		p2.setLayout(new BoxLayout(p2, BoxLayout.Y_AXIS));
-
-		setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
 
 		p1.add(buttons.get(AData.D1));
 		p1.add(buttons.get(AData.D2));
@@ -72,12 +68,8 @@ public final class DimensionPanel extends ActivePanel {
 		p2.add(buttons.get(AData.MALOMERNOST));
 		p2.add(buttons.get(AData.MNOGOMERNOST));
 
-		p.add(p1);
-		p.add(p2);
+		buildLayoutType1(p1, p2, clearButton);
 
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		add(p);
-		add(clearButton);
 		setBorder(new TitledBorder("Размерность"));
 
 		updateView();
